@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--check ignore -->
     <string name="app_name">Princess!</string>
     <string name="app_id">209015432702</string>
     <string name="ad_unit_id_interstitial">ca-app-pub-2003758271322872/6683413546</string>
