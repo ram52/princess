@@ -42,3 +42,7 @@ Thumbs.db
 .idea/dataSources.ids
 /android/res/values/strings.xml
 io.fabric/
+/.idea/misc.xml
+/data.sav
+/android/assets/crashlytics-build.properties
+/android/res/values/com_crashlytics_export_strings.xml
