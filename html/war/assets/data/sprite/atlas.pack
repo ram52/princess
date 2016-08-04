@@ -1,0 +1,640 @@
+
+atlas.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Slime_idle
+  rotate: false
+  xy: 1, 3845
+  size: 3731, 250
+  orig: 3731, 250
+  offset: 0, 0
+  index: -1
+Slime_die
+  rotate: false
+  xy: 1, 3593
+  size: 2665, 250
+  orig: 2665, 250
+  offset: 0, 0
+  index: -1
+backgroundMushroom960x540
+  rotate: false
+  xy: 1, 2511
+  size: 540, 1080
+  orig: 540, 1080
+  offset: 0, 0
+  index: -1
+backgroundGameOver
+  rotate: false
+  xy: 543, 2631
+  size: 640, 960
+  orig: 640, 960
+  offset: 0, 0
+  index: -1
+backgroundGameOverHS
+  rotate: false
+  xy: 1185, 2631
+  size: 640, 960
+  orig: 640, 960
+  offset: 0, 0
+  index: -1
+backgroundMushroom960x640
+  rotate: false
+  xy: 1827, 2631
+  size: 640, 960
+  orig: 640, 960
+  offset: 0, 0
+  index: -1
+backgroundSky
+  rotate: false
+  xy: 1, 1549
+  size: 640, 960
+  orig: 640, 960
+  offset: 0, 0
+  index: -1
+backgroundSkyNight
+  rotate: false
+  xy: 1, 587
+  size: 640, 960
+  orig: 640, 960
+  offset: 0, 0
+  index: -1
+backgroundThanksYou
+  rotate: false
+  xy: 643, 1669
+  size: 640, 960
+  orig: 640, 960
+  offset: 0, 0
+  index: -1
+backgroundTitle
+  rotate: false
+  xy: 643, 707
+  size: 640, 960
+  orig: 640, 960
+  offset: 0, 0
+  index: -1
+backgroundWood1
+  rotate: false
+  xy: 1285, 1669
+  size: 640, 960
+  orig: 640, 960
+  offset: 0, 0
+  index: -1
+backgroundWood2
+  rotate: false
+  xy: 1285, 707
+  size: 640, 960
+  orig: 640, 960
+  offset: 0, 0
+  index: -1
+cloud960x540
+  rotate: false
+  xy: 1927, 1669
+  size: 540, 960
+  orig: 540, 960
+  offset: 0, 0
+  index: -1
+cloud960x640
+  rotate: false
+  xy: 1927, 707
+  size: 640, 960
+  orig: 640, 960
+  offset: 0, 0
+  index: -1
+Slime_hurt
+  rotate: false
+  xy: 2668, 3593
+  size: 1066, 250
+  orig: 1066, 250
+  offset: 0, 0
+  index: -1
+ending
+  rotate: false
+  xy: 2469, 2631
+  size: 640, 960
+  orig: 640, 960
+  offset: 0, 0
+  index: -1
+opening1
+  rotate: false
+  xy: 2469, 1669
+  size: 640, 960
+  orig: 640, 960
+  offset: 0, 0
+  index: -1
+opening2
+  rotate: false
+  xy: 3111, 2631
+  size: 640, 960
+  orig: 640, 960
+  offset: 0, 0
+  index: -1
+secret1
+  rotate: false
+  xy: 3111, 1669
+  size: 640, 960
+  orig: 640, 960
+  offset: 0, 0
+  index: -1
+tuto
+  rotate: false
+  xy: 2569, 707
+  size: 640, 960
+  orig: 640, 960
+  offset: 0, 0
+  index: -1
+backgroundMushroom800x480
+  rotate: false
+  xy: 3211, 707
+  size: 480, 960
+  orig: 480, 960
+  offset: 0, 0
+  index: -1
+ukikiEyes
+  rotate: false
+  xy: 643, 698
+  size: 1280, 7
+  orig: 1280, 7
+  offset: 0, 0
+  index: -1
+uiContinueBackground
+  rotate: false
+  xy: 1, 105
+  size: 640, 480
+  orig: 640, 480
+  offset: 0, 0
+  index: -1
+uiOptionBackground
+  rotate: false
+  xy: 643, 121
+  size: 464, 575
+  orig: 464, 575
+  offset: 0, 0
+  index: -1
+wing
+  rotate: false
+  xy: 643, 1
+  size: 624, 118
+  orig: 624, 118
+  offset: 0, 0
+  index: -1
+ladybug
+  rotate: false
+  xy: 1109, 614
+  size: 656, 82
+  orig: 656, 82
+  offset: 0, 0
+  index: -1
+buttonCredits
+  rotate: false
+  xy: 1925, 4
+  size: 549, 701
+  orig: 549, 701
+  offset: 0, 0
+  index: -1
+playerBlue_walk
+  rotate: false
+  xy: 1, 6
+  size: 392, 97
+  orig: 392, 97
+  offset: 0, 0
+  index: -1
+playerGreen_walk
+  rotate: false
+  xy: 2476, 608
+  size: 392, 97
+  orig: 392, 97
+  offset: 0, 0
+  index: -1
+playerRed_walk
+  rotate: false
+  xy: 1109, 515
+  size: 392, 97
+  orig: 392, 97
+  offset: 0, 0
+  index: -1
+playerYellow_walk
+  rotate: false
+  xy: 2476, 509
+  size: 392, 97
+  orig: 392, 97
+  offset: 0, 0
+  index: -1
+buttonLeaderBoardDown
+  rotate: false
+  xy: 3734, 3899
+  size: 281, 196
+  orig: 281, 196
+  offset: 0, 0
+  index: -1
+buttonLeaderBoardUp
+  rotate: false
+  xy: 2870, 509
+  size: 281, 196
+  orig: 281, 196
+  offset: 0, 0
+  index: -1
+buttonPlayDown
+  rotate: false
+  xy: 1109, 317
+  size: 281, 196
+  orig: 281, 196
+  offset: 0, 0
+  index: -1
+buttonPlayUp
+  rotate: false
+  xy: 2476, 311
+  size: 281, 196
+  orig: 281, 196
+  offset: 0, 0
+  index: -1
+buttonReplayDown
+  rotate: false
+  xy: 3153, 509
+  size: 281, 196
+  orig: 281, 196
+  offset: 0, 0
+  index: -1
+buttonReplayUp
+  rotate: false
+  xy: 2476, 113
+  size: 281, 196
+  orig: 281, 196
+  offset: 0, 0
+  index: -1
+buttonUiContinueNoDown
+  rotate: false
+  xy: 2476, 1
+  size: 308, 110
+  orig: 308, 110
+  offset: 0, 0
+  index: -1
+buttonUiOptionAchievementDown
+  rotate: false
+  xy: 2759, 408
+  size: 362, 99
+  orig: 362, 99
+  offset: 0, 0
+  index: -1
+buttonUiOptionAchievementUp
+  rotate: false
+  xy: 2759, 307
+  size: 362, 99
+  orig: 362, 99
+  offset: 0, 0
+  index: -1
+buttonUiOptionSkyDown
+  rotate: false
+  xy: 2759, 206
+  size: 362, 99
+  orig: 362, 99
+  offset: 0, 0
+  index: -1
+buttonUiContinueNoUp
+  rotate: false
+  xy: 3123, 397
+  size: 308, 110
+  orig: 308, 110
+  offset: 0, 0
+  index: -1
+buttonUiOptionSkyUp
+  rotate: false
+  xy: 3123, 296
+  size: 362, 99
+  orig: 362, 99
+  offset: 0, 0
+  index: -1
+buttonUiOptionStoreDown
+  rotate: false
+  xy: 3123, 195
+  size: 362, 99
+  orig: 362, 99
+  offset: 0, 0
+  index: -1
+tvlight
+  rotate: false
+  xy: 1109, 188
+  size: 267, 127
+  orig: 267, 127
+  offset: 0, 0
+  index: -1
+buttonUiOptionStoreUp
+  rotate: false
+  xy: 1503, 513
+  size: 362, 99
+  orig: 362, 99
+  offset: 0, 0
+  index: -1
+buttonSound1Down
+  rotate: false
+  xy: 3436, 537
+  size: 150, 168
+  orig: 150, 168
+  offset: 0, 0
+  index: -1
+buttonTutoDown
+  rotate: false
+  xy: 3734, 3853
+  size: 257, 44
+  orig: 257, 44
+  offset: 0, 0
+  index: -1
+buttonSound1Up
+  rotate: false
+  xy: 3736, 3683
+  size: 150, 168
+  orig: 150, 168
+  offset: 0, 0
+  index: -1
+buttonTutoUp
+  rotate: false
+  xy: 2759, 160
+  size: 257, 44
+  orig: 257, 44
+  offset: 0, 0
+  index: -1
+playerBlue_fly
+  rotate: false
+  xy: 395, 6
+  size: 196, 97
+  orig: 196, 97
+  offset: 0, 0
+  index: -1
+buttonHeartDown
+  rotate: false
+  xy: 2786, 2
+  size: 159, 156
+  orig: 159, 156
+  offset: 0, 0
+  index: -1
+buttonHeartUp
+  rotate: false
+  xy: 3588, 549
+  size: 159, 156
+  orig: 159, 156
+  offset: 0, 0
+  index: -1
+buttonStarDown
+  rotate: false
+  xy: 3888, 3695
+  size: 159, 156
+  orig: 159, 156
+  offset: 0, 0
+  index: -1
+buttonStarUp
+  rotate: false
+  xy: 2947, 2
+  size: 159, 156
+  orig: 159, 156
+  offset: 0, 0
+  index: -1
+buttonAdsDown
+  rotate: false
+  xy: 3108, 39
+  size: 159, 154
+  orig: 159, 154
+  offset: 0, 0
+  index: -1
+buttonAdsUp
+  rotate: false
+  xy: 3269, 39
+  size: 159, 154
+  orig: 159, 154
+  offset: 0, 0
+  index: -1
+buttonUiCloseDown
+  rotate: false
+  xy: 1392, 406
+  size: 107, 107
+  orig: 107, 107
+  offset: 0, 0
+  index: -1
+playerGreen_fly
+  rotate: false
+  xy: 1501, 414
+  size: 196, 97
+  orig: 196, 97
+  offset: 0, 0
+  index: -1
+playerRed_fly
+  rotate: false
+  xy: 1699, 414
+  size: 196, 97
+  orig: 196, 97
+  offset: 0, 0
+  index: -1
+buttonEnergyDown
+  rotate: false
+  xy: 3693, 1513
+  size: 159, 154
+  orig: 159, 154
+  offset: 0, 0
+  index: -1
+buttonEnergyUp
+  rotate: false
+  xy: 3693, 1357
+  size: 159, 154
+  orig: 159, 154
+  offset: 0, 0
+  index: -1
+buttonGearDown
+  rotate: false
+  xy: 3693, 1201
+  size: 159, 154
+  orig: 159, 154
+  offset: 0, 0
+  index: -1
+buttonGearUp
+  rotate: false
+  xy: 3693, 1045
+  size: 159, 154
+  orig: 159, 154
+  offset: 0, 0
+  index: -1
+buttonPlay2Down
+  rotate: false
+  xy: 3693, 889
+  size: 159, 154
+  orig: 159, 154
+  offset: 0, 0
+  index: -1
+buttonPlay2Up
+  rotate: false
+  xy: 3693, 733
+  size: 159, 154
+  orig: 159, 154
+  offset: 0, 0
+  index: -1
+buttonSound2Down
+  rotate: false
+  xy: 3749, 577
+  size: 159, 154
+  orig: 159, 154
+  offset: 0, 0
+  index: -1
+buttonSound2Up
+  rotate: false
+  xy: 3430, 39
+  size: 159, 154
+  orig: 159, 154
+  offset: 0, 0
+  index: -1
+playerYellow_fly
+  rotate: false
+  xy: 1501, 315
+  size: 196, 97
+  orig: 196, 97
+  offset: 0, 0
+  index: -1
+buttonUiCloseUp
+  rotate: false
+  xy: 1392, 297
+  size: 107, 107
+  orig: 107, 107
+  offset: 0, 0
+  index: -1
+buttonPause
+  rotate: false
+  xy: 1699, 259
+  size: 159, 153
+  orig: 159, 153
+  offset: 0, 0
+  index: -1
+buttonSecret
+  rotate: false
+  xy: 1378, 167
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+buttonUiBossJumpDown
+  rotate: false
+  xy: 1508, 168
+  size: 145, 145
+  orig: 145, 145
+  offset: 0, 0
+  index: -1
+buttonUiContinueCameraDown
+  rotate: false
+  xy: 1655, 147
+  size: 149, 110
+  orig: 149, 110
+  offset: 0, 0
+  index: -1
+buttonUiBossJumpUp
+  rotate: false
+  xy: 3753, 3536
+  size: 145, 145
+  orig: 145, 145
+  offset: 0, 0
+  index: -1
+buttonUiBossLeftDown
+  rotate: false
+  xy: 3753, 3389
+  size: 145, 145
+  orig: 145, 145
+  offset: 0, 0
+  index: -1
+buttonUiBossLeftUp
+  rotate: false
+  xy: 3753, 3242
+  size: 145, 145
+  orig: 145, 145
+  offset: 0, 0
+  index: -1
+buttonUiBossRightDown
+  rotate: false
+  xy: 3753, 3095
+  size: 145, 145
+  orig: 145, 145
+  offset: 0, 0
+  index: -1
+buttonUiBossRightUp
+  rotate: false
+  xy: 3753, 2948
+  size: 145, 145
+  orig: 145, 145
+  offset: 0, 0
+  index: -1
+buttonUiContinueCameraUp
+  rotate: false
+  xy: 3753, 2836
+  size: 149, 110
+  orig: 149, 110
+  offset: 0, 0
+  index: -1
+buttonUiContinueCoinDown
+  rotate: false
+  xy: 3753, 2724
+  size: 149, 110
+  orig: 149, 110
+  offset: 0, 0
+  index: -1
+buttonUiContinueCoinUp
+  rotate: false
+  xy: 3753, 2612
+  size: 149, 110
+  orig: 149, 110
+  offset: 0, 0
+  index: -1
+coin
+  rotate: false
+  xy: 543, 2558
+  size: 71, 71
+  orig: 71, 71
+  offset: 0, 0
+  index: -1
+trophyBronze
+  rotate: false
+  xy: 1767, 638
+  size: 58, 58
+  orig: 58, 58
+  offset: 0, 0
+  index: -1
+trophyEmpty
+  rotate: false
+  xy: 4017, 4037
+  size: 58, 58
+  orig: 58, 58
+  offset: 0, 0
+  index: -1
+trophyGold
+  rotate: false
+  xy: 1109, 128
+  size: 58, 58
+  orig: 58, 58
+  offset: 0, 0
+  index: -1
+trophySilver
+  rotate: false
+  xy: 3753, 2552
+  size: 58, 58
+  orig: 58, 58
+  offset: 0, 0
+  index: -1
+mushroom
+  rotate: false
+  xy: 593, 71
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+
+atlas2.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+cloud800x480
+  rotate: false
+  xy: 1, 1
+  size: 480, 960
+  orig: 480, 960
+  offset: 0, 0
+  index: -1
+uiStoreBackground
+  rotate: false
+  xy: 483, 220
+  size: 526, 741
+  orig: 526, 741
+  offset: 0, 0
+  index: -1

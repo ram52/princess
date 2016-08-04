@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="900" height="40" tilewidth="32" tileheight="32" nextobjectid="208">
+ <tileset firstgid="1" name="tileset" tilewidth="32" tileheight="32" tilecount="525" columns="35">
+  <image source="tileset.png" width="1148" height="496"/>
+ </tileset>
+ <layer name="empty" width="900" height="40">
+  <data encoding="base64" compression="zlib">
+   eJztzjEKgDAQBED/38S3JK36Nq9IIFipiBGZgWWvWbhpAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAO5KkXn0EwAAALwuR8roJwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADg5+ZIqn1Fv2n3sQEAAPiuEsm1l8ga2U7s2qa/jw0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8YwcbLBKT
+  </data>
+ </layer>
+ <layer name="ground" width="900" height="40">
+  <data encoding="base64" compression="zlib">
+   eJzt2UtKQ0EQBdAM/AzMPvwM4j40LiWa/Y8sB4XF5UXkiUjwHLjk1etON2R2yWYDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8DcuK1eV68rFmc0AAACsd1e5rzxUbs9sBgAAYL3nyr7yUnmq3CxkG+vfnft5P+bcv3R/fv/UfgAAANabHe2w+exb/S7Xd5XHynFhnv3tONbexjzP/fh8HeuHOKMz75v7AQAAWK87Wqf7Vne5XM+ulu+7T+a+Tp976sxez+Sd29/4MQAAAP6R7mCZ7mBL/S772XzffTJ73JyzZ57qjnl/n6EPAgAA/Fx3s/7M/+ey332VXZyVa/m8dF9m3p9nAwAAsN472lgv3w==
+  </data>
+ </layer>
+ <layer name="undeground" width="900" height="40">
+  <data encoding="base64" compression="zlib">
+   eJzt3UlKxEAAhtFk5+zC8Rq6cLyEgt7GjScRbfUgzh7E2UP4N1oYGgWFtoPNe/DRVZ1NbUMlqaoCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfmMmzaa5NJ8W0mKrKwIAAGAQVtJqWkvraSNttroiAAAA/lrvvmDvHAAAgOF0l+7TS1qqq2q5fh93e211ZQAAAPylkdz/jaattJN203aaStN126sDAACgn776fkyZ9/7v+zIAAADD4yydp046/sGvZ0cBAACGQ3lnsNOo9z6wjLudpNNWVgoAAEA/7aXDdJSuGuOH9NiYXzfG+62sFAAAgH46SBfpsnrf/yvjsbqqxuvPeadxzf4gAADA/1feH+zuDXb3AMu+4Hfzm3TbykoBAADop/L+4FN6rj73Bcv5g2VervueDAAAwHAoZw5OpMmPswe3G+cPlnm57ixCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGIw3ZkFF/Q==
+  </data>
+ </layer>
+ <objectgroup color="#ff5500" name="player">
+  <object id="207" name="Player" x="275.886" y="985.437" width="14.4091" height="30.6515"/>
+ </objectgroup>
+</map>
