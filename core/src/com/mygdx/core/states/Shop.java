@@ -272,6 +272,14 @@ public class Shop extends GameState {
                                     "Equip Fire ball?", "buttonFireBallUp"){
                         public void result(Object obj) {
                             System.out.println("result Equip Fire ball?"+obj);
+                            System.out.println(obj);
+                            if(obj.toString().equals("true")){
+                                Save.gd.setFireBallPurchased(true);
+                                Save.gd.setFireBallEquiped(true);
+                                Save.gd.setExcaliburEquiped(false);
+                                Save.gd.setKamehamehaEquiped(false);
+                                Save.save();
+                            }
                         }
                     };
                     stage1.addActor(dialog);
@@ -312,6 +320,14 @@ public class Shop extends GameState {
                                 "Equip Excalibur?", "buttonExcaliburUp"){
                     public void result(Object obj) {
                         System.out.println("result Equip Excalibur?"+obj);
+                        System.out.println(obj);
+                        if(obj.toString().equals("true")){
+                            Save.gd.setExcaliburPurchased(true);
+                            Save.gd.setExcaliburEquiped(true);
+                            Save.gd.setFireBallEquiped(false);
+                            Save.gd.setKamehamehaEquiped(false);
+                            Save.save();
+                        }
                     }
                 };
                 stage1.addActor(dialog);
@@ -353,9 +369,13 @@ public class Shop extends GameState {
                                     "Buy Kamehameha?", "buttonKamehamehaUp"){
                         public void result(Object obj) {
                             System.out.println("result Buy Kamehameha?"+obj);
-                            if(obj.equals("Yes")){
+                            System.out.println(obj);
+                            if(obj.toString().equals("true")){
                                 Save.gd.setKamehamehaPurchased(true);
                                 Save.gd.setKamehamehaEquiped(true);
+                                Save.gd.setExcaliburEquiped(false);
+                                Save.gd.setFireBallEquiped(false);
+                                Save.save();
                             }
                         }
                     };
