@@ -1183,14 +1183,13 @@ public class Play extends GameState {
 
                     if(enemy.isMalicious()){
 
-                        if(!enemy.isFromLeft()){
-
+                        if(!enemy.isFromLeft() && enemy.getPosition().x<(MyGdxGame.V_WIDTH/PPM)-66/PPM){
                             if(!enemy.isDieRight()){
                                 enemy.getBody().setTransform((MyGdxGame.V_WIDTH/PPM)-65/PPM, enemy.getPosition().y, enemy.getBody().getAngle());
                                 enemy.dieAnimation(true);
                             }
                         }
-                        if(enemy.isFromLeft()){
+                        if(enemy.isFromLeft() && enemy.getPosition().x>64/PPM){
                             if(!enemy.isDieLeft()){
                                 enemy.getBody().setTransform(65/PPM, enemy.getPosition().y, enemy.getBody().getAngle());
                                 enemy.dieAnimation_rev(true);
