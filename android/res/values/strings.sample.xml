@@ -1,27 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--check ignore -->
-    <string name="app_name">Princess!</string>
-    <string name="app_id">xxx</string>
-    <string name="ad_unit_id_interstitial">xxx</string>
-    <string name="ad_unit_id_video">xxx</string>
-    <string name="ad_unit_mopub_reward_video">xxx</string>
-    <string name="banner_ad_unit_id">xxx</string>
-    <string name="billing">xxx</string>
-    <string name="leaderboard_submit">xxx</string>
-    <string name="leaderboard_intent">xxx</string>
-    <string name="ads_remover">xxx</string>
-    <string name="full_bar">xxx</string>
-    <string name="extra_coins">xxx</string>
-    <string name="fabric_api_key">xxx</string>
-    <string name="facebook_app_id">xxx</string>
-    <string name="app_google_url">xxx</string>
-    <string name="app_facebook_url">xxx</string>
-    <string name="app_twitter_url">xxx</string>
-    <string name="facebook_app_thumbnail">xxx</string>
-    <string name="facebook_post_description">xxx</string>
-    <string name="facebook_post_title">xxx</string>
-    <string name="ad_test_device">xxx</string>
-    <string name="chartboost_app_id">xxx</string>
-    <string name="chartboost_appSignature">xxx</string>
 </resources>

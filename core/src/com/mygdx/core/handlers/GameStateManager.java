@@ -10,7 +10,7 @@ import com.mygdx.core.states.Menu;
 import com.mygdx.core.states.Play;
 import com.mygdx.core.states.Ending;
 import com.mygdx.core.states.Shop;
-import com.mygdx.core.states.Storyline;
+import com.mygdx.core.states.Opening;
 import com.mygdx.core.states.Tuto;
 
 public class GameStateManager {
@@ -65,7 +65,7 @@ public class GameStateManager {
             flag_story = true;
 			flag_credits = false;
 			flag_shop = false;
-            return new Storyline(this);
+            return new Opening(this);
         }
         if(state == MENU){
             flag_menu = true;

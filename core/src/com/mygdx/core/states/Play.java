@@ -910,7 +910,13 @@ public class Play extends GameState {
             if(player.getBoundingBox().intersects(enemy.getBoundingBox()) && !enemy.isFading() && !enemy.isDead()){
                 enemy.getBody().setLinearVelocity(new Vector2(enemy.getSpeed()/6, enemy.getBody().getLinearVelocity().y));
                 player.getBody().setLinearVelocity(new Vector2(player.getBody().getLinearVelocity().x/6, player.getBody().getLinearVelocity().y));
-                enemy.setHealth(enemy.getHealth()-1);
+
+                if(Save.gd.isExcaliburEquiped()){
+                    enemy.setHealth(0);
+                }else{
+                    enemy.setHealth(enemy.getHealth()-1);
+                }
+
                 if(!MyGdxGame.pause){
                     if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2){
                         if(!MyGdxGame.res.getMusic("slash").isPlaying()){

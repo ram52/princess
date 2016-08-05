@@ -16,7 +16,7 @@ import com.mygdx.core.handlers.BoundedCamera;
 import com.mygdx.core.handlers.GameStateManager;
 import com.mygdx.core.handlers.Save;
 
-public class Storyline extends GameState {
+public class Opening extends GameState {
 
     private Stage stage1;
     private Image imageOpening1;
@@ -31,7 +31,7 @@ public class Storyline extends GameState {
     private Animation animationHya;
     private int time = 0;
 
-    public Storyline(final GameStateManager gsm) {
+    public Opening(final GameStateManager gsm) {
 
         super(gsm);
         offset = 0;
