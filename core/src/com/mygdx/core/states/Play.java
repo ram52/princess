@@ -99,6 +99,7 @@ public class Play extends GameState {
     private boolean cameraMotionOver = false, playerStartMoving = false;
     private int cpt_translate_animation = 0;
     private int cptJump = 0;
+    private int enemiesKilled = 0;
     private boolean isSlideInEnd = false;
     private boolean isSlideOutEnd = false;
     private  boolean uiIsSliding = false;
@@ -305,8 +306,11 @@ public class Play extends GameState {
             public boolean touchDown(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
-                fire = true;
-
+                if(player.getFireBallCount()>0){
+                    fire = true;
+                }else{
+                    fire = false;
+                }
                 return true;
             }
 
@@ -315,7 +319,7 @@ public class Play extends GameState {
             public void touchUp(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
-                System.out.println("clicked fire!");
+                //System.out.println("clicked fire!");
                 //fire = false;
 
             }
@@ -337,7 +341,7 @@ public class Play extends GameState {
             public void touchUp(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
-                System.out.println("clicked left!");
+                //System.out.println("clicked left!");
                 left = false;
 
             }
@@ -359,7 +363,7 @@ public class Play extends GameState {
             public void touchUp(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
-                System.out.println("clicked right!");
+                //System.out.println("clicked right!");
                 right = false;
 
             }
@@ -803,8 +807,10 @@ public class Play extends GameState {
         }
 
         //FIRE BALL
-        if(fire){
+        if(fire && player.getFireBallCount()>0){
             fire = false;
+            player.setFireBallCount(player.getFireBallCount()-1);
+
             //todo sound
             if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("fireball").play();
             float gap = 10.0f/PPM;
@@ -912,7 +918,7 @@ public class Play extends GameState {
                 player.getBody().setLinearVelocity(new Vector2(player.getBody().getLinearVelocity().x/6, player.getBody().getLinearVelocity().y));
 
                 if(Save.gd.isExcaliburEquiped()){
-                    enemy.setHealth(0);
+                    enemy.setHealth(enemy.getHealth()-3);
                 }else{
                     enemy.setHealth(enemy.getHealth()-1);
                 }
@@ -1112,22 +1118,17 @@ public class Play extends GameState {
                         removeBodySafely(fireBall.getBody());
                 }
 
-
                 if(!enemy.isDead() && enemy.getBoundingBox().intersects(fireBall.getBoundingBox())){
                     System.out.println("FIRE BALL TOUCH ENEMY!");
-
                     enemy.setHealth(0);
                     fireBall.setDead(true);
-
                     /*enemies.removeValue(enemy, true);
                     removeBodySafely(enemy.getBody());*/
-
                     fireBalls.removeValue(fireBall, true);
                     removeBodySafely(fireBall.getBody());
                 }
 
             }
-
         }
     }
 
@@ -1175,6 +1176,15 @@ public class Play extends GameState {
                     if(!enemy.isDead()){
                         player.collectCoin();
                         if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("boom").play();
+                        if(enemiesKilled >= 1 && player.getFireBallCount()<player.MAXFIREBALLCOUNT){
+                            fire = false;
+                            player.setFireBallCount(player.getFireBallCount()+1);
+                            enemiesKilled = 0;
+                            System.out.println("increment fireball count!");
+                        }else{
+                            enemiesKilled++;
+                            System.out.println("enemy killed="+enemiesKilled);
+                        }
                         enemy.setDead(true);
                     }
 
@@ -1183,13 +1193,13 @@ public class Play extends GameState {
 
                     if(enemy.isMalicious()){
 
-                        if(!enemy.isFromLeft() && enemy.getPosition().x<(MyGdxGame.V_WIDTH/PPM)-66/PPM){
+                        if(!enemy.isFromLeft()){
                             if(!enemy.isDieRight()){
                                 enemy.getBody().setTransform((MyGdxGame.V_WIDTH/PPM)-65/PPM, enemy.getPosition().y, enemy.getBody().getAngle());
                                 enemy.dieAnimation(true);
                             }
                         }
-                        if(enemy.isFromLeft() && enemy.getPosition().x>64/PPM){
+                        if(enemy.isFromLeft()){
                             if(!enemy.isDieLeft()){
                                 enemy.getBody().setTransform(65/PPM, enemy.getPosition().y, enemy.getBody().getAngle());
                                 enemy.dieAnimation_rev(true);

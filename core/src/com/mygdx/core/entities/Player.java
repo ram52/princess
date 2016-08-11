@@ -10,7 +10,8 @@ import com.mygdx.core.handlers.Save;
 
 public class Player extends B2DSprite 
 {
-	private int numCoins;
+    public static final int MAXFIREBALLCOUNT = 3 ;
+    private int numCoins;
 	private int totalCoins;
     private boolean runnigLeft = false;
     private boolean runningRight = false;
@@ -21,34 +22,9 @@ public class Player extends B2DSprite
     private boolean stillRight = true;
     private boolean stillLeft = false;
     private boolean playerDead = false;
-
-    public boolean isRight() {
-        return right;
-    }
-
-    public void setRight(boolean right) {
-        this.right = right;
-    }
-
-    public boolean isLeft() {
-        return left;
-    }
-
-    public void setLeft(boolean left) {
-        this.left = left;
-    }
-
+    private int fireBallCount = 2;
     private boolean right = false;
     private boolean left = false;
-
-    public void setSlashingRight(boolean slashingRight) {
-        isSlashingRight = slashingRight;
-    }
-
-    public void setSlashingLeft(boolean slashingLeft) {
-        isSlashingLeft = slashingLeft;
-    }
-
     private boolean isSlashingRight = false;
     private boolean isSlashingLeft = false;
 
@@ -333,6 +309,38 @@ public class Player extends B2DSprite
 
     public boolean isSlashingLeft() {
         return isSlashingLeft;
+    }
+
+    public int getFireBallCount() {
+        return fireBallCount;
+    }
+
+    public void setFireBallCount(int fireBallCount) {
+        this.fireBallCount = fireBallCount;
+    }
+
+    public boolean isRight() {
+        return right;
+    }
+
+    public void setRight(boolean right) {
+        this.right = right;
+    }
+
+    public boolean isLeft() {
+        return left;
+    }
+
+    public void setLeft(boolean left) {
+        this.left = left;
+    }
+
+    public void setSlashingRight(boolean slashingRight) {
+        isSlashingRight = slashingRight;
+    }
+
+    public void setSlashingLeft(boolean slashingLeft) {
+        isSlashingLeft = slashingLeft;
     }
 
 }
