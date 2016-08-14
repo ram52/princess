@@ -122,6 +122,7 @@ public class Play extends GameState {
     private boolean isTouchingEnemy = false;
     private float lastClickPos = Gdx.graphics.getWidth()/2/PPM;
     private float offsetY = 0.0f;
+    private float beamWidth = 0.0f;
     private Runnable runnable;
     private Boolean stopEnemies = false;
     private Button buttonLeft, buttonRight, buttonFire;
@@ -148,14 +149,33 @@ public class Play extends GameState {
                 MyGdxGame.res.getMusic("main").play();
         }*/
 
-        Sprite tex = new Sprite(MyGdxGame.atlas.findRegion("kameha0"));
-        TextureRegion[] sprites2 = tex.split(16, 43)[0];
-        animKamehameha0 = new Animation(sprites2, 1 / 5f);
+        Sprite tex = new Sprite(MyGdxGame.atlas.findRegion("kameha1"));
+        TextureRegion[] sprites = tex.split(16, 43)[0];
+        animKamehameha0 = new Animation(sprites, 1 / 5f);
 
-        TextureRegion[] sprites2Fliped = tex.split(16, 43)[0];
-        for (int i = 0; i < sprites2Fliped.length; i++)
-            sprites2Fliped[i].flip(true, false);
-        animKamehameha0_rev = new Animation(sprites2Fliped, 1 / 5f);
+        TextureRegion[] spritesFliped = tex.split(16, 43)[0];
+        for (int i = 0; i < spritesFliped.length; i++)
+            spritesFliped[i].flip(true, false);
+        animKamehameha0_rev = new Animation(spritesFliped, 1 / 5f);
+
+        tex = new Sprite(MyGdxGame.atlas.findRegion("kameha2"));
+        sprites = tex.split(2, 43)[0];
+        animKamehameha1 = new Animation(sprites, 1 / 5f);
+
+        spritesFliped = tex.split(2, 43)[0];
+        for (int i = 0; i < spritesFliped.length; i++)
+            spritesFliped[i].flip(true, false);
+        animKamehameha1_rev = new Animation(spritesFliped, 1 / 5f);
+
+        tex = new Sprite(MyGdxGame.atlas.findRegion("kameha3"));
+        sprites = tex.split(42, 43)[0];
+        animKamehameha2 = new Animation(sprites, 1 / 5f);
+
+        spritesFliped = tex.split(42, 43)[0];
+        for (int i = 0; i < spritesFliped.length; i++)
+            spritesFliped[i].flip(true, false);
+        animKamehameha2_rev = new Animation(spritesFliped, 1 / 5f);
+
 
         if(Save.gd.isPlayerBlue() && Save.gd.isPlayerGreen() && Save.gd.isPlayerYellow() && Save.gd.isPlayerRed()){
             MyGdxGame.actionResolver.unlockAchievementGPGS(MyGdxGame.achievementPeace);
@@ -1150,13 +1170,48 @@ public class Play extends GameState {
         float gap = 1.02f*PPM;
         float gap2 = 0.4f*PPM;
         float scale = 4.0f;
+
+        beamWidth+=0.1;
+
         sb.begin();
         if(player.isRight()){
-            sb.draw(animKamehameha0.getFrame(), player.getPosition().x*PPM + gap2, player.getPosition().y*PPM - animKamehameha0.getFrame().getRegionHeight()*scale/2, animKamehameha0.getFrame().getRegionWidth()*scale, animKamehameha0.getFrame().getRegionHeight()*scale);
-            //sb.draw(animKamehameha0.getFrame(), player.getPosition().x*PPM+gap,0,)
+            sb.draw(animKamehameha0.getFrame(),
+                    player.getPosition().x*PPM + gap2,
+                    player.getPosition().y*PPM - animKamehameha0.getFrame().getRegionHeight()*scale/2,
+                    animKamehameha0.getFrame().getRegionWidth()*scale,
+                    animKamehameha0.getFrame().getRegionHeight()*scale);
+
+            sb.draw(animKamehameha1.getFrame(),
+                    player.getPosition().x*PPM + gap2 + animKamehameha0.getFrame().getRegionWidth()*scale,
+                    player.getPosition().y*PPM - animKamehameha1.getFrame().getRegionHeight()*scale/2,
+                    beamWidth,
+                    animKamehameha1.getFrame().getRegionHeight()*scale);
+
+            sb.draw(animKamehameha2.getFrame(),
+                    player.getPosition().x*PPM + gap2 + beamWidth +  animKamehameha2.getFrame().getRegionWidth()*scale/4,
+                    player.getPosition().y*PPM - animKamehameha2.getFrame().getRegionHeight()*scale/2,
+                    animKamehameha2.getFrame().getRegionWidth()*scale,
+                    animKamehameha2.getFrame().getRegionHeight()*scale);
+
         }
         else {
-            sb.draw(animKamehameha0_rev.getFrame(), player.getPosition().x*PPM - gap, player.getPosition().y*PPM - animKamehameha0.getFrame().getRegionHeight()*scale/2, animKamehameha0.getFrame().getRegionWidth()*scale, animKamehameha0.getFrame().getRegionHeight()*scale);
+            sb.draw(animKamehameha0_rev.getFrame(),
+                    player.getPosition().x*PPM - gap,
+                    player.getPosition().y*PPM - animKamehameha0_rev.getFrame().getRegionHeight()*scale/2,
+                    animKamehameha0.getFrame().getRegionWidth()*scale,
+                    animKamehameha0.getFrame().getRegionHeight()*scale);
+
+            sb.draw(animKamehameha1_rev.getFrame(),
+                    player.getPosition().x*PPM - gap,
+                    player.getPosition().y*PPM - animKamehameha1.getFrame().getRegionHeight()*scale/2,
+                    animKamehameha1_rev.getFrame().getRegionWidth()*scale - beamWidth,
+                    animKamehameha1.getFrame().getRegionHeight()*scale);
+
+            sb.draw(animKamehameha2_rev.getFrame(),
+                    player.getPosition().x*PPM - gap - beamWidth - animKamehameha2_rev.getFrame().getRegionWidth()*scale + animKamehameha1_rev.getFrame().getRegionWidth()*scale,
+                    player.getPosition().y*PPM - animKamehameha2_rev.getFrame().getRegionHeight()*scale/2,
+                    animKamehameha2_rev.getFrame().getRegionWidth()*scale,
+                    animKamehameha2_rev.getFrame().getRegionHeight()*scale);
         }
         sb.end();
 
@@ -1659,6 +1714,10 @@ public class Play extends GameState {
             princess.updateBoundingBox(princess);
             animKamehameha0.update(dt);
             animKamehameha0_rev.update(dt);
+            animKamehameha1.update(dt);
+            animKamehameha1_rev.update(dt);
+            animKamehameha2.update(dt);
+            animKamehameha2_rev.update(dt);
         }
 
         if(!MyGdxGame.isNightEnable()) {
@@ -1798,11 +1857,12 @@ public class Play extends GameState {
         }
 
 
+        kamehamehaIA();
 
         enemiesIA();
         princessIA();
 
-        kamehamehaIA();
+
 
 
 

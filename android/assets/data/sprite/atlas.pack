@@ -202,15 +202,15 @@ gameover
 kameha1
   rotate: false
   xy: 1927, 964
-  size: 60, 43
-  orig: 60, 43
-  offset: 0, 0
-  index: -1
-kameha0
-  rotate: false
-  xy: 1927, 919
   size: 32, 43
   orig: 32, 43
+  offset: 0, 0
+  index: -1
+kameha2
+  rotate: false
+  xy: 2028, 1992
+  size: 4, 43
+  orig: 4, 43
   offset: 0, 0
   index: -1
 
