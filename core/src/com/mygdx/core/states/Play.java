@@ -15,7 +15,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
@@ -56,6 +58,7 @@ import com.mygdx.core.entities.Enemy;
 import com.mygdx.core.entities.FireBall;
 import com.mygdx.core.entities.Player;
 import com.mygdx.core.entities.Princess;
+import com.mygdx.core.handlers.Animation;
 import com.mygdx.core.handlers.B2DVars;
 import com.mygdx.core.handlers.BoundedCamera;
 import com.mygdx.core.handlers.GameStateManager;
@@ -124,6 +127,7 @@ public class Play extends GameState {
     private Button buttonLeft, buttonRight, buttonFire;
     private Stage stageUiControl;
     private SpriteBatch spriteBatch;
+    private Animation animKamehameha0, animKamehameha0_rev, animKamehameha1, animKamehameha1_rev, animKamehameha2, animKamehameha2_rev;
 
     public boolean getRandomBoolean() {
         Random random = new Random();
@@ -143,6 +147,15 @@ public class Play extends GameState {
             if(!MyGdxGame.res.getMusic("main").isPlaying())
                 MyGdxGame.res.getMusic("main").play();
         }*/
+
+        Sprite tex = new Sprite(MyGdxGame.atlas.findRegion("kameha0"));
+        TextureRegion[] sprites2 = tex.split(16, 43)[0];
+        animKamehameha0 = new Animation(sprites2, 1 / 5f);
+
+        TextureRegion[] sprites2Fliped = tex.split(16, 43)[0];
+        for (int i = 0; i < sprites2Fliped.length; i++)
+            sprites2Fliped[i].flip(true, false);
+        animKamehameha0_rev = new Animation(sprites2Fliped, 1 / 5f);
 
         if(Save.gd.isPlayerBlue() && Save.gd.isPlayerGreen() && Save.gd.isPlayerYellow() && Save.gd.isPlayerRed()){
             MyGdxGame.actionResolver.unlockAchievementGPGS(MyGdxGame.achievementPeace);
@@ -1132,6 +1145,23 @@ public class Play extends GameState {
         }
     }
 
+    public void kamehamehaIA(){
+        //kamehameha
+        float gap = 1.02f*PPM;
+        float gap2 = 0.4f*PPM;
+        float scale = 4.0f;
+        sb.begin();
+        if(player.isRight()){
+            sb.draw(animKamehameha0.getFrame(), player.getPosition().x*PPM + gap2, player.getPosition().y*PPM - animKamehameha0.getFrame().getRegionHeight()*scale/2, animKamehameha0.getFrame().getRegionWidth()*scale, animKamehameha0.getFrame().getRegionHeight()*scale);
+            //sb.draw(animKamehameha0.getFrame(), player.getPosition().x*PPM+gap,0,)
+        }
+        else {
+            sb.draw(animKamehameha0_rev.getFrame(), player.getPosition().x*PPM - gap, player.getPosition().y*PPM - animKamehameha0.getFrame().getRegionHeight()*scale/2, animKamehameha0.getFrame().getRegionWidth()*scale, animKamehameha0.getFrame().getRegionHeight()*scale);
+        }
+        sb.end();
+
+    }
+
 
     public void enemiesIA(){
 
@@ -1485,7 +1515,7 @@ public class Play extends GameState {
                 Timer.schedule(new Timer.Task() {
                     @Override
                     public void run() {
-                        gsm.setState(GameStateManager.GAME_OVER);
+                        //gsm.setState(GameStateManager.GAME_OVER);
                     }
                 }, 1.5f);
             }
@@ -1627,6 +1657,8 @@ public class Play extends GameState {
             player.updateBoundingBox(player);
             princess.update(dt);
             princess.updateBoundingBox(princess);
+            animKamehameha0.update(dt);
+            animKamehameha0_rev.update(dt);
         }
 
         if(!MyGdxGame.isNightEnable()) {
@@ -1769,6 +1801,10 @@ public class Play extends GameState {
 
         enemiesIA();
         princessIA();
+
+        kamehamehaIA();
+
+
 
         if(player.isPlayerDead() && !submit ) {
             labelScore.setVisible(false);

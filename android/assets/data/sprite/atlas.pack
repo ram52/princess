@@ -115,9 +115,16 @@ buttonUiOptionTwitterUp
   orig: 99, 99
   offset: 0, 0
   index: -1
+kameha
+  rotate: false
+  xy: 519, 2
+  size: 138, 43
+  orig: 138, 43
+  offset: 0, 0
+  index: -1
 princess!
   rotate: false
-  xy: 519, 1
+  xy: 659, 1
   size: 111, 44
   orig: 111, 44
   offset: 0, 0
@@ -136,9 +143,16 @@ buttonUiContinueCameraDown
   orig: 149, 110
   offset: 0, 0
   index: -1
+kameha3
+  rotate: false
+  xy: 772, 2
+  size: 84, 43
+  orig: 84, 43
+  offset: 0, 0
+  index: -1
 credits
   rotate: false
-  xy: 632, 21
+  xy: 858, 21
   size: 95, 24
   orig: 95, 24
   offset: 0, 0
@@ -183,6 +197,20 @@ gameover
   xy: 1927, 1009
   size: 59, 47
   orig: 59, 47
+  offset: 0, 0
+  index: -1
+kameha1
+  rotate: false
+  xy: 1927, 964
+  size: 60, 43
+  orig: 60, 43
+  offset: 0, 0
+  index: -1
+kameha0
+  rotate: false
+  xy: 1927, 919
+  size: 32, 43
+  orig: 32, 43
   offset: 0, 0
   index: -1
 

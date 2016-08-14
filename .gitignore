@@ -46,3 +46,5 @@ io.fabric/
 /data.sav
 /android/assets/crashlytics-build.properties
 /android/res/values/com_crashlytics_export_strings.xml
+/android/assets/data/sprite/atlas.png
+/android/assets/data/sprite/atlas2.png
