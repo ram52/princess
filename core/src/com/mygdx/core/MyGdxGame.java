@@ -70,6 +70,7 @@ public class MyGdxGame implements ApplicationListener {
     public static String spritesPackPath = "data/sprite/atlas.pack";
     public static String errorSoundPath = "data/sound/error.ogg";
     public static String reviveSoundPath = "data/sound/revive.ogg";
+    public static String yaSoundPath = "data/sound/yaa!.ogg";
     public static String jump1SoundPath = "data/sound/jump1.ogg";
     public static String jump2SoundPath = "data/sound/jump2.ogg";
     public static String deathSoundPath = "data/sound/death.ogg";
@@ -86,6 +87,8 @@ public class MyGdxGame implements ApplicationListener {
     public static String selectSoundPath = "data/sound/select.ogg";
     public static String moveSoundPath = "data/sound/move.ogg";
     public static String boomSoundPath = "data/sound/boom.ogg";
+    public static String enemyHitMusicdPath = "data/sound/hit.ogg";
+    public static String kamehamehaMusicPath = "data/sound/kamehameha.ogg";
     public static String fireballSoundPath = "data/sound/fireball.ogg";
     public static String mainMusicPath = "data/sound/main.ogg";
     public static String gameOverMusicPath = "data/sound/gameover.ogg";
@@ -176,9 +179,9 @@ public class MyGdxGame implements ApplicationListener {
         res.getMusic("on").play();
         res.loadSound(errorSoundPath, "error");
         res.loadSound(reviveSoundPath, "revive");
+        res.loadSound(yaSoundPath, "ya");
         res.loadSound(jump1SoundPath, "jump1");
         res.loadSound(jump2SoundPath, "jump2");
-        res.loadMusic(secretBossSoundPath, "secretboss");
         res.loadSound(newScreenSoundPath, "newScreen");
         res.loadSound(pointSoundPath, "point");
         res.loadSound(fallingSoundPath, "falling");
@@ -192,12 +195,16 @@ public class MyGdxGame implements ApplicationListener {
         res.loadMusic(successMusicPath, "success");
         res.loadMusic(mainMusicPath, "main");
         res.loadMusic(gameOverMusicPath, "gameOver");
+        res.loadMusic(enemyHitMusicdPath, "hit");
         res.loadMusic(bossMusicPath, "boss");
+        res.loadMusic(secretBossSoundPath, "secretboss");
+        res.loadMusic(kamehamehaMusicPath, "kamehameha");
         res.loadMusic(pointSoundPath, "secret");
         res.loadMusic(secretUnlockSoundPath, "secretUnlock");
         res.loadMusic(deathSoundPath, "death");
         res.loadMusic(bossDeathSoundPath, "bossDeath");
         res.loadMusic(slashSoundPath, "slash");
+        res.getMusic("kamehameha").setLooping(true);
         res.getMusic("opening").setLooping(true);
         res.getMusic("success").setLooping(false);
         res.getMusic("main").setLooping(true);

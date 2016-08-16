@@ -69,7 +69,7 @@ import com.mygdx.core.handlers.SimpleDirectionGestureDetector;
 public class Play extends GameState {
 
     private static int NJUMP = 2;
-    private boolean debug = true;
+    private boolean debug = false;
     private boolean stopMain = false;
     private boolean jump1 = false;
     public World world;
@@ -124,6 +124,7 @@ public class Play extends GameState {
     private float offsetY = 0.0f;
     private float beamWidth = 0.0f;
     private float beamX = 0.0f;
+    boolean kamehaReachLimit = false;
     private Runnable runnable;
     private Boolean stopEnemies = false;
     private Button buttonLeft, buttonRight, buttonFire;
@@ -347,11 +348,21 @@ public class Play extends GameState {
             public boolean touchDown(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
-                if(player.getFireBallCount()>0){
+                if(player.getFireBallCount()>0 && Save.gd.isFireBallEquiped()){
                     fire = true;
                 }else{
                     fire = false;
                 }
+
+                if(Save.gd.isKamehamehaEquiped()){
+                    fire = true;
+                    if((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)&& !MyGdxGame.res.getMusic("kamehameha").isPlaying()){
+                        MyGdxGame.res.getSound("ya").play();
+                    }
+                }else{
+                    fire = false;
+                }
+
                 return true;
             }
 
@@ -848,7 +859,7 @@ public class Play extends GameState {
         }
 
         //FIRE BALL
-        if(fire && player.getFireBallCount()>0){
+        if(Save.gd.isFireBallEquiped() && fire && player.getFireBallCount()>0){
             fire = false;
             player.setFireBallCount(player.getFireBallCount()-1);
 
@@ -1184,6 +1195,7 @@ public class Play extends GameState {
         }
     }
 
+
     public void kamehamehaIA(){
         //kamehameha
         float gap = 1.02f*PPM;
@@ -1195,9 +1207,47 @@ public class Play extends GameState {
         float w = 0.0f;
         float h = 0.0f;
 
-        beamWidth+=0.1;
+        float speed = 10.0f;
+
+        if(Math.abs(beamWidth) > Gdx.graphics.getWidth()*10){
+            kamehaReachLimit = !kamehaReachLimit;
+        }
+
+        if(MyGdxGame.pause){
+            MyGdxGame.res.getMusic("kamehameha").stop();
+        }else{
+
+            if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2){
+                if(!MyGdxGame.res.getMusic("kamehameha").isPlaying()){
+                    MyGdxGame.res.getMusic("kamehameha").play();
+                }
+            }else{
+                MyGdxGame.res.getMusic("kamehameha").stop();
+            }
+        }
+
+
+
+
+
+        if(!kamehaReachLimit){
+            beamWidth+= speed;
+        }else{
+//            if(Math.abs(beamWidth) > 10){
+//                beamWidth-=speed*2;
+//            }else {
+                fire = !fire;
+                kamehaReachLimit = false;
+                beamWidth = 0;
+                MyGdxGame.res.getMusic("kamehameha").stop();
+//            }
+
+        }
 
         sb.begin();
+        if(beamWidth>0){
+
+
         if(player.isRight()){
             sb.draw(animKamehameha0.getFrame(),
                     player.getPosition().x*PPM + gap2,
@@ -1250,6 +1300,7 @@ public class Play extends GameState {
             y = player.getPosition().y*PPM - animKamehameha0.getFrame().getRegionHeight()*scale/2;
             w = beamX;
             h = y + animKamehameha2.getFrame().getRegionHeight()*scale;
+        }
         }
         sb.end();
 
@@ -1306,7 +1357,7 @@ public class Play extends GameState {
                     if(!enemy.isDead()){
                         player.collectCoin();
                         if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("boom").play();
-                        if(enemiesKilled >= 1 && player.getFireBallCount()<player.MAXFIREBALLCOUNT){
+                        if(Save.gd.isFireBallEquiped() && enemiesKilled >= 1 && player.getFireBallCount()<player.MAXFIREBALLCOUNT){
                             fire = false;
                             player.setFireBallCount(player.getFireBallCount()+1);
                             enemiesKilled = 0;
@@ -1426,6 +1477,13 @@ public class Play extends GameState {
 
                             //todo enemyHurt animation
                             if(enemy.isTouched()){
+
+//                                if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2){
+//                                    if(!MyGdxGame.res.getMusic("hit").isPlaying()){
+//                                        MyGdxGame.res.getMusic("hit").play();
+//                                    }
+//                                }
+
                                 //nemy.getBody().setLinearVelocity(enemy.getBody().getLinearVelocity().x/2, enemy.getBody().getLinearVelocity().y);
                                 if(enemy.isClimbing()){
 
@@ -1920,7 +1978,10 @@ public class Play extends GameState {
         }
 
 
-        kamehamehaIA();
+        if(Save.gd.isKamehamehaEquiped() && fire){
+            kamehamehaIA();
+        }
+
 
         enemiesIA();
         princessIA();
