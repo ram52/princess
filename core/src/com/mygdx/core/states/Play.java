@@ -69,7 +69,7 @@ import com.mygdx.core.handlers.SimpleDirectionGestureDetector;
 public class Play extends GameState {
 
     private static int NJUMP = 2;
-    private boolean debug = false;
+    private boolean debug = true;
     private boolean stopMain = false;
     private boolean jump1 = false;
     public World world;
@@ -123,12 +123,14 @@ public class Play extends GameState {
     private float lastClickPos = Gdx.graphics.getWidth()/2/PPM;
     private float offsetY = 0.0f;
     private float beamWidth = 0.0f;
+    private float beamX = 0.0f;
     private Runnable runnable;
     private Boolean stopEnemies = false;
     private Button buttonLeft, buttonRight, buttonFire;
     private Stage stageUiControl;
     private SpriteBatch spriteBatch;
     private Animation animKamehameha0, animKamehameha0_rev, animKamehameha1, animKamehameha1_rev, animKamehameha2, animKamehameha2_rev;
+    protected BoundingBox boundingBoxCastle, boundingBoxKamehameha;
 
     public boolean getRandomBoolean() {
         Random random = new Random();
@@ -148,6 +150,12 @@ public class Play extends GameState {
             if(!MyGdxGame.res.getMusic("main").isPlaying())
                 MyGdxGame.res.getMusic("main").play();
         }*/
+
+        Vector2 origin = new Vector2(Gdx.graphics.getWidth()/2, 0);
+        boundingBoxCastle = new BoundingBox();
+        boundingBoxCastle.set(new Vector3((int)origin.x - Gdx.graphics.getWidth()/3.1f,(int)origin.y,0), new Vector3((int)origin.x+Gdx.graphics.getWidth()/3.1f,(int)origin.y+Gdx.graphics.getHeight(),10));
+
+        boundingBoxKamehameha = new BoundingBox();
 
         Sprite tex = new Sprite(MyGdxGame.atlas.findRegion("kameha1"));
         TextureRegion[] sprites = tex.split(16, 43)[0];
@@ -956,6 +964,8 @@ public class Play extends GameState {
                     enemy.setHealth(enemy.getHealth()-1);
                 }
 
+
+
                 if(!MyGdxGame.pause){
                     if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2){
                         if(!MyGdxGame.res.getMusic("slash").isPlaying()){
@@ -966,6 +976,15 @@ public class Play extends GameState {
 
                 enemy.setTouched(true);
                 isTouchingEnemy = true;
+            }else{
+                enemy.setTouched(false);
+            }
+
+            //System.out.println(enemy.getPosition().x*PPM+" "+beamX);
+            //kamehameha
+            if(enemy.getBoundingBox().intersects(boundingBoxKamehameha)){
+                enemy.setTouched(true);
+                enemy.setHealth(enemy.getHealth()-0.6f);
             }else{
                 enemy.setTouched(false);
             }
@@ -1171,6 +1190,11 @@ public class Play extends GameState {
         float gap2 = 0.4f*PPM;
         float scale = 4.0f;
 
+        float x = 0.0f;
+        float y = 0.0f;
+        float w = 0.0f;
+        float h = 0.0f;
+
         beamWidth+=0.1;
 
         sb.begin();
@@ -1193,6 +1217,13 @@ public class Play extends GameState {
                     animKamehameha2.getFrame().getRegionWidth()*scale,
                     animKamehameha2.getFrame().getRegionHeight()*scale);
 
+            beamX = player.getPosition().x*PPM + gap2 + beamWidth +  animKamehameha2.getFrame().getRegionWidth()*scale/4 + animKamehameha2.getFrame().getRegionWidth()*scale;
+
+            x = player.getPosition().x*PPM + gap2;
+            y = player.getPosition().y*PPM - animKamehameha0.getFrame().getRegionHeight()*scale/2;
+            w = beamX + animKamehameha2.getFrame().getRegionWidth()/3f;
+            h = y + animKamehameha2.getFrame().getRegionHeight()*scale;
+
         }
         else {
             sb.draw(animKamehameha0_rev.getFrame(),
@@ -1212,8 +1243,22 @@ public class Play extends GameState {
                     player.getPosition().y*PPM - animKamehameha2_rev.getFrame().getRegionHeight()*scale/2,
                     animKamehameha2_rev.getFrame().getRegionWidth()*scale,
                     animKamehameha2_rev.getFrame().getRegionHeight()*scale);
+
+            beamX = player.getPosition().x*PPM - gap - beamWidth - animKamehameha2_rev.getFrame().getRegionWidth()*scale + animKamehameha1_rev.getFrame().getRegionWidth()*scale;
+
+            x = player.getPosition().x*PPM - gap;
+            y = player.getPosition().y*PPM - animKamehameha0.getFrame().getRegionHeight()*scale/2;
+            w = beamX;
+            h = y + animKamehameha2.getFrame().getRegionHeight()*scale;
         }
         sb.end();
+
+
+
+        boundingBoxKamehameha.set(new Vector3(x,y,0),
+                new Vector3(w,h,10));
+
+        //System.out.println("beamX="+beamX);
 
     }
 
@@ -1276,7 +1321,7 @@ public class Play extends GameState {
                     enemy.getBody().setLinearVelocity(new Vector2(0,0));
                     enemy.setCptDieRunning(enemy.getCptDieRunning()+1);
 
-                    if(enemy.isMalicious()){
+                    if(enemy.isClimbing()){
 
                         if(!enemy.isFromLeft()){
                             if(!enemy.isDieRight()){
@@ -1381,7 +1426,9 @@ public class Play extends GameState {
 
                             //todo enemyHurt animation
                             if(enemy.isTouched()){
-                                if(enemy.isMalicious()){
+                                //nemy.getBody().setLinearVelocity(enemy.getBody().getLinearVelocity().x/2, enemy.getBody().getLinearVelocity().y);
+                                if(enemy.isClimbing()){
+
 
                                     if(!enemy.isFromLeft()){
 
@@ -1396,6 +1443,8 @@ public class Play extends GameState {
                                             enemy.hurtAnimation_rev(true);
                                         }
                                     }
+
+
 
                                 }else{
 
@@ -1415,7 +1464,7 @@ public class Play extends GameState {
 
                                 //enemy on the ground
 
-                                if(!enemy.isClimblLeft() && !enemy.isClimbRight() ){
+                                if(!enemy.isClimbing() ){
                                     if(!enemy.isFromLeft()) {
                                         enemy.getBody().setLinearVelocity(-enemy.getSpeed(),enemy.getBody().getLinearVelocity().y);
                                     }
@@ -1423,6 +1472,16 @@ public class Play extends GameState {
                                         enemy.getBody().setLinearVelocity(enemy.getSpeed(),enemy.getBody().getLinearVelocity().y);
                                         if(!enemy.isNormalLeft() && !enemy.isFadeOutLeft() && !enemy.isClimbRight() && !enemy.isClimblLeft() && !enemy.isTouched()){
                                             enemy.normalAnimation_rev();
+                                        }
+                                    }
+                                }else{
+                                    if(!enemy.isFromLeft()){
+                                        if(!enemy.isClimbRight()){
+                                            enemy.climbAnimation();
+                                        }
+                                    }else{
+                                        if(!enemy.isClimblLeft()){
+                                            enemy.climbAnimation_rev();
                                         }
                                     }
                                 }
@@ -1455,7 +1514,11 @@ public class Play extends GameState {
                                     }
                                 }
 
-                                if( enemy.isMalicious() && (enemy.isClimbing() | ((enemy.getPosition().x > 100/PPM && enemy.isFromLeft()) | (enemy.getPosition().x < MyGdxGame.V_WIDTH/PPM - 100/PPM && !enemy.isFromLeft()))) ){
+
+                                if( enemy.isMalicious() &&
+                                        (enemy.isClimbing() |
+                                                ((enemy.getPosition().x > 100/PPM && enemy.isFromLeft())
+                                                        | (enemy.getPosition().x < MyGdxGame.V_WIDTH/PPM - 100/PPM && !enemy.isFromLeft()))) ){
 
                                     enemy.setWaited(true);
                                     enemy.getBody().setLinearVelocity(0,enemy.getBody().getLinearVelocity().y);
@@ -1926,11 +1989,20 @@ public class Play extends GameState {
             shapeRenderer.circle((float)player.getBoundingBox().getMin().x, (float)player.getBoundingBox().getMin().y, 10);
             shapeRenderer.circle((float)player.getBoundingBox().getMax().x, (float)player.getBoundingBox().getMax().y, 10);
 
+            shapeRenderer.circle(beamX,(float)player.getBoundingBox().getMax().y, 10);
+
             shapeRenderer.circle((float)princess.getBoundingBox().getMin().x, (float)princess.getBoundingBox().getMin().y, 10);
             shapeRenderer.circle((float)princess.getBoundingBox().getMax().x, (float)princess.getBoundingBox().getMax().y, 10);
 
             shapeRenderer.setColor(Color.RED);
-            //shapeRenderer.circle(enemy.getBoundingBox().getCenterX()*PPM, enemy.getBoundingBox().getCenterY()*PPM, 100);
+            shapeRenderer.circle(boundingBoxCastle.getMin().x , boundingBoxCastle.getMin().y, 10);
+            shapeRenderer.circle(boundingBoxCastle.getMax().x , boundingBoxCastle.getMax().y, 10);
+
+            shapeRenderer.circle(boundingBoxKamehameha.getMin().x , boundingBoxKamehameha.getMin().y, 10);
+            shapeRenderer.circle(boundingBoxKamehameha.getMax().x , boundingBoxKamehameha.getMax().y, 10);
+
+
+
             shapeRenderer.end();
 
             Iterator<Enemy> iterEnemies = enemies.iterator();

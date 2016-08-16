@@ -7,7 +7,7 @@ import com.mygdx.core.MyGdxGame;
 
 public class Enemy extends B2DSprite 
 {
-	private int health = 20;
+	private double health = 20;
 	private Sprite tex;
     private boolean normalRight = false;
     private boolean normalLeft = false;
@@ -469,7 +469,7 @@ public class Enemy extends B2DSprite
     }
 
     public void hurtAnimation(boolean isClimbing){
-        setLoop(false);
+        setLoop(true);
         if(isClimbing){
             tex = new Sprite(MyGdxGame.atlas.findRegion("enemyClimbHurt"));
         }else{
@@ -488,7 +488,7 @@ public class Enemy extends B2DSprite
     }
 
     public void hurtAnimation_rev(boolean isClimbing){
-        setLoop(false);
+        setLoop(true);
         if(isClimbing){
             tex = new Sprite(MyGdxGame.atlas.findRegion("enemyClimbHurt"));
         }else{
@@ -513,11 +513,11 @@ public class Enemy extends B2DSprite
     }
 
 
-	public int getHealth() {
+	public double getHealth() {
 		return health;
 	}
 
-	public void setHealth(int health) {
+	public void setHealth(double health) {
 		this.health = health;
 	}
 
