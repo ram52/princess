@@ -54,7 +54,12 @@ public class Credits extends GameState {
             System.out.println(network);
         }
 
-        Sprite tex = new Sprite(MyGdxGame.atlas.findRegion("walk"));
+        Sprite tex = null;
+        if(Save.gd.isExcaliburEquiped()){
+            tex = new Sprite(MyGdxGame.atlas.findRegion("walkEx"));
+        }else{
+            tex = new Sprite(MyGdxGame.atlas.findRegion("walk"));
+        }
         TextureRegion[] sprites = tex.split(64, 64)[0];
         animationPBlue1 = new Animation(sprites, 1 / 5f);
 

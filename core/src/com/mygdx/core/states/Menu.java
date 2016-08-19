@@ -96,7 +96,12 @@ public class Menu extends GameState {
         MyGdxGame.background_skyDay.setVector(0, 0);
         MyGdxGame.background_wood1.setVector(-3, 0);
 
-        Sprite tex = new Sprite(MyGdxGame.atlas.findRegion("walk"));
+        Sprite tex = null;
+        if(Save.gd.isExcaliburEquiped()){
+            tex = new Sprite(MyGdxGame.atlas.findRegion("walkEx"));
+        }else{
+            tex = new Sprite(MyGdxGame.atlas.findRegion("walk"));
+        }
         TextureRegion[] sprites2 = tex.split(64, 64)[0];
         animPlayerIdle = new Animation(sprites2, 1 / 5f);
 

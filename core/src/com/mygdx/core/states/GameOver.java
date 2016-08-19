@@ -59,7 +59,13 @@ public class GameOver extends GameState {
 
         animTitle = new Animation(new Sprite(MyGdxGame.atlas.findRegion("gameover")).split(59,47)[0], 1 / 5f);
 
-        Sprite tex = new Sprite(MyGdxGame.atlas.findRegion("sad"));
+        Sprite tex = null;
+        if(Save.gd.isExcaliburEquiped()){
+            tex = new Sprite(MyGdxGame.atlas.findRegion("sadEx"));
+        }else{
+            tex = new Sprite(MyGdxGame.atlas.findRegion("sad"));
+        }
+
         TextureRegion[] sprites = tex.split(110, 168)[0];
         animSad = new Animation(sprites, 1 / 5f);
 

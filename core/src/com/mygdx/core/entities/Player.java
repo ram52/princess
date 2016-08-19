@@ -10,7 +10,7 @@ import com.mygdx.core.handlers.Save;
 
 public class Player extends B2DSprite 
 {
-    public static final int MAXFIREBALLCOUNT = 3 ;
+    public static final int MAXFIREBALLCOUNT = 4 ;
     private int numCoins;
 	private int totalCoins;
     private boolean runnigLeft = false;
@@ -22,7 +22,7 @@ public class Player extends B2DSprite
     private boolean stillRight = true;
     private boolean stillLeft = false;
     private boolean playerDead = false;
-    private int fireBallCount = 2;
+    private int fireBallCount = 3;
     private boolean right = false;
     private boolean left = false;
     private boolean isSlashingRight = false;
@@ -33,11 +33,18 @@ public class Player extends B2DSprite
 		super(body);
 
         Sprite tex = null;
+        if(Save.gd.isExcaliburEquiped()){
+            if(selector == 0) tex = new Sprite(MyGdxGame.atlas.findRegion("walkEx"));
+            if(selector == 1) tex = new Sprite(MyGdxGame.atlas.findRegion("walkEx"));
+            if(selector == 2) tex = new Sprite(MyGdxGame.atlas.findRegion("walkEx"));
+            if(selector == 3) tex = new Sprite(MyGdxGame.atlas.findRegion("walkEx"));
+        }else{
+            if(selector == 0) tex = new Sprite(MyGdxGame.atlas.findRegion("walk"));
+            if(selector == 1) tex = new Sprite(MyGdxGame.atlas.findRegion("walk"));
+            if(selector == 2) tex = new Sprite(MyGdxGame.atlas.findRegion("walk"));
+            if(selector == 3) tex = new Sprite(MyGdxGame.atlas.findRegion("walk"));
+        }
 
-        if(selector == 0) tex = new Sprite(MyGdxGame.atlas.findRegion("walk"));
-        if(selector == 1) tex = new Sprite(MyGdxGame.atlas.findRegion("walk"));
-        if(selector == 2) tex = new Sprite(MyGdxGame.atlas.findRegion("walk"));
-        if(selector == 3) tex = new Sprite(MyGdxGame.atlas.findRegion("walk"));
 
 		TextureRegion[] sprites = tex.split( 64, 64)[0];
 		setAnimation(sprites, 1 / 5f);
@@ -49,10 +56,17 @@ public class Player extends B2DSprite
     {
         Sprite tex = null;
 
-        if(selector == 0) tex = new Sprite(MyGdxGame.atlas.findRegion("slash"));
-        if(selector == 1) tex = new Sprite(MyGdxGame.atlas.findRegion("slash"));
-        if(selector == 2) tex = new Sprite(MyGdxGame.atlas.findRegion("slash"));
-        if(selector == 3) tex = new Sprite(MyGdxGame.atlas.findRegion("slash"));
+        if(Save.gd.isExcaliburEquiped()){
+            if(selector == 0) tex = new Sprite(MyGdxGame.atlas.findRegion("slashEx"));
+            if(selector == 1) tex = new Sprite(MyGdxGame.atlas.findRegion("slashEx"));
+            if(selector == 2) tex = new Sprite(MyGdxGame.atlas.findRegion("slashEx"));
+            if(selector == 3) tex = new Sprite(MyGdxGame.atlas.findRegion("slashEx"));
+        }else{
+            if(selector == 0) tex = new Sprite(MyGdxGame.atlas.findRegion("slash"));
+            if(selector == 1) tex = new Sprite(MyGdxGame.atlas.findRegion("slash"));
+            if(selector == 2) tex = new Sprite(MyGdxGame.atlas.findRegion("slash"));
+            if(selector == 3) tex = new Sprite(MyGdxGame.atlas.findRegion("slash"));
+        }
 
         TextureRegion[] sprites = tex.split(96, 64)[0];
         setAnimation(sprites, 1 / 15f);
@@ -75,10 +89,17 @@ public class Player extends B2DSprite
     {
         Sprite tex = null;
 
-        if(selector == 0) tex = new Sprite(MyGdxGame.atlas.findRegion("slash"));
-        if(selector == 1) tex = new Sprite(MyGdxGame.atlas.findRegion("slash"));
-        if(selector == 2) tex = new Sprite(MyGdxGame.atlas.findRegion("slash"));
-        if(selector == 3) tex = new Sprite(MyGdxGame.atlas.findRegion("slash"));
+        if(Save.gd.isExcaliburEquiped()){
+            if(selector == 0) tex = new Sprite(MyGdxGame.atlas.findRegion("slashEx"));
+            if(selector == 1) tex = new Sprite(MyGdxGame.atlas.findRegion("slashEx"));
+            if(selector == 2) tex = new Sprite(MyGdxGame.atlas.findRegion("slashEx"));
+            if(selector == 3) tex = new Sprite(MyGdxGame.atlas.findRegion("slashEx"));
+        }else{
+            if(selector == 0) tex = new Sprite(MyGdxGame.atlas.findRegion("slash"));
+            if(selector == 1) tex = new Sprite(MyGdxGame.atlas.findRegion("slash"));
+            if(selector == 2) tex = new Sprite(MyGdxGame.atlas.findRegion("slash"));
+            if(selector == 3) tex = new Sprite(MyGdxGame.atlas.findRegion("slash"));
+        }
 
         TextureRegion[] sprites = tex.split(96, 64)[0];
 
@@ -105,16 +126,21 @@ public class Player extends B2DSprite
     {
         Sprite tex = null;
 
-        if(selector == 0) tex = new Sprite(MyGdxGame.atlas.findRegion("walk"));
-        if(selector == 1) tex = new Sprite(MyGdxGame.atlas.findRegion("walk"));
-        if(selector == 2) tex = new Sprite(MyGdxGame.atlas.findRegion("walk"));
-        if(selector == 3) tex = new Sprite(MyGdxGame.atlas.findRegion("walk"));
+        if(Save.gd.isExcaliburEquiped()){
+            if(selector == 0) tex = new Sprite(MyGdxGame.atlas.findRegion("standEx"));
+            if(selector == 1) tex = new Sprite(MyGdxGame.atlas.findRegion("standEx"));
+            if(selector == 2) tex = new Sprite(MyGdxGame.atlas.findRegion("standEx"));
+            if(selector == 3) tex = new Sprite(MyGdxGame.atlas.findRegion("standEx"));
+        }else{
+            if(selector == 0) tex = new Sprite(MyGdxGame.atlas.findRegion("stand"));
+            if(selector == 1) tex = new Sprite(MyGdxGame.atlas.findRegion("stand"));
+            if(selector == 2) tex = new Sprite(MyGdxGame.atlas.findRegion("stand"));
+            if(selector == 3) tex = new Sprite(MyGdxGame.atlas.findRegion("stand"));
+        }
 
         TextureRegion[] sprites = tex.split(64, 64)[0];
-        for(int i=0 ;i<sprites.length; i++){
-            sprites[i] = sprites[0];
-        }
-        setAnimation(sprites, 1 / 15f);
+
+        setAnimation(sprites, 1 / 5f);
 
         flyingRight = false;
         flyingLeft = false;
@@ -134,21 +160,24 @@ public class Player extends B2DSprite
     {
         Sprite tex = null;
 
-        if(selector == 0) tex = new Sprite(MyGdxGame.atlas.findRegion("walk"));
-        if(selector == 1) tex = new Sprite(MyGdxGame.atlas.findRegion("walk"));
-        if(selector == 2) tex = new Sprite(MyGdxGame.atlas.findRegion("walk"));
-        if(selector == 3) tex = new Sprite(MyGdxGame.atlas.findRegion("walk"));
+        if(Save.gd.isExcaliburEquiped()){
+            if(selector == 0) tex = new Sprite(MyGdxGame.atlas.findRegion("standEx"));
+            if(selector == 1) tex = new Sprite(MyGdxGame.atlas.findRegion("standEx"));
+            if(selector == 2) tex = new Sprite(MyGdxGame.atlas.findRegion("standEx"));
+            if(selector == 3) tex = new Sprite(MyGdxGame.atlas.findRegion("standEx"));
+        }else{
+            if(selector == 0) tex = new Sprite(MyGdxGame.atlas.findRegion("stand"));
+            if(selector == 1) tex = new Sprite(MyGdxGame.atlas.findRegion("stand"));
+            if(selector == 2) tex = new Sprite(MyGdxGame.atlas.findRegion("stand"));
+            if(selector == 3) tex = new Sprite(MyGdxGame.atlas.findRegion("stand"));
+        }
 
         TextureRegion[] sprites = tex.split(64, 64)[0];
 
         for(int i=0;i<sprites.length;i++)
             sprites[i].flip(true,false);
 
-        for(int i=0 ;i<sprites.length; i++){
-            sprites[i] = sprites[0];
-        }
-
-        setAnimation(sprites, 1 / 15f);
+        setAnimation(sprites, 1 / 5f);
 
         flyingRight = false;
         flyingLeft = false;
@@ -170,10 +199,18 @@ public class Player extends B2DSprite
 	{
 		Sprite tex = null;
 
-		if(selector == 0) tex = new Sprite(MyGdxGame.atlas.findRegion("walk"));
-		if(selector == 1) tex = new Sprite(MyGdxGame.atlas.findRegion("walk"));
-		if(selector == 2) tex = new Sprite(MyGdxGame.atlas.findRegion("walk"));
-		if(selector == 3) tex = new Sprite(MyGdxGame.atlas.findRegion("walk"));
+        if(Save.gd.isExcaliburEquiped()){
+            if(selector == 0) tex = new Sprite(MyGdxGame.atlas.findRegion("walkEx"));
+            if(selector == 1) tex = new Sprite(MyGdxGame.atlas.findRegion("walkEx"));
+            if(selector == 2) tex = new Sprite(MyGdxGame.atlas.findRegion("walkEx"));
+            if(selector == 3) tex = new Sprite(MyGdxGame.atlas.findRegion("walkEx"));
+        }else {
+            if(selector == 0) tex = new Sprite(MyGdxGame.atlas.findRegion("walk"));
+            if(selector == 1) tex = new Sprite(MyGdxGame.atlas.findRegion("walk"));
+            if(selector == 2) tex = new Sprite(MyGdxGame.atlas.findRegion("walk"));
+            if(selector == 3) tex = new Sprite(MyGdxGame.atlas.findRegion("walk"));
+        }
+
 
 		TextureRegion[] sprites = tex.split(64, 64)[0];
 		setAnimation(sprites, 1 / 5f);
@@ -195,10 +232,17 @@ public class Player extends B2DSprite
 	{
 		Sprite tex = null;
 
-		if(selector == 0) tex = new Sprite(MyGdxGame.atlas.findRegion("walk"));
-		if(selector == 1) tex = new Sprite(MyGdxGame.atlas.findRegion("walk"));
-		if(selector == 2) tex = new Sprite(MyGdxGame.atlas.findRegion("walk"));
-		if(selector == 3) tex = new Sprite(MyGdxGame.atlas.findRegion("walk"));
+        if(Save.gd.isExcaliburEquiped()){
+            if(selector == 0) tex = new Sprite(MyGdxGame.atlas.findRegion("walkEx"));
+            if(selector == 1) tex = new Sprite(MyGdxGame.atlas.findRegion("walkEx"));
+            if(selector == 2) tex = new Sprite(MyGdxGame.atlas.findRegion("walkEx"));
+            if(selector == 3) tex = new Sprite(MyGdxGame.atlas.findRegion("walkEx"));
+        }else {
+            if(selector == 0) tex = new Sprite(MyGdxGame.atlas.findRegion("walk"));
+            if(selector == 1) tex = new Sprite(MyGdxGame.atlas.findRegion("walk"));
+            if(selector == 2) tex = new Sprite(MyGdxGame.atlas.findRegion("walk"));
+            if(selector == 3) tex = new Sprite(MyGdxGame.atlas.findRegion("walk"));
+        }
 
 		TextureRegion[] sprites = tex.split(64, 64)[0];
 

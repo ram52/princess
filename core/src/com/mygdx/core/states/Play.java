@@ -124,6 +124,8 @@ public class Play extends GameState {
     private float offsetY = 0.0f;
     private float beamWidth = 0.0f;
     private float beamX = 0.0f;
+    private float reloadKamehameha = 0.0f;
+    boolean blockKamehameha = false;
     boolean kamehaReachLimit = false;
     private Runnable runnable;
     private Boolean stopEnemies = false;
@@ -132,6 +134,7 @@ public class Play extends GameState {
     private SpriteBatch spriteBatch;
     private Animation animKamehameha0, animKamehameha0_rev, animKamehameha1, animKamehameha1_rev, animKamehameha2, animKamehameha2_rev;
     protected BoundingBox boundingBoxCastle, boundingBoxKamehameha;
+    protected double cpt_sound_hit = 0;
 
     public boolean getRandomBoolean() {
         Random random = new Random();
@@ -336,8 +339,14 @@ public class Play extends GameState {
         stageUiControl.addActor(buttonRight);
 
         Button.ButtonStyle fireButtonStyle = new Button.ButtonStyle();
-        fireButtonStyle.up = skin.getDrawable("buttonFireBallUp");
-        fireButtonStyle.down = skin.getDrawable("buttonFireBallDown");
+        if(Save.gd.isExcaliburEquiped()){
+            fireButtonStyle.up = skin.getDrawable("buttonSecret");
+            fireButtonStyle.down = skin.getDrawable("buttonSecret");
+        }else{
+            fireButtonStyle.up = skin.getDrawable("buttonUiBossJumpUp");
+            fireButtonStyle.down = skin.getDrawable("buttonUiBossJumpDown");
+        }
+
         buttonFire = new Button(fireButtonStyle);
         buttonFire.setWidth(buttonLeft.getWidth());
         buttonFire.setHeight(buttonLeft.getHeight());
@@ -348,15 +357,12 @@ public class Play extends GameState {
             public boolean touchDown(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
-                if(player.getFireBallCount()>0 && Save.gd.isFireBallEquiped()){
+                if(Save.gd.isFireBallEquiped()){
+                    System.out.println("clicked fire!");
                     fire = true;
-                }else{
-                    fire = false;
-                }
-
-                if(Save.gd.isKamehamehaEquiped()){
+                }else if(Save.gd.isKamehamehaEquiped() && !blockKamehameha){
                     fire = true;
-                    if((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)&& !MyGdxGame.res.getMusic("kamehameha").isPlaying()){
+                    if((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)&& reloadKamehameha == 0 && beamWidth == 0){
                         MyGdxGame.res.getSound("ya").play();
                     }
                 }else{
@@ -762,7 +768,10 @@ public class Play extends GameState {
                 }
 
                 if (keycode == Input.Keys.ENTER | keycode == Input.Keys.SPACE) {
-                    fire  = true;
+                    if(!blockKamehameha){
+                        fire  = true;
+                        System.out.println("pressed enter!");
+                    }
                     InputEvent event2 = new InputEvent();
                     event2.setType(InputEvent.Type.touchUp);
                     buttonFire.fire(event2);
@@ -1213,25 +1222,25 @@ public class Play extends GameState {
             kamehaReachLimit = !kamehaReachLimit;
         }
 
+        //MyGdxGame.res.getMusic("main").stop();
+
         if(MyGdxGame.pause){
-            MyGdxGame.res.getMusic("kamehameha").stop();
+            MyGdxGame.res.getMusic("epic").stop();
         }else{
 
             if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2){
-                if(!MyGdxGame.res.getMusic("kamehameha").isPlaying()){
-                    MyGdxGame.res.getMusic("kamehameha").play();
+                if(!MyGdxGame.res.getMusic("epic").isPlaying()){
+                    //MyGdxGame.res.getMusic("epic").play();
+
                 }
             }else{
-                MyGdxGame.res.getMusic("kamehameha").stop();
+                MyGdxGame.res.getMusic("epic").stop();
             }
         }
 
-
-
-
-
         if(!kamehaReachLimit){
-            beamWidth+= speed;
+            if(!MyGdxGame.pause)
+                beamWidth+= speed;
         }else{
 //            if(Math.abs(beamWidth) > 10){
 //                beamWidth-=speed*2;
@@ -1239,7 +1248,9 @@ public class Play extends GameState {
                 fire = !fire;
                 kamehaReachLimit = false;
                 beamWidth = 0;
-                MyGdxGame.res.getMusic("kamehameha").stop();
+                blockKamehameha = true;
+//                MyGdxGame.res.getMusic("epic").stop();
+//                MyGdxGame.res.getMusic("main").play();
 //            }
 
         }
@@ -1474,19 +1485,22 @@ public class Play extends GameState {
 
                         }else{
 
-
                             //todo enemyHurt animation
                             if(enemy.isTouched()){
+                                if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2){
+                                    if(cpt_sound_hit % 2 == 0){
+                                        MyGdxGame.res.getSound("hit").play();
+                                    }
+                                    if(cpt_sound_hit < 9999){
+                                        cpt_sound_hit+=0.5;
+                                    }else {
+                                        cpt_sound_hit = 0;
+                                    }
 
-//                                if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2){
-//                                    if(!MyGdxGame.res.getMusic("hit").isPlaying()){
-//                                        MyGdxGame.res.getMusic("hit").play();
-//                                    }
-//                                }
+                                }
 
                                 //nemy.getBody().setLinearVelocity(enemy.getBody().getLinearVelocity().x/2, enemy.getBody().getLinearVelocity().y);
                                 if(enemy.isClimbing()){
-
 
                                     if(!enemy.isFromLeft()){
 
@@ -1691,7 +1705,7 @@ public class Play extends GameState {
                 Timer.schedule(new Timer.Task() {
                     @Override
                     public void run() {
-                        //gsm.setState(GameStateManager.GAME_OVER);
+                        gsm.setState(GameStateManager.GAME_OVER);
                     }
                 }, 1.5f);
             }
@@ -1944,6 +1958,7 @@ public class Play extends GameState {
         }
 
         if(cameraMotionOver) {
+
             stage1.act();
             spriteBatch.begin();
             stage1.draw();
@@ -1952,6 +1967,54 @@ public class Play extends GameState {
                     Gdx.graphics.getHeight() / 1.27f);
 
             if(!MyGdxGame.pause && !player.isPlayerDead()) {
+                //power up bar
+                if(Save.gd.isKamehamehaEquiped()){
+                    shapeRenderer.setColor(Color.GRAY);
+                    shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+                    float w = buttonFire.getWidth()/1.5f;
+                    float h = buttonFire.getHeight()/1.5f;
+                    shapeRenderer.rect(buttonFire.getX()+w/4, buttonFire.getY()+h/4, w, h);
+                    shapeRenderer.setColor(Color.RED);
+                    w = buttonFire.getWidth()/1.5f;
+                    float max = buttonFire.getHeight()/1.5f;
+
+                    if(!blockKamehameha){
+                        reloadKamehameha = 0;
+                        h = max -(beamWidth/max*1.6f);
+                        shapeRenderer.rect(buttonFire.getX()+w/4, buttonFire.getY()+(buttonFire.getHeight()/1.5f)/4, w, h);
+                    }else{
+                        if(reloadKamehameha < max){
+                            if(!MyGdxGame.pause)
+                                reloadKamehameha+=0.1;
+                        }
+                        else{
+                            System.out.println("kamehameha reloaded!");
+                            if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
+                                MyGdxGame.res.getSound("reloaded").play();
+                            }
+                            blockKamehameha = false;
+                            reloadKamehameha = 0;
+                        }
+                        shapeRenderer.rect(buttonFire.getX()+w/4, buttonFire.getY()+(buttonFire.getHeight()/1.5f)/4, w, reloadKamehameha);
+                    }
+                }
+
+                if(Save.gd.isFireBallEquiped()){
+                    shapeRenderer.setColor(Color.GRAY);
+                    shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+                    float w = buttonFire.getWidth()/1.5f;
+                    float h = buttonFire.getHeight()/1.5f;
+                    shapeRenderer.rect(buttonFire.getX()+w/4, buttonFire.getY()+h/4, w, h);
+                    shapeRenderer.setColor(Color.RED);
+                    w = buttonFire.getWidth()/1.5f;
+                    h = buttonFire.getHeight()/1.5f/Math.abs(player.MAXFIREBALLCOUNT-player.getFireBallCount());
+                    if(player.getFireBallCount()>0)
+                        shapeRenderer.rect(buttonFire.getX()+w/4, buttonFire.getY()+(buttonFire.getHeight()/1.5f)/4, w, h);
+                }
+
+
+
+                shapeRenderer.end();
                 stageUiControl.act();
                 stageUiControl.draw();
             }
@@ -2043,6 +2106,8 @@ public class Play extends GameState {
 
         cam.update();
         cpt_cameraIntro++;
+
+
 
         if(debug){
             shapeRenderer.setColor(Color.BLACK);
