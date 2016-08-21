@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -123,9 +124,9 @@ public class GameOver extends GameState {
         Sprite tex_trophy_silver = new Sprite(MyGdxGame.atlas.findRegion("trophySilver"));
         Sprite tex_trophy_gold = new Sprite(MyGdxGame.atlas.findRegion("trophyGold"));
 
-        background = new Image(tex_background);
-        background.setHeight(Gdx.graphics.getHeight());
-        background.setWidth(Gdx.graphics.getWidth());
+        background = new Image(MyGdxGame.atlas.findRegion("buttonSecret"));
+        background.setHeight(0);
+        background.setWidth(0);
 
         trophy_empty = new Image(tex_trophy_empty);
         trophy_empty.setHeight(Gdx.graphics.getHeight() / 6.9f);
@@ -169,18 +170,19 @@ public class GameOver extends GameState {
 
         BitmapFont font = new BitmapFont(Gdx.files.internal(MyGdxGame.fontScorePath), false);
         labelScore = new Label("SCORE "+"0", new LabelStyle(font, Color.valueOf("C68C57") )) ;
-        labelBestScore = new Label("BEST "+String.valueOf(highScores[0]), new LabelStyle(font,Color.valueOf("C68C57")));
+        labelBestScore = new Label("BEST SCORE: "+String.valueOf(highScores[0]), new LabelStyle(font,Color.valueOf("FFFFFF")));
 
         float fScale = Gdx.graphics.getWidth() / 400f;
         labelScore.setFontScale(fScale);
         labelBestScore.setFontScale(fScale);
         labelScore.setWidth(Gdx.graphics.getWidth() / 3);
-        labelBestScore.setWidth(Gdx.graphics.getWidth()/3);
+        labelBestScore.setWidth(Gdx.graphics.getWidth());
+
         labelScore.setAlignment(Align.left);
-        labelBestScore.setAlignment(Align.left);
+        labelBestScore.setAlignment(Align.center);
 
         labelScore.setPosition((Gdx.graphics.getWidth() - labelScore.getWidth()) / 2.378f, ((float) Gdx.graphics.getHeight() / 1.92f));
-        labelBestScore.setPosition((Gdx.graphics.getWidth() - labelBestScore.getWidth()) / 2.36f, (float) labelScore.getY() - (float) (labelBestScore.getHeight() * fScale)/1.3f);
+        labelBestScore.setPosition((Gdx.graphics.getWidth() - labelBestScore.getWidth()) / 2f, Gdx.graphics.getHeight()/2.5f);
 
         if (score >= 10) game.actionResolver.unlockAchievementGPGS(MyGdxGame.achievementScore10);
         if (score >= 50) game.actionResolver.unlockAchievementGPGS(MyGdxGame.achievementScore50);
@@ -193,7 +195,7 @@ public class GameOver extends GameState {
         stage1.addActor(background);
         labelScore.setVisible(false);
         stage1.addActor(labelScore);
-        labelBestScore.setVisible(false);
+        labelBestScore.setVisible(true);
         stage1.addActor(labelBestScore);
 
         fade = new AlphaAction();
@@ -464,12 +466,25 @@ public class GameOver extends GameState {
         }
 
         MyGdxGame.background_wood1.render(sb);
+        MyGdxGame.background_title.render(sb);
+
+        shapeRenderer.setColor(Color.BLACK);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.rect(labelBestScore.getX(), labelBestScore.getY()/1.01f, labelBestScore.getWidth()*1.1f, labelBestScore.getHeight()*1.2f);
+        shapeRenderer.end();
+
+
 
         if(MyGdxGame.isNightEnable()) MyGdxGame.displayBlinkingStars();
 
         stage1.act();
         sb.begin();
         stage1.draw();
+
+
+
+
+
 
 
 
@@ -514,8 +529,6 @@ public class GameOver extends GameState {
         stage1.getActors().items[5].setVisible(true);
         stage1.getActors().items[5].setPosition((Gdx.graphics.getWidth() / 1f) - (Gdx.graphics.getWidth()/20+cpt_translate_animation * speed), stage1.getActors().items[4].getY());
         stage1.getActors().items[5].draw(sb, 1f);
-
-
 
 
         sb.end();

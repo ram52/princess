@@ -66,10 +66,10 @@ public class MyGdxGame implements ApplicationListener {
     public static boolean nightEnable = true;
     public static Background background_cloud, background_skyNight, background_skyDay, background_wood1,
     //background_storyLine,
-    background_title;
+    background_title, background_tuto;
     public static String spritesPackPath = "data/sprite/atlas.pack";
     public static String errorSoundPath = "data/sound/error.ogg";
-    public static String reviveSoundPath = "data/sound/revive.ogg";
+    //public static String reviveSoundPath = "data/sound/revive.ogg";
     public static String yaSoundPath = "data/sound/yaa!.ogg";
     public static String jump1SoundPath = "data/sound/jump1.ogg";
     public static String jump2SoundPath = "data/sound/jump2.ogg";
@@ -85,12 +85,13 @@ public class MyGdxGame implements ApplicationListener {
     public static String laughSoundPath = "data/sound/laugh.ogg";
     public static String slashSoundPath = "data/sound/slash.ogg";
     public static String selectSoundPath = "data/sound/select.ogg";
+    public static String equipedSoundPath = "data/sound/equiped.ogg";
     public static String moveSoundPath = "data/sound/move.ogg";
     public static String boomSoundPath = "data/sound/boom.ogg";
     public static String enemyHitMusicdPath = "data/sound/hit.ogg";
     public static String kamehamehaSoundPath = "data/sound/kamehameha.ogg";
     public static String epicMusicPath = "data/sound/epic.ogg";
-    public static String reloadedSoundPath = "data/sound/reloaded.wav";
+    public static String reloadedSoundPath = "data/sound/reloaded.ogg";
     public static String fireballSoundPath = "data/sound/fireball.ogg";
     public static String mainMusicPath = "data/sound/main.ogg";
     public static String gameOverMusicPath = "data/sound/gameover.ogg";
@@ -180,7 +181,7 @@ public class MyGdxGame implements ApplicationListener {
         res.loadMusic(onSoundPath, "on");
         res.getMusic("on").play();
         res.loadSound(errorSoundPath, "error");
-        res.loadSound(reviveSoundPath, "revive");
+        //res.loadSound(reviveSoundPath, "revive");
         res.loadSound(yaSoundPath, "ya");
         res.loadSound(jump1SoundPath, "jump1");
         res.loadSound(jump2SoundPath, "jump2");
@@ -188,6 +189,7 @@ public class MyGdxGame implements ApplicationListener {
         res.loadSound(pointSoundPath, "point");
         res.loadSound(fallingSoundPath, "falling");
         res.loadSound(selectSoundPath, "select");
+        res.loadSound(equipedSoundPath, "equiped");
         res.loadSound(boomSoundPath, "boom");
         res.loadSound(laughSoundPath, "laugh");
         res.loadSound(fireballSoundPath, "fireball");
@@ -450,6 +452,10 @@ public class MyGdxGame implements ApplicationListener {
         tex = new Sprite(MyGdxGame.atlas.findRegion("backgroundTitle"));
         background_title = new Background(new TextureRegion(tex), cam, 1f);
         background_title.setVector(0, 0);
+
+        tex = new Sprite(MyGdxGame.atlas.findRegion("backgroundTuto"));
+        background_tuto = new Background(new TextureRegion(tex), cam, 1f);
+        background_tuto.setVector(0, 0);
 
 
 

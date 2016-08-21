@@ -339,12 +339,12 @@ public class Play extends GameState {
         stageUiControl.addActor(buttonRight);
 
         Button.ButtonStyle fireButtonStyle = new Button.ButtonStyle();
-        if(Save.gd.isExcaliburEquiped()){
-            fireButtonStyle.up = skin.getDrawable("buttonSecret");
-            fireButtonStyle.down = skin.getDrawable("buttonSecret");
-        }else{
+        if(Save.gd.isFireBallEquiped() | Save.gd.isKamehamehaEquiped()){
             fireButtonStyle.up = skin.getDrawable("buttonUiBossJumpUp");
             fireButtonStyle.down = skin.getDrawable("buttonUiBossJumpDown");
+        }else{
+            fireButtonStyle.up = skin.getDrawable("buttonSecret");
+            fireButtonStyle.down = skin.getDrawable("buttonSecret");
         }
 
         buttonFire = new Button(fireButtonStyle);
@@ -438,6 +438,7 @@ public class Play extends GameState {
         labelScore.setFontScaleX(Gdx.graphics.getHeight() / 900f);
         labelScore.setPosition((Gdx.graphics.getWidth() - labelScore.getWidth()) / 2,
                 Gdx.graphics.getHeight() / 1.27f);
+        labelScore.setAlignment(Align.center);
         stage1.addActor(labelScore);
 
         createTiles();
@@ -1218,7 +1219,7 @@ public class Play extends GameState {
 
         float speed = 10.0f;
 
-        if(Math.abs(beamWidth) > Gdx.graphics.getWidth()*10){
+        if(Math.abs(beamWidth) > MyGdxGame.V_WIDTH*10){
             kamehaReachLimit = !kamehaReachLimit;
         }
 
@@ -1702,6 +1703,7 @@ public class Play extends GameState {
             //TODO go to game over
             if(!gameover){
                 gameover = true;
+                submit = true;
                 Timer.schedule(new Timer.Task() {
                     @Override
                     public void run() {
@@ -1863,15 +1865,15 @@ public class Play extends GameState {
             MyGdxGame.background_skyNight.update(dt);
         }
 
-        if (player.getNumCoins() <= 9)
-            labelScore.setPosition(
-                    (Gdx.graphics.getWidth() - labelScore.getWidth()) / 2, labelScore.getY());
-        else if (player.getNumCoins() >= 10 && player.getNumCoins() <= 99)
-            labelScore.setPosition(
-                    (Gdx.graphics.getWidth() - labelScore.getWidth() * 2) / 2, labelScore.getY());
-        else if (player.getNumCoins() == 100)
-            labelScore.setPosition(
-                    (Gdx.graphics.getWidth() - labelScore.getWidth() * 3) / 2, labelScore.getY());
+//        if (player.getNumCoins() <= 9)
+//            labelScore.setPosition(
+//                    (Gdx.graphics.getWidth() - labelScore.getWidth()) / 2, labelScore.getY());
+//        else if (player.getNumCoins() >= 10 && player.getNumCoins() <= 99)
+//            labelScore.setPosition(
+//                    (Gdx.graphics.getWidth() - labelScore.getWidth() * 2) / 2, labelScore.getY());
+//        else if (player.getNumCoins() == 100)
+//            labelScore.setPosition(
+//                    (Gdx.graphics.getWidth() - labelScore.getWidth() * 3) / 2, labelScore.getY());
 
         Array<Body> bodies = cl.getCoinsBodies();
         for (int i = 0; i < bodies.size; i++) {
@@ -1911,6 +1913,35 @@ public class Play extends GameState {
             player.getBody().setLinearVelocity(0, 0);
         }
 
+        //SUBMIT SCORE ONLY ONCE!
+        if(submit) {
+            submit = false;
+            MyGdxGame.setContinue(false);
+            Save.load();
+            boolean newHighScore = false;
+            long highScores[] = Save.gd.getHighScores();
+            for (int i = 0; i < highScores.length; i++) {
+                if (player.getNumCoins() > highScores[i])
+                    newHighScore = true;
+                else
+                    newHighScore = false;
+            }
+            if (newHighScore) {
+                Save.gd.setTenativeScore(player.getNumCoins());
+                Save.gd.setNewHighScore(true);
+                Save.gd.addHighScore(Save.gd.getTentativeScore(), "player");
+                Save.save();
+            } else {
+                Save.gd.setNewHighScore(false);
+                Save.gd.setTenativeScore(player.getNumCoins());
+                Save.save();
+            }
+
+            if (game.actionResolver.getSignedInGPGS()) {
+                game.actionResolver.submitScoreGPGS(player.getNumCoins());
+            }
+
+        }
 
     }
 
@@ -1968,24 +1999,32 @@ public class Play extends GameState {
 
             if(!MyGdxGame.pause && !player.isPlayerDead()) {
                 //power up bar
+                float c = MyGdxGame.V_WIDTH/6.7f;
+                float w = MyGdxGame.V_WIDTH/7;
+                float h = c;
+                float max = c;
+                float x = MyGdxGame.V_WIDTH/2 - w/2;
+                float y = MyGdxGame.V_WIDTH/15f;
+
                 if(Save.gd.isKamehamehaEquiped()){
                     shapeRenderer.setColor(Color.GRAY);
                     shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-                    float w = buttonFire.getWidth()/1.5f;
-                    float h = buttonFire.getHeight()/1.5f;
-                    shapeRenderer.rect(buttonFire.getX()+w/4, buttonFire.getY()+h/4, w, h);
-                    shapeRenderer.setColor(Color.RED);
-                    w = buttonFire.getWidth()/1.5f;
-                    float max = buttonFire.getHeight()/1.5f;
+                    shapeRenderer.rect(x, y, w, h);
+
+                    if(reloadKamehameha != 0)
+                        shapeRenderer.setColor(Color.YELLOW);
+                    else {
+                        shapeRenderer.setColor(Color.RED);
+                    }
 
                     if(!blockKamehameha){
                         reloadKamehameha = 0;
-                        h = max -(beamWidth/max*1.6f);
-                        shapeRenderer.rect(buttonFire.getX()+w/4, buttonFire.getY()+(buttonFire.getHeight()/1.5f)/4, w, h);
+                        h = max -(beamWidth*1.5f/max);
+                        shapeRenderer.rect(x, y, w, h);
                     }else{
-                        if(reloadKamehameha < max){
-                            if(!MyGdxGame.pause)
-                                reloadKamehameha+=0.1;
+                        if(reloadKamehameha <= max){
+                            //System.out.println(reloadKamehameha+" "+max);
+                            if(!MyGdxGame.pause) reloadKamehameha+=0.1;
                         }
                         else{
                             System.out.println("kamehameha reloaded!");
@@ -1995,28 +2034,28 @@ public class Play extends GameState {
                             blockKamehameha = false;
                             reloadKamehameha = 0;
                         }
-                        shapeRenderer.rect(buttonFire.getX()+w/4, buttonFire.getY()+(buttonFire.getHeight()/1.5f)/4, w, reloadKamehameha);
+                        shapeRenderer.rect(x, y, w, reloadKamehameha);
                     }
                 }
 
                 if(Save.gd.isFireBallEquiped()){
                     shapeRenderer.setColor(Color.GRAY);
                     shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-                    float w = buttonFire.getWidth()/1.5f;
-                    float h = buttonFire.getHeight()/1.5f;
-                    shapeRenderer.rect(buttonFire.getX()+w/4, buttonFire.getY()+h/4, w, h);
+                    shapeRenderer.rect(x, y, w, h);
                     shapeRenderer.setColor(Color.RED);
-                    w = buttonFire.getWidth()/1.5f;
-                    h = buttonFire.getHeight()/1.5f/Math.abs(player.MAXFIREBALLCOUNT-player.getFireBallCount());
+                    h = h/Math.abs(player.MAXFIREBALLCOUNT-player.getFireBallCount());
                     if(player.getFireBallCount()>0)
-                        shapeRenderer.rect(buttonFire.getX()+w/4, buttonFire.getY()+(buttonFire.getHeight()/1.5f)/4, w, h);
+                        shapeRenderer.rect(x, y, w, h);
                 }
 
 
 
                 shapeRenderer.end();
+
                 stageUiControl.act();
                 stageUiControl.draw();
+
+
             }
             spriteBatch.end();
         }

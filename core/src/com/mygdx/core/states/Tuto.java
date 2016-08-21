@@ -63,7 +63,7 @@ public class Tuto extends GameState {
         buttonPlay = new Button(buttonStylePlay);
         buttonPlay.setWidth(Gdx.graphics.getWidth() / 5f);
         buttonPlay.setHeight(Gdx.graphics.getHeight() / 7.8f);
-        buttonPlay.setPosition(-400, Gdx.graphics.getHeight()/100f);
+        buttonPlay.setPosition(-400, Gdx.graphics.getHeight()/1.4f);
 
         stage1.addActor(buttonPlay);
 
@@ -275,7 +275,7 @@ public class Tuto extends GameState {
             }
             MyGdxGame.background_wood1.render(sb);
             //bg1.render(sb);
-            MyGdxGame.background_title.render(sb);
+            MyGdxGame.background_tuto.render(sb);
             if(MyGdxGame.isNightEnable())MyGdxGame.displayBlinkingStars();
             stage1.act();
             sb.begin();

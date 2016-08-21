@@ -26,7 +26,7 @@ public class ShopDialog extends Dialog{
 
 
     public ShopDialog(Shop shop, String description, String drawable){
-        super("Ice ball", new Skin(Gdx.files.internal("uiskin.json")), "dialog");
+        super("", new Skin(Gdx.files.internal("uiskin.json")), "dialog");
 
 //        Dialog dialog = new Dialog("", new Skin(Gdx.files.internal("uiskin.json")), "dialog") {
 //            public void result(Object obj) {
