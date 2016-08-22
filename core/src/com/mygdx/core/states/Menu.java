@@ -257,7 +257,7 @@ public class Menu extends GameState {
         buttonTuto.setPosition((Gdx.graphics.getWidth() / 2) - buttonTuto.getWidth() / 1.26f, 0);
         stage1.addActor(buttonTuto);
 
-        labelCopyright = new Label("Credits 2015", new LabelStyle(new BitmapFont( Gdx.files.internal(MyGdxGame.fontScorePath), false), Color.WHITE));
+        labelCopyright = new Label("Credits 2016", new LabelStyle(new BitmapFont( Gdx.files.internal(MyGdxGame.fontScorePath), false), Color.WHITE));
         labelCopyright.setWidth(Gdx.graphics.getWidth() / 2.5f);
         labelCopyright.setHeight(Gdx.graphics.getHeight() / 20);
         labelCopyright.setFontScale(Gdx.graphics.getWidth() / 500f);
@@ -356,107 +356,6 @@ public class Menu extends GameState {
             if(!MyGdxGame.res.getMusic("main").isPlaying())
                 MyGdxGame.res.getMusic("main").play();
         }
-
-        buttonPBlue.addListener(new InputListener() {
-            public boolean touchDown(
-                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
-                    float y, int pointer, int button) {
-                if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)
-                    MyGdxGame.res.getSound("jump2").play();
-                PBlue = !PBlue;
-                System.out.println("PBlue:" + PBlue);
-                PRed = false;
-                PYellow = false;
-                playerIsTouched = false;
-                if(PBlue) code += "b";
-                return true;
-            }
-
-            ;
-
-            public void touchUp(
-                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
-                    float y, int pointer, int button) {
-                updateSelector();
-            }
-
-            ;
-        });
-
-        buttonPRed.addListener(new InputListener() {
-            public boolean touchDown(
-                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
-                    float y, int pointer, int button) {
-                if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("jump2").play();
-                PRed = !PRed;
-                System.out.println("PRed:" + PRed);
-                PBlue = false;
-                PYellow = false;
-                playerIsTouched = false;
-                if(PRed) code += "r";
-                return true;
-            }
-
-            ;
-
-            public void touchUp(
-                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
-                    float y, int pointer, int button) {
-                updateSelector();
-            }
-
-            ;
-        });
-
-        buttonPYellow.addListener(new InputListener() {
-            public boolean touchDown(
-                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
-                    float y, int pointer, int button) {
-                if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("jump2").play();
-                PYellow = !PYellow;
-                System.out.println("PYellow:" + PYellow);
-                PBlue = false;
-                PRed = false;
-                playerIsTouched = false;
-                if(PYellow) code += "y";
-                return true;
-            }
-
-            ;
-
-            public void touchUp(
-                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
-                    float y, int pointer, int button) {
-                updateSelector();
-            }
-
-            ;
-        });
-
-        buttonPGreen.addListener(new InputListener() {
-            public boolean touchDown(
-                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
-                    float y, int pointer, int button) {
-                if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("jump2").play();
-                playerIsTouched = !playerIsTouched;
-                System.out.println("playerIsTouched:" + playerIsTouched);
-                PBlue = false;
-                PRed = false;
-                PYellow = false;
-                if(playerIsTouched) code += "g";
-                return true;
-            }
-
-            ;
-
-            public void touchUp(
-                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
-                    float y, int pointer, int button) {
-                updateSelector();
-            }
-
-            ;
-        });
 
         buttonGear.addListener(new InputListener() {
             public boolean touchDown(

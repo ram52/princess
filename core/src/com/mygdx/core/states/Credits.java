@@ -30,6 +30,7 @@ public class Credits extends GameState {
     private int cpt_secret1 = 0, cpt_secret2 = 0;
     private int cpt_translate_animation1 = 0;
     private Animation animTitle;
+    private Animation animCredits;
     private Animation animationPBlue1;
     private Animation animationPrincess;
     private Animation animationEnemy;
@@ -78,6 +79,8 @@ public class Credits extends GameState {
         animationHya = new Animation(new Sprite(MyGdxGame.atlas.findRegion("hyaa")).split(168, 60)[0], 1 / 5f);
 
         animTitle = new Animation(new Sprite(MyGdxGame.atlas.findRegion("credits")).split(95,24)[0], 1 / 5f);
+
+        animCredits = new Animation(new Sprite(MyGdxGame.atlas.findRegion("creditentials")).split(233,120)[0], 1 / 5f);
 
         MyGdxGame.background_cloud.setVector(+10, 0);
         MyGdxGame.background_skyNight.setVector(0, 0);
@@ -180,7 +183,7 @@ public class Credits extends GameState {
 
                 cpt_secret1++;
                 System.out.println("CLICK SECRET 1: " + cpt_secret1);
-                if (Save.gd.isSoundEnable() == 1 | Save.gd.isSoundEnable() == 2) MyGdxGame.res.getMusic("secretboss").play();
+                //if (Save.gd.isSoundEnable() == 1 | Save.gd.isSoundEnable() == 2) MyGdxGame.res.getMusic("secretboss").play();
 
                 return true;
             }
@@ -325,6 +328,10 @@ public class Credits extends GameState {
             float h = 24*3.5f;
 
             sb.draw(animTitle.getFrame(), MyGdxGame.V_WIDTH/2 - w/2, MyGdxGame.V_HEIGHT - h*1.4f , MyGdxGame.V_WIDTH/2, 670.0f -95/2 ,  w, h,1,1, 0);
+
+            w = 233*2.5f;
+            h = 120*2.5f;
+            sb.draw(animCredits.getFrame(), MyGdxGame.V_WIDTH/2 - w/2, (MyGdxGame.V_HEIGHT - h)/1.4f , MyGdxGame.V_WIDTH/2, 670.0f -233/2 ,  w, h,1,1, 0);
 
             //GEAR BUTTON
             float speed = 8f;

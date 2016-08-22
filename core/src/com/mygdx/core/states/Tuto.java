@@ -29,12 +29,16 @@ public class Tuto extends GameState {
     private Button buttonPlay, buttonSecret1, buttonSecret2;
     private int cpt_secret1 = 0, cpt_secret2 = 0;
     private int cpt_translate_animation1 = 0;
+    private Animation animationPlayer;
+    private Animation animationPrincess;
+    private Animation animationHya;
 
     public Tuto(GameStateManager gsm) {
 
         super(gsm);
         viewport = new Rectangle();
 
+        animationHya = new Animation(new Sprite(MyGdxGame.atlas.findRegion("protectme")).split(123, 75)[0], 1 / 5f);
 
         Save.load();
         if (!Save.gd.getAdsRemoverPurchased()) {
@@ -45,6 +49,21 @@ public class Tuto extends GameState {
                 game.actionResolver.showOrLoadInterstital();
             System.out.println(network);
         }
+
+        Sprite tex = null;
+        if(Save.gd.isExcaliburEquiped()){
+            tex = new Sprite(MyGdxGame.atlas.findRegion("standEx"));
+        }else{
+            tex = new Sprite(MyGdxGame.atlas.findRegion("stand"));
+        }
+        TextureRegion[] sprites = tex.split(64, 64)[0];
+        animationPlayer = new Animation(sprites, 1 / 5f);
+
+        tex = new Sprite(MyGdxGame.atlas.findRegion("princesscry"));
+        sprites = tex.split(64, 64)[0];
+        //for(int i=0;i<sprites.length;i++)
+            //sprites[i].flip(true,false);
+        animationPrincess = new Animation(sprites, 1 / 5f);
 
         MyGdxGame.background_cloud.setVector(+10, 0);
         MyGdxGame.background_skyNight.setVector(0, 0);
@@ -147,7 +166,7 @@ public class Tuto extends GameState {
 
                 cpt_secret1++;
                 System.out.println("CLICK SECRET 1: " + cpt_secret1);
-                if (Save.gd.isSoundEnable() == 1 | Save.gd.isSoundEnable() == 2) MyGdxGame.res.getMusic("secretboss").play();
+                //if (Save.gd.isSoundEnable() == 1 | Save.gd.isSoundEnable() == 2) MyGdxGame.res.getMusic("secretboss").play();
 
                 return true;
             }
@@ -208,6 +227,9 @@ public class Tuto extends GameState {
             if(!MyGdxGame.res.getMusic("main").isPlaying())
                 MyGdxGame.res.getMusic("main").play();
         }
+
+        animationPlayer.update(dt);
+        animationPrincess.update(dt);
 
         MyGdxGame.updateBGM();
         handleInput();
@@ -283,6 +305,10 @@ public class Tuto extends GameState {
             sb.end();
 
             sb.begin();
+
+            sb.draw(animationPlayer.getFrame(), (MyGdxGame.V_WIDTH-animationPlayer.getFrame().getRegionWidth())/2, 202);
+            sb.draw(animationPrincess.getFrame(), (MyGdxGame.V_WIDTH-animationPrincess.getFrame().getRegionWidth())/5f, 455);
+            sb.draw(animationHya.getFrame(), (MyGdxGame.V_WIDTH-animationPrincess.getFrame().getRegionWidth())/5f, 520);
 
             //GEAR BUTTON
             float speed = 8f;

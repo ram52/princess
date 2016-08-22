@@ -267,7 +267,7 @@ public class Player extends B2DSprite
 	public void collectCoin() {
         numCoins++;
         Save.load();
-        Save.gd.setMoney(Save.gd.getMoney() + 1);
+        Save.gd.setMoney(Save.gd.getMoney() + 5);
         Save.save();
     }
 

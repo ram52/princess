@@ -191,7 +191,7 @@ public class MyGdxGame implements ApplicationListener {
         res.loadSound(selectSoundPath, "select");
         res.loadSound(equipedSoundPath, "equiped");
         res.loadSound(boomSoundPath, "boom");
-        res.loadSound(laughSoundPath, "laugh");
+        res.loadMusic(laughSoundPath, "laugh");
         res.loadSound(fireballSoundPath, "fireball");
         res.loadSound(moveSoundPath, "move");
         res.loadSound(enemyHitMusicdPath, "hit");

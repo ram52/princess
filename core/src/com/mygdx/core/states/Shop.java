@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
@@ -51,6 +52,9 @@ public class Shop extends GameState {
     public Skin skin;
     private Vector2 crop;
     private Animation animTitle;
+    private Animation animationEnemy, animationEnemyMock;
+    private int time = 0;
+
 
     public Shop(GameStateManager gsm) {
 
@@ -60,6 +64,18 @@ public class Shop extends GameState {
         skin.addRegions(MyGdxGame.atlas);
 
         Save.load();
+
+        Sprite tex = new Sprite(MyGdxGame.atlas.findRegion("enemy"));
+        TextureRegion[] sprites = tex.split(64, 64)[0];
+        for(int i=0;i<sprites.length;i++)
+            sprites[i].flip(true,false);
+        animationEnemy = new Animation(sprites, 1 / 5f);
+
+        tex = new Sprite(MyGdxGame.atlas.findRegion("enemyMock"));
+        sprites = tex.split(64, 64)[0];
+        for(int i=0;i<sprites.length;i++)
+            sprites[i].flip(true,false);
+        animationEnemyMock = new Animation(sprites, 1 / 5f);
 
         animTitle = new Animation(new Sprite(MyGdxGame.atlas.findRegion("shop")).split(57,23)[0], 1 / 5f);
 
@@ -101,7 +117,7 @@ public class Shop extends GameState {
         buttonSecret1 = new Button(buttonStyleSecret);
         buttonSecret1.setWidth(Gdx.graphics.getWidth() / 8f);
         buttonSecret1.setHeight(Gdx.graphics.getWidth() / 8f);
-        buttonSecret1.setPosition((Gdx.graphics.getWidth() - buttonSecret1.getWidth())/ 2.05f, (Gdx.graphics.getHeight() - buttonSecret1.getWidth())/4.3f );
+        //buttonSecret1.setPosition((Gdx.graphics.getWidth() - buttonSecret1.getWidth())/ 2.05f, (Gdx.graphics.getHeight() - buttonSecret1.getWidth())/4.3f );
         stage1.addActor(buttonSecret1);
 
         buttonSecret2 = new Button(buttonStyleSecret);
@@ -598,7 +614,7 @@ public class Shop extends GameState {
 
                 cpt_secret1++;
                 System.out.println("CLICK SECRET 1: " + cpt_secret1);
-                if(Save.gd.isSoundEnable() == 1 | Save.gd.isSoundEnable() == 2) MyGdxGame.res.getMusic("secretboss").play();
+                if(Save.gd.isSoundEnable() == 1 | Save.gd.isSoundEnable() == 2) MyGdxGame.res.getMusic("laugh").play();
 
                 return true;
             }
@@ -645,6 +661,7 @@ public class Shop extends GameState {
 
         stage1.getViewport().update((int) (width - offsetX), (int) (height - offsetY), true);
         stage2.getViewport().update((int) (width - offsetX), (int) (height - offsetY), true);
+
     }
 
     public void handleInput() {
@@ -656,6 +673,9 @@ public class Shop extends GameState {
     }
 
     public void update(float dt) {
+
+        animationEnemy.update(dt);
+        animationEnemyMock.update(dt);
 
         if (Save.gd.getAdsRemoverPurchased()) {
                 game.actionResolver.hideBannerAd();
@@ -796,6 +816,32 @@ public class Shop extends GameState {
 
             if((Save.gd.isSoundEnable() == 2) && !MyGdxGame.res.getMusic("main").isPlaying()) MyGdxGame.res.getMusic("main").setVolume(0.4f);
             sb.end();
+
+            sb.begin();
+            if(!MyGdxGame.res.getMusic("laugh").isPlaying()){
+                time+=2;
+                sb.draw(animationEnemy.getFrame(), -250 + ((float) time * 1.7f), 202);
+            }else{
+                sb.draw(animationEnemyMock.getFrame(), -250 + ((float) time * 1.7f), 202);
+
+            }
+
+            offsetY = (offsetY<=0)? 1:offsetY;
+
+            //buttonSecret1.setPosition( (-250 + ((float) time * 1.7f))*offsetY/100, 202*offsetY/100);
+//            stage1.getActors().items[1].setPosition((-250 + ((float) time * 1.7f))*offsetY, 202*offsetY);
+//            offsetY = (offsetY<=0)? 1:offsetY;
+//            stage1.getActors().items[1].setPosition((-250 + ((float) time * 1.7f))*offsetY/100, 202*offsetY/100);
+//            stage1.getActors().items[1].draw(sb, 1f);
+
+            sb.end();
+
+
+
+
+            if(time > 800){
+                time = -200;
+            }
 
 
             if(!MyGdxGame.isNightEnable())

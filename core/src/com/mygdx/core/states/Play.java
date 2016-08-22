@@ -125,6 +125,7 @@ public class Play extends GameState {
     private float beamWidth = 0.0f;
     private float beamX = 0.0f;
     private float reloadKamehameha = 0.0f;
+    private double dificulty = 0.0;
     boolean blockKamehameha = false;
     boolean kamehaReachLimit = false;
     private Runnable runnable;
@@ -1533,8 +1534,6 @@ public class Play extends GameState {
                                     }
                                 }
                             }else{
-
-
                                 //enemy on the ground
 
                                 if(!enemy.isClimbing() ){
@@ -1558,8 +1557,6 @@ public class Play extends GameState {
                                         }
                                     }
                                 }
-
-
 
                                 //enemy in door 1
                                 if(!enemy.isMalicious() && (enemy.getPosition().x > (MyGdxGame.V_WIDTH/2/PPM)-0.03f && enemy.getPosition().x < (MyGdxGame.V_WIDTH/2/PPM)+0.03f)){
@@ -1598,10 +1595,14 @@ public class Play extends GameState {
 
                                     enemy.setCptWaitRunning(enemy.getCptWaitRunning()+1);
 
-                                    if(enemy.getCptWaitRunning() > 5 && !enemy.isJumpOver()){
+
+                                    if(enemy.getCptWaitRunning() > 2 && !enemy.isJumpOver()){
+                                        //enemy.setCptWaitRunning(0);
                                         //enemy.setCptWaitRunning(0);
 
                                         float posClimb = enemy.getBody().getPosition().y + enemy.getCptWaitRunning()/5000f;
+
+                                        posClimb = (float) (posClimb*dificulty);
 
                                         if(posClimb >= 2.5621998f*2f){
 
@@ -1689,14 +1690,14 @@ public class Play extends GameState {
             if(princess.isLeft()){
                 if(!princess.isDieRight()){
                     princess.dieAnimation();
-                    if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("laugh").play();
+                    if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("laugh").play();
                 }
             }
 
             if(princess.isRight()){
                 if(!princess.isDieLeft()){
                     princess.dieAnimation_rev();
-                    if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("laugh").play();
+                    if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("laugh").play();
                 }
             }
 
@@ -1834,8 +1835,13 @@ public class Play extends GameState {
         }else{
             //createEnemy();
             Random r = new Random();
-            double rangeMin = 1.0;
-            double rangeMax = 1.0;
+
+            dificulty = 1.0+player.getNumCoins()/50;
+
+            double rangeMin = dificulty;
+            double rangeMax = dificulty;
+
+
             double randomSpeed = rangeMin + (rangeMax - rangeMin) * r.nextDouble();
             if(getRandomBoolean()){
                 enemies.add(createEnemy(MyGdxGame.V_WIDTH*1.0f/PPM, 2.5621998f, false, (float)randomSpeed));
