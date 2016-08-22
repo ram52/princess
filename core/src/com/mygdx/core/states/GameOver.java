@@ -177,12 +177,13 @@ public class GameOver extends GameState {
         labelBestScore.setFontScale(fScale);
         labelScore.setWidth(Gdx.graphics.getWidth() / 3);
         labelBestScore.setWidth(Gdx.graphics.getWidth());
+        labelBestScore.setHeight(Gdx.graphics.getHeight());
 
         labelScore.setAlignment(Align.left);
         labelBestScore.setAlignment(Align.center);
 
         labelScore.setPosition((Gdx.graphics.getWidth() - labelScore.getWidth()) / 2.378f, ((float) Gdx.graphics.getHeight() / 1.92f));
-        labelBestScore.setPosition((Gdx.graphics.getWidth() - labelBestScore.getWidth()) / 2f, Gdx.graphics.getHeight()/2.5f);
+        labelBestScore.setPosition(0, 0);
 
         if (score >= 10) game.actionResolver.unlockAchievementGPGS(MyGdxGame.achievementScore10);
         if (score >= 50) game.actionResolver.unlockAchievementGPGS(MyGdxGame.achievementScore50);
@@ -470,7 +471,8 @@ public class GameOver extends GameState {
 
         shapeRenderer.setColor(Color.BLACK);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.rect(labelBestScore.getX(), labelBestScore.getY()/1.01f, labelBestScore.getWidth()*1.1f, labelBestScore.getHeight()*1.2f);
+        float height = MyGdxGame.V_HEIGHT/15;
+        shapeRenderer.rect(0, (MyGdxGame.V_HEIGHT - height)/2.0f  , MyGdxGame.V_WIDTH, height);
         shapeRenderer.end();
 
 
@@ -480,12 +482,6 @@ public class GameOver extends GameState {
         stage1.act();
         sb.begin();
         stage1.draw();
-
-
-
-
-
-
 
 
         float speed = 8f;
