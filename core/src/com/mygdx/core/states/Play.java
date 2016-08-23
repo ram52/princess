@@ -83,7 +83,9 @@ public class Play extends GameState {
     private Princess princess;
     private Array<Enemy> enemies;
     private Array<FireBall> fireBalls;
+    private ScheduledExecutorService executor;
     private Array<Coin> coins;
+    long d = 3000;
     private int cpt0 = 0, cpt1 = 0, cpt2 = 0, cpt_cameraIntro = 0;
     private int player_selector = 0;
     private Stage stage1, stageUiContinue;
@@ -130,6 +132,9 @@ public class Play extends GameState {
     boolean kamehaReachLimit = false;
     private Runnable runnable;
     private Boolean stopEnemies = false;
+    private Boolean step1 = false;
+    private Boolean step2 = false;
+    private Boolean step3 = false;
     private Button buttonLeft, buttonRight, buttonFire;
     private Stage stageUiControl;
     private SpriteBatch spriteBatch;
@@ -450,6 +455,9 @@ public class Play extends GameState {
 
         fireBalls = new Array<FireBall>();
 
+
+        executor = Executors.newScheduledThreadPool(1);
+
         runnable = new Runnable() {
             public void run() {
                 if(!MyGdxGame.pause){
@@ -457,13 +465,34 @@ public class Play extends GameState {
                         addNewEnemy = true;
                         toggle = !toggle;
                         isMalicious = getRandomBoolean();
+                        //d = (d < 500)? 500:3000-player.getNumCoins()*100;
+                        System.out.println("="+ d);
+                        if(player.getNumCoins() >= 10 && !step1){
+                            step1 = true;
+                            executor = Executors.newScheduledThreadPool(1);
+                            executor.scheduleAtFixedRate(runnable, 0, 2000, TimeUnit.MILLISECONDS);
+                        }
+
+                        if(player.getNumCoins() >= 20 && !step2){
+                            step2 = true;
+                            executor = Executors.newScheduledThreadPool(1);
+                            executor.scheduleAtFixedRate(runnable, 0, 1000, TimeUnit.MILLISECONDS);
+                        }
+
+                        if(player.getNumCoins() >= 50 && !step3){
+                            step3 = true;
+                            executor = Executors.newScheduledThreadPool(1);
+                            executor.scheduleAtFixedRate(runnable, 0, 800, TimeUnit.MILLISECONDS);
+                        }
+
                     }
                 }
             }
         };
 
-        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        executor.scheduleAtFixedRate(runnable, 0, 3, TimeUnit.SECONDS);
+
+        executor.scheduleAtFixedRate(runnable, 0, 3000, TimeUnit.MILLISECONDS);
+
 
         //enemies.add(createEnemy(MyGdxGame.V_WIDTH*1.0f/PPM, 2.5621998f, false));
         //enemies.add(createEnemy(1/PPM, 2.5621998f, true));
@@ -1342,6 +1371,10 @@ public class Play extends GameState {
                 enemy.updateBoundingBox(enemy);
                 princess.updateBoundingBox(princess);
 
+
+
+
+
                 if(enemy.getPosition().y*PPM > 350){
                     princess.setCry(true);
                 }
@@ -1777,6 +1810,7 @@ public class Play extends GameState {
     }
 
     public void update(float dt) {
+
 
         if (Math.abs(player.getBody().getLinearVelocity().x) != 0) {
             MyGdxGame.background_wood1.setVector(+10, 0);
