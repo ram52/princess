@@ -127,6 +127,7 @@ public class Play extends GameState {
     private float beamWidth = 0.0f;
     private float beamX = 0.0f;
     private float reloadKamehameha = 0.0f;
+    private float boost = 1.2f;
     private double dificulty = 0.0;
     boolean blockKamehameha = false;
     boolean kamehaReachLimit = false;
@@ -857,10 +858,21 @@ public class Play extends GameState {
 
         //player not moving
         if((!left | !right) && cl.isPlayerOnGround()){
-            if(player.getBody().getLinearVelocity().x != 0 && Math.abs(player.getBody().getLinearVelocity().x) <= MyGdxGame.PLAYER_VELOCITY) {
-                //System.out.println("STILL");
-                player.getBody().setLinearVelocity(0, player.getBody().getLinearVelocity().y);
+
+            if(Save.gd.isExcaliburEquiped() | Save.gd.isKamehamehaEquiped()) {
+                if (player.getBody().getLinearVelocity().x != 0 && Math.abs(player.getBody().getLinearVelocity().x) <= MyGdxGame.PLAYER_VELOCITY * boost) {
+                    //System.out.println("STILL");
+                    player.getBody().setLinearVelocity(0, player.getBody().getLinearVelocity().y);
+                } else {
+                    if (player.getBody().getLinearVelocity().x != 0 && Math.abs(player.getBody().getLinearVelocity().x) <= MyGdxGame.PLAYER_VELOCITY) {
+                        //System.out.println("STILL");
+                        player.getBody().setLinearVelocity(0, player.getBody().getLinearVelocity().y);
+                    }
+                }
+
             }
+
+
         }
 
 
@@ -950,15 +962,26 @@ public class Play extends GameState {
 //        }
 //
         //moves left
+
         if (left && player.getBody().getLinearVelocity().x != -MyGdxGame.PLAYER_VELOCITY) {
             //System.out.println("LEFT");
-            player.getBody().setLinearVelocity(-MyGdxGame.PLAYER_VELOCITY, player.getBody().getLinearVelocity().y);
+            if(Save.gd.isExcaliburEquiped() | Save.gd.isKamehamehaEquiped()) {
+                player.getBody().setLinearVelocity(-MyGdxGame.PLAYER_VELOCITY*boost, player.getBody().getLinearVelocity().y);
+            }else{
+                player.getBody().setLinearVelocity(-MyGdxGame.PLAYER_VELOCITY, player.getBody().getLinearVelocity().y);
+            }
+
         }
 
         //moves right
         if (right && player.getBody().getLinearVelocity().x != MyGdxGame.PLAYER_VELOCITY) {
             //System.out.println("RIGHT");
-            player.getBody().setLinearVelocity(MyGdxGame.PLAYER_VELOCITY, player.getBody().getLinearVelocity().y);
+            if(Save.gd.isExcaliburEquiped() | Save.gd.isKamehamehaEquiped()) {
+                player.getBody().setLinearVelocity(MyGdxGame.PLAYER_VELOCITY*boost, player.getBody().getLinearVelocity().y);
+            }else{
+                player.getBody().setLinearVelocity(MyGdxGame.PLAYER_VELOCITY, player.getBody().getLinearVelocity().y);
+            }
+
         }
 
         //SIMPLE JUMP

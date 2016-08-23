@@ -446,6 +446,7 @@ public class Shop extends GameState {
                                 "EXCALIBUR\n" +
                                 "\n" +
                                 "Excalibur kill enemy in one swing.\n" +
+                                "The power of Excalibur makes you faster.\n" +
                                 "COST: "+cost+" coins.\n" +
                                 "\n\n" +
                                 "Equip Excalibur?", "buttonExcaliburUp"){
@@ -517,6 +518,7 @@ public class Shop extends GameState {
                                     "KAMEHAMEHA\n" +
                                     "\n" +
                                     "Kamehameha destroys everything.\n" +
+                                    "The power of Excalibur makes you faster.\n" +
                                     "COST: "+cost+" coins.\n" +
                                     "\n\n" +
                                     "Buy Kamehameha?", "buttonKamehamehaUp"){
