@@ -31,7 +31,7 @@ public class Tuto extends GameState {
     private int cpt_translate_animation1 = 0;
     private Animation animationPlayer;
     private Animation animationPrincess;
-    private Animation animationHya;
+    private Animation animationHya, animTitle;
 
     public Tuto(GameStateManager gsm) {
 
@@ -39,6 +39,8 @@ public class Tuto extends GameState {
         viewport = new Rectangle();
 
         animationHya = new Animation(new Sprite(MyGdxGame.atlas.findRegion("protectme")).split(123, 75)[0], 1 / 5f);
+
+        animTitle = new Animation(new Sprite(MyGdxGame.atlas.findRegion("princess!")).split(111, 44)[0], 1 / 5f);
 
         Save.load();
         if (!Save.gd.getAdsRemoverPurchased()) {
@@ -82,7 +84,7 @@ public class Tuto extends GameState {
         buttonPlay = new Button(buttonStylePlay);
         buttonPlay.setWidth(Gdx.graphics.getWidth() / 5f);
         buttonPlay.setHeight(Gdx.graphics.getHeight() / 7.8f);
-        buttonPlay.setPosition(-400, Gdx.graphics.getHeight()/1.4f);
+        buttonPlay.setPosition(-400, Gdx.graphics.getHeight()/4f);
 
         stage1.addActor(buttonPlay);
 
@@ -316,6 +318,11 @@ public class Tuto extends GameState {
                 stage1.getActors().items[0].setPosition(-stage1.getActors().items[0].getWidth() + cpt_translate_animation1 * speed, stage1.getActors().items[0].getY());
                 cpt_translate_animation1++;
             }
+
+
+            float w = 111*5f;
+            float h = 44*5f;
+            sb.draw(animTitle.getFrame(), MyGdxGame.V_WIDTH/2 - w/2, MyGdxGame.V_HEIGHT - h*1.2f , MyGdxGame.V_WIDTH/2, 670.0f -95/2 ,  w, h,1,1, 0);
 
 
             if((Save.gd.isSoundEnable() == 2) && !MyGdxGame.res.getMusic("main").isPlaying()) MyGdxGame.res.getMusic("main").setVolume(0.4f);
