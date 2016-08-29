@@ -394,17 +394,19 @@ public class Shop extends GameState {
                                 Save.save();
                                 labelMoney.setText(Integer.toString(Save.gd.getMoney()));
                             }else{
-                                if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("error").play();
-                                labelMoney.setColor(Color.RED);
+                                if(obj.toString().equals("true")){
+                                    if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("error").play();
+                                    labelMoney.setColor(Color.RED);
 
-                                new java.util.Timer().schedule(
-                                        new java.util.TimerTask() {
-                                            @Override
-                                            public void run() {
-                                                // your code here
-                                                labelMoney.setColor(Color.WHITE);
-                                            }
-                                        }, 500);
+                                    new java.util.Timer().schedule(
+                                            new java.util.TimerTask() {
+                                                @Override
+                                                public void run() {
+                                                    // your code here
+                                                    labelMoney.setColor(Color.WHITE);
+                                                }
+                                            }, 500);
+                                }
 
                             }
                         }
@@ -446,9 +448,9 @@ public class Shop extends GameState {
                                 "EXCALIBUR\n" +
                                 "\n" +
                                 "Excalibur kill enemy in one swing.\n" +
-                                "The power of Excalibur makes you faster.\n" +
+                                "The power of Excalibur makes\nyou faster.\n" +
                                 "COST: "+cost+" coins.\n" +
-                                "\n\n" +
+                                "\n" +
                                 "Equip Excalibur?", "buttonExcaliburUp"){
                     public void result(Object obj) {
                         System.out.println("result Equip Excalibur?"+obj);
@@ -465,17 +467,19 @@ public class Shop extends GameState {
                             Save.save();
                             labelMoney.setText(Integer.toString(Save.gd.getMoney()));
                         }else{
-                            if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("error").play();
-                            labelMoney.setColor(Color.RED);
+                            if(obj.toString().equals("true")){
+                                if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("error").play();
+                                labelMoney.setColor(Color.RED);
 
-                            new java.util.Timer().schedule(
-                                    new java.util.TimerTask() {
-                                        @Override
-                                        public void run() {
-                                            // your code here
-                                            labelMoney.setColor(Color.WHITE);
-                                        }
-                                    }, 500);
+                                new java.util.Timer().schedule(
+                                        new java.util.TimerTask() {
+                                            @Override
+                                            public void run() {
+                                                // your code here
+                                                labelMoney.setColor(Color.WHITE);
+                                            }
+                                        }, 500);
+                            }
 
                         }
                     }
@@ -518,9 +522,9 @@ public class Shop extends GameState {
                                     "KAMEHAMEHA\n" +
                                     "\n" +
                                     "Kamehameha destroys everything.\n" +
-                                    "The power of Excalibur makes you faster.\n" +
+                                    "The power of Kamehameha makes\nyou faster.\n" +
                                     "COST: "+cost+" coins.\n" +
-                                    "\n\n" +
+                                    "\n" +
                                     "Buy Kamehameha?", "buttonKamehamehaUp"){
                         public void result(Object obj) {
                             System.out.println("result Buy Kamehameha?"+obj);
@@ -538,17 +542,20 @@ public class Shop extends GameState {
                                 Save.save();
                                 labelMoney.setText(Integer.toString(Save.gd.getMoney()));
                             }else{
-                                if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("error").play();
-                                labelMoney.setColor(Color.RED);
 
-                                new java.util.Timer().schedule(
-                                        new java.util.TimerTask() {
-                                            @Override
-                                            public void run() {
-                                                // your code here
-                                                labelMoney.setColor(Color.WHITE);
-                                            }
-                                        }, 500);
+                                if(obj.toString().equals("true")){
+                                    if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("error").play();
+                                    labelMoney.setColor(Color.RED);
+
+                                    new java.util.Timer().schedule(
+                                            new java.util.TimerTask() {
+                                                @Override
+                                                public void run() {
+                                                    // your code here
+                                                    labelMoney.setColor(Color.WHITE);
+                                                }
+                                            }, 500);
+                                }
 
                             }
                         }

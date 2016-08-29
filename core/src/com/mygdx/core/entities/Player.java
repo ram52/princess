@@ -10,7 +10,7 @@ import com.mygdx.core.handlers.Save;
 
 public class Player extends B2DSprite 
 {
-    public static final int MAXFIREBALLCOUNT = 4 ;
+    public static final int MAXFIREBALLCOUNT = 3 ;
     private int numCoins;
 	private int totalCoins;
     private boolean runnigLeft = false;

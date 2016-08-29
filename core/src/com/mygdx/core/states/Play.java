@@ -133,6 +133,7 @@ public class Play extends GameState {
     boolean kamehaReachLimit = false;
     private Runnable runnable;
     private Boolean stopEnemies = false;
+    private Boolean step0 = false;
     private Boolean step1 = false;
     private Boolean step2 = false;
     private Boolean step3 = false;
@@ -467,7 +468,13 @@ public class Play extends GameState {
                         toggle = !toggle;
                         isMalicious = getRandomBoolean();
                         //d = (d < 500)? 500:3000-player.getNumCoins()*100;
-                        System.out.println("="+ d);
+
+                        if(player.getNumCoins() >= 5 && !step0){
+                            step0 = true;
+                            executor = Executors.newScheduledThreadPool(1);
+                            executor.scheduleAtFixedRate(runnable, 0, 2500, TimeUnit.MILLISECONDS);
+                        }
+
                         if(player.getNumCoins() >= 10 && !step1){
                             step1 = true;
                             executor = Executors.newScheduledThreadPool(1);
@@ -870,6 +877,8 @@ public class Play extends GameState {
                     }
                 }
 
+            }else{
+                player.getBody().setLinearVelocity(0, player.getBody().getLinearVelocity().y);
             }
 
 
@@ -2012,12 +2021,6 @@ public class Play extends GameState {
 
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-
-        //stageUiControl.getViewport().update((int) (viewport.width), (int) (viewport.height), true);
-        //stage1.getViewport().update((int) (viewport.width), (int) (viewport.height), true);
-        //stageUiContinue.getViewport().update((int) (viewport.width), (int) (viewport.height), true);
-
-
         if(MyGdxGame.isNightEnable())
             Gdx.gl.glClearColor(65f / 255f, 18f / 255f, 252f / 255f, 1);
         else
@@ -2106,24 +2109,19 @@ public class Play extends GameState {
                     shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
                     shapeRenderer.rect(x, y, w, h);
                     shapeRenderer.setColor(Color.RED);
-                    h = h/Math.abs(player.MAXFIREBALLCOUNT-player.getFireBallCount());
+                    System.out.println("h="+h);
+                    h = (max/3)*player.getFireBallCount();
+                    System.out.println("h="+h+" "+"player.MAXFIREBALLCOUNT="+player.MAXFIREBALLCOUNT+" "+"player.getFireBallCount()="+player.getFireBallCount());
                     if(player.getFireBallCount()>0)
                         shapeRenderer.rect(x, y, w, h);
                 }
 
-
-
                 shapeRenderer.end();
-
                 stageUiControl.act();
                 stageUiControl.draw();
-
-
             }
             spriteBatch.end();
         }
-
-
 
         if(!player.isPlayerDead()) {
             player.render(sb);
