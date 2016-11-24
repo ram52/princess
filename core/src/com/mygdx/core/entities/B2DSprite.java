@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.mygdx.core.handlers.Animation;
 import com.mygdx.core.handlers.B2DVars;
 
@@ -126,6 +127,12 @@ public class B2DSprite {
 
 	public Animation getAnimation() {
 		return animation;
+	}
+
+	public void destroy(){
+		for (Fixture fixture: getBody().getFixtureList()) {
+			getBody().destroyFixture(fixture);
+		}
 	}
 }
 
