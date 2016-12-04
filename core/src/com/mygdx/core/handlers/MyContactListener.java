@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.core.MyGdxGame;
+import com.mygdx.core.entities.B2DSprite;
 import com.mygdx.core.entities.Enemy;
 import com.mygdx.core.states.Play;
 
@@ -43,6 +44,10 @@ public class MyContactListener implements ContactListener {
 		this.play = play;
 	}
 
+	public boolean intersect(B2DSprite entity1, B2DSprite entity2){
+		return entity1.getBoundingBox().intersects(entity2.getBoundingBox());
+	}
+
 	// called when two fixtures start to collide
 	public void beginContact(Contact c) {
 
@@ -55,9 +60,6 @@ public class MyContactListener implements ContactListener {
 			numFootContacts++;
 		}
 
-		if (f.getUserData() != null && f.getUserData().equals("empty")) {
-			MyGdxGame.background_skyNight.setVector(0,0);
-		}
 
 		if (f.getUserData() != null && f.getUserData().equals("borders")) {
 			touchBorder = true;

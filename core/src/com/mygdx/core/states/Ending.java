@@ -24,7 +24,7 @@ public class Ending extends GameState {
     public Ending(final GameStateManager gsm) {
 
         super(gsm);
-        Gdx.gl.glClearColor(65f / 255f, 18f / 255f, 252f / 255f, 1);
+
         offset = 0;
         intro = new Image(MyGdxGame.atlas.findRegion("ending"));
         intro.setFillParent(true);
@@ -33,10 +33,6 @@ public class Ending extends GameState {
         stage0.addActor(intro);
         stage0.addAction(Actions.sequence(Actions.alpha(0), Actions.fadeIn(1f)));
 
-        if (!MyGdxGame.isNightEnable()) {
-            reset = true;
-            MyGdxGame.setNightEnable(true);
-        }
 
         //if (Save.gd.isSoundEnable()) MyGdxGame.res.getMusic("success").play();
 
@@ -72,6 +68,7 @@ public class Ending extends GameState {
     }
 
     public void resize(int width, int height) {
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         // calculate new viewport
         float aspectRatio = (float) width / (float) height;
         float scale = 1f;
@@ -89,8 +86,7 @@ public class Ending extends GameState {
         float w = (float) MyGdxGame.V_WIDTH * scale;
         float h = (float) MyGdxGame.V_HEIGHT * scale;
         viewport = new Rectangle(crop.x, 0, w, h);
-        offset = crop.y;
-        offsetx = crop.x;
+        Gdx.gl.glViewport((int) viewport.x, (int) viewport.y, (int) viewport.width, (int) viewport.height);
     }
 
     public void handleInput() {
@@ -99,8 +95,6 @@ public class Ending extends GameState {
                 Gdx.gl.glClearColor(3f / 255f, 23 / 255f, 41 / 255f, 1);
             else
                 Gdx.gl.glClearColor(22f / 255f, 119f / 255f, 126f / 255f, 1);*/
-            if(reset)
-                MyGdxGame.setNightEnable(false);
 
                 gsm.setState(GameStateManager.GAME_OVER);
         }
@@ -112,9 +106,8 @@ public class Ending extends GameState {
     }
 
     public void render() {
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        Gdx.gl.glViewport((int) viewport.x, (int) viewport.y, (int) viewport.width, (int) viewport.height);
 
         //sb.setProjectionMatrix(cam.combined);
         //MyGdxGame.background_skyNight.render(sb);

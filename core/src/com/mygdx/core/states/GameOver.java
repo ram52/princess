@@ -46,6 +46,8 @@ public class GameOver extends GameState {
     int cpt_translate_animation2 = 0;
     int cpt_translate_animation3 = 0;
     private Animation animTitle, animSad;
+    private Stage stage0;
+    private Image intro;
 
     public static String padRight(String s, int n) {
         return String.format("%1$-" + n + "s", s);
@@ -54,6 +56,10 @@ public class GameOver extends GameState {
     public GameOver(GameStateManager gsm) {
 
         super(gsm);
+        intro = new Image(MyGdxGame.atlas.findRegion("backgroundSky"));
+        intro.setFillParent(true);
+        stage0 = new Stage();
+        stage0.addActor(intro);
         MyGdxGame.continueCount = 0;
         if(MyGdxGame.res.getMusic("main").isPlaying()) MyGdxGame.res.getMusic("main").stop();
         if(MyGdxGame.res.getMusic("boss").isPlaying()) MyGdxGame.res.getMusic("boss").stop();
@@ -91,8 +97,8 @@ public class GameOver extends GameState {
         Save.gd.getNames();
         score = Save.gd.getTentativeScore();
 
-        MyGdxGame.background_skyNight.setVector(0, 0);
-        MyGdxGame.background_skyDay.setVector(0, 0);
+        MyGdxGame.background_cloud.setVector(+10, 0);
+        //MyGdxGame.background_skyDay.setVector(0, 0);
         MyGdxGame.background_wood1.setVector(0, 0);
 
         Sprite tex_background = null;
@@ -416,17 +422,14 @@ public class GameOver extends GameState {
         //MyGdxGame.updateBGM();
         handleInput();
         MyGdxGame.background_wood1.update(dt);
-        if(!MyGdxGame.isNightEnable()) {
-            MyGdxGame.background_cloud.update(dt);
-            MyGdxGame.background_skyDay.update(dt);
-        }
-        else{
-            MyGdxGame.background_skyNight.update(dt);
-        }
+        MyGdxGame.background_cloud.update(dt);
+        //MyGdxGame.background_skyDay.update(dt);
+
         animSad.update(dt);
     }
 
     public void resize(int width, int height) {
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         // calculate new viewport
         float aspectRatio = (float) width / (float) height;
         float scale = 1f;
@@ -441,31 +444,29 @@ public class GameOver extends GameState {
         } else {
             scale = (float) width / (float) MyGdxGame.V_WIDTH;
         }
-
         float w = (float) MyGdxGame.V_WIDTH * scale;
         float h = (float) MyGdxGame.V_HEIGHT * scale;
         viewport = new Rectangle(crop.x, 0, w, h);
-        offset = crop.y;
+        //Gdx.gl.glViewport((int) viewport.x, (int) viewport.y, (int) viewport.width, (int) viewport.height);
         float offsetY = crop.y;
         float offsetX = crop.x;
 
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glViewport(0,0, (int)viewport.width+ (int)offsetX, Gdx.graphics.getHeight());
+        stage0.act();
+        sb.begin();
+        stage0.draw();
+        sb.end();
+        Gdx.gl.glViewport((int) viewport.x, (int) viewport.y, (int) viewport.width - (int)offsetX, (int) viewport.height - (int)offsetY);
+
+        stage1.getViewport().update((int) (width - offsetX), (int) (height - offsetY), true);
     }
 
     public void render() {
+
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        Gdx.gl.glViewport((int) viewport.x, (int) viewport.y,
-                (int) viewport.width, (int) viewport.height);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        stage1.getViewport().update((int) (viewport.width), (int) (viewport.height
-        ), true);
-
-        if(MyGdxGame.isNightEnable()) {
-            MyGdxGame.background_skyNight.render(sb);
-        }else{
-            MyGdxGame.background_skyDay.render(sb);
-        }
-
+        //MyGdxGame.background_skyDay.render(sb);
         MyGdxGame.background_wood1.render(sb);
         MyGdxGame.background_title.render(sb);
 
@@ -475,9 +476,6 @@ public class GameOver extends GameState {
         shapeRenderer.rect(0, (MyGdxGame.V_HEIGHT - height)/2.0f  , MyGdxGame.V_WIDTH, height);
         shapeRenderer.end();
 
-
-
-        if(MyGdxGame.isNightEnable()) MyGdxGame.displayBlinkingStars();
 
         stage1.act();
         sb.begin();
@@ -552,10 +550,6 @@ public class GameOver extends GameState {
             cpt_timer = 0;
             // changeScreen();
         }
-        if(MyGdxGame.isNightEnable())
-            Gdx.gl.glClearColor(65f / 255f, 18f / 255f, 252f / 255f, 1);
-        else
-            Gdx.gl.glClearColor(65f / 255f, 18f / 255f, 252f / 255f, 1);
 
         float w = 59*6f;
         float h = 47*6f;
@@ -564,8 +558,6 @@ public class GameOver extends GameState {
         sb.draw(animSad.getFrame(), MyGdxGame.V_WIDTH/2, 202);
         sb.end();
 
-        if(!MyGdxGame.isNightEnable())
-            MyGdxGame.background_cloud.render(sb);
 
     }
 

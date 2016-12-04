@@ -26,12 +26,16 @@ import com.mygdx.core.handlers.Content;
 import com.mygdx.core.handlers.GameStateManager;
 import com.mygdx.core.handlers.MyInputProcessor;
 import com.mygdx.core.handlers.Save;
+import com.mygdx.core.states.Menu;
+
+import java.util.List;
 
 public class MyGdxGame implements ApplicationListener {
+    private static final String TAG = "MyGdxGame";
     private Stage stage0;
     private Image intro;
     //private com.badlogic.gdx.graphics.g2d.Animation loading;
-    private Rectangle viewport;
+    public static Rectangle viewport;
     public static ActionResolver actionResolver;
     public static final String TITLE = "Running Bird";
     public static final int V_WIDTH = 640;
@@ -63,13 +67,13 @@ public class MyGdxGame implements ApplicationListener {
 
     private static boolean isBoosTerritory = false;
     public static boolean pause = false;
-    public static boolean nightEnable = true;
-    public static Background background_cloud, background_skyNight, background_skyDay, background_wood1,
+    public static Background background_cloud, background_wood1,
+    //background_skyDay
     //background_storyLine,
     background_title, background_tuto;
     public static String spritesPackPath = "data/sprite/atlas.pack";
     public static String errorSoundPath = "data/sound/error.ogg";
-    //public static String reviveSoundPath = "data/sound/revive.ogg";
+    public static String reviveSoundPath = "data/sound/revive.ogg";
     public static String yaSoundPath = "data/sound/yaa!.ogg";
     public static String jump1SoundPath = "data/sound/jump1.ogg";
     public static String jump2SoundPath = "data/sound/jump2.ogg";
@@ -181,7 +185,7 @@ public class MyGdxGame implements ApplicationListener {
         res.loadMusic(onSoundPath, "on");
         res.getMusic("on").play();
         res.loadSound(errorSoundPath, "error");
-        //res.loadSound(reviveSoundPath, "revive");
+        res.loadSound(reviveSoundPath, "revive");
         res.loadSound(yaSoundPath, "ya");
         res.loadSound(jump1SoundPath, "jump1");
         res.loadSound(jump2SoundPath, "jump2");
@@ -237,7 +241,6 @@ public class MyGdxGame implements ApplicationListener {
         System.out.println("SCREEN SIZE: " + Gdx.graphics.getWidth() + "X" + Gdx.graphics.getHeight());
         Save.load();
         soundEnable = Save.gd.isSoundEnable();
-        nightEnable = Save.gd.isNight();
     }
 
     public void render() {
@@ -246,8 +249,7 @@ public class MyGdxGame implements ApplicationListener {
 
             if(!wait){
             resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-            Gdx.gl.glViewport((int) viewport.x, (int) viewport.y,
-                    (int) viewport.width, (int) viewport.height);
+            Gdx.gl.glViewport((int) viewport.x, (int) viewport.y, (int) viewport.width, (int) viewport.height);
 
             progress = 100;
             System.out.println("LOADING...  " + progress);
@@ -294,8 +296,7 @@ public class MyGdxGame implements ApplicationListener {
 
         } else {
             resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-            Gdx.gl.glViewport((int) viewport.x, (int) viewport.y,
-                    (int) viewport.width, (int) viewport.height);
+            Gdx.gl.glViewport((int) viewport.x, (int) viewport.y, (int) viewport.width, (int) viewport.height);
 
             progress = 100 * (assets.getLoadedAssets() / numberOfAssets);
             System.out.println("LOADING...  " + progress);
@@ -440,11 +441,8 @@ public class MyGdxGame implements ApplicationListener {
         background_cloud = new Background(new TextureRegion(tex), cam, 1f);
 
         tex = new Sprite(MyGdxGame.atlas.findRegion("backgroundSky"));
-        background_skyNight = new Background(new TextureRegion(tex), hudCam, 1f);
-
-        tex = new Sprite(MyGdxGame.atlas.findRegion("backgroundSky"));
         tex.setScale(1, MyGdxGame.V_WIDTH);
-        background_skyDay = new Background(new TextureRegion(tex), hudCam, 1f);
+        //background_skyDay = new Background(new TextureRegion(tex), hudCam, 1f);
 
         tex = new Sprite(MyGdxGame.atlas.findRegion("backgroundWood1"));
         background_wood1 = new Background(new TextureRegion(tex), cam, 1f);
@@ -476,13 +474,6 @@ public class MyGdxGame implements ApplicationListener {
         }
     }
 
-    public static void setNightEnable(boolean n) {
-        Save.load();
-        Save.gd.setNight(n);
-        Save.save();
-        nightEnable = Save.gd.isNight();
-        System.out.println("NIGHT: " + nightEnable);
-    }
 
     public static void setSoundEnable(int soundEnable) {
         MyGdxGame.soundEnable = soundEnable;
@@ -563,6 +554,8 @@ public class MyGdxGame implements ApplicationListener {
     }
 
     public void resize(int width, int height) {
+        //System.out.println(TAG+" "+"resize:"+width+"x"+height+" "+"viewport.x:"+viewport.x);
+
         float aspectRatio = (float) width / (float) height;
         float scale = 1f;
         Vector2 crop = new Vector2(0f, 0f);
@@ -612,9 +605,6 @@ public class MyGdxGame implements ApplicationListener {
         StartCameraMotion = startCameraMotion;
     }
 
-    public static boolean isNightEnable() {
-        return nightEnable;
-    }
 
     public void dispose() {
         assets.clear();

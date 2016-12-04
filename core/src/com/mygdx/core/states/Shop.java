@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -41,9 +42,6 @@ public class Shop extends GameState {
     private AlphaAction fade1, fade2, fade3;
     private Rectangle viewport;
     private AlphaAction fade;
-    private float offset = 0;
-    private float offsetx;
-    private float offsetY = 0.0f;
     private Button buttonPlay, buttonSecret1, buttonSecret2,imageCoin, buttonItem0;
     private Button buttonItem1, buttonItem2, buttonItem3, buttonItem4, buttonItem5;
     private int cpt_secret1 = 0, cpt_secret2 = 0;
@@ -51,14 +49,21 @@ public class Shop extends GameState {
     private Label labelMoney;
     public Skin skin;
     private Vector2 crop;
-    private Animation animTitle;
+    private Animation animTitle, animationCoin;
     private Animation animationEnemy, animationEnemyMock;
     private int time = 0;
+    private Stage stage0;
+    private Image intro;
 
 
     public Shop(GameStateManager gsm) {
 
         super(gsm);
+        intro = new Image(MyGdxGame.atlas.findRegion("backgroundSky"));
+        intro.setFillParent(true);
+        stage0 = new Stage();
+        stage0.addActor(intro);
+
         viewport = new Rectangle();
         skin = new Skin();
         skin.addRegions(MyGdxGame.atlas);
@@ -79,6 +84,8 @@ public class Shop extends GameState {
 
         animTitle = new Animation(new Sprite(MyGdxGame.atlas.findRegion("shop")).split(57,23)[0], 1 / 5f);
 
+        animationCoin = new Animation(new Sprite(MyGdxGame.atlas.findRegion("coin")).split(64,64)[0], 1 / 5f);
+
         if (!Save.gd.getAdsRemoverPurchased()) {
             String network = game.actionResolver.getNetworkClass();
             if(network == null) network = "ABSENT";
@@ -89,8 +96,7 @@ public class Shop extends GameState {
         }
 
         MyGdxGame.background_cloud.setVector(+10, 0);
-        MyGdxGame.background_skyNight.setVector(0, 0);
-        MyGdxGame.background_skyDay.setVector(0, 0);
+        //MyGdxGame.background_skyDay.setVector(0, 0);
         MyGdxGame.background_wood1.setVector(-3, 0);
 
         cam.setToOrtho(false, MyGdxGame.V_WIDTH, MyGdxGame.V_HEIGHT);
@@ -117,14 +123,14 @@ public class Shop extends GameState {
         buttonSecret1 = new Button(buttonStyleSecret);
         buttonSecret1.setWidth(Gdx.graphics.getWidth() / 8f);
         buttonSecret1.setHeight(Gdx.graphics.getWidth() / 8f);
-        //buttonSecret1.setPosition((Gdx.graphics.getWidth() - buttonSecret1.getWidth())/ 2.05f, (Gdx.graphics.getHeight() - buttonSecret1.getWidth())/4.3f );
+        buttonSecret1.setPosition((Gdx.graphics.getWidth() - buttonSecret1.getWidth())/ 2.05f, (Gdx.graphics.getHeight() - buttonSecret1.getWidth())/4.3f );
         stage1.addActor(buttonSecret1);
 
         buttonSecret2 = new Button(buttonStyleSecret);
         buttonSecret2.setWidth(Gdx.graphics.getWidth() / 8f);
         buttonSecret2.setHeight(Gdx.graphics.getWidth() / 8f);
         buttonSecret2.setPosition((Gdx.graphics.getWidth() - buttonSecret1.getWidth())/ 1.12f, (Gdx.graphics.getHeight() - buttonSecret1.getWidth())/21f );
-        stage1.addActor(buttonSecret2);
+        //stage1.addActor(buttonSecret2);
 
 
         ButtonStyle style = new ButtonStyle();
@@ -134,8 +140,8 @@ public class Shop extends GameState {
         imageCoin = new Button(style);
         imageCoin.setWidth(Gdx.graphics.getWidth() / 10f);
         imageCoin.setHeight(Gdx.graphics.getWidth() / 10f);
-        imageCoin.setPosition(imageCoin.getWidth() / 4, (Gdx.graphics.getHeight() - imageCoin.getHeight() - 20));
-        stage1.addActor(imageCoin);
+        imageCoin.setPosition((Gdx.graphics.getWidth()- 5*imageCoin.getWidth()) , imageCoin.getHeight()/2);
+        //stage1.addActor(imageCoin);
 
         style = new Button.ButtonStyle();
         style.up = skin.getDrawable("buttonAdsUp");
@@ -200,6 +206,7 @@ public class Shop extends GameState {
         labelMoney.setHeight(imageCoin.getHeight());
         labelMoney.setAlignment(Align.center | Align.left);
         labelMoney.setPosition(imageCoin.getRight() * 1.1f, imageCoin.getY());
+
         stage1.addActor(labelMoney);
         labelMoney.setText(Integer.toString(Save.gd.getMoney()));
 
@@ -388,7 +395,7 @@ public class Shop extends GameState {
                                 }
                                 Save.gd.setFireBallPurchased(true);
                                 Save.gd.setFireBallEquiped(true);
-                                Save.gd.setExcaliburEquiped(false);
+                                //Save.gd.setExcaliburEquiped(false);
                                 Save.gd.setKamehamehaEquiped(false);
                                 Save.gd.setMoney(Save.gd.getMoney() - cost);
                                 Save.save();
@@ -414,7 +421,7 @@ public class Shop extends GameState {
                     stage1.addActor(dialog);
                 }else{
                     Save.gd.setFireBallEquiped(!Save.gd.isFireBallEquiped());
-                    Save.gd.setExcaliburEquiped(false);
+                    //Save.gd.setExcaliburEquiped(false);
                     Save.gd.setKamehamehaEquiped(false);
                     if (Save.gd.isFireBallEquiped() && (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
                         MyGdxGame.res.getSound("fireball").play();
@@ -462,7 +469,7 @@ public class Shop extends GameState {
                             Save.gd.setExcaliburPurchased(true);
                             Save.gd.setExcaliburEquiped(true);
                             Save.gd.setFireBallEquiped(false);
-                            Save.gd.setKamehamehaEquiped(false);
+                            //Save.gd.setKamehamehaEquiped(false);
                             Save.gd.setMoney(Save.gd.getMoney() - cost);
                             Save.save();
                             labelMoney.setText(Integer.toString(Save.gd.getMoney()));
@@ -487,8 +494,8 @@ public class Shop extends GameState {
                 stage1.addActor(dialog);
                 }else{
                     Save.gd.setExcaliburEquiped(!Save.gd.isExcaliburEquiped());
-                    Save.gd.setFireBallEquiped(false);
-                    Save.gd.setKamehamehaEquiped(false);
+                    //Save.gd.setFireBallEquiped(false);
+                    //Save.gd.setKamehamehaEquiped(false);
                     if (Save.gd.isExcaliburEquiped() && (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
                         MyGdxGame.res.getMusic("slash").play();
                     }
@@ -536,7 +543,7 @@ public class Shop extends GameState {
                                 }
                                 Save.gd.setKamehamehaPurchased(true);
                                 Save.gd.setKamehamehaEquiped(true);
-                                Save.gd.setExcaliburEquiped(false);
+                                //Save.gd.setExcaliburEquiped(false);
                                 Save.gd.setFireBallEquiped(false);
                                 Save.gd.setMoney(Save.gd.getMoney() - cost);
                                 Save.save();
@@ -563,7 +570,7 @@ public class Shop extends GameState {
                     stage1.addActor(dialog);
                 }else{
                     Save.gd.setKamehamehaEquiped(!Save.gd.isKamehamehaEquiped());
-                    Save.gd.setExcaliburEquiped(false);
+                    //Save.gd.setExcaliburEquiped(false);
                     Save.gd.setFireBallEquiped(false);
                     if (Save.gd.isKamehamehaEquiped() && (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
                         MyGdxGame.res.getSound("ya").play();
@@ -643,9 +650,11 @@ public class Shop extends GameState {
     }
 
     public void resize(int width, int height) {
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        // calculate new viewport
         float aspectRatio = (float) width / (float) height;
         float scale = 1f;
-        crop = new Vector2(0f, 0f);
+        Vector2 crop = new Vector2(0f, 0f);
 
         if (aspectRatio > MyGdxGame.ASPECT_RATIO) {
             scale = (float) height / (float) MyGdxGame.V_HEIGHT;
@@ -656,20 +665,30 @@ public class Shop extends GameState {
         } else {
             scale = (float) width / (float) MyGdxGame.V_WIDTH;
         }
-
         float w = (float) MyGdxGame.V_WIDTH * scale;
         float h = (float) MyGdxGame.V_HEIGHT * scale;
         viewport = new Rectangle(crop.x, 0, w, h);
-        offsetY = crop.y;
+        float offsetY = crop.y;
         float offsetX = crop.x;
 
-        //System.out.println(crop);
-
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glViewport(0,0, (int)viewport.width+ (int)offsetX, Gdx.graphics.getHeight());
+        stage0.act();
+        sb.begin();
+        stage0.draw();
+        sb.end();
+
         Gdx.gl.glViewport((int) viewport.x, (int) viewport.y, (int) viewport.width - (int)offsetX, (int) viewport.height - (int)offsetY);
 
         stage1.getViewport().update((int) (width - offsetX), (int) (height - offsetY), true);
         stage2.getViewport().update((int) (width - offsetX), (int) (height - offsetY), true);
+
+//        stage1.getViewport().update((int) (width- offsetX), (int) (height- offsetY), true);
+//        stage2.getViewport().update((int) (width- offsetX), (int) (height- offsetY), true);
+//        //System.out.println(crop);
+//
+//        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+//        Gdx.gl.glViewport((int) viewport.x, (int) viewport.y, (int) viewport.width - (int)offsetX, (int) viewport.height);
 
     }
 
@@ -685,6 +704,7 @@ public class Shop extends GameState {
 
         animationEnemy.update(dt);
         animationEnemyMock.update(dt);
+        animationCoin.update(dt);
 
         if (Save.gd.getAdsRemoverPurchased()) {
                 game.actionResolver.hideBannerAd();
@@ -746,13 +766,10 @@ public class Shop extends GameState {
 
         MyGdxGame.updateBGM();
         handleInput();
-        if(!MyGdxGame.isNightEnable()) {
-            MyGdxGame.background_cloud.update(dt);
-            MyGdxGame.background_skyDay.update(dt);
-        }
-        else{
-            MyGdxGame.background_skyNight.update(dt);
-        }
+        MyGdxGame.background_cloud.update(dt);
+        //MyGdxGame.background_skyDay.update(dt);
+
+
         //MyGdxGame.background_secret1.update(dt);
         MyGdxGame.background_wood1.update(dt);
 
@@ -772,6 +789,9 @@ public class Shop extends GameState {
         }
     }
 
+
+
+
     public void render() {
 
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -784,20 +804,10 @@ public class Shop extends GameState {
         }
         else {
 
-            if(MyGdxGame.isNightEnable())
-                Gdx.gl.glClearColor(65f / 255f, 18f / 255f, 252f / 255f, 1);
-            else
-                Gdx.gl.glClearColor(65f / 255f, 18f / 255f, 252f / 255f, 1);
-
-
             sb.setProjectionMatrix(cam.combined);
             shapeRenderer.setProjectionMatrix(cam.combined);
-
-            if(MyGdxGame.isNightEnable()) {
-                MyGdxGame.background_skyNight.render(sb);
-            }else{
-                MyGdxGame.background_skyDay.render(sb);
-            }
+            //MyGdxGame.background_skyDay.render(sb);
+            MyGdxGame.background_cloud.render(sb);
             MyGdxGame.background_wood1.render(sb);
             //bg1.render(sb);
             MyGdxGame.background_title.render(sb);
@@ -807,7 +817,6 @@ public class Shop extends GameState {
             sb.draw(animTitle.getFrame(), MyGdxGame.V_WIDTH/2 - w/2, MyGdxGame.V_HEIGHT/2.75f , MyGdxGame.V_WIDTH/2, 670.0f -95/2 ,  w, h,1,1, 0);
             sb.end();
 
-            if(MyGdxGame.isNightEnable())MyGdxGame.displayBlinkingStars();
             stage1.act();
             sb.begin();
             //drawStageBackground(Batch batch, float parentAlpha, float x, float y, float width, float height)
@@ -832,31 +841,29 @@ public class Shop extends GameState {
                 sb.draw(animationEnemy.getFrame(), -250 + ((float) time * 1.7f), 202);
             }else{
                 sb.draw(animationEnemyMock.getFrame(), -250 + ((float) time * 1.7f), 202);
-
             }
 
-            offsetY = (offsetY<=0)? 1:offsetY;
+            sb.draw(animationCoin.getFrame(), (MyGdxGame.V_WIDTH - 5*imageCoin.getWidth()) , imageCoin.getHeight()/2);
 
-            //buttonSecret1.setPosition( (-250 + ((float) time * 1.7f))*offsetY/100, 202*offsetY/100);
-//            stage1.getActors().items[1].setPosition((-250 + ((float) time * 1.7f))*offsetY, 202*offsetY);
+
+
+//            buttonSecret1.setPosition( (-250 + ((float) time * 1.7f))*offsetY/100, 202*offsetY/100);
+//            stage1.getActors().items[1].setPosition(-250 + ((float) time * 3f), 502);
 //            offsetY = (offsetY<=0)? 1:offsetY;
 //            stage1.getActors().items[1].setPosition((-250 + ((float) time * 1.7f))*offsetY/100, 202*offsetY/100);
 //            stage1.getActors().items[1].draw(sb, 1f);
 
             sb.end();
 
-
-
-
             if(time > 800){
                 time = -200;
             }
 
 
-            if(!MyGdxGame.isNightEnable())
-                MyGdxGame.background_cloud.render(sb);
 
         }
+
+
     }
 
     public void dispose() {

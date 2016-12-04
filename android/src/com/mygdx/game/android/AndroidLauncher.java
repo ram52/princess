@@ -33,10 +33,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.crashlytics.android.Crashlytics;
-import com.facebook.CallbackManager;
-import com.facebook.appevents.AppEventsLogger;
-import com.facebook.share.model.ShareLinkContent;
-import com.facebook.share.widget.ShareDialog;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
@@ -60,22 +56,11 @@ import com.mygdx.core.MyGdxGame.RequestHandler;
 import com.mygdx.core.entities.ActionResolver;
 import com.mygdx.core.handlers.Save;
 import com.ram52.princess.R;
-import com.facebook.FacebookSdk;
 
 import java.util.ArrayList;
 import java.util.Set;
 
 import io.fabric.sdk.android.Fabric;
-
-import com.chartboost.sdk.Libraries.CBLogging.Level;
-import com.chartboost.sdk.Model.CBError.CBClickError;
-import com.chartboost.sdk.Model.CBError.CBImpressionError;
-import com.chartboost.sdk.Tracking.CBAnalytics;
-import com.chartboost.sdk.CBLocation;
-import com.chartboost.sdk.CBImpressionActivity;
-import com.chartboost.sdk.Chartboost;
-import com.chartboost.sdk.ChartboostDelegate;
-
 
 public class AndroidLauncher extends AndroidApplication implements
         GameHelperListener, ActionResolver, RequestHandler,PlayStorePurchaseListener, BillingProcessor.IBillingHandler {
@@ -94,111 +79,10 @@ public class AndroidLauncher extends AndroidApplication implements
     private String res = "";
     private Display display;
     public boolean debug = false; //IN DEBUG DO NOT SUBMIT SCORE && DO NOT SHOW ADS && DO NOT UNLOCK ACHIEVEMENTS
-    private CallbackManager callbackManager;
     public ProgressDialog pdialog;
     private static boolean b = true;
     //private MoPubRewardedVideoListener rewardedVideoListener;
     private boolean rewardCompleted = false;
-    //cancelChartboostVideoLoading = false;
-    private ChartboostDelegate delegate = new ChartboostDelegate() {
-
-        @Override
-        public boolean shouldDisplayRewardedVideo(String adUnitId) {
-            // Called before a rewarded video will be displayed on the screen.
-            Log.i("CHARTBOOST","SHOULDDISPLAYVIDEO");
-            return true;
-        }
-
-        @Override
-        public void didDisplayRewardedVideo(String location) {
-            // Called after a rewarded video has been displayed on the screen.
-            Log.i("CHARTBOOST","DIDDISPLAYVIDEO");
-        }
-
-        @Override
-        public void didCacheRewardedVideo(String location) {
-            // Called after a rewarded video has been loaded from the Chartboost API
-            // servers and cached locally.
-            Log.i("CHARTBOOST","DIDCACHEVIDEO");
-            pdialog.dismiss();
-            Chartboost.showRewardedVideo(CBLocation.LOCATION_GAMEOVER);
-
-        }
-
-        @Override
-        public void didFailToLoadRewardedVideo(String location, CBImpressionError error) {
-            // Called after a rewarded video has attempted to load from the Chartboost API
-            // servers but failed.
-            Log.i("CHARTBOOST", error.toString() + "***" + location);
-            if(!error.toString().contains("IMPRESSION_ALREADY_VISIBLE"))
-            {
-            pdialog.dismiss();
-            runOnUiThread(new Runnable() {
-                public void run() {
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(AndroidLauncher.this);
-                    builder.setMessage("Video is not available. Please try again later.")
-                            .setCancelable(true)
-                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.cancel();
-                                }
-                            })
-                            .setTitle("Sorry :-(")
-                            .setIcon(-1).setIcon(AndroidLauncher.this.getResources().getDrawable(R.drawable.ic_launcher));
-                    AlertDialog alert = builder.create();
-                    alert.show();
-
-                    TextView titleView = (TextView) dialog.findViewById(AndroidLauncher.this.getResources().getIdentifier("alertTitle", "id", "android"));
-                    if (titleView != null) {
-                        titleView.setGravity(Gravity.CENTER);
-                    }
-                }
-            });
-
-            }
-        }
-
-        @Override
-        public void didDismissRewardedVideo(String location) {
-            // Called after a rewarded video has been dismissed.
-            Log.i("CHARTBOOST","DIDDISMISSREWARD");
-            MyGdxGame.setPause(false);
-        }
-
-        @Override
-        public void didCloseRewardedVideo(String location) {
-            // Called after a rewarded video has been closed.
-            Log.i("CHARTBOOST","DIDCLODEREWARD");
-            if(rewardCompleted) {
-                MyGdxGame.setPause(false);
-                MyGdxGame.playContinueSound();
-                MyGdxGame.setContinue(true);
-            }
-        }
-
-        @Override
-        public void didClickRewardedVideo(String location) {
-            Log.i("CHARTBOOST","DIDCLICKREWARD");
-            // Called after a rewarded video has been clicked.
-        }
-
-        @Override
-        public void didCompleteRewardedVideo(String location, int reward) {
-            // Called after a rewarded video has been viewed completely and user is eligible for reward.
-            Log.i("CHARTBOOST","DIDCOMPLETEREWARD");
-            rewardCompleted = true;
-        }
-
-        @Override
-        public void willDisplayVideo(String location){
-            Log.i("CHARTBOOST","WILLDISPLAYVIDEO");
-            // Implement to be notified of when a video will be displayed on the screen for
-            // a given CBLocation. You can then do things like mute effects and sounds.
-        }
-
-
-    };
 
     public void displayDialogBillingNonAvailable(){
         runOnUiThread(new Runnable() {
@@ -226,80 +110,7 @@ public class AndroidLauncher extends AndroidApplication implements
         super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
-        try {
-            Log.i("CHARTBOOST","INIT START");
-            Chartboost.startWithAppId(this, getResources().getString(R.string.chartboost_app_id), getResources().getString(R.string.chartboost_appSignature));
-            Chartboost.setDelegate(delegate);
-            Chartboost.onCreate(this);
-        } catch (Exception e) {
-            Log.i("CHARTBOOST","INIT ERROR");
-        }
-
-        //MoPub.initializeRewardedVideo(this);
-        //MoPub.onCreate(this);
-        /*rewardedVideoListener = new MoPubRewardedVideoListener() {
-            @Override
-            public void onRewardedVideoLoadSuccess(String adUnitId) {
-                // Called when the adUnitId has loaded. At this point you should be able to call MoPub.showRewardedVideoChartBoost(String) to show the video
-                Log.i("MOPUB","VIDEO LOAD SUCCESS");
-                MoPub.showRewardedVideoChartBoost(getResources().getString(R.string.ad_unit_mopub_reward_video));
-            }
-
-            @Override
-            public void onRewardedVideoLoadFailure(String adUnitId, final MoPubErrorCode errorCode) {
-                // Called when a video fails to load for the given ad unit id. The provided error code will provide more insight into the reason for the failure to load.
-                Log.i("MOPUB", errorCode.toString());
-                pdialog.dismiss();
-                /*runOnUiThread(new Runnable() {
-                    public void run() {
-                        new AlertDialog.Builder(AndroidLauncher.this)
-                                .setTitle("Title")
-                                .setMessage("Do you really want to whatever?")
-                                .setIcon(android.R.drawable.ic_dialog_alert)
-                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-
-                                    public void onClick(DialogInterface dialog, int whichButton) {
-                                    }})
-                                .setNegativeButton(android.R.string.no, null).show();
-                    }
-                });
-            }
-
-            @Override
-            public void onRewardedVideoStarted(String adUnitId) {
-                // Called when a rewarded video starts playing.
-                Log.i("MOPUB","VIDEO STARTED");
-                pdialog.dismiss();
-            }
-
-            @Override
-            public void onRewardedVideoPlaybackError(String adUnitId, MoPubErrorCode errorCode) {
-                //  Called when there is an error during video playback.
-                Log.i("MOPUB","VIDEO PLAYBACKERROR");
-                pdialog.dismiss();
-            }
-
-            @Override
-            public void onRewardedVideoClosed(String adUnitId) {
-                // Called when a rewarded video is closed. At this point your application should resume.
-                Log.i("MOPUB","VIDEO CLOSED");
-                pdialog.dismiss();
-            }
-
-            @Override
-            public void onRewardedVideoCompleted(Set adUnitIds, MoPubReward reward) {
-                // Called when a rewarded video is completed and the user should be rewarded.
-                // You can query the reward object with boolean isSuccessful(), String getLabel(), and int getAmount().
-                Log.i("MOPUB","VIDEO COMPLETED");
-                MyGdxGame.setPause(false);
-                MyGdxGame.playContinueSound();
-                MyGdxGame.setContinue(true);
-            }
-        };
-        MoPub.setRewardedVideoListener(rewardedVideoListener);*/
-
         Fabric.with(this, new Crashlytics());
-        FacebookSdk.sdkInitialize(getApplicationContext());
 
         display = getWindowManager().getDefaultDisplay();
         interstitialAd = new InterstitialAd(this);
@@ -323,7 +134,8 @@ public class AndroidLauncher extends AndroidApplication implements
             @Override
             public void onAdClosed() {
                 AdRequest interstitialRequest = new AdRequest.Builder()
-                        .addTestDevice(getResources().getString(R.string.ad_test_device))
+                        .addTestDevice(getResources().getString(R.string.ad_test_device1))
+                        .addTestDevice(getResources().getString(R.string.ad_test_device2))
                         .build();
                 interstitialAd.loadAd(interstitialRequest);
                 //Toast.makeText(getApplicationContext(), "Loading Interstitial", Toast.LENGTH_SHORT).show();
@@ -359,7 +171,6 @@ public class AndroidLauncher extends AndroidApplication implements
         else
             bp = null;
 
-        callbackManager = CallbackManager.Factory.create();
     }
 
 
@@ -427,7 +238,8 @@ public class AndroidLauncher extends AndroidApplication implements
                         //Toast.makeText(getApplicationContext(), "Showing Interstitial", Toast.LENGTH_SHORT).show();
                     } else {
                         AdRequest interstitialRequest = new AdRequest.Builder()
-                                .addTestDevice(getResources().getString(R.string.ad_test_device))
+                                .addTestDevice(getResources().getString(R.string.ad_test_device1))
+                                .addTestDevice(getResources().getString(R.string.ad_test_device2))
                                 .build();
                         interstitialAd.loadAd(interstitialRequest);
                         //Toast.makeText(getApplicationContext(), "Loading Interstitial", Toast.LENGTH_SHORT).show();
@@ -441,32 +253,6 @@ public class AndroidLauncher extends AndroidApplication implements
 
     @Override
     public void shareOnFacebook() {
-
-        try {
-            runOnUiThread(new Runnable() {
-                public void run() {
-                    if (ShareDialog.canShow(ShareLinkContent.class)) {
-                        Log.i("ShareDialog", "CAN SHOW");
-                        ShareDialog shareDialog = new ShareDialog(AndroidLauncher.this);
-                        ShareLinkContent content = new ShareLinkContent.Builder()
-                                //.setContentTitle(getResources().getString(R.string.facebook_post_title))
-                                .setContentUrl(Uri.parse(getResources().getString(R.string.app_google_url)))
-                                .setContentDescription(getResources().getString(R.string.facebook_post_description))
-                                .setImageUrl(Uri.parse(getResources().getString(R.string.facebook_app_thumbnail)))
-                                .build();
-                        shareDialog.show(content);
-                    }else{
-                        Log.i("ShareDialog", "CAN NOT SHOW");
-                        String linkString = getResources().getString(R.string.app_google_url);
-                        String sharerUrl = "https://www.facebook.com/sharer/sharer.php?u=" + linkString;
-                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(sharerUrl));
-                        AndroidLauncher.this.startActivity(intent);
-                    }
-                }
-            });
-        } catch (final Exception ex) {
-            Log.e("EXCEPTION",ex.getMessage());
-        }
 
     }
 
@@ -505,7 +291,6 @@ public class AndroidLauncher extends AndroidApplication implements
 
     @Override
     public void showRewardedVideoChartBoost() {
-        Chartboost.showRewardedVideo(CBLocation.LOCATION_GAMEOVER);
     }
 
     @Override
@@ -519,14 +304,6 @@ public class AndroidLauncher extends AndroidApplication implements
                 pdialog.show();
             }
         });
-
-        //if(Chartboost.hasRewardedVideo(CBLocation.LOCATION_GAMEOVER)){
-         //   Chartboost.showRewardedVideo(CBLocation.LOCATION_GAMEOVER);
-        //}else{
-        //    Log.i("CHARTBOOST","DO NOT HAS VIDEO");
-            Chartboost.cacheRewardedVideo(CBLocation.LOCATION_GAMEOVER);
-        //}
-
     }
 
     @Override
@@ -568,10 +345,8 @@ public class AndroidLauncher extends AndroidApplication implements
     @Override
     protected void onPause() {
         super.onPause();
-        Chartboost.onPause(this);
         //MoPub.onPause(this);
 
-        AppEventsLogger.deactivateApp(this);
         if(MyGdxGame.isSoundEnable() != 0) {
             if(Save.gd != null) {
                 Save.gd.setSoundPause(true);
@@ -590,14 +365,12 @@ public class AndroidLauncher extends AndroidApplication implements
     @Override
     protected void onResume() {
         super.onResume();
-        Chartboost.onResume(this);
         //MoPub.onResume(this);
         // Optional targeting parameters
         /*RequestParameters parameters = new RequestParameters.Builder()
                 //.keywords("your target words here")
                 .build();*/
 
-        AppEventsLogger.activateApp(this);
 
         if(MyGdxGame.isSoundEnable() != 0) {
             if(Save.gd != null) {
@@ -618,14 +391,12 @@ public class AndroidLauncher extends AndroidApplication implements
     public void onStart() {
         super.onStart();
         //MoPub.onStart(this);
-        Chartboost.onStart(this);
         gameHelper.onStart(this);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        Chartboost.onStop(this);
         //MoPub.onRestart(this);
         gameHelper.onStop();
     }
@@ -636,17 +407,13 @@ public class AndroidLauncher extends AndroidApplication implements
             showDialog();
             MyGdxGame.gsm.game().pause();
         }
-        // If an interstitial is on screen, close it.
-        if (Chartboost.onBackPressed())
-            return;
-        else
-            super.onBackPressed();
+
+        super.onBackPressed();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Chartboost.onDestroy(this);
         //MoPub.onRestart(this);
         if (bp != null)
             bp.release();
@@ -657,8 +424,6 @@ public class AndroidLauncher extends AndroidApplication implements
     @Override
     public void onActivityResult(int request, int response, Intent data) {
         super.onActivityResult(request, response, data);
-
-        callbackManager.onActivityResult(request, response, data);
 
         if(bp!=null) if (!bp.handleActivityResult(request, response, data))
 
@@ -795,7 +560,8 @@ public class AndroidLauncher extends AndroidApplication implements
                 }
             });
             final AdRequest interstitialVideoRequest = new AdRequest.Builder()
-                    .addTestDevice(getResources().getString(R.string.ad_test_device))
+                    .addTestDevice(getResources().getString(R.string.ad_test_device1))
+                    .addTestDevice(getResources().getString(R.string.ad_test_device2))
                     .build();
 
             runOnUiThread(new Runnable() {
@@ -816,7 +582,8 @@ public class AndroidLauncher extends AndroidApplication implements
         runOnUiThread(new Runnable() {
             public void run() {
                 AdRequest adRequest = new AdRequest.Builder()
-                        .addTestDevice(getResources().getString(R.string.ad_test_device))
+                        .addTestDevice(getResources().getString(R.string.ad_test_device1))
+                        .addTestDevice(getResources().getString(R.string.ad_test_device2))
                         .build();
                 bannerAdView.loadAd(adRequest);
                 bannerAdView.setVisibility(View.VISIBLE);

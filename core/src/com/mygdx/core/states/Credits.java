@@ -12,22 +12,23 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.AlphaAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mygdx.core.MyGdxGame;
 import com.mygdx.core.handlers.Animation;
 import com.mygdx.core.handlers.GameStateManager;
 import com.mygdx.core.handlers.Save;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Credits extends GameState {
     private boolean click_on_play;
     private Stage stage1, stage2;
     private AlphaAction fade1, fade2, fade3;
-    private Rectangle viewport;
     private AlphaAction fade;
-    private float offset = 0;
-    private float offsetx;
     private Button buttonPlay, buttonSecret1, buttonSecret2;
-    private int cpt_secret1 = 0, cpt_secret2 = 0;
+    private int cpt_secret1 = 0;
     private int cpt_translate_animation1 = 0;
     private Animation animTitle;
     private Animation animCredits;
@@ -36,14 +37,18 @@ public class Credits extends GameState {
     private Animation animationEnemy;
     private Animation animationHya;
     private int time = 0;
-
-
+    private Rectangle viewport;
+    private Stage stage0;
+    private Image intro;
 
     public Credits(GameStateManager gsm) {
 
         super(gsm);
+        intro = new Image(MyGdxGame.atlas.findRegion("backgroundSky"));
+        intro.setFillParent(true);
+        stage0 = new Stage();
+        stage0.addActor(intro);
         viewport = new Rectangle();
-
 
         Save.load();
         if (!Save.gd.getAdsRemoverPurchased()) {
@@ -83,8 +88,7 @@ public class Credits extends GameState {
         animCredits = new Animation(new Sprite(MyGdxGame.atlas.findRegion("creditentials")).split(233,120)[0], 1 / 5f);
 
         MyGdxGame.background_cloud.setVector(+10, 0);
-        MyGdxGame.background_skyNight.setVector(0, 0);
-        MyGdxGame.background_skyDay.setVector(0, 0);
+        //MyGdxGame.background_skyDay.setVector(0, 0);
         MyGdxGame.background_wood1.setVector(-3, 0);
 
         cam.setToOrtho(false, MyGdxGame.V_WIDTH, MyGdxGame.V_HEIGHT);
@@ -202,33 +206,6 @@ public class Credits extends GameState {
         MyGdxGame.setIsBoosTerritory(false);
     }
 
-    public void resize(int width, int height) {
-        // calculate new viewport
-        float aspectRatio = (float) width / (float) height;
-        float scale = 1f;
-        Vector2 crop = new Vector2(0f, 0f);
-        if (aspectRatio > MyGdxGame.ASPECT_RATIO) {
-            scale = (float) height / (float) MyGdxGame.V_HEIGHT;
-            crop.x = (width - MyGdxGame.V_WIDTH * scale) / 2f;
-        } else if (aspectRatio < MyGdxGame.ASPECT_RATIO) {
-            scale = (float) width / (float) MyGdxGame.V_WIDTH;
-            crop.y = (height - MyGdxGame.V_HEIGHT * scale) / 2f;
-        } else {
-            scale = (float) width / (float) MyGdxGame.V_WIDTH;
-        }
-        float w = (float) MyGdxGame.V_WIDTH * scale;
-        float h = (float) MyGdxGame.V_HEIGHT * scale;
-        viewport = new Rectangle(crop.x, 0, w, h);
-        offset = crop.y;
-        offsetx = crop.x;
-
-        float offsetY = crop.y;
-        float offsetX = crop.x;
-
-        stage1.getViewport().update((int) (width- offsetX), (int) (height- offsetY), true);
-        stage2.getViewport().update((int) (width- offsetX), (int) (height- offsetY), true);
-    }
-
     public void handleInput() {
         if (click_on_play) {
             click_on_play = false;
@@ -251,13 +228,9 @@ public class Credits extends GameState {
 
         MyGdxGame.updateBGM();
         handleInput();
-        if(!MyGdxGame.isNightEnable()) {
-            MyGdxGame.background_cloud.update(dt);
-            MyGdxGame.background_skyDay.update(dt);
-        }
-        else{
-            MyGdxGame.background_skyNight.update(dt);
-        }
+        MyGdxGame.background_cloud.update(dt);
+        //MyGdxGame.background_skyDay.update(dt);
+
         //MyGdxGame.background_secret1.update(dt);
         MyGdxGame.background_wood1.update(dt);
 
@@ -277,17 +250,44 @@ public class Credits extends GameState {
         }
     }
 
+    public void resize(int width, int height) {
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        // calculate new viewport
+        float aspectRatio = (float) width / (float) height;
+        float scale = 1f;
+        Vector2 crop = new Vector2(0f, 0f);
+
+        if (aspectRatio > MyGdxGame.ASPECT_RATIO) {
+            scale = (float) height / (float) MyGdxGame.V_HEIGHT;
+            crop.x = (width - MyGdxGame.V_WIDTH * scale) / 2f;
+        } else if (aspectRatio < MyGdxGame.ASPECT_RATIO) {
+            scale = (float) width / (float) MyGdxGame.V_WIDTH;
+            crop.y = (height - MyGdxGame.V_HEIGHT * scale) / 2f;
+        } else {
+            scale = (float) width / (float) MyGdxGame.V_WIDTH;
+        }
+        float w = (float) MyGdxGame.V_WIDTH * scale;
+        float h = (float) MyGdxGame.V_HEIGHT * scale;
+        viewport = new Rectangle(crop.x, 0, w, h);
+        //Gdx.gl.glViewport((int) viewport.x, (int) viewport.y, (int) viewport.width, (int) viewport.height);
+        float offsetY = crop.y;
+        float offsetX = crop.x;
+
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glViewport(0,0, (int)viewport.width+ (int)offsetX, Gdx.graphics.getHeight());
+        stage0.act();
+        sb.begin();
+        stage0.draw();
+        sb.end();
+        Gdx.gl.glViewport((int) viewport.x, (int) viewport.y, (int) viewport.width - (int)offsetX, (int) viewport.height - (int)offsetY);
+
+        stage1.getViewport().update((int) (width - offsetX), (int) (height - offsetY), true);
+        stage2.getViewport().update((int) (width - offsetX), (int) (height - offsetY), true);
+    }
+
     public void render() {
 
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        Gdx.gl.glViewport((int) viewport.x, (int) viewport.y,
-                (int) viewport.width, (int) viewport.height);
-
-        stage1.getViewport().update((int) (viewport.width), (int) (viewport.height
-        ), true);
-        stage2.getViewport().update((int) (viewport.width), (int) (viewport.height
-        ), true);
 
         if (fade2.getTime() < fade2.getDuration()) {
             stage2.act();
@@ -297,26 +297,15 @@ public class Credits extends GameState {
         }
         else {
 
-            if(MyGdxGame.isNightEnable())
-                Gdx.gl.glClearColor(65f / 255f, 18f / 255f, 252f / 255f, 1);
-            else
-                Gdx.gl.glClearColor(65f / 255f, 18f / 255f, 252f / 255f, 1);
-
-            resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-            Gdx.gl.glViewport((int) viewport.x, (int) viewport.y,
-                    (int) viewport.width, (int) viewport.height);
             sb.setProjectionMatrix(cam.combined);
             shapeRenderer.setProjectionMatrix(cam.combined);
 
-            if(MyGdxGame.isNightEnable()) {
-                MyGdxGame.background_skyNight.render(sb);
-            }else{
-                MyGdxGame.background_skyDay.render(sb);
-            }
+            //MyGdxGame.background_skyDay.render(sb);
+
             MyGdxGame.background_wood1.render(sb);
             //bg1.render(sb);
             MyGdxGame.background_title.render(sb);
-            if(MyGdxGame.isNightEnable())MyGdxGame.displayBlinkingStars();
+
             stage1.act();
             sb.begin();
             stage1.draw();
@@ -358,9 +347,6 @@ public class Credits extends GameState {
                 time = -200;
             }
 
-
-            if(!MyGdxGame.isNightEnable())
-                MyGdxGame.background_cloud.render(sb);
 
         }
     }

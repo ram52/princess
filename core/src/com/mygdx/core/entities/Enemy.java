@@ -3,6 +3,7 @@ package com.mygdx.core.entities;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.mygdx.core.MyGdxGame;
 
 public class Enemy extends B2DSprite 
@@ -415,6 +416,11 @@ public class Enemy extends B2DSprite
         }
         TextureRegion[] sprites = tex.split( 64, 64)[0];
         setAnimation(sprites, 1 / 5f);
+
+        for (Fixture fixture: getBody().getFixtureList()) {
+            fixture.setSensor(true);
+        }
+
         normalRight = false;
         normalLeft = false;
         hitRight = false;

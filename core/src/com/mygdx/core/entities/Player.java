@@ -27,6 +27,8 @@ public class Player extends B2DSprite
     private boolean left = false;
     private boolean isSlashingRight = false;
     private boolean isSlashingLeft = false;
+    private boolean jumpRight = false;
+    private boolean jumpLeft = false;
 
 	public Player(Body body, int selector)
 	{
@@ -51,6 +53,44 @@ public class Player extends B2DSprite
         right = true;
         left = false;
 	}
+
+    public void jump_animation()
+    {
+        setLoop(false);
+        Sprite tex = null;
+
+        if(Save.gd.isExcaliburEquiped()){
+            tex = new Sprite(MyGdxGame.atlas.findRegion("jumpEx"));
+        }else{
+            tex = new Sprite(MyGdxGame.atlas.findRegion("jump"));
+        }
+
+        TextureRegion[] sprites = tex.split(64, 64)[0];
+        setAnimation(sprites, 1 / 15f);
+
+        jumpRight = true;
+        jumpLeft = false;
+    }
+
+    public void jump_animation_rev()
+    {
+        setLoop(false);
+        Sprite tex = null;
+
+        if(Save.gd.isExcaliburEquiped()){
+            tex = new Sprite(MyGdxGame.atlas.findRegion("jumpEx"));
+        }else{
+            tex = new Sprite(MyGdxGame.atlas.findRegion("jump"));
+        }
+
+        TextureRegion[] sprites = tex.split(64, 64)[0];
+        for(int i=0;i<sprites.length;i++)
+            sprites[i].flip(true,false);
+        setAnimation(sprites, 1 / 15f);
+
+        jumpRight = false;
+        jumpLeft = true;
+    }
 
     public void slash_animation(int selector)
     {
@@ -83,6 +123,8 @@ public class Player extends B2DSprite
         isSlashingLeft = false;
         right = true;
         left = false;
+        jumpRight = false;
+        jumpLeft = false;
     }
 
     public void slash_animation_rev(int selector)
@@ -120,6 +162,8 @@ public class Player extends B2DSprite
         isSlashingLeft = true;
         right = false;
         left = true;
+        jumpRight = false;
+        jumpLeft = false;
     }
 
     public void still_animation(int selector)
@@ -154,6 +198,8 @@ public class Player extends B2DSprite
         isSlashingLeft = false;
         right = true;
         left = false;
+        jumpRight = false;
+        jumpLeft = false;
     }
 
     public void still_animation_rev(int selector)
@@ -191,6 +237,8 @@ public class Player extends B2DSprite
         isSlashingLeft = false;
         right = false;
         left = true;
+        jumpRight = false;
+        jumpLeft = false;
 
     }
 
@@ -226,6 +274,8 @@ public class Player extends B2DSprite
         isSlashingLeft = false;
         right = true;
         left = false;
+        jumpRight = false;
+        jumpLeft = false;
 	}
 
 	public void running_animation_rev(int selector)
@@ -262,6 +312,8 @@ public class Player extends B2DSprite
         isSlashingLeft = false;
         right = false;
         left = true;
+        jumpRight = false;
+        jumpLeft = false;
 	}
 	
 	public void collectCoin() {
@@ -339,6 +391,10 @@ public class Player extends B2DSprite
         return stillLeft;
     }
 
+    public void setStillLeft(boolean stillRight) {
+        this.stillLeft = stillRight;
+    }
+
     public boolean isPlayerDead() {
         return playerDead;
     }
@@ -385,6 +441,22 @@ public class Player extends B2DSprite
 
     public void setSlashingLeft(boolean slashingLeft) {
         isSlashingLeft = slashingLeft;
+    }
+
+    public boolean isJumpRight() {
+        return jumpRight;
+    }
+
+    public void setJumpRight(boolean jumpRight) {
+        this.jumpRight = jumpRight;
+    }
+
+    public boolean isJumpLeft() {
+        return jumpLeft;
+    }
+
+    public void setJumpLeft(boolean jumpLeft) {
+        this.jumpLeft = jumpLeft;
     }
 
 }

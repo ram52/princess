@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.AlphaAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mygdx.core.MyGdxGame;
 import com.mygdx.core.handlers.Animation;
@@ -31,11 +32,18 @@ public class Tuto extends GameState {
     private int cpt_translate_animation1 = 0;
     private Animation animationPlayer;
     private Animation animationPrincess;
+    private Animation animationEnemy;
     private Animation animationHya, animTitle;
+    private Stage stage0;
+    private Image intro;
 
     public Tuto(GameStateManager gsm) {
 
         super(gsm);
+        intro = new Image(MyGdxGame.atlas.findRegion("backgroundSky"));
+        intro.setFillParent(true);
+        stage0 = new Stage();
+        stage0.addActor(intro);
         viewport = new Rectangle();
 
         animationHya = new Animation(new Sprite(MyGdxGame.atlas.findRegion("protectme")).split(123, 75)[0], 1 / 5f);
@@ -67,9 +75,14 @@ public class Tuto extends GameState {
             //sprites[i].flip(true,false);
         animationPrincess = new Animation(sprites, 1 / 5f);
 
+        tex = new Sprite(MyGdxGame.atlas.findRegion("enemy"));
+        sprites = tex.split(64, 64)[0];
+        //for(int i=0;i<sprites.length;i++)
+        //sprites[i].flip(true,false);
+        animationEnemy = new Animation(sprites, 1 / 5f);
+
         MyGdxGame.background_cloud.setVector(+10, 0);
-        MyGdxGame.background_skyNight.setVector(0, 0);
-        MyGdxGame.background_skyDay.setVector(0, 0);
+        //MyGdxGame.background_skyDay.setVector(0, 0);
         MyGdxGame.background_wood1.setVector(-3, 0);
 
         cam.setToOrtho(false, MyGdxGame.V_WIDTH, MyGdxGame.V_HEIGHT);
@@ -79,12 +92,12 @@ public class Tuto extends GameState {
         Skin skinButtonPlay = new Skin();
         skinButtonPlay.addRegions(MyGdxGame.atlas);
         ButtonStyle buttonStylePlay = new ButtonStyle();
-        buttonStylePlay.up = skinButtonPlay.getDrawable("buttonExit2Up");
-        buttonStylePlay.down = skinButtonPlay.getDrawable("buttonExit2Down");
+        buttonStylePlay.up = skinButtonPlay.getDrawable("buttonSecret");
+        buttonStylePlay.down = skinButtonPlay.getDrawable("buttonSecret");
         buttonPlay = new Button(buttonStylePlay);
-        buttonPlay.setWidth(Gdx.graphics.getWidth() / 5f);
-        buttonPlay.setHeight(Gdx.graphics.getHeight() / 7.8f);
-        buttonPlay.setPosition(-400, Gdx.graphics.getHeight()/4f);
+        buttonPlay.setWidth(Gdx.graphics.getWidth());
+        buttonPlay.setHeight(Gdx.graphics.getHeight());
+        buttonPlay.setPosition(0,0);
 
         stage1.addActor(buttonPlay);
 
@@ -188,10 +201,12 @@ public class Tuto extends GameState {
     }
 
     public void resize(int width, int height) {
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         // calculate new viewport
         float aspectRatio = (float) width / (float) height;
         float scale = 1f;
         Vector2 crop = new Vector2(0f, 0f);
+
         if (aspectRatio > MyGdxGame.ASPECT_RATIO) {
             scale = (float) height / (float) MyGdxGame.V_HEIGHT;
             crop.x = (width - MyGdxGame.V_WIDTH * scale) / 2f;
@@ -204,14 +219,20 @@ public class Tuto extends GameState {
         float w = (float) MyGdxGame.V_WIDTH * scale;
         float h = (float) MyGdxGame.V_HEIGHT * scale;
         viewport = new Rectangle(crop.x, 0, w, h);
-        offset = crop.y;
-        offsetx = crop.x;
-
+//        Gdx.gl.glViewport((int) viewport.x, (int) viewport.y, (int) viewport.width, (int) viewport.height);
         float offsetY = crop.y;
         float offsetX = crop.x;
 
-        stage1.getViewport().update((int) (width- offsetX), (int) (height- offsetY), true);
-        stage2.getViewport().update((int) (width- offsetX), (int) (height- offsetY), true);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glViewport(0,0, (int)viewport.width+ (int)offsetX, Gdx.graphics.getHeight());
+        stage0.act();
+        sb.begin();
+        stage0.draw();
+        sb.end();
+        Gdx.gl.glViewport((int) viewport.x, (int) viewport.y, (int) viewport.width - (int)offsetX, (int) viewport.height - (int)offsetY);
+
+        stage1.getViewport().update((int) (width - offsetX), (int) (height - offsetY), true);
+        stage2.getViewport().update((int) (width - offsetX), (int) (height - offsetY), true);
     }
 
     public void handleInput() {
@@ -232,16 +253,14 @@ public class Tuto extends GameState {
 
         animationPlayer.update(dt);
         animationPrincess.update(dt);
+        animationEnemy.update(dt);
 
         MyGdxGame.updateBGM();
         handleInput();
-        if(!MyGdxGame.isNightEnable()) {
-            MyGdxGame.background_cloud.update(dt);
-            MyGdxGame.background_skyDay.update(dt);
-        }
-        else{
-            MyGdxGame.background_skyNight.update(dt);
-        }
+
+        MyGdxGame.background_cloud.update(dt);
+        //MyGdxGame.background_skyDay.update(dt);
+
         //MyGdxGame.background_secret1.update(dt);
         MyGdxGame.background_wood1.update(dt);
 
@@ -264,14 +283,6 @@ public class Tuto extends GameState {
     public void render() {
 
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        Gdx.gl.glViewport((int) viewport.x, (int) viewport.y,
-                (int) viewport.width, (int) viewport.height);
-
-        stage1.getViewport().update((int) (viewport.width), (int) (viewport.height
-        ), true);
-        stage2.getViewport().update((int) (viewport.width), (int) (viewport.height
-        ), true);
 
         if (fade2.getTime() < fade2.getDuration()) {
             stage2.act();
@@ -281,26 +292,14 @@ public class Tuto extends GameState {
         }
         else {
 
-            if(MyGdxGame.isNightEnable())
-                Gdx.gl.glClearColor(65f / 255f, 18f / 255f, 252f / 255f, 1);
-            else
-                Gdx.gl.glClearColor(65f / 255f, 18f / 255f, 252f / 255f, 1);
-
-            resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-            Gdx.gl.glViewport((int) viewport.x, (int) viewport.y,
-                    (int) viewport.width, (int) viewport.height);
             sb.setProjectionMatrix(cam.combined);
             shapeRenderer.setProjectionMatrix(cam.combined);
 
-            if(MyGdxGame.isNightEnable()) {
-                MyGdxGame.background_skyNight.render(sb);
-            }else{
-                MyGdxGame.background_skyDay.render(sb);
-            }
+            MyGdxGame.background_cloud.render(sb);
+            //MyGdxGame.background_skyDay.render(sb);
             MyGdxGame.background_wood1.render(sb);
-            //bg1.render(sb);
             MyGdxGame.background_tuto.render(sb);
-            if(MyGdxGame.isNightEnable())MyGdxGame.displayBlinkingStars();
+
             stage1.act();
             sb.begin();
             stage1.draw();
@@ -309,15 +308,16 @@ public class Tuto extends GameState {
             sb.begin();
 
             sb.draw(animationPlayer.getFrame(), (MyGdxGame.V_WIDTH-animationPlayer.getFrame().getRegionWidth())/2, 202);
+            sb.draw(animationEnemy.getFrame(), (MyGdxGame.V_WIDTH-animationPlayer.getFrame().getRegionWidth()), 202);
             sb.draw(animationPrincess.getFrame(), (MyGdxGame.V_WIDTH-animationPrincess.getFrame().getRegionWidth())/5f, 455);
             sb.draw(animationHya.getFrame(), (MyGdxGame.V_WIDTH-animationPrincess.getFrame().getRegionWidth())/5f, 520);
 
             //GEAR BUTTON
-            float speed = 8f;
-            if (stage1.getActors().items[0].getX() <= -5) {
-                stage1.getActors().items[0].setPosition(-stage1.getActors().items[0].getWidth() + cpt_translate_animation1 * speed, stage1.getActors().items[0].getY());
-                cpt_translate_animation1++;
-            }
+//            float speed = 8f;
+//            if (stage1.getActors().items[0].getX() <= -5) {
+//                stage1.getActors().items[0].setPosition(-stage1.getActors().items[0].getWidth() + cpt_translate_animation1 * speed, stage1.getActors().items[0].getY());
+//                cpt_translate_animation1++;
+//            }
 
 
             float w = 111*5f;
@@ -328,9 +328,6 @@ public class Tuto extends GameState {
             if((Save.gd.isSoundEnable() == 2) && !MyGdxGame.res.getMusic("main").isPlaying()) MyGdxGame.res.getMusic("main").setVolume(0.4f);
             sb.end();
 
-
-            if(!MyGdxGame.isNightEnable())
-                MyGdxGame.background_cloud.render(sb);
 
         }
     }

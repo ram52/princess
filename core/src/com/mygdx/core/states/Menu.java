@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -25,6 +26,9 @@ import com.mygdx.core.MyGdxGame;
 import com.mygdx.core.handlers.Animation;
 import com.mygdx.core.handlers.GameStateManager;
 import com.mygdx.core.handlers.Save;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Menu extends GameState {
 
@@ -58,11 +62,17 @@ public class Menu extends GameState {
     boolean right2 = true;
     boolean left2 = false;
     float y = 670.0f;
-
+    private Stage stage0;
+    private Image intro;
 
     public Menu(GameStateManager gsm) {
 
         super(gsm);
+
+        intro = new Image(MyGdxGame.atlas.findRegion("backgroundSky"));
+        intro.setFillParent(true);
+        stage0 = new Stage();
+        stage0.addActor(intro);
 
         Timer.instance().stop();
         Timer.instance().clear();
@@ -77,13 +87,6 @@ public class Menu extends GameState {
             if(network.equals("4G")|network.equals("3G")|network.equals("WIFI"))
                 game.actionResolver.showOrLoadBanner();
         }
-        /*if (!Save.gd.getAdsRemoverPurchased()) {
-            String network = game.actionResolver.getNetworkClass();
-            if(network == null) network = "ABSENT";
-            System.out.println("NETWORK: "+network);
-            if(network.equals("4G")|network.equals("3G")|network.equals("WIFI"))
-                game.actionResolver.showOrLoadInterstital();
-        }*/
 
         click_on_play = false;
         click_on_leaderboard = false;
@@ -92,8 +95,7 @@ public class Menu extends GameState {
         sb3 = new SpriteBatch();
 
         MyGdxGame.background_cloud.setVector(+10, 0);
-        MyGdxGame.background_skyNight.setVector(0, 0);
-        MyGdxGame.background_skyDay.setVector(0, 0);
+        //MyGdxGame.background_skyDay.setVector(0, 0);
         MyGdxGame.background_wood1.setVector(-3, 0);
 
         Sprite tex = null;
@@ -561,19 +563,13 @@ public class Menu extends GameState {
                 System.out.println("bt back pressed!");
                 if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("select").play();
                 System.out.println("bt backimage pressed!");
-                MyGdxGame.setNightEnable(!MyGdxGame.isNightEnable());
 
-                if (MyGdxGame.isNightEnable()) {
-                    ButtonStyle style = new ButtonStyle();
-                    style.up = skin.getDrawable("buttonUiOptionSkyUp");
-                    style.down = skin.getDrawable("buttonUiOptionSkyUp");
-                    buttonBackImage.setStyle(style);
-                } else {
-                    ButtonStyle style = new ButtonStyle();
-                    style.up = skin.getDrawable("buttonUiOptionSkyDown");
-                    style.down = skin.getDrawable("buttonUiOptionSkyDown");
-                    buttonBackImage.setStyle(style);
-                }
+
+                ButtonStyle style = new ButtonStyle();
+                style.up = skin.getDrawable("buttonUiOptionSkyDown");
+                style.down = skin.getDrawable("buttonUiOptionSkyDown");
+                buttonBackImage.setStyle(style);
+
                 return true;
             };
 
@@ -690,37 +686,11 @@ public class Menu extends GameState {
         im.addProcessor(stageUiOption);
         im.addProcessor(stage1);
         Gdx.input.setInputProcessor(im);
-        resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+        //MyGdxGame.resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(),stages);
 
         //Gdx.input.setInputProcessor(stageUiOption);
         MyGdxGame.setIsBoosTerritory(false);
-
-    }
-
-    public void resize(int width, int height) {
-        // calculate new viewport
-        float aspectRatio = (float) width / (float) height;
-        float scale = 1f;
-        Vector2 crop = new Vector2(0f, 0f);
-
-        if (aspectRatio > MyGdxGame.ASPECT_RATIO) {
-            scale = (float) height / (float) MyGdxGame.V_HEIGHT;
-            crop.x = (width - MyGdxGame.V_WIDTH * scale) / 2f;
-        } else if (aspectRatio < MyGdxGame.ASPECT_RATIO) {
-            scale = (float) width / (float) MyGdxGame.V_WIDTH;
-            crop.y = (height - MyGdxGame.V_HEIGHT * scale) / 2f;
-        } else {
-            scale = (float) width / (float) MyGdxGame.V_WIDTH;
-        }
-        float w = (float) MyGdxGame.V_WIDTH * scale;
-        float h = (float) MyGdxGame.V_HEIGHT * scale;
-
-        viewport = new Rectangle(crop.x, 0, w, h);
-        float offsetY = crop.y;
-        float offsetX = crop.x;
-
-        stageUiOption.getViewport().update((int) (width - offsetX), (int) (height - offsetY), true);
-
     }
 
     public void updateSelector(){
@@ -803,15 +773,8 @@ public class Menu extends GameState {
         handleInput();
         //animationRain.update(dt);
         MyGdxGame.background_wood1.update(dt);
-        MyGdxGame.background_skyNight.update(dt);
-        if(!MyGdxGame.isNightEnable()) {
-            MyGdxGame.background_cloud.update(dt);
-            MyGdxGame.background_skyDay.update(dt);
-        }
-        else{
-            MyGdxGame.background_skyNight.update(dt);
-        }
-
+        MyGdxGame.background_cloud.update(dt);
+        //MyGdxGame.background_skyDay.update(dt);
 
         animPlayerIdle.update(dt);
         //animTitle.update(dt);
@@ -822,41 +785,58 @@ public class Menu extends GameState {
 
     }
 
+    public void resize(int width, int height) {
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        // calculate new viewport
+        float aspectRatio = (float) width / (float) height;
+        float scale = 1f;
+        Vector2 crop = new Vector2(0f, 0f);
+
+        if (aspectRatio > MyGdxGame.ASPECT_RATIO) {
+            scale = (float) height / (float) MyGdxGame.V_HEIGHT;
+            crop.x = (width - MyGdxGame.V_WIDTH * scale) / 2f;
+        } else if (aspectRatio < MyGdxGame.ASPECT_RATIO) {
+            scale = (float) width / (float) MyGdxGame.V_WIDTH;
+            crop.y = (height - MyGdxGame.V_HEIGHT * scale) / 2f;
+        } else {
+            scale = (float) width / (float) MyGdxGame.V_WIDTH;
+        }
+        float w = (float) MyGdxGame.V_WIDTH * scale;
+        float h = (float) MyGdxGame.V_HEIGHT * scale;
+        viewport = new Rectangle(crop.x, 0, w, h);
+        //Gdx.gl.glViewport((int) viewport.x, (int) viewport.y, (int) viewport.width, (int) viewport.height);
+
+        float offsetY = crop.y;
+        float offsetX = crop.x;
+
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glViewport(0,0, (int)viewport.width+ (int)offsetX, Gdx.graphics.getHeight());
+        stage0.act();
+        sb.begin();
+        stage0.draw();
+        sb.end();
+        Gdx.gl.glViewport((int) viewport.x, (int) viewport.y, (int) viewport.width - (int)offsetX, (int) viewport.height - (int)offsetY);
+
+        stage1.getViewport().update((int) (width - offsetX), (int) (height - offsetY), true);
+        stage2.getViewport().update((int) (width - offsetX), (int) (height - offsetY), true);
+
+    }
+
+
     public void render() {
 
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        Gdx.gl.glViewport((int) viewport.x, (int) viewport.y,
-                (int) viewport.width, (int) viewport.height);
 
-        stageUiOption.getViewport().update((int) (viewport.width), (int) (viewport.height
-        ), true);
-        stage1.getViewport().update((int) (viewport.width), (int) (viewport.height
-        ), true);
-        stage2.getViewport().update((int) (viewport.width), (int) (viewport.height
-        ), true);
-        stage3.getViewport().update((int) (viewport.width), (int) (viewport.height
-        ), true);
-
-        if (MyGdxGame.isNightEnable())
-            Gdx.gl.glClearColor(65f / 255f, 18f / 255f, 252f / 255f, 1);
-        else
-            Gdx.gl.glClearColor(65f / 255f, 18f / 255f, 252f / 255f, 1);
+        //Gdx.gl.glClearColor(65f / 255f, 18f / 255f, 252f / 255f, 1);
 
         sb.setProjectionMatrix(cam.combined);
         shapeRenderer.setProjectionMatrix(cam.combined);
 
-        if(MyGdxGame.isNightEnable()) {
-            MyGdxGame.background_skyNight.render(sb);
-        }else{
-            MyGdxGame.background_skyDay.render(sb);
-        }
-
+        //MyGdxGame.background_skyDay.render(sb);
+        MyGdxGame.background_cloud.render(sb);
         MyGdxGame.background_wood1.render(sb);
-        if(MyGdxGame.isNightEnable()) MyGdxGame.displayBlinkingStars();
         MyGdxGame.background_title.render(sb);
-
 
         sb2.begin();
 
@@ -870,11 +850,6 @@ public class Menu extends GameState {
             stage1.getActors().items[2].setVisible(false);
 
         } else {
-
-
-//                    sb.begin();
-//                    sb.draw(animHelpMe.getFrame(),posX2 , 520);
-//                    sb.end();
 
             //SOUND BUTTON
             sb3.begin();
@@ -963,9 +938,7 @@ public class Menu extends GameState {
                 y-=0.3f;
             }
 
-
             sb.draw(animTitle.getFrame(), MyGdxGame.V_WIDTH/2 - w/2, MyGdxGame.V_HEIGHT - h*1.2f , MyGdxGame.V_WIDTH/2, 670.0f -95/2 ,  w, h,1,1, 0);
-
 
 
             if(posX+(96/2) >= MyGdxGame.V_WIDTH){
@@ -1009,19 +982,13 @@ public class Menu extends GameState {
             }
 
 
-
             sb.end();
         }
 
 
+
+
         sb2.end();
-
-
-
-        if(!MyGdxGame.isNightEnable())
-            MyGdxGame.background_cloud.render(sb);
-
-
 
 
     }

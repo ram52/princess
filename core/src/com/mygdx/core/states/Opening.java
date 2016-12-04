@@ -21,20 +21,23 @@ public class Opening extends GameState {
     private Stage stage1;
     private Image imageOpening1;
     private Rectangle viewport;
-    private float offset;
-    private float offsetx;
-    private BoundedCamera cam2;
     private boolean fade = false, touchEnable = false;
     private Animation animationPBlue1;
     private Animation animationPrincess;
     private Animation animationEnemy;
     private Animation animationHya;
     private int time = 0;
+    private Stage stage0;
+    private Image intro;
 
     public Opening(final GameStateManager gsm) {
 
         super(gsm);
-        offset = 0;
+        intro = new Image(MyGdxGame.atlas.findRegion("backgroundSky"));
+        intro.setFillParent(true);
+        stage0 = new Stage();
+        stage0.addActor(intro);
+
         imageOpening1 = new Image(MyGdxGame.atlas.findRegion("opening1"));
 
         //imageStorylineText.setFillParent(true);
@@ -58,13 +61,8 @@ public class Opening extends GameState {
             }
         }, 5f);
 
-        cam2 = new BoundedCamera();
-        cam2.setToOrtho(false, MyGdxGame.V_WIDTH, MyGdxGame.V_HEIGHT);
-
         MyGdxGame.background_cloud.setVector(+10, 0);
-        //MyGdxGame.background_storyLine.setVector(0, 0);
-        MyGdxGame.background_skyNight.setVector(0, 0);
-        MyGdxGame.background_skyDay.setVector(0, 0);
+        //MyGdxGame.background_skyDay.setVector(0, 0);
         MyGdxGame.background_wood1.setVector(-3, 0);
 
         Sprite tex = null;
@@ -108,38 +106,26 @@ public class Opening extends GameState {
 
     public void update(float dt) {
         handleInput();
-        if (!MyGdxGame.isNightEnable()) {
-            MyGdxGame.background_cloud.update(dt);
-            MyGdxGame.background_skyDay.update(dt);
-        } else {
-            MyGdxGame.background_skyNight.update(dt);
-        }
+       // MyGdxGame.background_skyDay.update(dt);
+        MyGdxGame.background_cloud.update(dt);
         MyGdxGame.background_wood1.update(dt);
         animationPBlue1.update(dt);
         animationEnemy.update(dt);
         animationPrincess.update(dt);
         //MyGdxGame.background_storyLine.update(dt);
-
     }
 
-
     public void render() {
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        Gdx.gl.glViewport((int) viewport.x, (int) viewport.y, (int) viewport.width, (int) viewport.height);
         if (!fade) {
 
-            sb.setProjectionMatrix(cam2.combined);
-            shapeRenderer.setProjectionMatrix(cam2.combined);
-            Gdx.gl.glClearColor(65f / 255f, 18f / 255f, 252f / 255f, 1);
+            sb.setProjectionMatrix(cam.combined);
+            shapeRenderer.setProjectionMatrix(cam.combined);
+            //Gdx.gl.glClearColor(65f / 255f, 18f / 255f, 252f / 255f, 1);
 
-            if (MyGdxGame.isNightEnable()) {
-                MyGdxGame.background_skyNight.render(sb);
-            } else {
-                MyGdxGame.background_skyDay.render(sb);
-            }
+            //MyGdxGame.background_skyDay.render(sb);
+            MyGdxGame.background_cloud.render(sb);
             MyGdxGame.background_wood1.render(sb);
-            if (MyGdxGame.isNightEnable()) MyGdxGame.displayBlinkingStars();
 
             stage1.act();
             sb.begin();
@@ -163,6 +149,7 @@ public class Opening extends GameState {
     }
 
     public void resize(int width, int height) {
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         // calculate new viewport
         float aspectRatio = (float) width / (float) height;
         float scale = 1f;
@@ -180,8 +167,19 @@ public class Opening extends GameState {
         float w = (float) MyGdxGame.V_WIDTH * scale;
         float h = (float) MyGdxGame.V_HEIGHT * scale;
         viewport = new Rectangle(crop.x, 0, w, h);
-        offset = crop.y;
-        offsetx = crop.x;
+        //Gdx.gl.glViewport((int) viewport.x, (int) viewport.y, (int) viewport.width, (int) viewport.height);
+        float offsetY = crop.y;
+        float offsetX = crop.x;
+
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glViewport(0,0, (int)viewport.width+ (int)offsetX, Gdx.graphics.getHeight());
+        stage0.act();
+        sb.begin();
+        stage0.draw();
+        sb.end();
+        Gdx.gl.glViewport((int) viewport.x, (int) viewport.y, (int) viewport.width - (int)offsetX, (int) viewport.height - (int)offsetY);
+
+        stage1.getViewport().update((int) (width - offsetX), (int) (height - offsetY), true);
     }
 
     public void dispose() {
