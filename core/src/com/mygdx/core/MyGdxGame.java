@@ -314,7 +314,7 @@ public class MyGdxGame implements ApplicationListener {
 
             /** RENDER THE GAME STATE **/
             if(gsm != null){
-                if(!gsm.flag_play){
+                if(!gsm.flag_play | !gsm.flag_shop){
                     debugString = "fps: "+Gdx.graphics.getFramesPerSecond()+'\n'+
                             "java heap: "+ (int)(Gdx.app.getJavaHeap()/Math.pow(10, 6))+"Mb"+'\n'+
                             "native heap: "+ (int)(Gdx.app.getNativeHeap()/Math.pow(10, 6))+"Mb";
@@ -326,8 +326,7 @@ public class MyGdxGame implements ApplicationListener {
 
             sb.begin();
             font.setColor(Color.GREEN);
-
-            font.drawMultiLine(sb, debugString, Gdx.graphics.getWidth()/15 ,Gdx.graphics.getHeight()/1.1f, Gdx.graphics.getWidth(), BitmapFont.HAlignment.LEFT);
+            font.drawMultiLine(sb, debugString, MyGdxGame.V_WIDTH/15 , MyGdxGame.V_HEIGHT/1.1f, MyGdxGame.V_WIDTH, BitmapFont.HAlignment.LEFT);
             sb.end();
 
 

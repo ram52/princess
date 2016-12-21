@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -36,6 +37,8 @@ import com.mygdx.core.handlers.ShopDialog;
 
 import java.text.NumberFormat;
 
+import static com.mygdx.core.handlers.B2DVars.PPM;
+
 public class Shop extends GameState {
     private boolean click_on_play;
     private Stage stage1, stage2;
@@ -51,9 +54,10 @@ public class Shop extends GameState {
     private Vector2 crop;
     private Animation animTitle, animationCoin;
     private Animation animationEnemy, animationEnemyMock;
-    private int time = 0;
+    private float time = 0.0f;
     private Stage stage0;
     private Image intro;
+    private float offsetY = 0;
 
 
     public Shop(GameStateManager gsm) {
@@ -69,6 +73,8 @@ public class Shop extends GameState {
         skin.addRegions(MyGdxGame.atlas);
 
         Save.load();
+
+        game.actionResolver.hideBannerAd();
 
         Sprite tex = new Sprite(MyGdxGame.atlas.findRegion("enemy"));
         TextureRegion[] sprites = tex.split(64, 64)[0];
@@ -200,12 +206,14 @@ public class Shop extends GameState {
         buttonItem5.setPosition(buttonItem4.getX() + buttonItem4.getWidth()*1.2f , buttonItem4.getY());
         stage1.addActor(buttonItem5);
 
-        labelMoney = new Label("0", new Label.LabelStyle(new BitmapFont(Gdx.files.internal(MyGdxGame.fontPointPath), false), Color.WHITE));
-        labelMoney.setFontScale(Gdx.graphics.getWidth() / 1200f);
-        labelMoney.setWidth(Gdx.graphics.getWidth() / 2);
-        labelMoney.setHeight(imageCoin.getHeight());
-        labelMoney.setAlignment(Align.center | Align.left);
-        labelMoney.setPosition(imageCoin.getRight() * 1.1f, imageCoin.getY());
+        labelMoney = new Label("0", new Label.LabelStyle(new BitmapFont(Gdx.files.internal(MyGdxGame.fontScorePath), false), Color.WHITE));
+        float fScale = Gdx.graphics.getWidth() / 400f;
+        labelMoney.setFontScale(fScale);
+
+        labelMoney.setWidth(Gdx.graphics.getWidth());
+        labelMoney.setHeight(Gdx.graphics.getHeight()/15f);
+        labelMoney.setPosition((Gdx.graphics.getWidth()-labelMoney.getWidth())/2, Gdx.graphics.getHeight() - labelMoney.getHeight()*1.1f);
+        labelMoney.setAlignment(Align.center);
 
         stage1.addActor(labelMoney);
         labelMoney.setText(Integer.toString(Save.gd.getMoney()));
@@ -668,7 +676,7 @@ public class Shop extends GameState {
         float w = (float) MyGdxGame.V_WIDTH * scale;
         float h = (float) MyGdxGame.V_HEIGHT * scale;
         viewport = new Rectangle(crop.x, 0, w, h);
-        float offsetY = crop.y;
+        offsetY = crop.y;
         float offsetX = crop.x;
 
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -701,6 +709,8 @@ public class Shop extends GameState {
     }
 
     public void update(float dt) {
+
+
 
         animationEnemy.update(dt);
         animationEnemyMock.update(dt);
@@ -817,6 +827,12 @@ public class Shop extends GameState {
             sb.draw(animTitle.getFrame(), MyGdxGame.V_WIDTH/2 - w/2, MyGdxGame.V_HEIGHT/2.75f , MyGdxGame.V_WIDTH/2, 670.0f -95/2 ,  w, h,1,1, 0);
             sb.end();
 
+            shapeRenderer.setColor(Color.BLACK);
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            float height = MyGdxGame.V_HEIGHT/12;
+            shapeRenderer.rect(0, MyGdxGame.V_HEIGHT-height , MyGdxGame.V_WIDTH, height);
+            shapeRenderer.end();
+
             stage1.act();
             sb.begin();
             //drawStageBackground(Batch batch, float parentAlpha, float x, float y, float width, float height)
@@ -836,34 +852,39 @@ public class Shop extends GameState {
             sb.end();
 
             sb.begin();
+            float a = 1.7f;
             if(!MyGdxGame.res.getMusic("laugh").isPlaying()){
-                time+=2;
-                sb.draw(animationEnemy.getFrame(), -250 + ((float) time * 1.7f), 202);
+                time+=4.0f;
+                sb.draw(animationEnemy.getFrame(), buttonSecret1.getX()/a, 202);
             }else{
-                sb.draw(animationEnemyMock.getFrame(), -250 + ((float) time * 1.7f), 202);
+                sb.draw(animationEnemyMock.getFrame(), buttonSecret1.getX()/a, 202);
             }
 
-            sb.draw(animationCoin.getFrame(), (MyGdxGame.V_WIDTH - 5*imageCoin.getWidth()) , imageCoin.getHeight()/2);
+            float coef = 3.0f;
+            sb.draw(animationCoin.getFrame(), (1*imageCoin.getWidth()) , MyGdxGame.V_HEIGHT - imageCoin.getWidth()*1.14f+(offsetY/coef));
 
+            buttonSecret1.setPosition( (-250.0f + ((float) time * a)) + (float)buttonSecret1.getWidth(), 202+(offsetY/coef)+buttonSecret1.getHeight());
+            //stage1.getActors().items[1].setPosition(-250 + ((float) time * 3f), 502);
+            //offsetY = (offsetY<=0)? 1:offsetY;
+            //stage1.getActors().items[1].setPosition((-250 + ((float) time * 1.7f)), 202-(offsetY/coef));
+            //stage1.getActors().items[1].draw(sb, 1f);
 
-
-//            buttonSecret1.setPosition( (-250 + ((float) time * 1.7f))*offsetY/100, 202*offsetY/100);
-//            stage1.getActors().items[1].setPosition(-250 + ((float) time * 3f), 502);
-//            offsetY = (offsetY<=0)? 1:offsetY;
-//            stage1.getActors().items[1].setPosition((-250 + ((float) time * 1.7f))*offsetY/100, 202*offsetY/100);
-//            stage1.getActors().items[1].draw(sb, 1f);
+            MyGdxGame.debugString = "fps: "+Gdx.graphics.getFramesPerSecond()+'\n'+
+                    "java heap: "+ (int)(Gdx.app.getJavaHeap()/Math.pow(10, 6))+" Mb"+'\n'+
+                    "native heap: "+ (int)(Gdx.app.getNativeHeap()/Math.pow(10, 6))+" Mb"+'\n'+
+                    "offDisplay: "+ offsetY+'\n'+
+                    "offset: "+ offsetY/coef+'\n'+
+                    "secret: "+ cpt_secret1+'\n'+
+                    "sX: "+ buttonSecret1.getX()+'\n'+
+                    "sY: "+ buttonSecret1.getY()+'\n'+
+                    "tick: "+ time;
 
             sb.end();
 
             if(time > 800){
                 time = -200;
             }
-
-
-
         }
-
-
     }
 
     public void dispose() {

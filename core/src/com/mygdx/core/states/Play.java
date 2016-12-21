@@ -1811,7 +1811,7 @@ public class Play extends GameState {
 
                                         float posClimb = enemy.getBody().getPosition().y + enemy.getCptWaitRunning()/5000f;
 
-                                        posClimb = (float) (posClimb*dificulty);
+                                        posClimb = (float) (posClimb+dificulty/1000.0f);
 
                                         if(posClimb >= 2.5621998f*2f){
 
@@ -1994,6 +1994,7 @@ public class Play extends GameState {
         MyGdxGame.debugString = "fps: "+Gdx.graphics.getFramesPerSecond()+'\n'+
                 "java heap: "+ (int)(Gdx.app.getJavaHeap()/Math.pow(10, 6))+" Mb"+'\n'+
                 "native heap: "+ (int)(Gdx.app.getNativeHeap()/Math.pow(10, 6))+" Mb"+'\n'+
+                "offDisplay: "+ offsetY+'\n'+
                 "enemy count: "+ enemies.size+'\n'+
                 "oGplayer: "+ cl.isPlayerOnGround()+'\n'+
                 "yPlayer: "+ (int)(player.getPosition().y*PPM)+'\n'+

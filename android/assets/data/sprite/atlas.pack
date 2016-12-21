@@ -24,9 +24,16 @@ hyaa
   orig: 168, 60
   offset: 0, 0
   index: -1
+black
+  rotate: false
+  xy: 2031, 2039
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: -1
 kameha2
   rotate: false
-  xy: 2031, 2004
+  xy: 2041, 2004
   size: 4, 43
   orig: 4, 43
   offset: 0, 0

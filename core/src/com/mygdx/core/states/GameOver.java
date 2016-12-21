@@ -27,6 +27,8 @@ import com.mygdx.core.handlers.Animation;
 import com.mygdx.core.handlers.GameStateManager;
 import com.mygdx.core.handlers.Save;
 
+import static com.mygdx.core.handlers.B2DVars.PPM;
+
 public class GameOver extends GameState {
     Stage stage1;
     Label labelScore, labelBestScore;
@@ -41,6 +43,7 @@ public class GameOver extends GameState {
     Rectangle viewport;
     int cpt_timer = 0;
     int cpt_score = 0;
+    int score_offset = 100;
     float offset = 0;
     int cpt_translate_animation = 0;
     int cpt_translate_animation2 = 0;
@@ -175,21 +178,21 @@ public class GameOver extends GameState {
         String best2_padded = String.format("%7s", best2);*/
 
         BitmapFont font = new BitmapFont(Gdx.files.internal(MyGdxGame.fontScorePath), false);
-        labelScore = new Label("SCORE "+"0", new LabelStyle(font, Color.valueOf("C68C57") )) ;
-        labelBestScore = new Label("BEST SCORE: "+String.valueOf(highScores[0]), new LabelStyle(font,Color.valueOf("FFFFFF")));
+        labelScore = new Label("SCORE  "+String.valueOf(score), new LabelStyle(font, Color.valueOf("545454") )) ;
+        labelBestScore = new Label("BEST SCORE  "+String.valueOf(highScores[0]), new LabelStyle(font,Color.valueOf("FFFFFF")));
 
         float fScale = Gdx.graphics.getWidth() / 400f;
         labelScore.setFontScale(fScale);
+        labelScore.setAlignment(Align.center);
+        labelScore.setPosition(0, 0+score_offset*2);
+        labelScore.setWidth(Gdx.graphics.getWidth());
+        labelScore.setHeight(Gdx.graphics.getHeight());
+
         labelBestScore.setFontScale(fScale);
-        labelScore.setWidth(Gdx.graphics.getWidth() / 3);
         labelBestScore.setWidth(Gdx.graphics.getWidth());
         labelBestScore.setHeight(Gdx.graphics.getHeight());
-
-        labelScore.setAlignment(Align.left);
-        labelBestScore.setAlignment(Align.center);
-
-        labelScore.setPosition((Gdx.graphics.getWidth() - labelScore.getWidth()) / 2.378f, ((float) Gdx.graphics.getHeight() / 1.92f));
         labelBestScore.setPosition(0, 0);
+        labelBestScore.setAlignment(Align.center);
 
         if (score >= 10) game.actionResolver.unlockAchievementGPGS(MyGdxGame.achievementScore10);
         if (score >= 50) game.actionResolver.unlockAchievementGPGS(MyGdxGame.achievementScore50);
@@ -200,7 +203,7 @@ public class GameOver extends GameState {
 
 
         stage1.addActor(background);
-        labelScore.setVisible(false);
+        labelScore.setVisible(true);
         stage1.addActor(labelScore);
         labelBestScore.setVisible(true);
         stage1.addActor(labelBestScore);
@@ -450,6 +453,7 @@ public class GameOver extends GameState {
         //Gdx.gl.glViewport((int) viewport.x, (int) viewport.y, (int) viewport.width, (int) viewport.height);
         float offsetY = crop.y;
         float offsetX = crop.x;
+        offset = offsetY;
 
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glViewport(0,0, (int)viewport.width+ (int)offsetX, Gdx.graphics.getHeight());
@@ -474,6 +478,8 @@ public class GameOver extends GameState {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         float height = MyGdxGame.V_HEIGHT/15;
         shapeRenderer.rect(0, (MyGdxGame.V_HEIGHT - height)/2.0f  , MyGdxGame.V_WIDTH, height);
+        shapeRenderer.setColor(Color.WHITE);
+        shapeRenderer.rect(0, ((MyGdxGame.V_HEIGHT - height)/2.0f)+score_offset  , MyGdxGame.V_WIDTH, height);
         shapeRenderer.end();
 
 
@@ -534,7 +540,7 @@ public class GameOver extends GameState {
                     if (cpt_timer <= 3) {
                         cpt_timer++;
                         if (cpt_score != 0)
-                            labelScore.setText("SCORE " + Integer.toString(cpt_score + 1));
+                            labelScore.setText("SCORE  " + Integer.toString(cpt_score + 1));
                     } else {
                         cpt_timer = 0;
                         cpt_score++;

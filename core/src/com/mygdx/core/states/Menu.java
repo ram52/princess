@@ -715,7 +715,7 @@ public class Menu extends GameState {
 
         if (click_on_play) {
             if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) {
-                MyGdxGame.res.getSound("newScreen").play();
+                //MyGdxGame.res.getSound("newScreen").play();
             }
 
 

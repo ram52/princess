@@ -249,7 +249,7 @@ public class Princess extends B2DSprite
     public void cryAnimation(){
         tex = new Sprite(MyGdxGame.atlas.findRegion("princesscry"));
         TextureRegion[] sprites = tex.split( 64, 64)[0];
-        setAnimation(sprites, 1 / 3f);
+        setAnimation(sprites, 1 / 10f);
         normalRight = false;
         normalLeft = false;
         hitRight = false;
@@ -263,7 +263,7 @@ public class Princess extends B2DSprite
         TextureRegion[] sprites = tex.split( 64, 64)[0];
         for(int i=0;i<sprites.length;i++)
             sprites[i].flip(true,false);
-        setAnimation(sprites, 1 / 3f);
+        setAnimation(sprites, 1 / 10f);
         normalRight = false;
         normalLeft = false;
         hitRight = false;
