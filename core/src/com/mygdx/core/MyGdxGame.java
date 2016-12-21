@@ -5,9 +5,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -20,20 +23,19 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.mygdx.core.entities.ActionResolver;
+import com.mygdx.core.entities.B2DSprite;
 import com.mygdx.core.handlers.Background;
 import com.mygdx.core.handlers.BoundedCamera;
 import com.mygdx.core.handlers.Content;
 import com.mygdx.core.handlers.GameStateManager;
 import com.mygdx.core.handlers.MyInputProcessor;
 import com.mygdx.core.handlers.Save;
-import com.mygdx.core.states.Menu;
-
-import java.util.List;
 
 public class MyGdxGame implements ApplicationListener {
     private static final String TAG = "MyGdxGame";
     private Stage stage0;
     private Image intro;
+    private FPSLogger fps;
     //private com.badlogic.gdx.graphics.g2d.Animation loading;
     public static Rectangle viewport;
     public static ActionResolver actionResolver;
@@ -59,6 +61,9 @@ public class MyGdxGame implements ApplicationListener {
     public static boolean iSeverythingLoaded = false;
     private static int soundEnable = 1;
     private static boolean android = true;
+    public static B2DSprite fadeIn, fadeOut;
+    public static float FADE_DELAY = 1/50f;
+    public BitmapFont font;
 
 
     public static void setIsBoosTerritory(boolean isBoosTerritory) {
@@ -174,6 +179,9 @@ public class MyGdxGame implements ApplicationListener {
 
     public void create() {
         //loading  = GifDecoder.loadGIFAnimation(com.badlogic.gdx.graphics.g2d.Animation.PlayMode.LOOP, Gdx.files.internal("data/sprite/loading.gif").readBytes());
+        //font = new BitmapFont();
+        fps = new FPSLogger();
+        font = new BitmapFont(Gdx.files.internal(MyGdxGame.fontTextPath), false);
         viewport = new Rectangle();
         intro = new Image(new Texture(Gdx.files.internal("data/sprite/loading.png")));
         intro.setFillParent(true);
@@ -241,27 +249,41 @@ public class MyGdxGame implements ApplicationListener {
         System.out.println("SCREEN SIZE: " + Gdx.graphics.getWidth() + "X" + Gdx.graphics.getHeight());
         Save.load();
         soundEnable = Save.gd.isSoundEnable();
+
+    }
+
+    public static void initFade(){
+        fadeIn = new B2DSprite(new Sprite(MyGdxGame.atlas.findRegion("fadeIn2")).split(8,8)[0], FADE_DELAY);
+        fadeIn.setHeight(Gdx.graphics.getHeight());
+        fadeIn.setWidth(Gdx.graphics.getWidth());
+        fadeIn.setLoop(false);
+
+        fadeOut = new B2DSprite(new Sprite(MyGdxGame.atlas.findRegion("fadeOut2")).split(8,8)[0], FADE_DELAY);
+        fadeOut.setHeight(Gdx.graphics.getHeight());
+        fadeOut.setWidth(Gdx.graphics.getWidth());
+        fadeOut.setLoop(false);
     }
 
     public void render() {
 
         if (assets.update()) {
-
+            //wait a little bit at 100% . Prettier this way.
             if(!wait){
-            resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-            Gdx.gl.glViewport((int) viewport.x, (int) viewport.y, (int) viewport.width, (int) viewport.height);
+                resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+                Gdx.gl.glViewport((int) viewport.x, (int) viewport.y, (int) viewport.width, (int) viewport.height);
 
-            progress = 100;
-            System.out.println("LOADING...  " + progress);
+                progress = 100;
+                System.out.println("LOADING...  " + progress+"%");
 
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-            sb.setProjectionMatrix(cam.combined);
-            stage0.act();
-            sb.begin();
-            stage0.draw();
-            sb.end();
+                Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+                sb.setProjectionMatrix(cam.combined);
+                stage0.act();
+                sb.begin();
+                stage0.draw();
+                sb.end();
 
-            displayLoadingBar(112, 146, 190, V_HEIGHT / 10f, false);
+                //displayLoadingBar(112, 146, 190, V_HEIGHT / 10f, false);
+                displayLoadingBar(255, 255, 255, V_HEIGHT / 10f, false);
 
                 if(!init){
                     init = true;
@@ -275,9 +297,8 @@ public class MyGdxGame implements ApplicationListener {
                             500
                     );
                 }
-
             }
-
+            //Everything is loaded ready to start the game
             if (gsm == null && wait) {
                 //tileMap = new TmxMapLoader().load(mapPath);
                 tileMap = assets.get(mapPath);
@@ -286,29 +307,42 @@ public class MyGdxGame implements ApplicationListener {
                 gsm = new GameStateManager(this);
                 Gdx.input.setInputProcessor(new MyInputProcessor());
                 Gdx.input.setCatchBackKey(true);
+                initFade();
                 iSeverythingLoaded = true;
             }
+
+            /** RENDER THE GAME STATE **/
             if(gsm != null){
                 gsm.update(STEP);
                 gsm.render();
                 if (Gdx.input.isKeyPressed(Keys.BACK)) showConfirmDialog();
             }
 
+            sb.begin();
+            font.setColor(Color.GREEN);
+            font.drawMultiLine(sb,
+                    "fps: "+Gdx.graphics.getFramesPerSecond()+'\n'+
+                    "java heap: "+ (int)(Gdx.app.getJavaHeap()/Math.pow(10, 6))+"Mb"+'\n'+
+                    "native heap: "+ (int)(Gdx.app.getNativeHeap()/Math.pow(10, 6))+"Mb",
+                    Gdx.graphics.getWidth()/12 ,Gdx.graphics.getHeight()/1.1f, Gdx.graphics.getWidth(), BitmapFont.HAlignment.LEFT);
+            sb.end();
+
+
+
         } else {
+            //display loading screen
             resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
             Gdx.gl.glViewport((int) viewport.x, (int) viewport.y, (int) viewport.width, (int) viewport.height);
-
             progress = 100 * (assets.getLoadedAssets() / numberOfAssets);
-            System.out.println("LOADING...  " + progress);
-
+            System.out.println("LOADING...  " + progress +"%");
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
             sb.setProjectionMatrix(cam.combined);
             stage0.act();
             sb.begin();
             stage0.draw();
             sb.end();
-
-            displayLoadingBar(112, 146, 190, V_HEIGHT / 10f, false);
+            displayLoadingBar(255, 255, 255, V_HEIGHT / 10f, false);
+            //displayLoadingBar(112, 146, 190, V_HEIGHT / 10f, false);
         }
     }
 

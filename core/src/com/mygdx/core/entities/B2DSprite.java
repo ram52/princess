@@ -43,6 +43,17 @@ public class B2DSprite {
 		boundingBox.set(new Vector3(0,0,0), new Vector3(0,0,0));
 	}
 
+	public B2DSprite(TextureRegion[] reg, float delay) {
+		body = null;
+		animation = new Animation();
+		setAnimation(reg, delay);
+		size = new Vector2(0,0);
+		width = 0;
+		height = 0;
+		boundingBox = new BoundingBox();
+		boundingBox.set(new Vector3(0,0,0), new Vector3(0,0,0));
+	}
+
 	public void updateBoundingBox(B2DSprite player){
 		Vector2 origin = new Vector2(player.getPosition().x*100 - player.getWidth()/2, player.getPosition().y*100 - player.getHeight()/2);
 		Vector2 originExt = new Vector2(player.getPosition().x*100 - (player.getWidth()/2)*3, player.getPosition().y*100 - player.getHeight()/2);
@@ -65,6 +76,10 @@ public class B2DSprite {
 		regSize = reg.length;
 	}
 
+	public void reset(){
+		animation.setCurrentFrame(0);
+	}
+
 	public void update(float dt) {
 		if(!loop){
 			if(animation.getCurrentFrame() != regSize-1){
@@ -79,8 +94,8 @@ public class B2DSprite {
 		sb.begin();
 		sb.draw(
 				animation.getFrame(),
-				body.getPosition().x * B2DVars.PPM - width / 2,
-				body.getPosition().y * B2DVars.PPM - height / 2,
+				(body == null)? 0:body.getPosition().x * B2DVars.PPM - width / 2,
+				(body == null)? 0:body.getPosition().y * B2DVars.PPM - height / 2,
 				width,
 				height
 		);

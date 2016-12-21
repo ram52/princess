@@ -23,21 +23,22 @@ public class GameStateManager {
 	public static final int TUTO = 5541654;
 	public static final int CREDITS = 78826;
 	public static final int ENDING = 21984251;
-    public static final int STORY = 24576557;
+    public static final int OPENING = 24576557;
 	public static final int SHOP = 8424165;
-	public boolean flag_menu, flag_play, flag_gameover, flag_tuto, flag_ending, flag_story, flag_credits, flag_shop;
+	public boolean flag_menu, flag_play, flag_gameover, flag_tuto, flag_ending, flag_opening, flag_credits, flag_shop;
 	
 	public GameStateManager( MyGdxGame game)
 	{
 		this.game = game;
 		gameStates = new Stack<GameState>();
-		pushState(STORY);
+		//first state is initialized. The game start in this state when all assets loaded.
+		pushState(OPENING);
 		flag_menu = false;
 		flag_play = false;
 		flag_gameover = false;
 		flag_tuto = false;
         flag_ending = false;
-        flag_story = true;
+        flag_opening = true;
 		flag_credits = false;
 		flag_shop = false;
 	}
@@ -56,13 +57,13 @@ public class GameStateManager {
 	
 	private GameState getState(int state)
 	{
-        if(state == STORY){
+        if(state == OPENING){
             flag_menu = false;
             flag_play = false;
             flag_gameover = false;
             flag_tuto = false;
             flag_ending = false;
-            flag_story = true;
+            flag_opening = true;
 			flag_credits = false;
 			flag_shop = false;
             return new Opening(this);
@@ -73,7 +74,7 @@ public class GameStateManager {
             flag_gameover = false;
             flag_tuto = false;
             flag_ending = false;
-            flag_story = false;
+            flag_opening = false;
 			flag_credits = false;
 			flag_shop = false;
 			return new Menu(this);
@@ -84,7 +85,7 @@ public class GameStateManager {
 			flag_gameover = false;
             flag_tuto = false;
             flag_ending = false;
-            flag_story = false;
+            flag_opening = false;
 			flag_credits = false;
 			flag_shop = false;
 			return new Play(this);
@@ -95,7 +96,7 @@ public class GameStateManager {
 			flag_gameover = true;
             flag_tuto = false;
             flag_ending = false;
-            flag_story = false;
+            flag_opening = false;
 			flag_credits = false;
 			flag_shop = false;
 			return new GameOver(this);
@@ -106,7 +107,7 @@ public class GameStateManager {
 			flag_play = false;
 			flag_gameover = false;
             flag_ending = false;
-            flag_story = false;
+            flag_opening = false;
 			flag_credits = false;
 			flag_shop = false;
 			return new Tuto(this);
@@ -118,7 +119,7 @@ public class GameStateManager {
             flag_play = false;
             flag_gameover = false;
             flag_ending = true;
-            flag_story = false;
+            flag_opening = false;
 			flag_credits = false;
 			flag_shop = false;
             return new Ending(this);
@@ -130,7 +131,7 @@ public class GameStateManager {
 			flag_play = false;
 			flag_gameover = false;
 			flag_ending = false;
-			flag_story = false;
+			flag_opening = false;
 			flag_credits = true;
 			flag_shop = false;
 			return new Credits(this);
@@ -142,7 +143,7 @@ public class GameStateManager {
 			flag_play = false;
 			flag_gameover = false;
 			flag_ending = false;
-			flag_story = false;
+			flag_opening = false;
 			flag_credits = true;
 			flag_shop = false;
 			return new Shop(this);

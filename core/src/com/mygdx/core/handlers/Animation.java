@@ -10,6 +10,7 @@ public class Animation {
     private boolean loopEnable = true;
     private int currentFrame;
     private int timesPlayed;
+	private int stepSpeed = 1;
 
     public void setTimesPlayed(int timesPlayed) {
         this.timesPlayed = timesPlayed;
@@ -43,7 +44,7 @@ public class Animation {
 
 	private void step() {
 		time -= delay;
-		currentFrame++;
+		currentFrame += stepSpeed;
 		if(currentFrame == frames.length) {
             if(loopEnable)
 			    currentFrame = 0;
@@ -75,5 +76,13 @@ public class Animation {
     public void setCurrentFrame(int currentFrame) {
         this.currentFrame = currentFrame;
     }
+
+	public int getStepSpeed() {
+		return stepSpeed;
+	}
+
+	public void setStepSpeed(int stepSpeed) {
+		this.stepSpeed = stepSpeed;
+	}
 	
 }

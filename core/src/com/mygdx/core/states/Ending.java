@@ -59,7 +59,7 @@ public class Ending extends GameState {
                 else
                     Gdx.gl.glClearColor(22f / 255f, 119f / 255f, 126f / 255f, 1);
 
-                gsm.setState(GameStateManager.STORY);
+                gsm.setState(GameStateManager.OPENING);
             }
         }, 2.2f);*/
 

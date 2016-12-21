@@ -1,7 +1,6 @@
 package com.mygdx.core.states;
 
 import static com.mygdx.core.handlers.B2DVars.BIT_ENEMY;
-import static com.mygdx.core.handlers.B2DVars.BIT_PLAYER;
 import static com.mygdx.core.handlers.B2DVars.PPM;
 
 import java.util.Iterator;
@@ -100,7 +99,6 @@ public class Play extends GameState {
     private TextButton button;
     private Rectangle viewport;
     private Image fade;
-    private FPSLogger fps;
     private int fly = 0;
     private int cpt_fly;
     private Vector2 crop;
@@ -162,7 +160,7 @@ public class Play extends GameState {
 
         MyGdxGame.setPause(false);
         viewport = new Rectangle();
-        fps = new FPSLogger();
+
         Save.load();
 
         /*if(MyGdxGame.isSoundEnable()) {
@@ -723,7 +721,8 @@ public class Play extends GameState {
                         enemy.setDead(true);
                         enemy.setCptDieRunning(100);
                         enemies.removeValue(enemy, true);
-                        removeBodySafely(enemy.getBody());
+                        //removeBodySafely(enemy.getBody());
+                        enemy.destroy();
                     }
                     princess.setTouched(false);
                     princess.setCry(false);
@@ -1402,7 +1401,8 @@ public class Play extends GameState {
                         System.out.println("FIRE BALL REMOVED!");
                         fireBall.setDead(true);
                         fireBalls.removeValue(fireBall, true);
-                        removeBodySafely(fireBall.getBody());
+                        //removeBodySafely(fireBall.getBody());
+                        fireBall.destroy();
                 }
 
                 if(!enemy.isDead() && enemy.getBoundingBox().intersects(fireBall.getBoundingBox())){
@@ -1412,7 +1412,8 @@ public class Play extends GameState {
                     /*enemies.removeValue(enemy, true);
                     removeBodySafely(enemy.getBody());*/
                     fireBalls.removeValue(fireBall, true);
-                    removeBodySafely(fireBall.getBody());
+                    //removeBodySafely(fireBall.getBody());
+                    fireBall.destroy();
                 }
 
             }
@@ -1553,6 +1554,8 @@ public class Play extends GameState {
             brick.setLife(brick.getLife()-1);
             brick.hurtAnimation();
         }else {
+            brick.setLoop(false);
+            brick.setHurt(false);
             enemy.setStop(false);
         }
     }
@@ -1661,9 +1664,11 @@ public class Play extends GameState {
                 enemy.getBody().setLinearVelocity(0,0);
             }
 
+            if(!MyGdxGame.pause){
+                enemy.update(MyGdxGame.STEP);
+
             if(!MyGdxGame.pause | !stopEnemies){
                 enemy.updateBoundingBox(enemy);
-                enemy.update(MyGdxGame.STEP);
 
                 brickIA(enemy);
                 princessIA(enemy);
@@ -1697,7 +1702,7 @@ public class Play extends GameState {
                         enemy.setDead(true);
                         enemies.removeValue(enemy, true);
                         enemy.destroy();
-                        removeBodySafely(enemy.getBody());
+                        //removeBodySafely(enemy.getBody());
                     }
 
                 }else{
@@ -1786,7 +1791,7 @@ public class Play extends GameState {
 
                                     enemy.getBody().setLinearVelocity(0,enemy.getBody().getLinearVelocity().y);
                                     enemy.setFading(true);
-                                    //todo fade
+                                    //todo fadeIn
                                     if(!enemy.isFromLeft()){
                                         if(!enemy.isFadeOutRight()){
                                             enemy.fadeOutAnimation();
@@ -1874,7 +1879,7 @@ public class Play extends GameState {
                 //
             }
 
-
+            }
         }
 
 
@@ -1882,8 +1887,10 @@ public class Play extends GameState {
     }
 
     public void princessIA(Enemy enemy){
-        princess.update(MyGdxGame.STEP);
-        princess.updateBoundingBox(princess);
+        if(MyGdxGame.pause){
+            princess.update(MyGdxGame.STEP);
+            princess.updateBoundingBox(princess);
+        }
 
         if(!enemy.isDead() && enemy.getPosition().y*PPM > 350){
             princess.setCry(true);
@@ -2003,7 +2010,7 @@ public class Play extends GameState {
 
     public void update(float dt) {
 
-
+        MyGdxGame.fadeIn.update(dt);
 
         if(princess.getPosition().x - princess.getWidth()/2/PPM < 150/PPM){
             princess.setRight(true);
@@ -2174,15 +2181,7 @@ public class Play extends GameState {
     }
 
     public void render() {
-
-
-
-
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
-
-
-
         //MyGdxGame.background_skyDay.render(sb);
         MyGdxGame.background_wood1.render(sb);
         MyGdxGame.background_cloud.render(sb);
@@ -2302,8 +2301,8 @@ public class Play extends GameState {
         }
 
         enemiesIA();
-        //princessIA();
 
+        //princessIA();
 
             if(!MyGdxGame.pause){
                 stageUiControl.act();
@@ -2399,7 +2398,9 @@ public class Play extends GameState {
             b2dr.render(world, b2dCam.combined);
         }
 
-        // fps.log();
+        Gdx.gl.glViewport(0,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
+        MyGdxGame.fadeIn.render(sb);
+
     }
 
     public Enemy createEnemy(float x, float y, boolean fromLeft, float speed) {

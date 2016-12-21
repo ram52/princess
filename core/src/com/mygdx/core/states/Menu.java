@@ -23,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.core.MyGdxGame;
+import com.mygdx.core.entities.B2DSprite;
 import com.mygdx.core.handlers.Animation;
 import com.mygdx.core.handlers.GameStateManager;
 import com.mygdx.core.handlers.Save;
@@ -34,6 +35,7 @@ public class Menu extends GameState {
 
     private Animation animPlayerIdle, animPlayerIdleFliped, animPlayerSlash, animPrincessIdle, animPrincessIdleFliped, animTitle, animHelpMe;
     private boolean click_on_play, click_on_leaderboard, click_on_tuto;
+    private int isfadeOutStarted = 0;
     private Stage stage1, stage2, stage3, stageUiOption;
     private Label labelCopyright;
     private Button buttonPlay, buttonLeaderBoard, buttonTuto, buttonSound, buttonGear, buttonCredits, buttonPBlue, buttonPRed,
@@ -65,9 +67,12 @@ public class Menu extends GameState {
     private Stage stage0;
     private Image intro;
 
-    public Menu(GameStateManager gsm) {
+    public Menu(final GameStateManager gsm) {
 
         super(gsm);
+
+        MyGdxGame.initFade();
+        Timer.instance().start();
 
         intro = new Image(MyGdxGame.atlas.findRegion("backgroundSky"));
         intro.setFillParent(true);
@@ -709,8 +714,12 @@ public class Menu extends GameState {
         showMainUi();
 
         if (click_on_play) {
-            if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)MyGdxGame.res.getSound("newScreen").play();
-            gsm.setState(GameStateManager.PLAY);
+            if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) {
+                MyGdxGame.res.getSound("newScreen").play();
+            }
+
+
+
         }
         if (click_on_leaderboard) {
             click_on_leaderboard = false;
@@ -739,6 +748,17 @@ public class Menu extends GameState {
     }
 
     public void update(float dt) {
+
+        if (click_on_play){
+            MyGdxGame.fadeOut.update(dt);
+            isfadeOutStarted++;
+
+            if(isfadeOutStarted > 30){
+                gsm.setState(GameStateManager.PLAY);
+                isfadeOutStarted = 0;
+            }
+        }
+
 
         if(MyGdxGame.isSoundEnable() == 2) {
             MyGdxGame.res.getMusic("main").setVolume(0.4f);
@@ -985,10 +1005,12 @@ public class Menu extends GameState {
             sb.end();
         }
 
-
-
-
         sb2.end();
+
+        if(click_on_play){
+            Gdx.gl.glViewport(0,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
+            MyGdxGame.fadeOut.render(sb2);
+        }
 
 
     }
@@ -996,6 +1018,7 @@ public class Menu extends GameState {
     public void dispose() {
         sb2.dispose();
         sb3.dispose();
+
     }
 
     public void showMainUi(){

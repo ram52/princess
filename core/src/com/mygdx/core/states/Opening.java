@@ -7,12 +7,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.core.MyGdxGame;
 import com.mygdx.core.handlers.Animation;
-import com.mygdx.core.handlers.BoundedCamera;
 import com.mygdx.core.handlers.GameStateManager;
 import com.mygdx.core.handlers.Save;
 
@@ -21,7 +19,7 @@ public class Opening extends GameState {
     private Stage stage1;
     private Image imageOpening1;
     private Rectangle viewport;
-    private boolean fade = false, touchEnable = false;
+    private boolean touchEnable = false;
     private Animation animationPBlue1;
     private Animation animationPrincess;
     private Animation animationEnemy;
@@ -29,6 +27,7 @@ public class Opening extends GameState {
     private int time = 0;
     private Stage stage0;
     private Image intro;
+
 
     public Opening(final GameStateManager gsm) {
 
@@ -39,13 +38,14 @@ public class Opening extends GameState {
         stage0.addActor(intro);
 
         imageOpening1 = new Image(MyGdxGame.atlas.findRegion("opening1"));
-
-        //imageStorylineText.setFillParent(true);
         imageOpening1.setFillParent(true);
         viewport = new Rectangle();
 
         stage1 = new Stage();
         stage1.addActor(imageOpening1);
+
+        //stage0.addAction(Actions.sequence(Actions.alpha(0.5f), Actions.fadeIn(1.5f)));
+        //stage1.addAction(Actions.sequence(Actions.alpha(0.5f), Actions.fadeIn(1.5f)));
 
         Timer.schedule(new Timer.Task() {
             @Override
@@ -53,7 +53,6 @@ public class Opening extends GameState {
                 touchEnable = true;
             }
         }, 0.3f);
-
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() {
@@ -86,11 +85,7 @@ public class Opening extends GameState {
             sprites[i].flip(true,false);
         animationEnemy = new Animation(sprites, 1 / 5f);
 
-
-
         animationHya = new Animation(new Sprite(MyGdxGame.atlas.findRegion("hyaa")).split(168, 60)[0], 1 / 5f);
-
-
     }
 
     public void handleInput() {
@@ -106,45 +101,47 @@ public class Opening extends GameState {
 
     public void update(float dt) {
         handleInput();
-       // MyGdxGame.background_skyDay.update(dt);
+        // MyGdxGame.background_skyDay.update(dt);
         MyGdxGame.background_cloud.update(dt);
         MyGdxGame.background_wood1.update(dt);
         animationPBlue1.update(dt);
         animationEnemy.update(dt);
         animationPrincess.update(dt);
+        MyGdxGame.fadeIn.update(dt);
         //MyGdxGame.background_storyLine.update(dt);
     }
 
     public void render() {
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        if (!fade) {
 
-            sb.setProjectionMatrix(cam.combined);
-            shapeRenderer.setProjectionMatrix(cam.combined);
-            //Gdx.gl.glClearColor(65f / 255f, 18f / 255f, 252f / 255f, 1);
+        sb.setProjectionMatrix(cam.combined);
+        shapeRenderer.setProjectionMatrix(cam.combined);
+        //Gdx.gl.glClearColor(65f / 255f, 18f / 255f, 252f / 255f, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
 
-            //MyGdxGame.background_skyDay.render(sb);
-            MyGdxGame.background_cloud.render(sb);
-            MyGdxGame.background_wood1.render(sb);
+        //MyGdxGame.background_skyDay.render(sb);
+        MyGdxGame.background_cloud.render(sb);
+        MyGdxGame.background_wood1.render(sb);
 
-            stage1.act();
-            sb.begin();
-            stage1.draw();
-            sb.end();
-            sb.begin();
-            sb.draw(animationPBlue1.getFrame(), -80 + ((float) time * 1.7f), 200);
-            sb.draw(animationPrincess.getFrame(), 0 + ((float) time * 1.7f), 200);
-            sb.draw(animationHya.getFrame(), 0 + ((float) time * 1.7f), 250);
-            sb.draw(animationEnemy.getFrame(), -250 + ((float) time * 1.7f), 200);
-            sb.end();
-            time+=2;
+        stage1.act();
+        sb.begin();
+        stage1.draw();
+        sb.end();
+        sb.begin();
+        sb.draw(animationPBlue1.getFrame(), -80 + ((float) time * 1.7f), 200);
+        sb.draw(animationPrincess.getFrame(), 0 + ((float) time * 1.7f), 200);
+        sb.draw(animationHya.getFrame(), 0 + ((float) time * 1.7f), 250);
+        sb.draw(animationEnemy.getFrame(), -250 + ((float) time * 1.7f), 200);
+        //sb.draw(fadeIn.animation.getFrame(),0,0,0,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight(),1,1,0);
+        sb.end();
 
+        Gdx.gl.glViewport(0,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
+        MyGdxGame.fadeIn.render(sb);
 
-            if(time > 800){
-                time = 0;
-            }
-        } else {
-            Gdx.gl.glClearColor(0, 0, 0, 1);
+        time+=2;
+
+        if(time > 800){
+            time = 0;
         }
     }
 
