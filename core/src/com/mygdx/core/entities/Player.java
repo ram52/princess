@@ -2,8 +2,6 @@ package com.mygdx.core.entities;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.mygdx.core.MyGdxGame;
 import com.mygdx.core.handlers.Save;
@@ -29,6 +27,7 @@ public class Player extends B2DSprite
     private boolean isSlashingLeft = false;
     private boolean jumpRight = false;
     private boolean jumpLeft = false;
+    private boolean isTouchingEnemy = false;
 
 	public Player(Body body, int selector)
 	{
@@ -457,6 +456,14 @@ public class Player extends B2DSprite
 
     public void setJumpLeft(boolean jumpLeft) {
         this.jumpLeft = jumpLeft;
+    }
+
+    public boolean isTouchingEnemy() {
+        return isTouchingEnemy;
+    }
+
+    public void setTouchingEnemy(boolean touchingEnemy) {
+        isTouchingEnemy = touchingEnemy;
     }
 
 }

@@ -64,6 +64,7 @@ public class MyGdxGame implements ApplicationListener {
     public static B2DSprite fadeIn, fadeOut;
     public static float FADE_DELAY = 1/50f;
     public BitmapFont font;
+    public static String debugString = "";
 
 
     public static void setIsBoosTerritory(boolean isBoosTerritory) {
@@ -313,6 +314,11 @@ public class MyGdxGame implements ApplicationListener {
 
             /** RENDER THE GAME STATE **/
             if(gsm != null){
+                if(!gsm.flag_play){
+                    debugString = "fps: "+Gdx.graphics.getFramesPerSecond()+'\n'+
+                            "java heap: "+ (int)(Gdx.app.getJavaHeap()/Math.pow(10, 6))+"Mb"+'\n'+
+                            "native heap: "+ (int)(Gdx.app.getNativeHeap()/Math.pow(10, 6))+"Mb";
+                }
                 gsm.update(STEP);
                 gsm.render();
                 if (Gdx.input.isKeyPressed(Keys.BACK)) showConfirmDialog();
@@ -320,11 +326,8 @@ public class MyGdxGame implements ApplicationListener {
 
             sb.begin();
             font.setColor(Color.GREEN);
-            font.drawMultiLine(sb,
-                    "fps: "+Gdx.graphics.getFramesPerSecond()+'\n'+
-                    "java heap: "+ (int)(Gdx.app.getJavaHeap()/Math.pow(10, 6))+"Mb"+'\n'+
-                    "native heap: "+ (int)(Gdx.app.getNativeHeap()/Math.pow(10, 6))+"Mb",
-                    Gdx.graphics.getWidth()/12 ,Gdx.graphics.getHeight()/1.1f, Gdx.graphics.getWidth(), BitmapFont.HAlignment.LEFT);
+
+            font.drawMultiLine(sb, debugString, Gdx.graphics.getWidth()/15 ,Gdx.graphics.getHeight()/1.1f, Gdx.graphics.getWidth(), BitmapFont.HAlignment.LEFT);
             sb.end();
 
 

@@ -13,7 +13,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -108,6 +107,7 @@ public class Play extends GameState {
     private int cpt_translate_animation = 0;
     private int cptJump = 0;
     private int enemiesKilled = 0;
+    private int jumpDelay = 0;
     private boolean isSlideInEnd = false;
     private boolean isSlideOutEnd = false;
     private  boolean uiIsSliding = false;
@@ -964,33 +964,14 @@ public class Play extends GameState {
         }
 
 
-
-//        if (Gdx.input.isKeyPressed(Input.Keys.ENTER) | Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-//            InputEvent event1 = new InputEvent();
-//            event1.setType(InputEvent.Type.touchDown);
-//            buttonFire.fire(event1);
-//
-//            InputEvent event2 = new InputEvent();
-//            event2.setType(InputEvent.Type.touchUp);
-//            buttonFire.fire(event2);
-//        }
-
-//        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-//            InputEvent event1 = new InputEvent();
-//            event1.setType(InputEvent.Type.touchDown);
-//            buttonJump.fire(event1);
-//            jump = true;
-//
-//            Timer.schedule(new Timer.Task(){
-//                @Override
-//                public void run() {
-//                    InputEvent event2 = new InputEvent();
-//                    event2.setType(InputEvent.Type.touchUp);
-//                    buttonJump.fire(event2);
-//                    jump = false;
-//                }
-//            }, 0.01f);
-//        }
+        /**Handle keyboard input**/
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            if(cl.isPlayerOnGround() && !jump && (!player.isSlashingLeft()|!player.isSlashingRight()) && (player.getPosition().y*PPM) < 260 ){
+                player.getBody().setLinearVelocity(new Vector2(player.getBody().getLinearVelocity().x,0));
+                player.getBody().setAngularVelocity(0);
+                player.getBody().applyForceToCenter(new Vector2(0,160),false);
+            }
+        }
 
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             InputEvent event1 = new InputEvent();
@@ -2010,16 +1991,28 @@ public class Play extends GameState {
 
     public void update(float dt) {
 
+        MyGdxGame.debugString = "fps: "+Gdx.graphics.getFramesPerSecond()+'\n'+
+                "java heap: "+ (int)(Gdx.app.getJavaHeap()/Math.pow(10, 6))+" Mb"+'\n'+
+                "native heap: "+ (int)(Gdx.app.getNativeHeap()/Math.pow(10, 6))+" Mb"+'\n'+
+                "enemy count: "+ enemies.size+'\n'+
+                "oGplayer: "+ cl.isPlayerOnGround()+'\n'+
+                "yPlayer: "+ (int)(player.getPosition().y*PPM)+'\n'+
+                "pPrincess: "+ (int)(princess.getPosition().x*PPM)+'\n'+
+                "vPrincess: "+ (int)(princess.getBody().getLinearVelocity().x)+'\n'+
+                "princess: "+ princess.isLeft();
+
         MyGdxGame.fadeIn.update(dt);
 
-        if(princess.getPosition().x - princess.getWidth()/2/PPM < 150/PPM){
+        if(princess.getPosition().x - princess.getWidth()/2/PPM <= 150/PPM){
             princess.setRight(true);
             princess.setLeft(false);
+            princess.getBody().setLinearVelocity(1,0);
         }
 
-        if(princess.getPosition().x + princess.getWidth()/2/PPM > MyGdxGame.V_WIDTH/PPM - 150/PPM){
+        if(princess.getPosition().x + princess.getWidth()/2/PPM >= MyGdxGame.V_WIDTH/PPM - 150/PPM){
             princess.setRight(false);
             princess.setLeft(true);
+            princess.getBody().setLinearVelocity(-1,0);
         }
 
 
