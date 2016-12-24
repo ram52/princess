@@ -2,6 +2,7 @@ package com.mygdx.core.states;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -34,6 +35,7 @@ import com.mygdx.core.handlers.Animation;
 import com.mygdx.core.handlers.GameStateManager;
 import com.mygdx.core.handlers.Save;
 import com.mygdx.core.handlers.ShopDialog;
+import com.mygdx.core.handlers.SimpleDirectionGestureDetector;
 
 import java.text.NumberFormat;
 
@@ -105,6 +107,37 @@ public class Shop extends GameState {
         //MyGdxGame.background_skyDay.setVector(0, 0);
         MyGdxGame.background_wood1.setVector(-3, 0);
 
+
+        SimpleDirectionGestureDetector gd = new SimpleDirectionGestureDetector(
+                new SimpleDirectionGestureDetector.DirectionListener() {
+
+                    @Override
+                    public void onUp() {
+                        System.out.println("up");
+                    }
+
+                    @Override
+                    public void onRight() {
+                        System.out.println("right");
+                    }
+
+                    @Override
+                    public void onLeft() {
+                        System.out.println("left");
+                    }
+
+                    @Override
+                    public void onDown() {
+
+                        if((Save.gd.isSoundEnable() == 1 | Save.gd.isSoundEnable() == 2) && time > 200 && time < 700 && !MyGdxGame.res.getMusic("laugh").isPlaying()){
+                            MyGdxGame.res.getMusic("laugh").play();
+                            cpt_secret1++;
+                            System.out.println("CLICK SECRET 1: " + cpt_secret1);
+                        }
+                        System.out.println("down");
+                    }
+                });
+
         cam.setToOrtho(false, MyGdxGame.V_WIDTH, MyGdxGame.V_HEIGHT);
         click_on_play = false;
         stage1 = new Stage();
@@ -124,13 +157,16 @@ public class Shop extends GameState {
         Skin skinButtonSecret = new Skin();
         skinButtonSecret.addRegions(MyGdxGame.atlas);
         ButtonStyle buttonStyleSecret = new ButtonStyle();
-        buttonStyleSecret.up = skinButtonSecret.getDrawable("buttonSecret");
-        buttonStyleSecret.down = skinButtonSecret.getDrawable("buttonSecret");
+        buttonStyleSecret.up = skinButtonSecret.getDrawable("black");
+        buttonStyleSecret.down = skinButtonSecret.getDrawable("black");
         buttonSecret1 = new Button(buttonStyleSecret);
         buttonSecret1.setWidth(Gdx.graphics.getWidth() / 8f);
         buttonSecret1.setHeight(Gdx.graphics.getWidth() / 8f);
         buttonSecret1.setPosition((Gdx.graphics.getWidth() - buttonSecret1.getWidth())/ 2.05f, (Gdx.graphics.getHeight() - buttonSecret1.getWidth())/4.3f );
-        stage1.addActor(buttonSecret1);
+        //stage1.addActor(buttonSecret1);
+
+
+
 
         buttonSecret2 = new Button(buttonStyleSecret);
         buttonSecret2.setWidth(Gdx.graphics.getWidth() / 8f);
@@ -218,8 +254,11 @@ public class Shop extends GameState {
         stage1.addActor(labelMoney);
         labelMoney.setText(Integer.toString(Save.gd.getMoney()));
 
+        InputMultiplexer im = new InputMultiplexer();
+        im.addProcessor(gd);
+        im.addProcessor(stage1);
+        Gdx.input.setInputProcessor(im);
 
-        Gdx.input.setInputProcessor(stage1);
         fade = new AlphaAction();
         fade.setDuration(0f);
         //scoreLabel.setText(Float.toString(offset));
@@ -852,18 +891,18 @@ public class Shop extends GameState {
             sb.end();
 
             sb.begin();
-            float a = 1.7f;
+
             if(!MyGdxGame.res.getMusic("laugh").isPlaying()){
                 time+=4.0f;
-                sb.draw(animationEnemy.getFrame(), buttonSecret1.getX()/a, 202);
+                sb.draw(animationEnemy.getFrame(), -250 + time , 202);
             }else{
-                sb.draw(animationEnemyMock.getFrame(), buttonSecret1.getX()/a, 202);
+                sb.draw(animationEnemyMock.getFrame(), -250 + time , 202);
             }
 
             float coef = 3.0f;
             sb.draw(animationCoin.getFrame(), (1*imageCoin.getWidth()) , MyGdxGame.V_HEIGHT - imageCoin.getWidth()*1.14f+(offsetY/coef));
 
-            buttonSecret1.setPosition( (-250.0f + ((float) time * a)) + (float)buttonSecret1.getWidth(), 202+(offsetY/coef)+buttonSecret1.getHeight());
+            //buttonSecret1.setPosition( (-250.0f + ((float) time * a)) + (float)buttonSecret1.getWidth(), 202+(offsetY/coef)+buttonSecret1.getHeight());
             //stage1.getActors().items[1].setPosition(-250 + ((float) time * 3f), 502);
             //offsetY = (offsetY<=0)? 1:offsetY;
             //stage1.getActors().items[1].setPosition((-250 + ((float) time * 1.7f)), 202-(offsetY/coef));
@@ -875,7 +914,7 @@ public class Shop extends GameState {
                     "offDisplay: "+ offsetY+'\n'+
                     "offset: "+ offsetY/coef+'\n'+
                     "secret: "+ cpt_secret1+'\n'+
-                    "sX: "+ buttonSecret1.getX()+'\n'+
+                    "sX: "+ animationEnemy.getFrame().getRegionX()+'\n'+
                     "sY: "+ buttonSecret1.getY()+'\n'+
                     "tick: "+ time;
 

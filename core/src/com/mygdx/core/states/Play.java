@@ -83,8 +83,9 @@ public class Play extends GameState {
     private OrthogonalTiledMapRenderer tmr;
     private Player player;
     private Princess princess;
-    private Brick brick;
     private Array<Enemy> enemies;
+    //private Array<Brick> bricks;
+    private Brick brick;
     private Array<FireBall> fireBalls;
     private ScheduledExecutorService executor;
     private Array<Coin> coins;
@@ -125,7 +126,7 @@ public class Play extends GameState {
     private boolean isMalicious = false;
     private boolean toggle = true;
     private boolean isTouchingEnemy = false;
-    private float lastClickPos = Gdx.graphics.getWidth()/2/PPM;
+    private float lastClickPos = 0;
     private float offsetY = 0.0f;
     private float beamWidth = 0.0f;
     private float beamX = 0.0f;
@@ -141,6 +142,7 @@ public class Play extends GameState {
     private Boolean step2 = false;
     private Boolean step3 = false;
     private Boolean jump = false;
+    public Boolean enableBrick = true;
     private Button buttonLeft, buttonRight, buttonFire, buttonJump;
     private Stage stageUiControl;
     private SpriteBatch spriteBatch;
@@ -510,8 +512,9 @@ public class Play extends GameState {
 
         createTiles();
         createPlayer();
-        createBrick(MyGdxGame.V_WIDTH/5/PPM, player.getPosition().y - player.getHeight()/2.8f/PPM);
-        createPrincess(MyGdxGame.V_WIDTH/2/PPM, 2*2.5621998f);
+        //createBrick(MyGdxGame.V_WIDTH/5/PPM, player.getPosition().y - player.getHeight()/2.8f/PPM);
+
+        createPrincess(MyGdxGame.V_WIDTH/2/PPM, 2*MyGdxGame.GROUND);
 
         enemies = new Array<Enemy>();
 
@@ -549,25 +552,23 @@ public class Play extends GameState {
                             executor.scheduleAtFixedRate(runnable, 0, 1000, TimeUnit.MILLISECONDS);
                         }
 
-                        if(player.getNumCoins() >= 50 && !step3){
-                            step3 = true;
-                            executor = Executors.newScheduledThreadPool(1);
-                            executor.scheduleAtFixedRate(runnable, 0, 800, TimeUnit.MILLISECONDS);
-                        }
+//                        if(player.getNumCoins() >= 50 && !step3){
+//                            step3 = true;
+//                            executor = Executors.newScheduledThreadPool(1);
+//                            executor.scheduleAtFixedRate(runnable, 0, 800, TimeUnit.MILLISECONDS);
+//                        }
 
                     }
                 }
             }
         };
 
-
         executor.scheduleAtFixedRate(runnable, 0, 3000, TimeUnit.MILLISECONDS);
 
+        //enemies.add(createEnemy(MyGdxGame.V_WIDTH*1.0f/PPM, MyGdxGame.GROUND, false));
+        //enemies.add(createEnemy(1/PPM, MyGdxGame.GROUND, true));
 
-        //enemies.add(createEnemy(MyGdxGame.V_WIDTH*1.0f/PPM, 2.5621998f, false));
-        //enemies.add(createEnemy(1/PPM, 2.5621998f, true));
-
-        cl = new MyContactListener(enemies, this);
+        cl = new MyContactListener(this);
         world.setContactListener(cl);
 
         player.setNumCoins(0);
@@ -659,6 +660,24 @@ public class Play extends GameState {
 
                     @Override
                     public void onDown() {
+
+                        if(brick == null){
+                            brick = createBrick(MyGdxGame.V_WIDTH/5/PPM, player.getHeight()/PPM + Gdx.graphics.getHeight()/PPM);
+                        }else{
+                            if(brick.getDead()){
+                                brick = createBrick(MyGdxGame.V_WIDTH/5/PPM, player.getHeight()/PPM + Gdx.graphics.getHeight()/PPM);
+                            }
+                        }
+
+                        if(!MyGdxGame.pause){
+                            if(!brick.isSummoned() && enableBrick){
+                                enableBrick = false;
+                                brick.setFalling(true);
+                                brick.setSummoned(true);
+                                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("newScreen").play();
+                            }
+                        }
+
                         System.out.println("down");
                     }
                 });
@@ -683,7 +702,7 @@ public class Play extends GameState {
                 submit = true;
                 gsm.setState(GameStateManager.GAME_OVER);
 
-                }
+            }
 
             ;
         });
@@ -925,6 +944,7 @@ public class Play extends GameState {
 
         MyGdxGame.setIsBoosTerritory(false);
 
+        System.out.println("init completed without errors.");
 
 
     }
@@ -966,11 +986,24 @@ public class Play extends GameState {
 
         /**Handle keyboard input**/
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            if(cl.isPlayerOnGround() && !jump && (!player.isSlashingLeft()|!player.isSlashingRight()) && (player.getPosition().y*PPM) < 260 ){
+            if(cl.isPlayerOnGround() && !jump && (!player.isSlashingLeft()|!player.isSlashingRight()) && (player.getPosition().y*PPM) < 325 ){
                 player.getBody().setLinearVelocity(new Vector2(player.getBody().getLinearVelocity().x,0));
                 player.getBody().setAngularVelocity(0);
                 player.getBody().applyForceToCenter(new Vector2(0,160),false);
             }
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+//            //todo summon brick
+//            brick = createBrick(MyGdxGame.V_WIDTH/5/PPM, player.getHeight()/PPM + Gdx.graphics.getHeight()/PPM);
+//            if(!MyGdxGame.pause){
+//                if(!brick.isSummoned() && enableBrick){
+//                    enableBrick = false;
+//                    brick.setFalling(true);
+//                    brick.setSummoned(true);
+//                    if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("newScreen").play();
+//                }
+//            }
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
@@ -1180,44 +1213,44 @@ public class Play extends GameState {
             }
         }
 
-            if(!isTouchingEnemy){
-                if(player.getBody().getLinearVelocity().x > 0){
-                    if(!player.isRunningRight())player.running_animation(player_selector);
-                }
-
-                if(player.getBody().getLinearVelocity().x < 0){
-                    if(!player.isRunningLeft()) player.running_animation_rev(player_selector);
-                }
-
-                if(player.getBody().getLinearVelocity().x == 0){
-
-                    if(!player.isStillRight()) {
-
-                        if (player.isRunningRight() | player.isSlashingRight()) {
-                            player.still_animation(player_selector);
-                        }
-                    }
-
-                    if(!player.isStillRight()) {
-
-                        if(player.isRunningLeft()  | player.isSlashingLeft()){
-                            player.still_animation_rev(player_selector);
-                        }
-                    }
-                }
-
-            }else{
-
-                //System.out.println("touch");
-                if ((player.isStillRight() | player.isRunningRight())) {
-                    player.slash_animation(player_selector);
-                }
-                if ((player.isStillLeft() | player.isRunningLeft())) {
-                    player.slash_animation_rev(player_selector);
-                }
-
-                isTouchingEnemy = false;
+        if(!isTouchingEnemy){
+            if(player.getBody().getLinearVelocity().x > 0){
+                if(!player.isRunningRight())player.running_animation(player_selector);
             }
+
+            if(player.getBody().getLinearVelocity().x < 0){
+                if(!player.isRunningLeft()) player.running_animation_rev(player_selector);
+            }
+
+            if(player.getBody().getLinearVelocity().x == 0){
+
+                if(!player.isStillRight()) {
+
+                    if (player.isRunningRight() | player.isSlashingRight()) {
+                        player.still_animation(player_selector);
+                    }
+                }
+
+                if(!player.isStillRight()) {
+
+                    if(player.isRunningLeft()  | player.isSlashingLeft()){
+                        player.still_animation_rev(player_selector);
+                    }
+                }
+            }
+
+        }else{
+
+            //System.out.println("touch");
+            if ((player.isStillRight() | player.isRunningRight())) {
+                player.slash_animation(player_selector);
+            }
+            if ((player.isStillLeft() | player.isRunningLeft())) {
+                player.slash_animation_rev(player_selector);
+            }
+
+            isTouchingEnemy = false;
+        }
 
 
 
@@ -1379,11 +1412,11 @@ public class Play extends GameState {
                 fireBall.updateBoundingBox(fireBall);
 
                 if(!fireBall.getDead() && (fireBall.getPosition().x < 0 | fireBall.getPosition().x > Gdx.graphics.getWidth()/PPM)){
-                        System.out.println("FIRE BALL REMOVED!");
-                        fireBall.setDead(true);
-                        fireBalls.removeValue(fireBall, true);
-                        //removeBodySafely(fireBall.getBody());
-                        fireBall.destroy();
+                    System.out.println("FIRE BALL REMOVED!");
+                    fireBall.setDead(true);
+                    fireBalls.removeValue(fireBall, true);
+                    //removeBodySafely(fireBall.getBody());
+                    fireBall.destroy();
                 }
 
                 if(!enemy.isDead() && enemy.getBoundingBox().intersects(fireBall.getBoundingBox())){
@@ -1442,10 +1475,10 @@ public class Play extends GameState {
 //            if(Math.abs(beamWidth) > 10){
 //                beamWidth-=speed*2;
 //            }else {
-                fire = !fire;
-                kamehaReachLimit = false;
-                beamWidth = 0;
-                blockKamehameha = true;
+            fire = !fire;
+            kamehaReachLimit = false;
+            beamWidth = 0;
+            blockKamehameha = true;
 //                MyGdxGame.res.getMusic("epic").stop();
 //                MyGdxGame.res.getMusic("main").play();
 //            }
@@ -1456,59 +1489,59 @@ public class Play extends GameState {
         if(beamWidth>0){
 
 
-        if(player.isRight()){
-            sb.draw(animKamehameha0.getFrame(),
-                    player.getPosition().x*PPM + gap2,
-                    player.getPosition().y*PPM - animKamehameha0.getFrame().getRegionHeight()*scale/2,
-                    animKamehameha0.getFrame().getRegionWidth()*scale,
-                    animKamehameha0.getFrame().getRegionHeight()*scale);
+            if(player.isRight()){
+                sb.draw(animKamehameha0.getFrame(),
+                        player.getPosition().x*PPM + gap2,
+                        player.getPosition().y*PPM - animKamehameha0.getFrame().getRegionHeight()*scale/2,
+                        animKamehameha0.getFrame().getRegionWidth()*scale,
+                        animKamehameha0.getFrame().getRegionHeight()*scale);
 
-            sb.draw(animKamehameha1.getFrame(),
-                    player.getPosition().x*PPM + gap2 + animKamehameha0.getFrame().getRegionWidth()*scale,
-                    player.getPosition().y*PPM - animKamehameha1.getFrame().getRegionHeight()*scale/2,
-                    beamWidth,
-                    animKamehameha1.getFrame().getRegionHeight()*scale);
+                sb.draw(animKamehameha1.getFrame(),
+                        player.getPosition().x*PPM + gap2 + animKamehameha0.getFrame().getRegionWidth()*scale,
+                        player.getPosition().y*PPM - animKamehameha1.getFrame().getRegionHeight()*scale/2,
+                        beamWidth,
+                        animKamehameha1.getFrame().getRegionHeight()*scale);
 
-            sb.draw(animKamehameha2.getFrame(),
-                    player.getPosition().x*PPM + gap2 + beamWidth +  animKamehameha2.getFrame().getRegionWidth()*scale/4,
-                    player.getPosition().y*PPM - animKamehameha2.getFrame().getRegionHeight()*scale/2,
-                    animKamehameha2.getFrame().getRegionWidth()*scale,
-                    animKamehameha2.getFrame().getRegionHeight()*scale);
+                sb.draw(animKamehameha2.getFrame(),
+                        player.getPosition().x*PPM + gap2 + beamWidth +  animKamehameha2.getFrame().getRegionWidth()*scale/4,
+                        player.getPosition().y*PPM - animKamehameha2.getFrame().getRegionHeight()*scale/2,
+                        animKamehameha2.getFrame().getRegionWidth()*scale,
+                        animKamehameha2.getFrame().getRegionHeight()*scale);
 
-            beamX = player.getPosition().x*PPM + gap2 + beamWidth +  animKamehameha2.getFrame().getRegionWidth()*scale/4 + animKamehameha2.getFrame().getRegionWidth()*scale;
+                beamX = player.getPosition().x*PPM + gap2 + beamWidth +  animKamehameha2.getFrame().getRegionWidth()*scale/4 + animKamehameha2.getFrame().getRegionWidth()*scale;
 
-            x = player.getPosition().x*PPM + gap2;
-            y = player.getPosition().y*PPM - animKamehameha0.getFrame().getRegionHeight()*scale/2;
-            w = beamX + animKamehameha2.getFrame().getRegionWidth()/3f;
-            h = y + animKamehameha2.getFrame().getRegionHeight()*scale;
+                x = player.getPosition().x*PPM + gap2;
+                y = player.getPosition().y*PPM - animKamehameha0.getFrame().getRegionHeight()*scale/2;
+                w = beamX + animKamehameha2.getFrame().getRegionWidth()/3f;
+                h = y + animKamehameha2.getFrame().getRegionHeight()*scale;
 
-        }
-        else {
-            sb.draw(animKamehameha0_rev.getFrame(),
-                    player.getPosition().x*PPM - gap,
-                    player.getPosition().y*PPM - animKamehameha0_rev.getFrame().getRegionHeight()*scale/2,
-                    animKamehameha0.getFrame().getRegionWidth()*scale,
-                    animKamehameha0.getFrame().getRegionHeight()*scale);
+            }
+            else {
+                sb.draw(animKamehameha0_rev.getFrame(),
+                        player.getPosition().x*PPM - gap,
+                        player.getPosition().y*PPM - animKamehameha0_rev.getFrame().getRegionHeight()*scale/2,
+                        animKamehameha0.getFrame().getRegionWidth()*scale,
+                        animKamehameha0.getFrame().getRegionHeight()*scale);
 
-            sb.draw(animKamehameha1_rev.getFrame(),
-                    player.getPosition().x*PPM - gap,
-                    player.getPosition().y*PPM - animKamehameha1.getFrame().getRegionHeight()*scale/2,
-                    animKamehameha1_rev.getFrame().getRegionWidth()*scale - beamWidth,
-                    animKamehameha1.getFrame().getRegionHeight()*scale);
+                sb.draw(animKamehameha1_rev.getFrame(),
+                        player.getPosition().x*PPM - gap,
+                        player.getPosition().y*PPM - animKamehameha1.getFrame().getRegionHeight()*scale/2,
+                        animKamehameha1_rev.getFrame().getRegionWidth()*scale - beamWidth,
+                        animKamehameha1.getFrame().getRegionHeight()*scale);
 
-            sb.draw(animKamehameha2_rev.getFrame(),
-                    player.getPosition().x*PPM - gap - beamWidth - animKamehameha2_rev.getFrame().getRegionWidth()*scale + animKamehameha1_rev.getFrame().getRegionWidth()*scale,
-                    player.getPosition().y*PPM - animKamehameha2_rev.getFrame().getRegionHeight()*scale/2,
-                    animKamehameha2_rev.getFrame().getRegionWidth()*scale,
-                    animKamehameha2_rev.getFrame().getRegionHeight()*scale);
+                sb.draw(animKamehameha2_rev.getFrame(),
+                        player.getPosition().x*PPM - gap - beamWidth - animKamehameha2_rev.getFrame().getRegionWidth()*scale + animKamehameha1_rev.getFrame().getRegionWidth()*scale,
+                        player.getPosition().y*PPM - animKamehameha2_rev.getFrame().getRegionHeight()*scale/2,
+                        animKamehameha2_rev.getFrame().getRegionWidth()*scale,
+                        animKamehameha2_rev.getFrame().getRegionHeight()*scale);
 
-            beamX = player.getPosition().x*PPM - gap - beamWidth - animKamehameha2_rev.getFrame().getRegionWidth()*scale + animKamehameha1_rev.getFrame().getRegionWidth()*scale;
+                beamX = player.getPosition().x*PPM - gap - beamWidth - animKamehameha2_rev.getFrame().getRegionWidth()*scale + animKamehameha1_rev.getFrame().getRegionWidth()*scale;
 
-            x = player.getPosition().x*PPM - gap;
-            y = player.getPosition().y*PPM - animKamehameha0.getFrame().getRegionHeight()*scale/2;
-            w = beamX;
-            h = y + animKamehameha2.getFrame().getRegionHeight()*scale;
-        }
+                x = player.getPosition().x*PPM - gap;
+                y = player.getPosition().y*PPM - animKamehameha0.getFrame().getRegionHeight()*scale/2;
+                w = beamX;
+                h = y + animKamehameha2.getFrame().getRegionHeight()*scale;
+            }
         }
         sb.end();
 
@@ -1521,24 +1554,116 @@ public class Play extends GameState {
 
     }
 
+    public boolean isEnemyTouchingBrick(){
+        boolean result = false;
+        for(Enemy enemy:enemies) {
+            if(cl.intersect(brick,enemy) && !enemy.isDead()){
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    public void stopEnemyIfTouchBrick(Enemy enemy){
+        if(!enemy.isFading() && !enemy.isDead()&& !brick.getBroken() && cl.intersect(brick,enemy)){
+            enemy.setStop(true);
+            brick.setLife(brick.getLife()-1);
+        }else {
+            //brick.setLoop(false);
+            //brick.setHurt(false);
+            enemy.setStop(false);
+        }
+
+        //move brick if player push
+        //System.out.println(player.isStillLeft()+" "+player.isStillRight()+" "+ brick.getHurt() +" "+ brick.getLife() +" "+ cl.intersect(player, brick)+" "+player.isLeft());
+        if(!player.isStillLeft() && !player.isStillRight() && !brick.getHurt() && brick.getLife() > 0 && cl.intersect(player, brick)  && player.isLeft() && player.getPosition().y*PPM < 315){
+
+            float speed = -0.01f;
+            float pos = brick.getPosition().x + speed;
+            brick.getBody().setTransform(pos, brick.getPosition().y,brick.getBody().getAngle());
+        }
+
+        if(!player.isStillLeft() && !player.isStillRight() && !brick.getHurt() && brick.getLife() > 0 && cl.intersect(player, brick)  && player.isRight() && player.getPosition().y*PPM < 315){
+            float speed = +0.01f;
+            float pos = brick.getPosition().x + speed;
+            brick.getBody().setTransform(pos, brick.getPosition().y,brick.getBody().getAngle());
+        }
+
+        Iterator<Enemy> iter = brick.getEnemies().iterator();
+        while (iter.hasNext()) {
+            final Enemy e = iter.next();
+
+            if(!e.isFading() && !e.isDead()&& !brick.getBroken() && cl.intersect(brick,e)){
+
+            }else {
+                //brick.setLoop(false);
+                //brick.setHurt(false);
+                //e.setStop(false);
+            }
+
+//            //move brick if player push
+//            if(!player.isStillLeft() && !player.isStillRight() && brick.getLife() > 0 && cl.intersect(player, brick) && !cl.intersect(e, brick) && player.isLeft() && player.getPosition().y*PPM < 315){
+//                float speed = -0.01f;
+//                float pos = brick.getPosition().x + speed;
+//                brick.getBody().setTransform(pos, brick.getPosition().y,brick.getBody().getAngle());
+//            }
+//
+//            if(!player.isStillLeft() && !player.isStillRight() && brick.getLife() > 0 && cl.intersect(player, brick) && !cl.intersect(e, brick) && player.isRight() && player.getPosition().y*PPM < 315){
+//                float speed = +0.01f;
+//                float pos = brick.getPosition().x + speed;
+//                brick.getBody().setTransform(pos, brick.getPosition().y,brick.getBody().getAngle());
+//            }
+
+        }
+
+
+    }
 
     public void brickIA(Enemy enemy){
 
-        if(brick.getLife() <= 0){
-            brick.brokeAnimation();
-        }
+//        Iterator<Brick> iter = bricks.iterator();
+//
+//        while (iter.hasNext()) {
 
-        brick.updateBoundingBox(brick);
+            if(!MyGdxGame.pause && brick != null){
+                brick.updateBoundingBox(brick);
+                brick.update(MyGdxGame.STEP);
+            }
+            //brick.getBoundingBox().set(brick.getBoundingBox().min, brick.getBoundingBox().max);
 
-        if(!enemy.isDead()&& !brick.getBroken() && enemy.getBoundingBox().intersects(brick.getBoundingBox())){
-            enemy.setStop(true);
-            brick.setLife(brick.getLife()-1);
-            brick.hurtAnimation();
-        }else {
-            brick.setLoop(false);
-            brick.setHurt(false);
-            enemy.setStop(false);
-        }
+            //make brick fall from the sky when summoned
+            if(brick.isFalling()){
+                System.out.println("falling"+brick.getPosition().y);
+                float y = brick.getPosition().y-0.4f;
+
+                if(brick.getX() == 0){
+                    brick.setX(lastClickPos);
+                }
+
+                brick.getBody().setTransform(brick.getX(),y,brick.getBody().getAngle());
+
+                if(cl.intersect(brick,enemy)){
+                    enemy.setHealth(-99);
+                }
+
+                if(brick.getPosition().y*PPM <= 264.8){
+                    brick.getBody().setTransform(brick.getX(),MyGdxGame.GROUND,brick.getBody().getAngle());
+                    brick.setFalling(false);
+                }
+
+            }else{
+
+                stopEnemyIfTouchBrick(enemy);
+
+                if(brick.getLife() <= 0){
+                    //brick destroyed in anim function
+                    brick.brokeAnimation();
+                    enableBrick = true;
+                }
+
+            }
+
+       // }
     }
 
     public void climbingIA(Enemy enemy){
@@ -1648,217 +1773,222 @@ public class Play extends GameState {
             if(!MyGdxGame.pause){
                 enemy.update(MyGdxGame.STEP);
 
-            if(!MyGdxGame.pause | !stopEnemies){
-                enemy.updateBoundingBox(enemy);
+                if(!MyGdxGame.pause | !stopEnemies){
+                    enemy.updateBoundingBox(enemy);
 
-                brickIA(enemy);
-                princessIA(enemy);
-                fireBallIA(enemy);
 
-                if(enemy.getHealth()<=0 | enemy.isDead()){
-                    /**ENEMY IS DEAD**/
-
-                    enemy.getBody().setLinearVelocity(new Vector2(0,0));
-                    enemy.setCptDieRunning(enemy.getCptDieRunning()+1);
-
-                    if(!enemy.isDead()){
-                        player.collectCoin();
-                        if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("boom").play();
-                        if(Save.gd.isFireBallEquiped() && enemiesKilled >= 1 && player.getFireBallCount()<player.MAXFIREBALLCOUNT){
-                            fire = false;
-                            player.setFireBallCount(player.getFireBallCount()+1);
-                            enemiesKilled = 0;
-                            System.out.println("increment fireball count!");
-                        }else{
-                            enemiesKilled++;
-                            System.out.println("enemy killed="+enemiesKilled);
-                        }
-                        enemy.setDead(true);
+                    if(brick != null){
+                        brickIA(enemy);
                     }
 
-                    climbingIA(enemy);
 
-                    //todo timer
-                    if(enemy.getCptDieRunning() > 80){
-                        enemy.setDead(true);
-                        enemies.removeValue(enemy, true);
-                        enemy.destroy();
-                        //removeBodySafely(enemy.getBody());
-                    }
+                    princessIA(enemy);
+                    fireBallIA(enemy);
 
-                }else{
-                    /**ENEMY IS NOT DEAD**/
-                    if(!enemy.isStop()){
+                    if(enemy.getHealth()<=0 | enemy.isDead()){
+                        /**ENEMY IS DEAD**/
 
-                        if(enemy.isJumpOver()){
+                        enemy.getBody().setLinearVelocity(new Vector2(0,0));
+                        enemy.setCptDieRunning(enemy.getCptDieRunning()+1);
 
-                            enemyJumpOverIA(enemy);
-
-                        }else{
-
-                            //todo enemyHurt animation
-                            if(enemy.isTouched()){
-                                if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2){
-                                    if(cpt_sound_hit % 2 == 0){
-                                        MyGdxGame.res.getSound("hit").play();
-                                    }
-                                    if(cpt_sound_hit < 9999){
-                                        cpt_sound_hit+=0.5;
-                                    }else {
-                                        cpt_sound_hit = 0;
-                                    }
-
-                                }
-
-                                //nemy.getBody().setLinearVelocity(enemy.getBody().getLinearVelocity().x/2, enemy.getBody().getLinearVelocity().y);
-                                if(enemy.isClimbing()){
-
-                                    if(!enemy.isFromLeft()){
-
-                                        if(!enemy.isHurtRight()){
-                                            //enemy.getBody().setTransform((MyGdxGame.V_WIDTH/PPM)-65/PPM, enemy.getPosition().y, enemy.getBody().getAngle());
-                                            enemy.hurtAnimation(true);
-                                        }
-                                    }
-                                    if(enemy.isFromLeft()){
-                                        if(!enemy.isHurtLeft()){
-                                            //enemy.getBody().setTransform(65/PPM, enemy.getPosition().y, enemy.getBody().getAngle());
-                                            enemy.hurtAnimation_rev(true);
-                                        }
-                                    }
-
-
-
-                                }else{
-
-                                    if(!enemy.isFromLeft()){
-                                        if(!enemy.isHurtRight()){
-                                            enemy.hurtAnimation(false);
-                                        }
-                                    }
-                                    if(enemy.isFromLeft()){
-                                        if(!enemy.isHurtLeft()){
-                                            enemy.hurtAnimation_rev(false);
-                                        }
-                                    }
-                                }
+                        if(!enemy.isDead()){
+                            player.collectCoin();
+                            if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("boom").play();
+                            if(Save.gd.isFireBallEquiped() && enemiesKilled >= 1 && player.getFireBallCount()<player.MAXFIREBALLCOUNT){
+                                fire = false;
+                                player.setFireBallCount(player.getFireBallCount()+1);
+                                enemiesKilled = 0;
+                                System.out.println("increment fireball count!");
                             }else{
-                                //enemy on the ground
+                                enemiesKilled++;
+                                System.out.println("enemy killed="+enemiesKilled);
+                            }
+                            enemy.setDead(true);
+                        }
 
-                                if(!enemy.isClimbing() ){
-                                    if(!enemy.isFromLeft()) {
-                                        enemy.getBody().setLinearVelocity(-enemy.getSpeed(),enemy.getBody().getLinearVelocity().y);
+                        climbingIA(enemy);
+
+                        //todo timer
+                        if(enemy.getCptDieRunning() > 80){
+                            enemy.setDead(true);
+                            enemies.removeValue(enemy, true);
+                            enemy.destroy();
+                            //removeBodySafely(enemy.getBody());
+                        }
+
+                    }else{
+                        /**ENEMY IS NOT DEAD**/
+                        if(!enemy.isStop()){
+
+                            if(enemy.isJumpOver()){
+
+                                enemyJumpOverIA(enemy);
+
+                            }else{
+
+                                //todo enemyHurt animation
+                                if(enemy.isTouched()){
+                                    if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2){
+                                        if(cpt_sound_hit % 2 == 0){
+                                            MyGdxGame.res.getSound("hit").play();
+                                        }
+                                        if(cpt_sound_hit < 9999){
+                                            cpt_sound_hit+=0.5;
+                                        }else {
+                                            cpt_sound_hit = 0;
+                                        }
+
                                     }
-                                    else {
-                                        enemy.getBody().setLinearVelocity(enemy.getSpeed(),enemy.getBody().getLinearVelocity().y);
-                                        if(!enemy.isNormalLeft() && !enemy.isFadeOutLeft() && !enemy.isClimbRight() && !enemy.isClimblLeft() && !enemy.isTouched()){
-                                            enemy.normalAnimation_rev();
+
+                                    //nemy.getBody().setLinearVelocity(enemy.getBody().getLinearVelocity().x/2, enemy.getBody().getLinearVelocity().y);
+                                    if(enemy.isClimbing()){
+
+                                        if(!enemy.isFromLeft()){
+
+                                            if(!enemy.isHurtRight()){
+                                                //enemy.getBody().setTransform((MyGdxGame.V_WIDTH/PPM)-65/PPM, enemy.getPosition().y, enemy.getBody().getAngle());
+                                                enemy.hurtAnimation(true);
+                                            }
+                                        }
+                                        if(enemy.isFromLeft()){
+                                            if(!enemy.isHurtLeft()){
+                                                //enemy.getBody().setTransform(65/PPM, enemy.getPosition().y, enemy.getBody().getAngle());
+                                                enemy.hurtAnimation_rev(true);
+                                            }
+                                        }
+
+
+
+                                    }else{
+
+                                        if(!enemy.isFromLeft()){
+                                            if(!enemy.isHurtRight()){
+                                                enemy.hurtAnimation(false);
+                                            }
+                                        }
+                                        if(enemy.isFromLeft()){
+                                            if(!enemy.isHurtLeft()){
+                                                enemy.hurtAnimation_rev(false);
+                                            }
                                         }
                                     }
                                 }else{
-                                    if(!enemy.isFromLeft()){
-                                        if(!enemy.isClimbRight()){
-                                            enemy.climbAnimation();
+                                    //enemy on the ground
+
+                                    if(!enemy.isClimbing() ){
+                                        if(!enemy.isFromLeft()) {
+                                            enemy.getBody().setLinearVelocity(-enemy.getSpeed(),enemy.getBody().getLinearVelocity().y);
                                         }
-                                    }else{
-                                        if(!enemy.isClimblLeft()){
-                                            enemy.climbAnimation_rev();
-                                        }
-                                    }
-                                }
-
-                                //enemy in door 1
-                                if(!enemy.isMalicious() && (enemy.getPosition().x > (MyGdxGame.V_WIDTH/2/PPM)-0.03f && enemy.getPosition().x < (MyGdxGame.V_WIDTH/2/PPM)+0.03f)){
-
-                                    enemy.getBody().setLinearVelocity(0,enemy.getBody().getLinearVelocity().y);
-                                    enemy.setFading(true);
-                                    //todo fadeIn
-                                    if(!enemy.isFromLeft()){
-                                        if(!enemy.isFadeOutRight()){
-                                            enemy.fadeOutAnimation();
-                                        }
-                                    }else{
-                                        if(!enemy.isFadeOutLeft()){
-                                            enemy.fadeOutAnimation_rev();
-                                        }
-                                    }
-
-                                    enemy.setCptFadeOutRunning(enemy.getCptFadeOutRunning()+1);
-
-                                    if(enemy.getCptFadeOutRunning() > 30){
-                                        enemy.setCptFadeOutRunning(0);
-                                        enemy.getBody().setTransform(enemy.getBody().getPosition().x, enemy.getBody().getPosition().y*2, enemy.getBody().getAngle());
-                                        enemy.setJumpOver(true);
-                                        //enemy.getBody().applyForceToCenter(new Vector2(0,50),false);
-                                    }
-                                }
-
-
-                                if( enemy.isMalicious() &&
-                                        (enemy.isClimbing() |
-                                                ((enemy.getPosition().x > 100/PPM && enemy.isFromLeft())
-                                                        | (enemy.getPosition().x < MyGdxGame.V_WIDTH/PPM - 100/PPM && !enemy.isFromLeft()))) ){
-
-                                    enemy.setWaited(true);
-                                    enemy.getBody().setLinearVelocity(0,enemy.getBody().getLinearVelocity().y);
-
-                                    enemy.setCptWaitRunning(enemy.getCptWaitRunning()+1);
-
-
-                                    if(enemy.getCptWaitRunning() > 2 && !enemy.isJumpOver()){
-                                        //enemy.setCptWaitRunning(0);
-                                        //enemy.setCptWaitRunning(0);
-
-                                        float posClimb = enemy.getBody().getPosition().y + enemy.getCptWaitRunning()/5000f;
-
-                                        posClimb = (float) (posClimb+dificulty/1000.0f);
-
-                                        if(posClimb >= 2.5621998f*2f){
-
-                                            enemy.setJumpOver(true);
-                                            //stopEnemies = true;
-
-                                            if(!enemy.isFromLeft()){
-                                                enemy.getBody().setTransform(enemy.getBody().getPosition().x-65/PPM, 2.5621998f*2f, enemy.getBody().getAngle());
-                                                if(!enemy.isRight()){
-                                                    enemy.normalAnimation();
-                                                }
-                                            }else{
-                                                enemy.getBody().setTransform(enemy.getBody().getPosition().x+65/PPM, 2.5621998f*2f, enemy.getBody().getAngle());
-                                                if(!enemy.isLeft()){
-                                                    enemy.normalAnimation_rev();
-                                                }
+                                        else {
+                                            enemy.getBody().setLinearVelocity(enemy.getSpeed(),enemy.getBody().getLinearVelocity().y);
+                                            if(!enemy.isNormalLeft() && !enemy.isFadeOutLeft() && !enemy.isClimbRight() && !enemy.isClimblLeft() && !enemy.isTouched()){
+                                                enemy.normalAnimation_rev();
                                             }
-
+                                        }
+                                    }else{
+                                        if(!enemy.isFromLeft()){
+                                            if(!enemy.isClimbRight()){
+                                                enemy.climbAnimation();
+                                            }
                                         }else{
-
-
-
-                                            enemy.getBody().setTransform(enemy.getBody().getPosition().x , posClimb, enemy.getBody().getAngle());
-
-                                            if(!enemy.isFromLeft()){
-                                                enemy.getBody().setTransform((MyGdxGame.V_WIDTH/PPM)-65/PPM, posClimb, enemy.getBody().getAngle());
-                                                if(!enemy.isClimbRight()){
-
-                                                    enemy.climbAnimation();
-                                                }
-                                            }else{
-                                                enemy.getBody().setTransform(65/PPM , posClimb, enemy.getBody().getAngle());
-                                                if(!enemy.isClimblLeft()){
-
-                                                    enemy.climbAnimation_rev();
-                                                }
+                                            if(!enemy.isClimblLeft()){
+                                                enemy.climbAnimation_rev();
                                             }
-
                                         }
                                     }
-                                }}
+
+                                    //enemy in door 1
+                                    if(!enemy.isMalicious() && (enemy.getPosition().x > (MyGdxGame.V_WIDTH/2/PPM)-0.03f && enemy.getPosition().x < (MyGdxGame.V_WIDTH/2/PPM)+0.03f)){
+
+                                        enemy.getBody().setLinearVelocity(0,enemy.getBody().getLinearVelocity().y);
+                                        enemy.setFading(true);
+                                        //todo fadeIn
+                                        if(!enemy.isFromLeft()){
+                                            if(!enemy.isFadeOutRight()){
+                                                enemy.fadeOutAnimation();
+                                            }
+                                        }else{
+                                            if(!enemy.isFadeOutLeft()){
+                                                enemy.fadeOutAnimation_rev();
+                                            }
+                                        }
+
+                                        enemy.setCptFadeOutRunning(enemy.getCptFadeOutRunning()+1);
+
+                                        if(enemy.getCptFadeOutRunning() > 30){
+                                            enemy.setCptFadeOutRunning(0);
+                                            enemy.getBody().setTransform(enemy.getBody().getPosition().x, enemy.getBody().getPosition().y*2, enemy.getBody().getAngle());
+                                            enemy.setJumpOver(true);
+                                            //enemy.getBody().applyForceToCenter(new Vector2(0,50),false);
+                                        }
+                                    }
+
+
+                                    if( enemy.isMalicious() &&
+                                            (enemy.isClimbing() |
+                                                    ((enemy.getPosition().x > 100/PPM && enemy.isFromLeft())
+                                                            | (enemy.getPosition().x < MyGdxGame.V_WIDTH/PPM - 100/PPM && !enemy.isFromLeft()))) ){
+
+                                        enemy.setWaited(true);
+                                        enemy.getBody().setLinearVelocity(0,enemy.getBody().getLinearVelocity().y);
+
+                                        enemy.setCptWaitRunning(enemy.getCptWaitRunning()+1);
+
+
+                                        if(enemy.getCptWaitRunning() > 2 && !enemy.isJumpOver()){
+                                            //enemy.setCptWaitRunning(0);
+                                            //enemy.setCptWaitRunning(0);
+
+                                            float posClimb = enemy.getBody().getPosition().y + enemy.getCptWaitRunning()/5000f;
+
+                                            posClimb = (float) (posClimb+dificulty/1000.0f);
+
+                                            if(posClimb >= MyGdxGame.GROUND*2f){
+
+                                                enemy.setJumpOver(true);
+                                                //stopEnemies = true;
+
+                                                if(!enemy.isFromLeft()){
+                                                    enemy.getBody().setTransform(enemy.getBody().getPosition().x-65/PPM, MyGdxGame.GROUND*2f, enemy.getBody().getAngle());
+                                                    if(!enemy.isRight()){
+                                                        enemy.normalAnimation();
+                                                    }
+                                                }else{
+                                                    enemy.getBody().setTransform(enemy.getBody().getPosition().x+65/PPM, MyGdxGame.GROUND*2f, enemy.getBody().getAngle());
+                                                    if(!enemy.isLeft()){
+                                                        enemy.normalAnimation_rev();
+                                                    }
+                                                }
+
+                                            }else{
+
+
+
+                                                enemy.getBody().setTransform(enemy.getBody().getPosition().x , posClimb, enemy.getBody().getAngle());
+
+                                                if(!enemy.isFromLeft()){
+                                                    enemy.getBody().setTransform((MyGdxGame.V_WIDTH/PPM)-65/PPM, posClimb, enemy.getBody().getAngle());
+                                                    if(!enemy.isClimbRight()){
+
+                                                        enemy.climbAnimation();
+                                                    }
+                                                }else{
+                                                    enemy.getBody().setTransform(65/PPM , posClimb, enemy.getBody().getAngle());
+                                                    if(!enemy.isClimblLeft()){
+
+                                                        enemy.climbAnimation_rev();
+                                                    }
+                                                }
+
+                                            }
+                                        }
+                                    }}
+                            }
                         }
                     }
+                }else{
+                    //
                 }
-            }else{
-                //
-            }
 
             }
         }
@@ -1994,15 +2124,33 @@ public class Play extends GameState {
         MyGdxGame.debugString = "fps: "+Gdx.graphics.getFramesPerSecond()+'\n'+
                 "java heap: "+ (int)(Gdx.app.getJavaHeap()/Math.pow(10, 6))+" Mb"+'\n'+
                 "native heap: "+ (int)(Gdx.app.getNativeHeap()/Math.pow(10, 6))+" Mb"+'\n'+
+                "d0: "+ step0+'\n'+
+                "d1: "+ step1+'\n'+
+                "d2: "+ step2+'\n'+
+                "d3: "+ step3+'\n'+
                 "offDisplay: "+ offsetY+'\n'+
                 "enemy count: "+ enemies.size+'\n'+
                 "oGplayer: "+ cl.isPlayerOnGround()+'\n'+
                 "yPlayer: "+ (int)(player.getPosition().y*PPM)+'\n'+
+                "R: "+ player.isRight()+'\n'+
+                "L: "+ player.isLeft()+'\n'+
+//                "bricks: "+ brick.isSummoned()+'\n'+
+                "oSwipe: "+ lastClickPos+'\n'+
+//                "0: "+ bricks.get(0).isFalling()+'\n'+
+//                "1: "+ bricks.get(1).isFalling()+'\n'+
                 "pPrincess: "+ (int)(princess.getPosition().x*PPM)+'\n'+
                 "vPrincess: "+ (int)(princess.getBody().getLinearVelocity().x)+'\n'+
                 "princess: "+ princess.isLeft();
 
         MyGdxGame.fadeIn.update(dt);
+
+        if(brick != null){
+            if(isEnemyTouchingBrick()){
+                brick.hurtAnimation();
+            }else{
+                brick.normalAnimation();
+            }
+        }
 
         if(princess.getPosition().x - princess.getWidth()/2/PPM <= 150/PPM){
             princess.setRight(true);
@@ -2076,18 +2224,20 @@ public class Play extends GameState {
             double rangeMax = dificulty;
 
 
+            //have'nt decide if speed should be random
+            //now linear
             double randomSpeed = rangeMin + (rangeMax - rangeMin) * r.nextDouble();
             if(getRandomBoolean()){
-                enemies.add(createEnemy(MyGdxGame.V_WIDTH*1.0f/PPM, 2.5621998f, false, (float)randomSpeed));
+                enemies.add(createEnemy(MyGdxGame.V_WIDTH*1.0f/PPM, MyGdxGame.GROUND, false, (float)randomSpeed));
             }else{
-                enemies.add(createEnemy(1/PPM, 2.5621998f, true, (float)randomSpeed));
+                enemies.add(createEnemy(1/PPM, MyGdxGame.GROUND, true, (float)randomSpeed));
             }
+            System.out.println(randomSpeed);
         }
 
         if(!MyGdxGame.pause){
             player.update(dt);
-            brick.update(dt);
-            brick.getBoundingBox().set(brick.getBoundingBox().min, brick.getBoundingBox().max);
+
             player.updateBoundingBox(player);
             princess.update(dt);
             princess.updateBoundingBox(princess);
@@ -2188,6 +2338,12 @@ public class Play extends GameState {
         tmr.setView(cam);
         tmr.render();
 
+        if(Gdx.input.justTouched()){
+            Vector3 v = new Vector3(Gdx.input.getX(),Gdx.input.getY(),0);
+            cam.unproject(v);
+            lastClickPos = Float.valueOf(String.format("%.1f", v.x/PPM));
+        }
+
         if(cameraMotionOver && !player.isPlayerDead()) {
             if(!MyGdxGame.pause)
                 handleInput();
@@ -2276,7 +2432,7 @@ public class Play extends GameState {
             player.render(sb);
         }
 
-        if(!brick.getDead()) {
+        if(brick != null){
             brick.render(sb);
         }
 
@@ -2289,7 +2445,6 @@ public class Play extends GameState {
             fireBall.render(sb);
         }
 
-
         if(Save.gd.isKamehamehaEquiped() && fire){
             kamehamehaIA();
         }
@@ -2298,14 +2453,14 @@ public class Play extends GameState {
 
         //princessIA();
 
-            if(!MyGdxGame.pause){
-                stageUiControl.act();
-                stageUiControl.draw();
-                labelScore.setVisible(true);
-                buttonPause.setVisible(true);
-                buttonNo.setVisible(false);
-                buttonCoin.setVisible(false);
-                buttonCamera.setVisible(false);
+        if(!MyGdxGame.pause){
+            stageUiControl.act();
+            stageUiControl.draw();
+            labelScore.setVisible(true);
+            buttonPause.setVisible(true);
+            buttonNo.setVisible(false);
+            buttonCoin.setVisible(false);
+            buttonCamera.setVisible(false);
 
         }
 
@@ -2456,7 +2611,7 @@ public class Play extends GameState {
         return fireBall;
     }
 
-    public void createBrick(float x, float y) {
+    public Brick createBrick(float x, float y) {
         System.out.println("create brick...");
         BodyDef bdef = new BodyDef();
         FixtureDef fdef = new FixtureDef();
@@ -2502,7 +2657,7 @@ public class Play extends GameState {
 
         body.setLinearVelocity(0,0);
 
-        brick = new Brick(body);
+        return new Brick(body);
     }
 
     public void createPrincess(float x, float y) {

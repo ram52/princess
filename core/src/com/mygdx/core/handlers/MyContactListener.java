@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.core.MyGdxGame;
 import com.mygdx.core.entities.B2DSprite;
+import com.mygdx.core.entities.Brick;
 import com.mygdx.core.entities.Enemy;
 import com.mygdx.core.states.Play;
 
@@ -23,7 +24,6 @@ public class MyContactListener implements ContactListener {
 	private Array<Body> coinsToRemove;
     private boolean boosHit = false;
     private boolean touchBorder = false;
-	private Array<Enemy> enemies;
 	private Play play;
 
 	public Array<Body> getEnemiesToRemove() {
@@ -36,11 +36,10 @@ public class MyContactListener implements ContactListener {
 
 	private Array<Body> enemiesToRemove;
 
-	public MyContactListener(Array<Enemy> enemies, Play play) {
+	public MyContactListener(Play play) {
 		super();
 		coinsToRemove = new Array<Body>();
 		enemiesToRemove = new Array<Body>();
-		this.enemies = enemies;
 		this.play = play;
 	}
 

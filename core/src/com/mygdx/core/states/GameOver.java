@@ -179,7 +179,7 @@ public class GameOver extends GameState {
 
         BitmapFont font = new BitmapFont(Gdx.files.internal(MyGdxGame.fontScorePath), false);
         labelScore = new Label("SCORE  "+String.valueOf(score), new LabelStyle(font, Color.valueOf("545454") )) ;
-        labelBestScore = new Label("BEST SCORE  "+String.valueOf(highScores[0]), new LabelStyle(font,Color.valueOf("FFFFFF")));
+        labelBestScore = new Label("SCORE  "+String.valueOf(score)+"      "+"BEST SCORE  "+String.valueOf(highScores[0]), new LabelStyle(font,Color.valueOf("FFFFFF")));
 
         float fScale = Gdx.graphics.getWidth() / 400f;
         labelScore.setFontScale(fScale);
@@ -203,7 +203,7 @@ public class GameOver extends GameState {
 
 
         stage1.addActor(background);
-        labelScore.setVisible(true);
+        labelScore.setVisible(false);
         stage1.addActor(labelScore);
         labelBestScore.setVisible(true);
         stage1.addActor(labelBestScore);
@@ -478,9 +478,11 @@ public class GameOver extends GameState {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         float height = MyGdxGame.V_HEIGHT/15;
         shapeRenderer.rect(0, (MyGdxGame.V_HEIGHT - height)/2.0f  , MyGdxGame.V_WIDTH, height);
-        shapeRenderer.setColor(Color.WHITE);
-        shapeRenderer.rect(0, ((MyGdxGame.V_HEIGHT - height)/2.0f)+score_offset  , MyGdxGame.V_WIDTH, height);
+        shapeRenderer.setColor(Color.valueOf("f4f4f4"));
+        //shapeRenderer.rect(0, ((MyGdxGame.V_HEIGHT - height)/2.0f)+score_offset  , MyGdxGame.V_WIDTH, height);
         shapeRenderer.end();
+
+        //labelBestScore.setPosition(labelBestScore.getX(),labelBestScore.getY());
 
 
         stage1.act();

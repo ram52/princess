@@ -269,6 +269,7 @@ public class Player extends B2DSprite
         tiredLeft = false;
         tiredRight = false;
         stillRight = false;
+        stillLeft = false;
         isSlashingRight = false;
         isSlashingLeft = false;
         right = true;
@@ -307,6 +308,7 @@ public class Player extends B2DSprite
         tiredLeft = false;
         tiredRight = false;
         stillRight = false;
+        stillLeft = false;
         isSlashingRight = false;
         isSlashingLeft = false;
         right = false;

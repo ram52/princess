@@ -3,6 +3,7 @@ package com.mygdx.core.entities;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.utils.Array;
 import com.mygdx.core.MyGdxGame;
 
 /**
@@ -17,6 +18,60 @@ public class Brick extends B2DSprite{
     private Boolean dead;
     private Boolean hurt;
     private int life = 300;
+    private float falling_cpt = 0;
+    private boolean falling = false;
+    private boolean summoned = false;
+    private float x = 0;
+    private float y = 0;
+    public Array<Enemy> enemies;
+
+    public Array<Enemy> getEnemies() {
+        return enemies;
+    }
+
+    public void setEnemies(Array<Enemy> enemies) {
+        this.enemies = enemies;
+    }
+
+    public boolean isSummoned() {
+        return summoned;
+    }
+
+    public void setSummoned(boolean summoned) {
+        this.summoned = summoned;
+    }
+
+    public float getY() {
+        return y;
+    }
+
+    public void setY(float y) {
+        this.y = y;
+    }
+
+    public float getX() {
+        return x;
+    }
+
+    public void setX(float x) {
+        this.x = x;
+    }
+
+    public float getFalling_cpt() {
+        return falling_cpt;
+    }
+
+    public void setFalling_cpt(float falling_cpt) {
+        this.falling_cpt = falling_cpt;
+    }
+
+    public boolean isFalling() {
+        return falling;
+    }
+
+    public void setFalling(boolean falling) {
+        this.falling = falling;
+    }
 
     public Boolean getNormal() {
         return normal;
@@ -60,6 +115,7 @@ public class Brick extends B2DSprite{
 
     public Brick(Body body) {
         super(body);
+        enemies = new Array<Enemy>();
         setLoop(false);
         tex = new Sprite(MyGdxGame.atlas.findRegion("brick"));
         TextureRegion[] sprites = tex.split( 64, 64)[0];
@@ -84,6 +140,11 @@ public class Brick extends B2DSprite{
 
     public void brokeAnimation(){
         if (!broken){
+
+            for (Enemy enemy: enemies) {
+                enemy.setStop(false);
+            }
+
             setLoop(false);
             tex = new Sprite(MyGdxGame.atlas.findRegion("brick_breacking"));
             TextureRegion[] sprites = tex.split( 64, 64)[0];
