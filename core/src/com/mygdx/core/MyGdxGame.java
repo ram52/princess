@@ -321,7 +321,12 @@ public class MyGdxGame implements ApplicationListener {
                             "native heap: "+ (int)(Gdx.app.getNativeHeap()/Math.pow(10, 6))+"Mb";
                 }
                 gsm.update(STEP);
-                gsm.render();
+                try{
+                    gsm.render();
+                }catch (NullPointerException e){
+                    System.out.println(e.toString());
+                }
+
                 if (Gdx.input.isKeyPressed(Keys.BACK)) showConfirmDialog();
             }
 

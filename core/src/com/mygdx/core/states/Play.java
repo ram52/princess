@@ -52,6 +52,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.PerformanceCounter;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.core.MyGdxGame;
 import com.mygdx.core.entities.Brick;
@@ -152,6 +153,8 @@ public class Play extends GameState {
     private Stage stage0;
     private Image intro;
 
+    public PerformanceCounter performanceCounter;
+
     public boolean getRandomBoolean() {
         Random random = new Random();
         return random.nextBoolean();
@@ -159,6 +162,8 @@ public class Play extends GameState {
 
     public Play(final GameStateManager gsm) {
         super(gsm);
+
+        performanceCounter = new PerformanceCounter(" ");
 
         MyGdxGame.setPause(false);
         viewport = new Rectangle();
@@ -341,12 +346,15 @@ public class Play extends GameState {
         leftButtonStyle.up = skin.getDrawable("buttonUiBossLeftUp");
         leftButtonStyle.down = skin.getDrawable("buttonUiBossLeftDown");
         buttonLeft = new Button(leftButtonStyle);
-        float size = (Gdx.graphics.getWidth() / 4f);
+        float size = (Gdx.graphics.getWidth() / 4.5f);
+        float space = (Gdx.graphics.getWidth() - (size*4))/5;
         buttonLeft.setWidth(size);
         buttonLeft.setHeight(size);
-        buttonLeft.setPosition(Gdx.graphics.getWidth()/2 - buttonLeft.getWidth()/2 - 2.5f*buttonLeft.getWidth()/2, Gdx.graphics.getHeight() / 100);
+        buttonLeft.setPosition(space, space*2);
         //buttonLeft.setBounds(0,0,Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight());
         stageUiControl.addActor(buttonLeft);
+
+
 
         Button.ButtonStyle rightButtonStyle = new Button.ButtonStyle();
         rightButtonStyle.up = skin.getDrawable("buttonUiBossRightUp");
@@ -354,7 +362,7 @@ public class Play extends GameState {
         buttonRight = new Button(rightButtonStyle);
         buttonRight.setWidth(buttonLeft.getWidth());
         buttonRight.setHeight(buttonLeft.getHeight());
-        buttonRight.setPosition(Gdx.graphics.getWidth()/2 - buttonRight.getWidth()/2 + 2.5f*buttonRight.getWidth()/2, buttonLeft.getY());
+        buttonRight.setPosition(buttonLeft.getRight()+space, buttonLeft.getY());
         stageUiControl.addActor(buttonRight);
 
         Button.ButtonStyle fireButtonStyle = new Button.ButtonStyle();
@@ -366,11 +374,28 @@ public class Play extends GameState {
             fireButtonStyle.down = skin.getDrawable("buttonSecret");
         }
 
+
         buttonFire = new Button(fireButtonStyle);
         buttonFire.setWidth(buttonLeft.getWidth());
         buttonFire.setHeight(buttonLeft.getHeight());
-        buttonFire.setPosition(Gdx.graphics.getWidth()/2 - buttonRight.getWidth()/2, buttonLeft.getY());
+        buttonFire.setPosition(buttonRight.getRight()+space, buttonLeft.getY());
         stageUiControl.addActor(buttonFire);
+
+
+        Button.ButtonStyle jumpButtonStyle = new Button.ButtonStyle();
+        jumpButtonStyle.up = skin.getDrawable("buttonJumpUp");
+        jumpButtonStyle.down = skin.getDrawable("buttonJumpDown");
+        buttonJump = new Button(jumpButtonStyle);
+        buttonJump.setDisabled(true);
+        buttonJump.setWidth(buttonFire.getWidth());
+        buttonJump.setHeight(buttonFire.getHeight());
+        buttonJump.setPosition(buttonFire.getRight()+space, buttonLeft.getY());
+        stageUiControl.addActor(buttonJump);
+
+
+
+
+
 
         buttonFire.addListener(new InputListener() {
             public boolean touchDown(
@@ -405,12 +430,7 @@ public class Play extends GameState {
         });
 
 
-        buttonJump = new Button(fireButtonStyle);
-        buttonJump.setDisabled(true);
-        buttonJump.setWidth(buttonFire.getWidth());
-        buttonJump.setHeight(buttonFire.getHeight());
-        buttonJump.setPosition(buttonFire.getX(), buttonFire.getY()+buttonFire.getHeight());
-        //stageUiControl.addActor(buttonJump);
+      //stageUiControl.addActor(buttonJump);
 
         buttonJump.addListener(new InputListener() {
             public boolean touchDown(
@@ -661,24 +681,27 @@ public class Play extends GameState {
                     @Override
                     public void onDown() {
 
-                        if(brick == null){
-                            brick = createBrick(MyGdxGame.V_WIDTH/5/PPM, player.getHeight()/PPM + Gdx.graphics.getHeight()/PPM);
-                        }else{
-                            if(brick.getDead()){
+                        if(Save.gd.isBrickEquiped()){
+                            if(brick == null){
                                 brick = createBrick(MyGdxGame.V_WIDTH/5/PPM, player.getHeight()/PPM + Gdx.graphics.getHeight()/PPM);
+                            }else{
+                                if(brick.getDead()){
+                                    brick = createBrick(MyGdxGame.V_WIDTH/5/PPM, player.getHeight()/PPM + Gdx.graphics.getHeight()/PPM);
+                                }
                             }
+
+                            if(!MyGdxGame.pause){
+                                if(!brick.isSummoned() && enableBrick){
+                                    enableBrick = false;
+                                    brick.setFalling(true);
+                                    brick.setSummoned(true);
+                                    if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("newScreen").play();
+                                }
+                            }
+
+                            System.out.println("down");
                         }
 
-                        if(!MyGdxGame.pause){
-                            if(!brick.isSummoned() && enableBrick){
-                                enableBrick = false;
-                                brick.setFalling(true);
-                                brick.setSummoned(true);
-                                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("newScreen").play();
-                            }
-                        }
-
-                        System.out.println("down");
                     }
                 });
 
@@ -1577,7 +1600,6 @@ public class Play extends GameState {
         //move brick if player push
         //System.out.println(player.isStillLeft()+" "+player.isStillRight()+" "+ brick.getHurt() +" "+ brick.getLife() +" "+ cl.intersect(player, brick)+" "+player.isLeft());
         if(!player.isStillLeft() && !player.isStillRight() && !brick.getHurt() && brick.getLife() > 0 && cl.intersect(player, brick)  && player.isLeft() && player.getPosition().y*PPM < 315){
-
             float speed = -0.01f;
             float pos = brick.getPosition().x + speed;
             brick.getBody().setTransform(pos, brick.getPosition().y,brick.getBody().getAngle());
@@ -2341,7 +2363,7 @@ public class Play extends GameState {
         if(Gdx.input.justTouched()){
             Vector3 v = new Vector3(Gdx.input.getX(),Gdx.input.getY(),0);
             cam.unproject(v);
-            lastClickPos = Float.valueOf(String.format("%.1f", v.x/PPM));
+            lastClickPos = v.x/PPM;
         }
 
         if(cameraMotionOver && !player.isPlayerDead()) {
@@ -2368,11 +2390,15 @@ public class Play extends GameState {
             if(!MyGdxGame.pause ) {
                 //power up bar
                 float c = MyGdxGame.V_WIDTH/6.7f;
-                float w = MyGdxGame.V_WIDTH/7;
+                float w = MyGdxGame.V_WIDTH/6.2f;
                 float h = c;
                 float max = c;
-                float x = MyGdxGame.V_WIDTH/2 - w/2;
-                float y = MyGdxGame.V_WIDTH/15f;
+
+                Vector3 v = new Vector3(buttonFire.getX()*1.06f,buttonFire.getY(),0);
+                cam.unproject(v);
+                float x = v.x;
+
+                float y = MyGdxGame.V_WIDTH/13f;
 
                 if(Save.gd.isKamehamehaEquiped()){
                     shapeRenderer.setColor(Color.GRAY);
@@ -2449,7 +2475,11 @@ public class Play extends GameState {
             kamehamehaIA();
         }
 
+        //performanceCounter.start();
         enemiesIA();
+       // performanceCounter.stop();
+
+        //System.out.println(performanceCounter.current);
 
         //princessIA();
 

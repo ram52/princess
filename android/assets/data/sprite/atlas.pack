@@ -561,7 +561,7 @@ buttonExcaliburDown
   orig: 159, 159
   offset: 0, 0
   index: -1
-buttonUiBossJumpDown
+buttonJumpDown
   rotate: false
   xy: 804, 1
   size: 145, 145
@@ -785,7 +785,7 @@ buttonPause
   orig: 159, 153
   offset: 0, 0
   index: -1
-buttonUiBossJumpUp
+buttonJumpUp
   rotate: false
   xy: 1560, 1097
   size: 145, 145
@@ -799,7 +799,7 @@ enemyMock
   orig: 128, 64
   offset: 0, 0
   index: -1
-buttonUiBossLeftDown
+buttonUiBossJumpDown
   rotate: false
   xy: 1731, 1253
   size: 145, 145
@@ -841,7 +841,7 @@ princessdie
   orig: 192, 64
   offset: 0, 0
   index: -1
-buttonUiBossLeftUp
+buttonUiBossJumpUp
   rotate: false
   xy: 1814, 1475
   size: 145, 145
@@ -855,7 +855,7 @@ walk
   orig: 192, 64
   offset: 0, 0
   index: -1
-buttonUiBossRightDown
+buttonUiBossLeftDown
   rotate: false
   xy: 1878, 1262
   size: 145, 145
@@ -869,23 +869,37 @@ walkEx
   orig: 192, 64
   offset: 0, 0
   index: -1
-buttonUiBossRightUp
+buttonUiBossLeftUp
   rotate: false
   xy: 1875, 1702
   size: 145, 145
   orig: 145, 145
   offset: 0, 0
   index: -1
+buttonUiBossRightDown
+  rotate: false
+  xy: 1707, 1097
+  size: 145, 145
+  orig: 145, 145
+  offset: 0, 0
+  index: -1
+buttonUiBossRightUp
+  rotate: false
+  xy: 1854, 1106
+  size: 145, 145
+  orig: 145, 145
+  offset: 0, 0
+  index: -1
 buttonUiContinueNoUp
   rotate: false
-  xy: 1731, 1141
+  xy: 1560, 985
   size: 149, 110
   orig: 149, 110
   offset: 0, 0
   index: -1
 buttonSecret
   rotate: false
-  xy: 1882, 1132
+  xy: 1711, 967
   size: 128, 128
   orig: 128, 128
   offset: 0, 0

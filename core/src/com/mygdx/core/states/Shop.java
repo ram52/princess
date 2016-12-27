@@ -32,6 +32,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.core.MyGdxGame;
 import com.mygdx.core.handlers.Animation;
+import com.mygdx.core.handlers.AnimeActor;
 import com.mygdx.core.handlers.GameStateManager;
 import com.mygdx.core.handlers.Save;
 import com.mygdx.core.handlers.ShopDialog;
@@ -48,7 +49,7 @@ public class Shop extends GameState {
     private Rectangle viewport;
     private AlphaAction fade;
     private Button buttonPlay, buttonSecret1, buttonSecret2,imageCoin, buttonItem0;
-    private Button buttonItem1, buttonItem2, buttonItem3, buttonItem4, buttonItem5;
+    private Button buttonItem1, buttonItem2, buttonItem3, buttonItem4, buttonItem5, buttonItem6, buttonItem7;
     private int cpt_secret1 = 0, cpt_secret2 = 0;
     private int cpt_translate_animation1 = 0;
     private Label labelMoney;
@@ -92,7 +93,7 @@ public class Shop extends GameState {
 
         animTitle = new Animation(new Sprite(MyGdxGame.atlas.findRegion("shop")).split(57,23)[0], 1 / 5f);
 
-        animationCoin = new Animation(new Sprite(MyGdxGame.atlas.findRegion("coin")).split(64,64)[0], 1 / 5f);
+
 
         if (!Save.gd.getAdsRemoverPurchased()) {
             String network = game.actionResolver.getNetworkClass();
@@ -191,7 +192,7 @@ public class Shop extends GameState {
         buttonItem0 = new Button(style);
         buttonItem0.setWidth(Gdx.graphics.getWidth() / 6f);
         buttonItem0.setHeight(Gdx.graphics.getWidth() / 6f);
-        buttonItem0.setPosition(Gdx.graphics.getWidth()/4.5f, Gdx.graphics.getHeight()/1.5f);
+        buttonItem0.setPosition(Gdx.graphics.getWidth()/8.5f, Gdx.graphics.getHeight()/1.5f);
         stage1.addActor(buttonItem0);
 
 
@@ -242,6 +243,26 @@ public class Shop extends GameState {
         buttonItem5.setPosition(buttonItem4.getX() + buttonItem4.getWidth()*1.2f , buttonItem4.getY());
         stage1.addActor(buttonItem5);
 
+        style = new Button.ButtonStyle();
+        style.up = skin.getDrawable("buttonBrickUp");
+        style.down = skin.getDrawable("buttonBrickDown");
+        buttonItem6 = new Button(style);
+        buttonItem6.setWidth(buttonItem0.getWidth());
+        buttonItem6.setHeight(buttonItem0.getWidth());
+        buttonItem6.setPosition(buttonItem5.getX() + buttonItem6.getWidth()*1.2f , buttonItem5.getY());
+        stage1.addActor(buttonItem6);
+
+
+        style = new Button.ButtonStyle();
+        style.up = skin.getDrawable("buttonCoins3Up");
+        style.down = skin.getDrawable("buttonCoins3Down");
+        buttonItem7 = new Button(style);
+        buttonItem7.setWidth(buttonItem0.getWidth());
+        buttonItem7.setHeight(buttonItem0.getWidth());
+        buttonItem7.setPosition(buttonItem2.getX() + buttonItem7.getWidth()*1.2f , buttonItem2.getY());
+        stage1.addActor(buttonItem7);
+
+
         labelMoney = new Label("0", new Label.LabelStyle(new BitmapFont(Gdx.files.internal(MyGdxGame.fontScorePath), false), Color.WHITE));
         float fScale = Gdx.graphics.getWidth() / 400f;
         labelMoney.setFontScale(fScale);
@@ -253,6 +274,16 @@ public class Shop extends GameState {
 
         stage1.addActor(labelMoney);
         labelMoney.setText(Integer.toString(Save.gd.getMoney()));
+
+        animationCoin = new Animation(new Sprite(MyGdxGame.atlas.findRegion("coin")).split(64,64)[0], 1 / 5f);
+
+        com.badlogic.gdx.graphics.g2d.Animation a = new com.badlogic.gdx.graphics.g2d.Animation(1/10f,animationCoin.getFrames());
+
+        AnimeActor anim = new AnimeActor(a);
+        anim.setHeight(labelMoney.getHeight());
+        anim.setWidth(labelMoney.getHeight());
+        anim.setPosition(100,labelMoney.getY());
+        stage1.addActor(anim);
 
         InputMultiplexer im = new InputMultiplexer();
         im.addProcessor(gd);
@@ -340,7 +371,7 @@ public class Shop extends GameState {
                                     "\n" +
                                     "Purchase 1000 coins.\n" +
                                     "\n\n" +
-                                    "Buy 1000 coins.?", "buttonCoins1Down"){
+                                    "Buy 1000 coins.?", "buttonCoins1Up"){
                         public void result(Object obj) {
                             System.out.println("result"+obj);
                             System.out.println(obj);
@@ -387,7 +418,7 @@ public class Shop extends GameState {
                                 "\n" +
                                 "Purchase 10000 coins.\n" +
                                 "\n\n" +
-                                "Buy 10000 coins.?", "buttonCoins2Down"){
+                                "Buy 10000 coins.?", "buttonCoins2Up"){
                     public void result(Object obj) {
                         System.out.println("result"+obj);
                         System.out.println(obj);
@@ -396,6 +427,52 @@ public class Shop extends GameState {
                                 MyGdxGame.res.getSound("point").play();
                             }
                             Save.gd.setMoney(Save.gd.getMoney()+10000);
+                            Save.save();
+                            labelMoney.setText(Integer.toString(Save.gd.getMoney()));
+                        }
+                    }
+                };
+                stage1.addActor(dialog);
+
+                Save.save();
+                Save.load();
+            }
+
+            ;
+        });
+
+        buttonItem7.addListener(new InputListener() {
+            public boolean touchDown(
+                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
+                    float y, int pointer, int button) {
+                if (Save.gd.isSoundEnable() == 1 | Save.gd.isSoundEnable() == 2) MyGdxGame.res.getSound("select").play();
+                return true;
+            }
+
+            ;
+
+            public void touchUp(
+                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
+                    float y, int pointer, int button) {
+                System.out.println("buttonItem7 clicked!");
+                Save.load();
+                NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
+                String cur = currencyFormatter.format(1).replaceAll("[0-9.,]","");;
+                ShopDialog dialog = new ShopDialog(Shop.this,
+                        "\n\n" +
+                                "100 Coins\n" +
+                                "\n" +
+                                "Watch a video for 100 coins FREE.\n" +
+                                "\n\n" +
+                                "Watch video ?", "buttonCoins3Up"){
+                    public void result(Object obj) {
+                        System.out.println("result"+obj);
+                        System.out.println(obj);
+                        if(obj.toString().equals("true")){
+                            if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
+                                MyGdxGame.res.getSound("point").play();
+                            }
+                            Save.gd.setMoney(Save.gd.getMoney()+100);
                             Save.save();
                             labelMoney.setText(Integer.toString(Save.gd.getMoney()));
                         }
@@ -628,6 +705,77 @@ public class Shop extends GameState {
             }
         });
 
+
+        buttonItem6.addListener(new InputListener() {
+            public boolean touchDown(
+                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
+                    float y, int pointer, int button) {
+                if (Save.gd.isSoundEnable() == 1 | Save.gd.isSoundEnable() == 2) MyGdxGame.res.getSound("select").play();
+                return true;
+            }
+
+            ;
+
+            public void touchUp(
+                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
+                    float y, int pointer, int button) {
+                System.out.println("buttonItem6 clicked!");
+                Save.load();
+                final int cost = 60000;
+                if(!Save.gd.isBrickPurchased()){
+                    ShopDialog dialog = new ShopDialog(Shop.this,
+                            "\n\n" +
+                                    "BRICK SUMMON\n" +
+                                    "\n" +
+                                    "Blocks and can crush enemies.\n" +
+                                    "Swipe down to summon 1 brick \nat a time (unlimited).\n" +
+                                    "COST: "+cost+" coins.\n" +
+                                    "\n" +
+                                    "Buy brick summon?", "buttonBrickUp"){
+                        public void result(Object obj) {
+                            System.out.println("result Buy Brick?"+obj);
+                            System.out.println(obj);
+
+                            if(obj.toString().equals("true") && Save.gd.getMoney() >= cost){
+                                if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
+                                    MyGdxGame.res.getSound("newScreen").play();
+                                }
+                                Save.gd.setBrickPurchased(true);
+                                Save.gd.setBrickEquiped(true);
+                                Save.gd.setMoney(Save.gd.getMoney() - cost);
+                                Save.save();
+                                labelMoney.setText(Integer.toString(Save.gd.getMoney()));
+                            }else{
+
+                                if(obj.toString().equals("true")){
+                                    if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("error").play();
+                                    labelMoney.setColor(Color.RED);
+
+                                    new java.util.Timer().schedule(
+                                            new java.util.TimerTask() {
+                                                @Override
+                                                public void run() {
+                                                    // your code here
+                                                    labelMoney.setColor(Color.WHITE);
+                                                }
+                                            }, 500);
+                                }
+
+                            }
+                        }
+                    };
+                    stage1.addActor(dialog);
+                }else{
+                    Save.gd.setBrickEquiped(!Save.gd.isBrickEquiped());
+                    if (Save.gd.isBrickEquiped() && (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
+                        MyGdxGame.res.getSound("newScreen").play();
+                    }
+                }
+                Save.save();
+                Save.load();
+            }
+        });
+
         buttonPlay.addListener(new InputListener() {
             public boolean touchDown(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
@@ -749,8 +897,6 @@ public class Shop extends GameState {
 
     public void update(float dt) {
 
-
-
         animationEnemy.update(dt);
         animationEnemyMock.update(dt);
         animationCoin.update(dt);
@@ -793,6 +939,18 @@ public class Shop extends GameState {
             style.up = skin.getDrawable("buttonKamehamehaUp");
             style.down = skin.getDrawable("buttonKamehamehaUp");
             buttonItem5.setStyle(style);
+        }
+
+        if(Save.gd.isBrickEquiped()){
+            ButtonStyle style = new Button.ButtonStyle();
+            style.up = skin.getDrawable("buttonBrickDown");
+            style.down = skin.getDrawable("buttonBrickDown");
+            buttonItem6.setStyle(style);
+        }else{
+            ButtonStyle style = new Button.ButtonStyle();
+            style.up = skin.getDrawable("buttonBrickUp");
+            style.down = skin.getDrawable("buttonBrickUp");
+            buttonItem6.setStyle(style);
         }
 
         if(Save.gd.getAdsRemoverPurchased()){
@@ -900,7 +1058,7 @@ public class Shop extends GameState {
             }
 
             float coef = 3.0f;
-            sb.draw(animationCoin.getFrame(), (1*imageCoin.getWidth()) , MyGdxGame.V_HEIGHT - imageCoin.getWidth()*1.14f+(offsetY/coef));
+            //sb.draw(animationCoin.getFrame(), (1*imageCoin.getWidth()) , labelMoney.getY());
 
             //buttonSecret1.setPosition( (-250.0f + ((float) time * a)) + (float)buttonSecret1.getWidth(), 202+(offsetY/coef)+buttonSecret1.getHeight());
             //stage1.getActors().items[1].setPosition(-250 + ((float) time * 3f), 502);

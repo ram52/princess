@@ -1,9 +1,20 @@
 package com.mygdx.core.handlers;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 public class Animation {
-	
+
+	public TextureRegion[] getFrames() {
+		return frames;
+	}
+
+	public void setFrames(TextureRegion[] frames) {
+		this.frames = frames;
+	}
+
 	private TextureRegion[] frames;
 	private float time;
 	private float delay;
@@ -54,7 +65,7 @@ public class Animation {
 		}
 
 	}
-	
+
 	public TextureRegion getFrame() {
 		return frames[currentFrame];
     }

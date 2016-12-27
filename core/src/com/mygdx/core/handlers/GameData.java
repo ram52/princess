@@ -14,9 +14,11 @@ public class GameData implements Serializable {
     private boolean adsRemoverPurchased;
 	private boolean fireBallPurchased;
 	private boolean excaliburPurchased;
+	private boolean brickPurchased;
 	private boolean kamehamehaPurchased;
 	private boolean fireBallEquiped;
 	private boolean excaliburEquiped;
+	private boolean brickEquiped;
 	private boolean kamehamehaEquiped;
 	private int sound;
 	private boolean night;
@@ -47,6 +49,8 @@ public class GameData implements Serializable {
 		fireBallPurchased =false;
 		excaliburPurchased = false;
 		kamehamehaPurchased = false;
+		brickPurchased = false;
+		brickEquiped = false;
 		fireBallEquiped = false;
 		excaliburEquiped = false;
 		kamehamehaEquiped = false;
@@ -241,6 +245,22 @@ public class GameData implements Serializable {
     public void setPlayerGreen(boolean playerGreen) {
         this.playerGreen = playerGreen;
     }
+
+	public boolean isBrickPurchased() {
+		return brickPurchased;
+	}
+
+	public void setBrickPurchased(boolean brickPurchased) {
+		this.brickPurchased = brickPurchased;
+	}
+
+	public boolean isBrickEquiped() {
+		return brickEquiped;
+	}
+
+	public void setBrickEquiped(boolean brickEquiped) {
+		this.brickEquiped = brickEquiped;
+	}
 }
 
 

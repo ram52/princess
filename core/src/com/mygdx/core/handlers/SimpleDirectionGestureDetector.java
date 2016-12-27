@@ -26,6 +26,7 @@ private static class DirectionGestureListener extends GestureAdapter{
 
     @Override
     public boolean fling(float velocityX, float velocityY, int button) {
+        System.out.println(velocityX+" "+velocityY);
         if(Math.abs(velocityX)>Math.abs(velocityY)){
             if(velocityX>0){
                     directionListener.onRight();
@@ -33,7 +34,7 @@ private static class DirectionGestureListener extends GestureAdapter{
                     directionListener.onLeft();
             }
         }else{
-            if(velocityY>0){
+            if(velocityY>1000){
                     directionListener.onDown();
             }else{                                  
                     directionListener.onUp();
