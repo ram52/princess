@@ -77,7 +77,7 @@ public class MyGdxGame implements ApplicationListener {
     public static Background background_cloud, background_wood1,
     //background_skyDay
     //background_storyLine,
-    background_title, background_tuto;
+    background_title, background_tuto, background_shop;
     public static String spritesPackPath = "data/sprite/atlas.pack";
     public static String errorSoundPath = "data/sound/error.ogg";
     public static String reviveSoundPath = "data/sound/revive.ogg";
@@ -284,8 +284,8 @@ public class MyGdxGame implements ApplicationListener {
                 stage0.draw();
                 sb.end();
 
-                //displayLoadingBar(112, 146, 190, V_HEIGHT / 10f, false);
-                displayLoadingBar(255, 255, 255, V_HEIGHT / 10f, false);
+                displayLoadingBar(255, 255, 255, V_HEIGHT / 10f, true);
+                //displayLoadingBar(255, 255, 255, V_HEIGHT / 10f, false);
 
                 if(!init){
                     init = true;
@@ -330,10 +330,10 @@ public class MyGdxGame implements ApplicationListener {
                 if (Gdx.input.isKeyPressed(Keys.BACK)) showConfirmDialog();
             }
 
-            sb.begin();
-            font.setColor(Color.GREEN);
-            font.drawMultiLine(sb, debugString, MyGdxGame.V_WIDTH/15 , MyGdxGame.V_HEIGHT/1.1f, MyGdxGame.V_WIDTH, BitmapFont.HAlignment.LEFT);
-            sb.end();
+//            sb.begin();
+//            font.setColor(Color.GREEN);
+//            font.drawMultiLine(sb, debugString, MyGdxGame.V_WIDTH/15 , MyGdxGame.V_HEIGHT/1.1f, MyGdxGame.V_WIDTH, BitmapFont.HAlignment.LEFT);
+//            sb.end();
 
 
 
@@ -350,61 +350,94 @@ public class MyGdxGame implements ApplicationListener {
             stage0.draw();
             sb.end();
             displayLoadingBar(255, 255, 255, V_HEIGHT / 10f, false);
+            //displayLoadingBar(255, 255, 255, V_HEIGHT / 10f, false);
             //displayLoadingBar(112, 146, 190, V_HEIGHT / 10f, false);
         }
     }
 
-    public void displayLoadingBar(int r, int g, int b, float posY, boolean border) {
-
-        int numberOfRec = 10;
+    public void displayLoadingBar(int r, int g, int b, float posY, boolean full) {
         float recSize = 40f;
         float space = 5f;
-        float barWidth = numberOfRec * recSize + space * (recSize - 1);
+        float barWidth = V_WIDTH/1.5f;
         float barPosY = posY;
-        float first = (V_WIDTH - barWidth) / 0.5f;
-
+        float first = (V_WIDTH - barWidth)/2;
         Gdx.gl.glEnable(GL20.GL_BLEND);
         shapeRenderer.setProjectionMatrix(cam.combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(r / 255f, g / 255f, b / 255f, 0.1f);
-        if (progress > 0) shapeRenderer.rect(first, barPosY, recSize, recSize);
-        shapeRenderer.setColor(r / 255f, g / 255f, b / 255f, 0.15f);
-        if (progress > 10)
-            shapeRenderer.rect(first + (space + recSize) * 1, barPosY, recSize, recSize);
-        shapeRenderer.setColor(r / 255f, g / 255f, b / 255f, 0.2f);
-        if (progress > 20)
-            shapeRenderer.rect(first + (space + recSize) * 2, barPosY, recSize, recSize);
-        shapeRenderer.setColor(r / 255f, g / 255f, b / 255f, 0.25f);
-        if (progress > 30)
-            shapeRenderer.rect(first + (space + recSize) * 3, barPosY, recSize, recSize);
-        shapeRenderer.setColor(r / 255f, g / 255f, b / 255f, 0.3f);
-        if (progress > 40)
-            shapeRenderer.rect(first + (space + recSize) * 4, barPosY, recSize, recSize);
-        shapeRenderer.setColor(r / 255f, g / 255f, b / 255f, 0.4f);
-        if (progress > 50)
-            shapeRenderer.rect(first + (space + recSize) * 5, barPosY, recSize, recSize);
-        shapeRenderer.setColor(r / 255f, g / 255f, b / 255f, 0.55f);
-        if (progress > 60)
-            shapeRenderer.rect(first + (space + recSize) * 6, barPosY, recSize, recSize);
-        shapeRenderer.setColor(r / 255f, g / 255f, b / 255f, 0.75f);
-        if (progress > 70)
-            shapeRenderer.rect(first + (space + recSize) * 7, barPosY, recSize, recSize);
-        shapeRenderer.setColor(r / 255f, g / 255f, b / 255f, 0.85f);
-        if (progress > 80)
-            shapeRenderer.rect(first + (space + recSize) * 8, barPosY, recSize, recSize);
-        shapeRenderer.setColor(r / 255f, g / 255f, b / 255f, 1f);
-        if (progress > 90)
-            shapeRenderer.rect(first + (space + recSize) * 9, barPosY, recSize, recSize);
+
+        if(full){
+            shapeRenderer.setColor(r / 255f, g / 255f, b / 255f, 1f);
+            shapeRenderer.rect(first, barPosY, barWidth, recSize);
+        }else{
+            shapeRenderer.setColor(r / 255f, g / 255f, b / 255f, 1f);
+            shapeRenderer.rect(first, barPosY, barWidth*(progress/100), recSize);
+        }
+
+        System.out.println(barWidth*(progress/100));
+
+        shapeRenderer.setColor(r / 155f, g / 155f, b / 155f, 0.1f);
+        shapeRenderer.rect(first, barPosY, barWidth, recSize);
+
         shapeRenderer.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
-
-        if (border) {
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-            Gdx.gl20.glLineWidth(2.4f);
-            shapeRenderer.rect(first - recSize / 2, barPosY - recSize / 2, barWidth + recSize, recSize * 2);
-            shapeRenderer.end();
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
+
+//    public void displayLoadingBar(int r, int g, int b, float posY, boolean border) {
+//
+//        int numberOfRec = 10;
+//        float recSize = 40f;
+//        float space = 5f;
+//        float barWidth = numberOfRec * recSize + space * (recSize - 1);
+//        float barPosY = posY;
+//        float first = (V_WIDTH - barWidth) / 0.5f;
+//
+//        Gdx.gl.glEnable(GL20.GL_BLEND);
+//        shapeRenderer.setProjectionMatrix(cam.combined);
+//        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+//        shapeRenderer.setColor(r / 255f, g / 255f, b / 255f, 0.1f);
+//        if (progress > 0) shapeRenderer.rect(first, barPosY, recSize, recSize);
+//        shapeRenderer.setColor(r / 255f, g / 255f, b / 255f, 0.15f);
+//        if (progress > 10)
+//            shapeRenderer.rect(first + (space + recSize) * 1, barPosY, recSize, recSize);
+//        shapeRenderer.setColor(r / 255f, g / 255f, b / 255f, 0.2f);
+//        if (progress > 20)
+//            shapeRenderer.rect(first + (space + recSize) * 2, barPosY, recSize, recSize);
+//        shapeRenderer.setColor(r / 255f, g / 255f, b / 255f, 0.25f);
+//        if (progress > 30)
+//            shapeRenderer.rect(first + (space + recSize) * 3, barPosY, recSize, recSize);
+//        shapeRenderer.setColor(r / 255f, g / 255f, b / 255f, 0.3f);
+//        if (progress > 40)
+//            shapeRenderer.rect(first + (space + recSize) * 4, barPosY, recSize, recSize);
+//        shapeRenderer.setColor(r / 255f, g / 255f, b / 255f, 0.4f);
+//        if (progress > 50)
+//            shapeRenderer.rect(first + (space + recSize) * 5, barPosY, recSize, recSize);
+//        shapeRenderer.setColor(r / 255f, g / 255f, b / 255f, 0.55f);
+//        if (progress > 60)
+//            shapeRenderer.rect(first + (space + recSize) * 6, barPosY, recSize, recSize);
+//        shapeRenderer.setColor(r / 255f, g / 255f, b / 255f, 0.75f);
+//        if (progress > 70)
+//            shapeRenderer.rect(first + (space + recSize) * 7, barPosY, recSize, recSize);
+//        shapeRenderer.setColor(r / 255f, g / 255f, b / 255f, 0.85f);
+//        if (progress > 80)
+//            shapeRenderer.rect(first + (space + recSize) * 8, barPosY, recSize, recSize);
+//        shapeRenderer.setColor(r / 255f, g / 255f, b / 255f, 1f);
+//        if (progress > 90)
+//            shapeRenderer.rect(first + (space + recSize) * 9, barPosY, recSize, recSize);
+//        shapeRenderer.end();
+//        Gdx.gl.glDisable(GL20.GL_BLEND);
+//
+//        if (border) {
+//            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+//            Gdx.gl20.glLineWidth(2.4f);
+//            shapeRenderer.rect(first - recSize / 2, barPosY - recSize / 2, barWidth + recSize, recSize * 2);
+//            shapeRenderer.end();
+//        }
+//    }
 
     public static void computeStarBlinking() {
         if (cptBlinkingStarSlow > 1 | cptBlinkingStarSlow < 0) isAscendingSlow = !isAscendingSlow;
@@ -492,6 +525,10 @@ public class MyGdxGame implements ApplicationListener {
         tex = new Sprite(MyGdxGame.atlas.findRegion("backgroundTitle"));
         background_title = new Background(new TextureRegion(tex), cam, 1f);
         background_title.setVector(0, 0);
+
+        tex = new Sprite(MyGdxGame.atlas.findRegion("backgroundShop"));
+        background_shop = new Background(new TextureRegion(tex), cam, 1f);
+        background_shop.setVector(0, 0);
 
         tex = new Sprite(MyGdxGame.atlas.findRegion("backgroundTuto"));
         background_tuto = new Background(new TextureRegion(tex), cam, 1f);

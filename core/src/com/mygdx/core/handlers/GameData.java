@@ -15,6 +15,14 @@ public class GameData implements Serializable {
 	private boolean fireBallPurchased;
 	private boolean excaliburPurchased;
 	private boolean brickPurchased;
+	private boolean brick2Purchased;
+	private boolean lightningPurchased;
+	private boolean megaJumpPurchased;
+	private boolean fireBall2Purchased;
+	private boolean brick2Equiped;
+	private boolean lightningEquiped;
+	private boolean megaJumpEquiped;
+	private boolean fireBall2Equiped;
 	private boolean kamehamehaPurchased;
 	private boolean fireBallEquiped;
 	private boolean excaliburEquiped;
@@ -54,6 +62,14 @@ public class GameData implements Serializable {
 		fireBallEquiped = false;
 		excaliburEquiped = false;
 		kamehamehaEquiped = false;
+		brick2Purchased = false;
+		lightningPurchased = false;
+		megaJumpPurchased = false;
+		fireBall2Purchased = false;
+		brick2Equiped = false;
+		lightningEquiped = false;
+		megaJumpEquiped = false;
+		fireBall2Equiped = false;
 	}
 	
 	// sets up an empty high scores table
@@ -260,6 +276,70 @@ public class GameData implements Serializable {
 
 	public void setBrickEquiped(boolean brickEquiped) {
 		this.brickEquiped = brickEquiped;
+	}
+
+	public boolean isBrick2Purchased() {
+		return brick2Purchased;
+	}
+
+	public void setBrick2Purchased(boolean brick2Purchased) {
+		this.brick2Purchased = brick2Purchased;
+	}
+
+	public boolean isLightningPurchased() {
+		return lightningPurchased;
+	}
+
+	public void setLightningPurchased(boolean lightningPurchased) {
+		this.lightningPurchased = lightningPurchased;
+	}
+
+	public boolean isMegaJumpPurchased() {
+		return megaJumpPurchased;
+	}
+
+	public void setMegaJumpPurchased(boolean megaJumpPurchased) {
+		this.megaJumpPurchased = megaJumpPurchased;
+	}
+
+	public boolean isFireBall2Purchased() {
+		return fireBall2Purchased;
+	}
+
+	public void setFireBall2Purchased(boolean fireBall2Purchased) {
+		this.fireBall2Purchased = fireBall2Purchased;
+	}
+
+	public boolean isBrick2Equiped() {
+		return brick2Equiped;
+	}
+
+	public void setBrick2Equiped(boolean brick2Equiped) {
+		this.brick2Equiped = brick2Equiped;
+	}
+
+	public boolean isLightningEquiped() {
+		return lightningEquiped;
+	}
+
+	public void setLightningEquiped(boolean lightningEquiped) {
+		this.lightningEquiped = lightningEquiped;
+	}
+
+	public boolean isMegaJumpEquiped() {
+		return megaJumpEquiped;
+	}
+
+	public void setMegaJumpEquiped(boolean megaJumpEquiped) {
+		this.megaJumpEquiped = megaJumpEquiped;
+	}
+
+	public boolean isFireBall2Equiped() {
+		return fireBall2Equiped;
+	}
+
+	public void setFireBall2Equiped(boolean fireBall2Equiped) {
+		this.fireBall2Equiped = fireBall2Equiped;
 	}
 }
 

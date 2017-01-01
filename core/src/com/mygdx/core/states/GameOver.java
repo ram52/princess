@@ -128,10 +128,10 @@ public class GameOver extends GameState {
         if (score == 100)
             tex_background = new Sprite(MyGdxGame.atlas.findRegion("backgroundThanksYou"));
 
-        Sprite tex_trophy_empty = new Sprite(MyGdxGame.atlas.findRegion("trophyEmpty"));
-        Sprite tex_trophy_bronze = new Sprite(MyGdxGame.atlas.findRegion("trophyBronze"));
-        Sprite tex_trophy_silver = new Sprite(MyGdxGame.atlas.findRegion("trophySilver"));
-        Sprite tex_trophy_gold = new Sprite(MyGdxGame.atlas.findRegion("trophyGold"));
+        Sprite tex_trophy_empty = new Sprite(MyGdxGame.atlas.findRegion("coin"));
+        Sprite tex_trophy_bronze = new Sprite(MyGdxGame.atlas.findRegion("coin"));
+        Sprite tex_trophy_silver = new Sprite(MyGdxGame.atlas.findRegion("coin"));
+        Sprite tex_trophy_gold = new Sprite(MyGdxGame.atlas.findRegion("coin"));
 
         background = new Image(MyGdxGame.atlas.findRegion("buttonSecret"));
         background.setHeight(0);
@@ -256,8 +256,8 @@ public class GameOver extends GameState {
 
         skinEnergie.addRegions(MyGdxGame.atlas);
         buttonStyleEnergie = new TextButtonStyle();
-        buttonStyleEnergie.up = skinEnergie.getDrawable("buttonEnergyUp");
-        buttonStyleEnergie.down = skinEnergie.getDrawable("buttonEnergyDown");
+        buttonStyleEnergie.up = skinEnergie.getDrawable("buttonAdsUp");
+        buttonStyleEnergie.down = skinEnergie.getDrawable("buttonAdsUp");
         buttonEnergie = new Button(buttonStyleEnergie);
         buttonEnergie.setWidth(Gdx.graphics.getWidth() / 5f);
         buttonEnergie.setHeight(Gdx.graphics.getHeight() / 7.8f);

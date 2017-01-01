@@ -17,7 +17,7 @@ public class Brick extends B2DSprite{
     private Boolean normal;
     private Boolean dead;
     private Boolean hurt;
-    private int life = 300;
+    private int life = 400;
     private float falling_cpt = 0;
     private boolean falling = false;
     private boolean summoned = false;

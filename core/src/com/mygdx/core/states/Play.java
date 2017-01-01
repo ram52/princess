@@ -1,5 +1,6 @@
 package com.mygdx.core.states;
 
+import static com.mygdx.core.handlers.B2DVars.BIT_BLOCK;
 import static com.mygdx.core.handlers.B2DVars.BIT_ENEMY;
 import static com.mygdx.core.handlers.B2DVars.PPM;
 
@@ -314,8 +315,8 @@ public class Play extends GameState {
         stageUiContinue.addActor(labelContinue);
 
         Button.ButtonStyle cameraButtonStyle = new Button.ButtonStyle();
-        cameraButtonStyle.up = skin.getDrawable("buttonUiContinueCameraUp");
-        cameraButtonStyle.down = skin.getDrawable("buttonUiContinueCameraDown");
+        cameraButtonStyle.up = skin.getDrawable("coin");
+        cameraButtonStyle.down = skin.getDrawable("coin");
         buttonCamera = new Button(cameraButtonStyle);
         buttonCamera.setWidth(Gdx.graphics.getWidth() / 3f);
         buttonCamera.setHeight(Gdx.graphics.getHeight() / 6.5f);
@@ -323,8 +324,8 @@ public class Play extends GameState {
         stageUiContinue.addActor(buttonCamera);
 
         Button.ButtonStyle coinButtonStyle = new Button.ButtonStyle();
-        coinButtonStyle.up = skin.getDrawable("buttonUiContinueCoinUp");
-        coinButtonStyle.down = skin.getDrawable("buttonUiContinueCoinDown");
+        coinButtonStyle.up = skin.getDrawable("coin");
+        coinButtonStyle.down = skin.getDrawable("coin");
         buttonCoin = new Button(coinButtonStyle);
         buttonCoin.setWidth(buttonCamera.getWidth());
         buttonCoin.setHeight(buttonCamera.getHeight());
@@ -332,8 +333,8 @@ public class Play extends GameState {
         stageUiContinue.addActor(buttonCoin);
 
         Button.ButtonStyle noButtonStyle = new Button.ButtonStyle();
-        noButtonStyle.up = skin.getDrawable("buttonUiContinueNoUp");
-        noButtonStyle.down = skin.getDrawable("buttonUiContinueNoDown");
+        noButtonStyle.up = skin.getDrawable("coin");
+        noButtonStyle.down = skin.getDrawable("coin");
         buttonNo = new Button(noButtonStyle);
         buttonNo.setWidth(buttonCamera.getWidth());
         buttonNo.setHeight(buttonCamera.getHeight());
@@ -683,10 +684,10 @@ public class Play extends GameState {
 
                         if(Save.gd.isBrickEquiped()){
                             if(brick == null){
-                                brick = createBrick(MyGdxGame.V_WIDTH/5/PPM, player.getHeight()/PPM + Gdx.graphics.getHeight()/PPM);
+                                brick = createBrick(lastClickPos, player.getHeight()/PPM + Gdx.graphics.getHeight()/PPM);
                             }else{
                                 if(brick.getDead()){
-                                    brick = createBrick(MyGdxGame.V_WIDTH/5/PPM, player.getHeight()/PPM + Gdx.graphics.getHeight()/PPM);
+                                    brick = createBrick(lastClickPos, player.getHeight()/PPM + Gdx.graphics.getHeight()/PPM);
                                 }
                             }
 
@@ -986,7 +987,7 @@ public class Play extends GameState {
         }
 
         //player not moving
-        if((!left | !right) && cl.isPlayerOnGround()){
+        if((!left | !right)){
 
             if(Save.gd.isExcaliburEquiped() | Save.gd.isKamehamehaEquiped()) {
                 if (player.getBody().getLinearVelocity().x != 0 && Math.abs(player.getBody().getLinearVelocity().x) <= MyGdxGame.PLAYER_VELOCITY * boost) {
@@ -1002,14 +1003,11 @@ public class Play extends GameState {
             }else{
                 player.getBody().setLinearVelocity(0, player.getBody().getLinearVelocity().y);
             }
-
-
         }
-
 
         /**Handle keyboard input**/
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            if(cl.isPlayerOnGround() && !jump && (!player.isSlashingLeft()|!player.isSlashingRight()) && (player.getPosition().y*PPM) < 325 ){
+            if( (cl.isPlayerOnGround() |cl.isPlayerOnBrick() ) && !jump && (!player.isSlashingLeft()|!player.isSlashingRight()) && (player.getPosition().y*PPM) < 325 ){
                 player.getBody().setLinearVelocity(new Vector2(player.getBody().getLinearVelocity().x,0));
                 player.getBody().setAngularVelocity(0);
                 player.getBody().applyForceToCenter(new Vector2(0,160),false);
@@ -1588,8 +1586,13 @@ public class Play extends GameState {
     }
 
     public void stopEnemyIfTouchBrick(Enemy enemy){
+
         if(!enemy.isFading() && !enemy.isDead()&& !brick.getBroken() && cl.intersect(brick,enemy)){
             enemy.setStop(true);
+            if(enemy.isFromLeft()){
+                if(!enemy.isNormalLeft())
+                    enemy.normalAnimation_rev();
+            }
             brick.setLife(brick.getLife()-1);
         }else {
             //brick.setLoop(false);
@@ -1602,42 +1605,14 @@ public class Play extends GameState {
         if(!player.isStillLeft() && !player.isStillRight() && !brick.getHurt() && brick.getLife() > 0 && cl.intersect(player, brick)  && player.isLeft() && player.getPosition().y*PPM < 315){
             float speed = -0.01f;
             float pos = brick.getPosition().x + speed;
-            brick.getBody().setTransform(pos, brick.getPosition().y,brick.getBody().getAngle());
+            //brick.getBody().setTransform(pos, brick.getPosition().y,brick.getBody().getAngle());
         }
 
         if(!player.isStillLeft() && !player.isStillRight() && !brick.getHurt() && brick.getLife() > 0 && cl.intersect(player, brick)  && player.isRight() && player.getPosition().y*PPM < 315){
             float speed = +0.01f;
             float pos = brick.getPosition().x + speed;
-            brick.getBody().setTransform(pos, brick.getPosition().y,brick.getBody().getAngle());
+            //brick.getBody().setTransform(pos, brick.getPosition().y,brick.getBody().getAngle());
         }
-
-        Iterator<Enemy> iter = brick.getEnemies().iterator();
-        while (iter.hasNext()) {
-            final Enemy e = iter.next();
-
-            if(!e.isFading() && !e.isDead()&& !brick.getBroken() && cl.intersect(brick,e)){
-
-            }else {
-                //brick.setLoop(false);
-                //brick.setHurt(false);
-                //e.setStop(false);
-            }
-
-//            //move brick if player push
-//            if(!player.isStillLeft() && !player.isStillRight() && brick.getLife() > 0 && cl.intersect(player, brick) && !cl.intersect(e, brick) && player.isLeft() && player.getPosition().y*PPM < 315){
-//                float speed = -0.01f;
-//                float pos = brick.getPosition().x + speed;
-//                brick.getBody().setTransform(pos, brick.getPosition().y,brick.getBody().getAngle());
-//            }
-//
-//            if(!player.isStillLeft() && !player.isStillRight() && brick.getLife() > 0 && cl.intersect(player, brick) && !cl.intersect(e, brick) && player.isRight() && player.getPosition().y*PPM < 315){
-//                float speed = +0.01f;
-//                float pos = brick.getPosition().x + speed;
-//                brick.getBody().setTransform(pos, brick.getPosition().y,brick.getBody().getAngle());
-//            }
-
-        }
-
 
     }
 
@@ -1655,21 +1630,21 @@ public class Play extends GameState {
 
             //make brick fall from the sky when summoned
             if(brick.isFalling()){
-                System.out.println("falling"+brick.getPosition().y);
+                //System.out.println("falling"+brick.getPosition().y);
                 float y = brick.getPosition().y-0.4f;
 
                 if(brick.getX() == 0){
                     brick.setX(lastClickPos);
                 }
 
-                brick.getBody().setTransform(brick.getX(),y,brick.getBody().getAngle());
+                //brick.getBody().setTransform(brick.getX(),brick.getBody().getPosition().x,brick.getBody().getAngle());
 
                 if(cl.intersect(brick,enemy)){
                     enemy.setHealth(-99);
                 }
 
                 if(brick.getPosition().y*PPM <= 264.8){
-                    brick.getBody().setTransform(brick.getX(),MyGdxGame.GROUND,brick.getBody().getAngle());
+                    //brick.getBody().setTransform(brick.getX(),MyGdxGame.GROUND,brick.getBody().getAngle());
                     brick.setFalling(false);
                 }
 
@@ -2143,34 +2118,72 @@ public class Play extends GameState {
 
     public void update(float dt) {
 
-        MyGdxGame.debugString = "fps: "+Gdx.graphics.getFramesPerSecond()+'\n'+
-                "java heap: "+ (int)(Gdx.app.getJavaHeap()/Math.pow(10, 6))+" Mb"+'\n'+
-                "native heap: "+ (int)(Gdx.app.getNativeHeap()/Math.pow(10, 6))+" Mb"+'\n'+
-                "d0: "+ step0+'\n'+
-                "d1: "+ step1+'\n'+
-                "d2: "+ step2+'\n'+
-                "d3: "+ step3+'\n'+
-                "offDisplay: "+ offsetY+'\n'+
-                "enemy count: "+ enemies.size+'\n'+
-                "oGplayer: "+ cl.isPlayerOnGround()+'\n'+
-                "yPlayer: "+ (int)(player.getPosition().y*PPM)+'\n'+
-                "R: "+ player.isRight()+'\n'+
-                "L: "+ player.isLeft()+'\n'+
+        if(brick!=null){
+            MyGdxGame.debugString = "fps: "+Gdx.graphics.getFramesPerSecond()+'\n'+
+                    "java heap: "+ (int)(Gdx.app.getJavaHeap()/Math.pow(10, 6))+" Mb"+'\n'+
+                    "native heap: "+ (int)(Gdx.app.getNativeHeap()/Math.pow(10, 6))+" Mb"+'\n'+
+                    "d0: "+ step0+'\n'+
+                    "d1: "+ step1+'\n'+
+                    "d2: "+ step2+'\n'+
+                    "d3: "+ step3+'\n'+
+                    "world contact: "+ world.getContactCount()+'\n'+
+                    "offDisplay: "+ offsetY+'\n'+
+                    "enemy count: "+ enemies.size+'\n'+
+                    "onGround: "+ cl.isPlayerOnGround()+'\n'+
+                    "onBrick: "+ cl.isPlayerOnBrick()+'\n'+
+                    "yPlayer: "+ (int)(player.getPosition().y*PPM)+'\n'+
+                    "xBrick: "+ brick.getPosition().x*PPM+'\n'+
+                    "velocity: "+ player.getBody().getLinearVelocity()+'\n'+
+                    "R: "+ player.isRight()+'\n'+
+                    "L: "+ player.isLeft()+'\n'+
 //                "bricks: "+ brick.isSummoned()+'\n'+
-                "oSwipe: "+ lastClickPos+'\n'+
+                    "oSwipe: "+ lastClickPos+'\n'+
 //                "0: "+ bricks.get(0).isFalling()+'\n'+
 //                "1: "+ bricks.get(1).isFalling()+'\n'+
-                "pPrincess: "+ (int)(princess.getPosition().x*PPM)+'\n'+
-                "vPrincess: "+ (int)(princess.getBody().getLinearVelocity().x)+'\n'+
-                "princess: "+ princess.isLeft();
+                    "pPrincess: "+ (int)(princess.getPosition().x*PPM)+'\n'+
+                    "vPrincess: "+ (int)(princess.getBody().getLinearVelocity().x)+'\n'+
+                    "princess: "+ princess.isLeft();
+        }else{
+            MyGdxGame.debugString = "fps: "+Gdx.graphics.getFramesPerSecond()+'\n'+
+                    "java heap: "+ (int)(Gdx.app.getJavaHeap()/Math.pow(10, 6))+" Mb"+'\n'+
+                    "native heap: "+ (int)(Gdx.app.getNativeHeap()/Math.pow(10, 6))+" Mb"+'\n'+
+                    "d0: "+ step0+'\n'+
+                    "d1: "+ step1+'\n'+
+                    "d2: "+ step2+'\n'+
+                    "d3: "+ step3+'\n'+
+                    "world contact: "+ world.getContactCount()+'\n'+
+                    "offDisplay: "+ offsetY+'\n'+
+                    "enemy count: "+ enemies.size+'\n'+
+                    "onGround: "+ cl.isPlayerOnGround()+'\n'+
+                    "onBrick: "+ cl.isPlayerOnBrick()+'\n'+
+                    "yPlayer: "+ (int)(player.getPosition().y*PPM)+'\n'+
+                    "velocity: "+ player.getBody().getLinearVelocity()+'\n'+
+                    "R: "+ player.isRight()+'\n'+
+                    "L: "+ player.isLeft()+'\n'+
+//                "bricks: "+ brick.isSummoned()+'\n'+
+                    "oSwipe: "+ lastClickPos+'\n'+
+//                "0: "+ bricks.get(0).isFalling()+'\n'+
+//                "1: "+ bricks.get(1).isFalling()+'\n'+
+                    "pPrincess: "+ (int)(princess.getPosition().x*PPM)+'\n'+
+                    "vPrincess: "+ (int)(princess.getBody().getLinearVelocity().x)+'\n'+
+                    "princess: "+ princess.isLeft();
+        }
+
 
         MyGdxGame.fadeIn.update(dt);
 
         if(brick != null){
-            if(isEnemyTouchingBrick()){
+            if(isEnemyTouchingBrick() | brick.getPosition().x*PPM <= 33 | brick.getPosition().x*PPM >= 607 ){
                 brick.hurtAnimation();
+                System.out.println("hurt"+" "+world.getContactCount()+" "+Gdx.graphics.getFramesPerSecond());
+                brick.getBody().setType(BodyType.StaticBody);
             }else{
                 brick.normalAnimation();
+                brick.getBody().setType(BodyType.DynamicBody);
+            }
+
+            if(!brick.isFalling()){
+                brick.getBody().setLinearVelocity(0,0);
             }
         }
 
@@ -2187,8 +2200,10 @@ public class Play extends GameState {
         }
 
 
-        if(jump && cl.isPlayerOnGround()){
+        if( (cl.isPlayerOnGround() |cl.isPlayerOnBrick() ) && jump && (!player.isSlashingLeft()|!player.isSlashingRight()) && (player.getPosition().y*PPM) < 325 ){
             jump = false;
+            player.getBody().setLinearVelocity(new Vector2(player.getBody().getLinearVelocity().x,0));
+            player.getBody().setAngularVelocity(0);
             player.getBody().applyForceToCenter(new Vector2(0,180),false);
         }
 
@@ -2458,10 +2473,6 @@ public class Play extends GameState {
             player.render(sb);
         }
 
-        if(brick != null){
-            brick.render(sb);
-        }
-
         Iterator<FireBall> iter = fireBalls.iterator();
         while (iter.hasNext()) {
             final FireBall fireBall = iter.next();
@@ -2473,6 +2484,10 @@ public class Play extends GameState {
 
         if(Save.gd.isKamehamehaEquiped() && fire){
             kamehamehaIA();
+        }
+
+        if(brick != null){
+            brick.render(sb);
         }
 
         //performanceCounter.start();
@@ -2608,7 +2623,7 @@ public class Play extends GameState {
 
         shape.dispose();
 
-        return new Enemy(body, fromLeft, isMalicious, speed);
+        return new Enemy(body, fromLeft, isMalicious, 1.0f);
     }
 
     public FireBall createFireBall(float x, float y, float velocity) {
@@ -2651,7 +2666,7 @@ public class Play extends GameState {
         float h = 32/PPM;
         bdef.position.set(x,y);
 
-        bdef.type = BodyType.StaticBody;
+        bdef.type = BodyType.DynamicBody;
         Body body = world.createBody(bdef);
         shape.setAsBox(w, h, new Vector2(0 ,0), 0);
         fdef.shape = shape;
@@ -2659,19 +2674,20 @@ public class Play extends GameState {
         fdef.friction = 0;
         fdef.isSensor = false;
         fdef.restitution = 0;
-        fdef.filter.categoryBits = B2DVars.BIT_BLOCK;
+        fdef.filter.categoryBits = B2DVars.BIT_BLOCK ;
         fdef.filter.maskBits =  B2DVars.BIT_GROUND | B2DVars.BIT_ENEMY | B2DVars.BIT_PLAYER;
         body.createFixture(fdef).setUserData("brick");
         // foot
-        shape.setAsBox(w, h, new Vector2(0 , 0 ), 0);
+        shape.setAsBox(w, 0.05f, new Vector2(0 , h), 0);
         fdef.shape = shape;
         fdef.filter.categoryBits = B2DVars.BIT_BLOCK;
-        fdef.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_ENEMY;
+        fdef.filter.maskBits = B2DVars.BIT_PLAYER;
         fdef.isSensor = true;
         fdef.density = 0;
         fdef.friction = 0;
         fdef.restitution = 0;
-        body.createFixture(fdef).setUserData("foot");
+        body.createFixture(fdef).setUserData("bricktop");
+
 
         /*shape.setAsBox(w, h, new Vector2(0 , 0 ), 0);
         fdef.shape = shape;
@@ -2778,13 +2794,13 @@ public class Play extends GameState {
             fdef.friction = 0;
             fdef.restitution = 0;
             fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
-            fdef.filter.maskBits =  B2DVars.BIT_GROUND | BIT_ENEMY;
+            fdef.filter.maskBits =  B2DVars.BIT_GROUND|BIT_BLOCK;
             body.createFixture(fdef).setUserData("player");
             // foot
             shape.setAsBox(w/1.95f, h/5, new Vector2(0 , -h*0.99f ), 0);
             fdef.shape = shape;
             fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
-            fdef.filter.maskBits = B2DVars.BIT_GROUND;
+            fdef.filter.maskBits = B2DVars.BIT_GROUND|BIT_BLOCK;
             fdef.isSensor = true;
             fdef.density = 0;
             fdef.friction = 0;

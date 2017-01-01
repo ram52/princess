@@ -1,5 +1,6 @@
 package com.mygdx.core.handlers;
 
+import java.util.EmptyStackException;
 import java.util.Stack;
 
 import com.mygdx.core.MyGdxGame;
@@ -47,7 +48,12 @@ public class GameStateManager {
 	
 	public void update(float dt)
 	{
-		gameStates.peek().update(dt);
+		try{
+			gameStates.peek().update(dt);
+		}catch(EmptyStackException e){
+			System.out.println(e.getMessage());
+		}
+
 	}
 	
 	public void render()

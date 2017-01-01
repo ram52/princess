@@ -20,6 +20,7 @@ import static com.mygdx.core.handlers.B2DVars.PPM;
 public class MyContactListener implements ContactListener {
 
 	private int numFootContacts = 0;
+	private int numFootBrickContacts = 0;
 	private Boolean touch_enemy = false;
 	private Array<Body> coinsToRemove;
     private boolean boosHit = false;
@@ -57,6 +58,10 @@ public class MyContactListener implements ContactListener {
 
 		if (f.getUserData() != null && f.getUserData().equals("foot")) {
 			numFootContacts++;
+		}
+
+		if (f.getUserData() != null && f.getUserData().equals("bricktop")) {
+			numFootBrickContacts++;
 		}
 
 
@@ -100,6 +105,10 @@ public class MyContactListener implements ContactListener {
 			numFootContacts--;
 		}
 
+		if (fb.getUserData() != null && fb.getUserData().equals("bricktop")) {
+			numFootBrickContacts--;
+		}
+
         /*if (fb.getUserData() != null && fb.getUserData().equals("enemy")) {
             Timer.schedule(new Timer.Task() {
                 @Override
@@ -122,6 +131,10 @@ public class MyContactListener implements ContactListener {
 
 	public boolean isPlayerOnGround() {
 		return numFootContacts > 0;
+	}
+
+	public boolean isPlayerOnBrick() {
+		return numFootBrickContacts > 0;
 	}
 
 	public boolean isPlayerTouchingEnemy() {

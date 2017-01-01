@@ -169,8 +169,8 @@ public class Menu extends GameState {
         stageUiOption.addActor(labelMoney);
 
         style = new ButtonStyle();
-        style.up = skin.getDrawable("uiOptionBackground");
-        style.down = skin.getDrawable("uiOptionBackground");
+        style.up = skin.getDrawable("coin");
+        style.down = skin.getDrawable("coin");
         optionUiBackImage = new Button(style);
         optionUiBackImage.setWidth(Gdx.graphics.getWidth() / 1.05f);
         optionUiBackImage.setHeight(Gdx.graphics.getHeight() / 1.25f);
@@ -207,8 +207,8 @@ public class Menu extends GameState {
 
 
         style = new ButtonStyle();
-        style.up = skin.getDrawable("buttonUiOptionStoreUp");
-        style.down = skin.getDrawable("buttonUiOptionStoreDown");
+        style.up = skin.getDrawable("coin");
+        style.down = skin.getDrawable("coin");
         buttonStore = new Button(style);
         buttonStore.setWidth(Gdx.graphics.getWidth() / 1.26f);
         buttonStore.setHeight(Gdx.graphics.getHeight() / 7f);
