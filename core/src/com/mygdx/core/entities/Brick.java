@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.core.MyGdxGame;
+import com.mygdx.core.handlers.Save;
 
 /**
  * Created by Axel on 23/11/2016.
@@ -117,7 +118,13 @@ public class Brick extends B2DSprite{
         super(body);
         enemies = new Array<Enemy>();
         setLoop(false);
-        tex = new Sprite(MyGdxGame.atlas.findRegion("brick"));
+
+        if(Save.gd.isBrick2Equiped()){
+            tex = new Sprite(MyGdxGame.atlas.findRegion("brick2"));
+        }else{
+            tex = new Sprite(MyGdxGame.atlas.findRegion("brick"));
+        }
+
         TextureRegion[] sprites = tex.split( 64, 64)[0];
         setAnimation(sprites, 0);
         broken = false;
@@ -129,7 +136,11 @@ public class Brick extends B2DSprite{
     public void normalAnimation(){
         if (!broken){
             setLoop(false);
-            tex = new Sprite(MyGdxGame.atlas.findRegion("brick"));
+            if(Save.gd.isBrick2Equiped()){
+                tex = new Sprite(MyGdxGame.atlas.findRegion("brick2"));
+            }else{
+                tex = new Sprite(MyGdxGame.atlas.findRegion("brick"));
+            }
             TextureRegion[] sprites = tex.split( 64, 64)[0];
             setAnimation(sprites, 1 / 5f);
             normal = true;
@@ -146,7 +157,11 @@ public class Brick extends B2DSprite{
             }
 
             setLoop(false);
-            tex = new Sprite(MyGdxGame.atlas.findRegion("brick_breacking"));
+            if(Save.gd.isBrick2Equiped()){
+                tex = new Sprite(MyGdxGame.atlas.findRegion("brick2_breacking"));
+            }else{
+                tex = new Sprite(MyGdxGame.atlas.findRegion("brick_breacking"));
+            }
             TextureRegion[] sprites = tex.split( 64, 64)[0];
             setAnimation(sprites, 1 / 5f);
             normal = false;
@@ -169,7 +184,11 @@ public class Brick extends B2DSprite{
     public void hurtAnimation(){
         if(!hurt && !broken){
             setLoop(true);
-            tex = new Sprite(MyGdxGame.atlas.findRegion("brick_hurt"));
+            if(Save.gd.isBrick2Equiped()){
+                tex = new Sprite(MyGdxGame.atlas.findRegion("brick2_hurt"));
+            }else{
+                tex = new Sprite(MyGdxGame.atlas.findRegion("brick_hurt"));
+            }
             TextureRegion[] sprites = tex.split( 64, 64)[0];
             setAnimation(sprites, 1 / 5f);
             normal = false;

@@ -60,6 +60,7 @@ import com.mygdx.core.entities.Brick;
 import com.mygdx.core.entities.Coin;
 import com.mygdx.core.entities.Enemy;
 import com.mygdx.core.entities.FireBall;
+import com.mygdx.core.entities.Lightning;
 import com.mygdx.core.entities.Player;
 import com.mygdx.core.entities.Princess;
 import com.mygdx.core.handlers.Animation;
@@ -68,6 +69,7 @@ import com.mygdx.core.handlers.BoundedCamera;
 import com.mygdx.core.handlers.GameStateManager;
 import com.mygdx.core.handlers.MyContactListener;
 import com.mygdx.core.handlers.Save;
+import com.mygdx.core.handlers.ScreenShake;
 import com.mygdx.core.handlers.SimpleDirectionGestureDetector;
 
 public class Play extends GameState {
@@ -88,6 +90,7 @@ public class Play extends GameState {
     private Array<Enemy> enemies;
     //private Array<Brick> bricks;
     private Brick brick;
+    private Lightning lightning;
     private Array<FireBall> fireBalls;
     private ScheduledExecutorService executor;
     private Array<Coin> coins;
@@ -125,6 +128,7 @@ public class Play extends GameState {
     private boolean falling = false;
     private boolean addNewEnemy = false;
     private boolean addNewFireball = false;
+    private boolean addNewLightning = false;
     private boolean isMalicious = false;
     private boolean toggle = true;
     private boolean isTouchingEnemy = false;
@@ -133,10 +137,14 @@ public class Play extends GameState {
     private float beamWidth = 0.0f;
     private float beamX = 0.0f;
     private float reloadKamehameha = 0.0f;
+    private float reloadLightning = 0.0f;
+    private boolean lightningRunning = false;
     private float boost = 1.2f;
     private double dificulty = 0.0;
     boolean blockKamehameha = false;
+    boolean blockLightning = false;
     boolean kamehaReachLimit = false;
+    boolean lightningReachLimit = false;
     private Runnable runnable;
     private Boolean stopEnemies = false;
     private Boolean step0 = false;
@@ -153,6 +161,9 @@ public class Play extends GameState {
     protected double cpt_sound_hit = 0;
     private Stage stage0;
     private Image intro;
+    private ScreenShake screenShake;
+    private float baseX = 0f;
+    private float baseY = 0f;
 
     public PerformanceCounter performanceCounter;
 
@@ -165,6 +176,8 @@ public class Play extends GameState {
         super(gsm);
 
         performanceCounter = new PerformanceCounter(" ");
+
+        screenShake = new ScreenShake(50000.0f,20.0f);
 
         MyGdxGame.setPause(false);
         viewport = new Rectangle();
@@ -267,11 +280,13 @@ public class Play extends GameState {
         spriteBatch = new SpriteBatch();
 
         cam.setToOrtho(false, MyGdxGame.V_WIDTH, MyGdxGame.V_HEIGHT);
+
         b2dCam = new BoundedCamera();
         b2dCam.setToOrtho(false, MyGdxGame.V_WIDTH / PPM, MyGdxGame.V_HEIGHT
                 / PPM);
         b2dCam.setBounds(0, (tileMapWidth * tileSize) / PPM, 0,
                 (tileMapHeight * tileSize) / PPM);
+
 
         cam2 = new BoundedCamera();
         cam2.setToOrtho(false, MyGdxGame.V_WIDTH, MyGdxGame.V_HEIGHT);
@@ -367,7 +382,7 @@ public class Play extends GameState {
         stageUiControl.addActor(buttonRight);
 
         Button.ButtonStyle fireButtonStyle = new Button.ButtonStyle();
-        if(Save.gd.isFireBallEquiped() | Save.gd.isKamehamehaEquiped()){
+        if(Save.gd.isFireBallEquiped() | Save.gd.isKamehamehaEquiped() | Save.gd.isFireBall2Equiped()| Save.gd.isLightningEquiped() ){
             fireButtonStyle.up = skin.getDrawable("buttonUiBossJumpUp");
             fireButtonStyle.down = skin.getDrawable("buttonUiBossJumpDown");
         }else{
@@ -402,7 +417,7 @@ public class Play extends GameState {
             public boolean touchDown(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
-                if(Save.gd.isFireBallEquiped()){
+                if(Save.gd.isFireBallEquiped()|Save.gd.isFireBall2Equiped()){
                     System.out.println("clicked fire!");
                     fire = true;
                 }else if(Save.gd.isKamehamehaEquiped() && !blockKamehameha){
@@ -410,7 +425,12 @@ public class Play extends GameState {
                     if((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)&& reloadKamehameha == 0 && beamWidth == 0){
                         MyGdxGame.res.getSound("ya").play();
                     }
-                }else{
+                }else if(Save.gd.isLightningEquiped() && !blockLightning){
+                    fire = true;
+                    if((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)&& reloadLightning == 0 && beamWidth == 0 ){
+                        MyGdxGame.res.getSound("ya").play();
+                    }
+                } else{
                     fire = false;
                 }
 
@@ -431,7 +451,7 @@ public class Play extends GameState {
         });
 
 
-      //stageUiControl.addActor(buttonJump);
+        //stageUiControl.addActor(buttonJump);
 
         buttonJump.addListener(new InputListener() {
             public boolean touchDown(
@@ -691,6 +711,32 @@ public class Play extends GameState {
                                 }
                             }
 
+                            brick.setLife(400);
+
+                            if(!MyGdxGame.pause){
+                                if(!brick.isSummoned() && enableBrick){
+                                    enableBrick = false;
+                                    brick.setFalling(true);
+                                    brick.setSummoned(true);
+                                    if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("newScreen").play();
+                                }
+                            }
+
+                            System.out.println("down");
+                        }
+
+
+                        if(Save.gd.isBrick2Equiped()){
+                            if(brick == null){
+                                brick = createBrick(lastClickPos, player.getHeight()/PPM + Gdx.graphics.getHeight()/PPM);
+                            }else{
+                                if(brick.getDead()){
+                                    brick = createBrick(lastClickPos, player.getHeight()/PPM + Gdx.graphics.getHeight()/PPM);
+                                }
+                            }
+
+                            brick.setLife(400*5);
+
                             if(!MyGdxGame.pause){
                                 if(!brick.isSummoned() && enableBrick){
                                     enableBrick = false;
@@ -931,6 +977,10 @@ public class Play extends GameState {
                         fire  = true;
                         System.out.println("pressed enter!");
                     }
+                    if(!blockLightning){
+                        fire  = true;
+                        System.out.println("pressed enter!");
+                    }
                     InputEvent event2 = new InputEvent();
                     event2.setType(InputEvent.Type.touchUp);
                     buttonFire.fire(event2);
@@ -1010,7 +1060,13 @@ public class Play extends GameState {
             if( (cl.isPlayerOnGround() |cl.isPlayerOnBrick() ) && !jump && (!player.isSlashingLeft()|!player.isSlashingRight()) && (player.getPosition().y*PPM) < 325 ){
                 player.getBody().setLinearVelocity(new Vector2(player.getBody().getLinearVelocity().x,0));
                 player.getBody().setAngularVelocity(0);
-                player.getBody().applyForceToCenter(new Vector2(0,160),false);
+
+                if(Save.gd.isMegaJumpEquiped()){
+                    player.getBody().applyForceToCenter(new Vector2(0,200),false);
+                }else{
+                    player.getBody().applyForceToCenter(new Vector2(0,160),false);
+                }
+
             }
         }
 
@@ -1052,6 +1108,15 @@ public class Play extends GameState {
         }
 
         //FIRE BALL
+        if(Save.gd.isLightningEquiped() && fire && !lightningRunning){
+            fire = false;
+            //todo sound
+            if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("fireball").play();
+            lightning = createLightning(player.getPosition().x, player.getPosition().y,4);
+            lightningRunning = true;
+
+        }
+        //FIRE BALL
         if(Save.gd.isFireBallEquiped() && fire && player.getFireBallCount()>0){
             fire = false;
             player.setFireBallCount(player.getFireBallCount()-1);
@@ -1068,6 +1133,25 @@ public class Play extends GameState {
             else {
                 fireBalls.add(createFireBall(player.getPosition().x - gap, player.getPosition().y,-2));
             }
+        }
+        //FIRE BALL2
+        if(Save.gd.isFireBall2Equiped() && fire && player.getFireBallCount()>0){
+            fire = false;
+            player.setFireBallCount(player.getFireBallCount()-1);
+
+            //todo sound
+            if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("fireball").play();
+            float gap = 10.0f/PPM;
+            if(player.isRight()){
+                FireBall fireball = createFireBall(player.getPosition().x + gap, player.getPosition().y,1.9f);
+                if(!fireball.getRight())
+                    fireball.normalAnimation_rev();
+                fireBalls.add(fireball);
+            }
+            else {
+                fireBalls.add(createFireBall(player.getPosition().x - gap, player.getPosition().y,-1.9f));
+            }
+
         }
 
 
@@ -1276,7 +1360,12 @@ public class Play extends GameState {
 
 
         if(jump && cl.isPlayerOnGround()){
-            player.getBody().applyForceToCenter(new Vector2(0,20),false);
+//            //player.getBody().applyForceToCenter(new Vector2(0,20),false);
+//            if(Save.gd.isMegaJumpEquiped()){
+//                player.getBody().applyForceToCenter(new Vector2(0,60),false);
+//            }else{
+//                player.getBody().applyForceToCenter(new Vector2(0,60),false);
+//            }
             if(player.isRight() | player.isStillRight()){
                 if(!player.isJumpRight()){
                     player.jump_animation();
@@ -1455,6 +1544,57 @@ public class Play extends GameState {
         }
     }
 
+    public void lightningIA(Enemy enemy){
+        if(!MyGdxGame.pause && lightning != null){
+            lightning.updateBoundingBox(lightning);
+            enemy.updateBoundingBox(enemy);
+
+            if(!MyGdxGame.pause){
+                lightning.update(MyGdxGame.STEP);
+            }
+
+            if(cl.intersect(lightning,enemy)){
+                enemy.setHealth(-99);
+            }
+
+            if(MyGdxGame.pause){
+                MyGdxGame.res.getMusic("epic").stop();
+            }else{
+
+                if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2){
+                    if(!MyGdxGame.res.getMusic("epic").isPlaying()){
+                        //MyGdxGame.res.getMusic("epic").play();
+
+                    }
+                }else{
+                    MyGdxGame.res.getMusic("epic").stop();
+                }
+            }
+
+            float speed = 10.0f;
+
+            if(Math.abs(beamWidth) > MyGdxGame.V_WIDTH*10){
+                lightningReachLimit = !lightningReachLimit;
+            }
+
+            if(!lightningReachLimit){
+                if(!MyGdxGame.pause)
+                    beamWidth+= speed;
+            }else{
+                fire = !fire;
+                lightningReachLimit = false;
+                beamWidth = 0;
+                blockLightning = true;
+
+                lightningRunning = false;
+                lightning.destroy();
+                lightning = null;
+            }
+
+        }
+
+
+    }
 
     public void kamehamehaIA(){
         //kamehameha
@@ -1493,17 +1633,10 @@ public class Play extends GameState {
             if(!MyGdxGame.pause)
                 beamWidth+= speed;
         }else{
-//            if(Math.abs(beamWidth) > 10){
-//                beamWidth-=speed*2;
-//            }else {
             fire = !fire;
             kamehaReachLimit = false;
             beamWidth = 0;
             blockKamehameha = true;
-//                MyGdxGame.res.getMusic("epic").stop();
-//                MyGdxGame.res.getMusic("main").play();
-//            }
-
         }
 
         sb.begin();
@@ -1585,6 +1718,16 @@ public class Play extends GameState {
         return result;
     }
 
+    public boolean isEnemyTouchingLightning(){
+        boolean result = false;
+        for(Enemy enemy:enemies) {
+            if(cl.intersect(lightning,enemy) && !enemy.isDead()){
+                result = true;
+            }
+        }
+        return result;
+    }
+
     public void stopEnemyIfTouchBrick(Enemy enemy){
 
         if(!enemy.isFading() && !enemy.isDead()&& !brick.getBroken() && cl.intersect(brick,enemy)){
@@ -1616,51 +1759,53 @@ public class Play extends GameState {
 
     }
 
+
+
     public void brickIA(Enemy enemy){
 
 //        Iterator<Brick> iter = bricks.iterator();
 //
 //        while (iter.hasNext()) {
 
-            if(!MyGdxGame.pause && brick != null){
-                brick.updateBoundingBox(brick);
-                brick.update(MyGdxGame.STEP);
-            }
-            //brick.getBoundingBox().set(brick.getBoundingBox().min, brick.getBoundingBox().max);
+        if(!MyGdxGame.pause && brick != null){
+            brick.updateBoundingBox(brick);
+            brick.update(MyGdxGame.STEP);
+        }
+        //brick.getBoundingBox().set(brick.getBoundingBox().min, brick.getBoundingBox().max);
 
-            //make brick fall from the sky when summoned
-            if(brick.isFalling()){
-                //System.out.println("falling"+brick.getPosition().y);
-                float y = brick.getPosition().y-0.4f;
+        //make brick fall from the sky when summoned
+        if(brick.isFalling()){
+            //System.out.println("falling"+brick.getPosition().y);
+            float y = brick.getPosition().y-0.4f;
 
-                if(brick.getX() == 0){
-                    brick.setX(lastClickPos);
-                }
-
-                //brick.getBody().setTransform(brick.getX(),brick.getBody().getPosition().x,brick.getBody().getAngle());
-
-                if(cl.intersect(brick,enemy)){
-                    enemy.setHealth(-99);
-                }
-
-                if(brick.getPosition().y*PPM <= 264.8){
-                    //brick.getBody().setTransform(brick.getX(),MyGdxGame.GROUND,brick.getBody().getAngle());
-                    brick.setFalling(false);
-                }
-
-            }else{
-
-                stopEnemyIfTouchBrick(enemy);
-
-                if(brick.getLife() <= 0){
-                    //brick destroyed in anim function
-                    brick.brokeAnimation();
-                    enableBrick = true;
-                }
-
+            if(brick.getX() == 0){
+                brick.setX(lastClickPos);
             }
 
-       // }
+            //brick.getBody().setTransform(brick.getX(),brick.getBody().getPosition().x,brick.getBody().getAngle());
+
+            if(cl.intersect(brick,enemy)){
+                enemy.setHealth(-99);
+            }
+
+            if(brick.getPosition().y*PPM <= 264.8){
+                //brick.getBody().setTransform(brick.getX(),MyGdxGame.GROUND,brick.getBody().getAngle());
+                brick.setFalling(false);
+            }
+
+        }else{
+
+            stopEnemyIfTouchBrick(enemy);
+
+            if(brick.getLife() <= 0){
+                //brick destroyed in anim function
+                brick.brokeAnimation();
+                enableBrick = true;
+            }
+
+        }
+
+        // }
     }
 
     public void climbingIA(Enemy enemy){
@@ -1778,6 +1923,9 @@ public class Play extends GameState {
                         brickIA(enemy);
                     }
 
+                    if(lightning != null){
+                        lightningIA(enemy);
+                    }
 
                     princessIA(enemy);
                     fireBallIA(enemy);
@@ -1792,6 +1940,16 @@ public class Play extends GameState {
                             player.collectCoin();
                             if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("boom").play();
                             if(Save.gd.isFireBallEquiped() && enemiesKilled >= 1 && player.getFireBallCount()<player.MAXFIREBALLCOUNT){
+                                fire = false;
+                                player.setFireBallCount(player.getFireBallCount()+1);
+                                enemiesKilled = 0;
+                                System.out.println("increment fireball count!");
+                            }else{
+                                enemiesKilled++;
+                                System.out.println("enemy killed="+enemiesKilled);
+                            }
+
+                            if(Save.gd.isFireBall2Equiped() && player.getFireBallCount()<player.MAXFIREBALLCOUNT){
                                 fire = false;
                                 player.setFireBallCount(player.getFireBallCount()+1);
                                 enemiesKilled = 0;
@@ -2187,6 +2345,22 @@ public class Play extends GameState {
             }
         }
 
+        if(lightning != null){
+
+            if(!MyGdxGame.pause){
+                lightning.update(dt);
+            }
+
+            if(lightning.getBody().getPosition().x + lightning.getWidth()/PPM >= MyGdxGame.V_WIDTH/PPM){
+                lightning.getBody().setLinearVelocity(-4, lightning.getBody().getLinearVelocity().y);
+                lightning.normalAnimation();
+            }
+            if(lightning.getBody().getPosition().x <= 0){
+                lightning.normalAnimation_rev();
+                lightning.getBody().setLinearVelocity(4, lightning.getBody().getLinearVelocity().y);
+            }
+        }
+
         if(princess.getPosition().x - princess.getWidth()/2/PPM <= 150/PPM){
             princess.setRight(true);
             princess.setLeft(false);
@@ -2199,12 +2373,37 @@ public class Play extends GameState {
             princess.getBody().setLinearVelocity(-1,0);
         }
 
+        if(princess.isLeft()){
+            if(!princess.isNormalRight() && !princess.isCry()){
+                princess.normalAnimation();
+            }
+            if(!princess.isCryRight() && princess.isCry()){
+                princess.cryAnimation();
+            }
+            princess.getBody().setLinearVelocity(-1,0);
+        }
+
+        if(princess.isRight()){
+            if(!princess.isNormalLeft() && !princess.isCry()){
+                princess.normalAnimation_rev();
+            }
+            if(!princess.isCryLeft() && princess.isCry()){
+                princess.cryAnimation_rev();
+            }
+            princess.getBody().setLinearVelocity(1,0);
+        }
+
 
         if( (cl.isPlayerOnGround() |cl.isPlayerOnBrick() ) && jump && (!player.isSlashingLeft()|!player.isSlashingRight()) && (player.getPosition().y*PPM) < 325 ){
             jump = false;
             player.getBody().setLinearVelocity(new Vector2(player.getBody().getLinearVelocity().x,0));
             player.getBody().setAngularVelocity(0);
-            player.getBody().applyForceToCenter(new Vector2(0,180),false);
+            //player.getBody().applyForceToCenter(new Vector2(0,180),false);
+            if(Save.gd.isMegaJumpEquiped()){
+                player.getBody().applyForceToCenter(new Vector2(0,200),false);
+            }else{
+                player.getBody().applyForceToCenter(new Vector2(0,180),false);
+            }
         }
 
 
@@ -2265,11 +2464,11 @@ public class Play extends GameState {
             //now linear
             double randomSpeed = rangeMin + (rangeMax - rangeMin) * r.nextDouble();
             if(getRandomBoolean()){
-                enemies.add(createEnemy(MyGdxGame.V_WIDTH*1.0f/PPM, MyGdxGame.GROUND, false, (float)randomSpeed));
+                enemies.add(createEnemy(MyGdxGame.V_WIDTH*1.0f/PPM , MyGdxGame.GROUND, false, (float)randomSpeed));
             }else{
-                enemies.add(createEnemy(1/PPM, MyGdxGame.GROUND, true, (float)randomSpeed));
+                enemies.add(createEnemy(1/PPM , MyGdxGame.GROUND, true, (float)randomSpeed));
             }
-            System.out.println(randomSpeed);
+            //System.out.println(randomSpeed);
         }
 
         if(!MyGdxGame.pause){
@@ -2364,10 +2563,28 @@ public class Play extends GameState {
     public void render() {
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         //MyGdxGame.background_skyDay.render(sb);
-        MyGdxGame.background_wood1.render(sb);
-        MyGdxGame.background_cloud.render(sb);
+
+        System.out.println("lightningRunning:"+lightningRunning);
+
+        if(!lightningRunning){
+            MyGdxGame.background_wood1.render(sb);
+            MyGdxGame.background_cloud.render(sb);
+        }
 
         //if (MyGdxGame.isNightEnable())MyGdxGame.displayBlinkingStars();
+
+        if(lightningRunning && !MyGdxGame.pause && !gameover){
+            cam.position.x = baseX;
+            cam.position.y = baseY;
+            screenShake.update(MyGdxGame.STEP, cam);
+            spriteBatch.setProjectionMatrix(cam.combined);
+            cam.update();
+        }else {
+            if(baseX > 0){
+                cam.position.x = baseX;
+                cam.position.y = baseY;
+            }
+        }
 
         sb.setProjectionMatrix(cam.combined);
 
@@ -2386,6 +2603,8 @@ public class Play extends GameState {
                 handleInput();
 
             if(!playerStartMoving) {
+                baseX = cam.position.x;
+                baseY = cam.position.y;
                 System.out.println("START MOVING!");
                 MyGdxGame.background_cloud.setVector(+10, 0);
                 player.getBody().setLinearVelocity(MyGdxGame.PLAYER_VELOCITY, 0);
@@ -2401,6 +2620,15 @@ public class Play extends GameState {
 
             stage1.getActors().items[0].setPosition((Gdx.graphics.getWidth() - labelScore.getWidth()) / 2,
                     Gdx.graphics.getHeight() / 1.27f);
+
+
+            if(lightning != null){
+                //lightning.render(sb);
+                lightning.updateBoundingBox(lightning);
+                sb.begin();
+                sb.draw(lightning.getAnimation().getFrame(),(lightning.getPosition().x*PPM)-Gdx.graphics.getWidth()/3/2 ,-100,Gdx.graphics.getWidth()/3,1.2f*Gdx.graphics.getHeight());
+                sb.end();
+            }
 
             if(!MyGdxGame.pause ) {
                 //power up bar
@@ -2445,9 +2673,45 @@ public class Play extends GameState {
                         }
                         shapeRenderer.rect(x, y, w, reloadKamehameha);
                     }
+                    shapeRenderer.end();
                 }
 
-                if(Save.gd.isFireBallEquiped()){
+                if(Save.gd.isLightningEquiped()){
+
+                    shapeRenderer.setColor(Color.GRAY);
+                    shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+                    shapeRenderer.rect(x, y, w, h);
+
+                    if(reloadLightning != 0)
+                        shapeRenderer.setColor(Color.YELLOW);
+                    else {
+                        shapeRenderer.setColor(Color.RED);
+                    }
+
+                    if(!blockLightning){
+                        reloadLightning = 0;
+                        h = max -(beamWidth*1.5f/max);
+                        shapeRenderer.rect(x, y, w, h);
+                    }else{
+                        if(reloadLightning <= max){
+                            //System.out.println("reloadLightning"+reloadLightning+" "+max);
+                            if(!MyGdxGame.pause) reloadLightning+=0.1;
+                        } else{
+
+                            System.out.println("lightning reloaded!");
+
+                            if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
+                                MyGdxGame.res.getSound("reloaded").play();
+                            }
+                            blockLightning = false;
+                            reloadLightning = 0;
+                        }
+                        shapeRenderer.rect(x, y, w, reloadLightning);
+                    }
+                    shapeRenderer.end();
+                }
+
+                if(Save.gd.isFireBallEquiped()|Save.gd.isFireBall2Equiped()){
                     shapeRenderer.setColor(Color.GRAY);
                     shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
                     shapeRenderer.rect(x, y, w, h);
@@ -2457,9 +2721,10 @@ public class Play extends GameState {
                     //System.out.println("h="+h+" "+"player.MAXFIREBALLCOUNT="+player.MAXFIREBALLCOUNT+" "+"player.getFireBallCount()="+player.getFireBallCount());
                     if(player.getFireBallCount()>0)
                         shapeRenderer.rect(x, y, w, h);
+                    shapeRenderer.end();
                 }
 
-                shapeRenderer.end();
+
 
             }
             spriteBatch.end();
@@ -2490,9 +2755,11 @@ public class Play extends GameState {
             brick.render(sb);
         }
 
+
+
         //performanceCounter.start();
         enemiesIA();
-       // performanceCounter.stop();
+        // performanceCounter.stop();
 
         //System.out.println(performanceCounter.current);
 
@@ -2654,6 +2921,36 @@ public class Play extends GameState {
 
         FireBall fireBall = new FireBall(body);
         return fireBall;
+    }
+
+    public Lightning createLightning(float x, float y, float velocity) {
+        System.out.println("create lightning...");
+        BodyDef bdef = new BodyDef();
+        FixtureDef fdef = new FixtureDef();
+        PolygonShape shape = new PolygonShape();
+
+        float w = 60/PPM;
+        float h = Gdx.graphics.getHeight();
+        bdef.position.set(x,y);
+        addNewLightning = true;
+        bdef.type = BodyType.DynamicBody;
+        Body body = world.createBody(bdef);
+        shape.setAsBox(w, h, new Vector2(0 ,0), 0);
+        fdef.shape = shape;
+        fdef.density = 0;
+        fdef.friction = 0;
+        fdef.isSensor = true;
+        fdef.restitution = 0;
+        fdef.filter.categoryBits = B2DVars.BIT_PRINCESS;
+        fdef.filter.maskBits = B2DVars.BIT_ENEMY;
+        body.setGravityScale(0);
+        body.createFixture(fdef).setUserData("lightning");
+        shape.dispose();
+
+        body.setLinearVelocity(velocity,0);
+
+        Lightning lightning = new Lightning(body);
+        return lightning;
     }
 
     public Brick createBrick(float x, float y) {
@@ -2884,12 +3181,16 @@ public class Play extends GameState {
         float offsetY = crop.y;
         float offsetX = crop.x;
 
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         Gdx.gl.glViewport(0,0, (int)viewport.width+ (int)offsetX, Gdx.graphics.getHeight());
         stage0.act();
         sb.begin();
-        stage0.draw();
+        if(!lightningRunning){
+            stage0.draw();
+        }
+
         sb.end();
 
         Gdx.gl.glViewport((int) viewport.x, (int) viewport.y, (int) viewport.width - (int)offsetX, (int) viewport.height - (int)offsetY);

@@ -39,7 +39,7 @@ public class MyGdxGame implements ApplicationListener {
     //private com.badlogic.gdx.graphics.g2d.Animation loading;
     public static Rectangle viewport;
     public static ActionResolver actionResolver;
-    public static final String TITLE = "Running Bird";
+    public static final String TITLE = "PRINCESS";
     public static final int V_WIDTH = 640;
     public static final int V_HEIGHT = 960;
     public static final int SCALE = 1;
@@ -380,6 +380,7 @@ public class MyGdxGame implements ApplicationListener {
 
         shapeRenderer.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
+        //for vanity
         try {
             Thread.sleep(100);
         } catch (InterruptedException e) {
