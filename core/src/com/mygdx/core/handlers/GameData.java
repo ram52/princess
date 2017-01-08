@@ -14,19 +14,19 @@ public class GameData implements Serializable {
     private boolean adsRemoverPurchased;
 	private boolean fireBallPurchased;
 	private boolean excaliburPurchased;
-	private boolean brickPurchased;
+	private boolean bootPurchased;
 	private boolean brick2Purchased;
 	private boolean lightningPurchased;
 	private boolean megaJumpPurchased;
 	private boolean fireBall2Purchased;
-	private boolean brick2Equiped;
 	private boolean lightningEquiped;
 	private boolean megaJumpEquiped;
 	private boolean fireBall2Equiped;
 	private boolean kamehamehaPurchased;
 	private boolean fireBallEquiped;
 	private boolean excaliburEquiped;
-	private boolean brickEquiped;
+	private boolean bootEquiped;
+	private boolean brick2Equiped;
 	private boolean kamehamehaEquiped;
 	private int sound;
 	private boolean night;
@@ -57,8 +57,8 @@ public class GameData implements Serializable {
 		fireBallPurchased =false;
 		excaliburPurchased = false;
 		kamehamehaPurchased = false;
-		brickPurchased = false;
-		brickEquiped = false;
+		bootPurchased = false;
+		bootEquiped = false;
 		fireBallEquiped = false;
 		excaliburEquiped = false;
 		kamehamehaEquiped = false;
@@ -262,20 +262,20 @@ public class GameData implements Serializable {
         this.playerGreen = playerGreen;
     }
 
-	public boolean isBrickPurchased() {
-		return brickPurchased;
+	public boolean isBootPurchased() {
+		return bootPurchased;
 	}
 
-	public void setBrickPurchased(boolean brickPurchased) {
-		this.brickPurchased = brickPurchased;
+	public void setBootPurchased(boolean bootPurchased) {
+		this.bootPurchased = bootPurchased;
 	}
 
-	public boolean isBrickEquiped() {
-		return brickEquiped;
+	public boolean isBootEquiped() {
+		return bootEquiped;
 	}
 
-	public void setBrickEquiped(boolean brickEquiped) {
-		this.brickEquiped = brickEquiped;
+	public void setBootEquiped(boolean bootEquiped) {
+		this.bootEquiped = bootEquiped;
 	}
 
 	public boolean isBrick2Purchased() {

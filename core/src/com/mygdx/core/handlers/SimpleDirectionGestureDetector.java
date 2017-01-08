@@ -1,5 +1,6 @@
 package com.mygdx.core.handlers;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.input.GestureDetector;
 
 public class SimpleDirectionGestureDetector extends GestureDetector {
@@ -27,19 +28,23 @@ private static class DirectionGestureListener extends GestureAdapter{
     @Override
     public boolean fling(float velocityX, float velocityY, int button) {
         System.out.println(velocityX+" "+velocityY);
-        if(Math.abs(velocityX)>Math.abs(velocityY)){
-            if(velocityX>0){
+
+
+            if(Math.abs(velocityX)>Math.abs(velocityY)){
+                if(velocityX>0){
                     directionListener.onRight();
-            }else{
+                }else{
                     directionListener.onLeft();
-            }
-        }else{
-            if(velocityY>500){
+                }
+            }else{
+                if(velocityY>200){
                     directionListener.onDown();
-            }else{                                  
+                }else{
                     directionListener.onUp();
+                }
             }
-        }
+
+
         return super.fling(velocityX, velocityY, button);
     }
 

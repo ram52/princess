@@ -54,11 +54,9 @@ public class B2DSprite {
 		boundingBox.set(new Vector3(0,0,0), new Vector3(0,0,0));
 	}
 
-	public void updateBoundingBox(B2DSprite player){
-		Vector2 origin = new Vector2(player.getPosition().x*100 - player.getWidth()/2, player.getPosition().y*100 - player.getHeight()/2);
-		Vector2 originExt = new Vector2(player.getPosition().x*100 - (player.getWidth()/2)*3, player.getPosition().y*100 - player.getHeight()/2);
-		//boundingBox = new BoundingBox(origin.x, origin.y, 64, 64);
-		boundingBox.set(new Vector3((int)origin.x,(int)origin.y,0), new Vector3((int)origin.x+64,(int)origin.y+64,10));
+	public void updateBoundingBox(B2DSprite b2DSprite, float width, float height){
+		Vector2 origin = new Vector2(b2DSprite.getPosition().x*100 - b2DSprite.getWidth()/2, b2DSprite.getPosition().y*100 - b2DSprite.getHeight()/2);
+		boundingBox.set(new Vector3((int)origin.x,(int)origin.y,0), new Vector3((int)origin.x+width,(int)origin.y+height,10));
 	}
 
 	public Vector2 getSize() {

@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -20,7 +19,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.mygdx.core.MyGdxGame;
 import com.mygdx.core.handlers.Animation;
@@ -39,7 +37,7 @@ public class Shop extends GameState {
     private Rectangle viewport;
     private AlphaAction fade;
     private Button buttonPlay, buttonSecret1, buttonSecret2,imageCoin;
-    private Button buttonFireBall, buttonExcalibur, buttonKamehameha, buttonBrick;
+    private Button buttonFireBall, buttonExcalibur, buttonKamehameha, buttonBoot;
     private Button buttonFireBall2, buttonMegaJump, buttonLightning, buttonBrick2;
     private Button buttonAds, buttonCoin1, buttonCoin2,buttonCoin3;
     private int cpt_secret1 = 0, cpt_secret2 = 0;
@@ -208,13 +206,13 @@ public class Shop extends GameState {
         stage1.addActor(buttonKamehameha);
 
         style = new Button.ButtonStyle();
-        style.up = skin.getDrawable("buttonBrickUp");
-        style.down = skin.getDrawable("buttonBrickDown");
-        buttonBrick = new Button(style);
-        buttonBrick.setWidth(buttonFireBall.getWidth());
-        buttonBrick.setHeight(buttonFireBall.getWidth());
-        buttonBrick.setPosition(buttonKamehameha.getX() + buttonBrick.getWidth()*1.2f , buttonKamehameha.getY());
-        stage1.addActor(buttonBrick);
+        style.up = skin.getDrawable("buttonBootUp");
+        style.down = skin.getDrawable("buttonBootDown");
+        buttonBoot = new Button(style);
+        buttonBoot.setWidth(buttonFireBall.getWidth());
+        buttonBoot.setHeight(buttonFireBall.getWidth());
+        buttonBoot.setPosition(buttonKamehameha.getX() + buttonBoot.getWidth()*1.2f , buttonKamehameha.getY());
+        stage1.addActor(buttonBoot);
 
         /**SECOND ITEM ROW*/
         style = new Button.ButtonStyle();
@@ -492,7 +490,7 @@ public class Shop extends GameState {
                 String cur = currencyFormatter.format(1).replaceAll("[0-9.,]","");;
                 ShopDialog dialog = new ShopDialog(Shop.this,
                         "\n\n" +
-                                "100 Coins\n" +
+                                "100 FREE Coins\n" +
                                 "\n" +
                                 "Watch a video for 100 coins FREE.\n" +
                                 "\n\n" +
@@ -923,7 +921,7 @@ public class Shop extends GameState {
         });
 
 
-        buttonBrick.addListener(new InputListener() {
+        buttonBoot.addListener(new InputListener() {
             public boolean touchDown(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
@@ -936,30 +934,28 @@ public class Shop extends GameState {
             public void touchUp(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
-                System.out.println("buttonBrick clicked!");
+                System.out.println("buttonBoot clicked!");
                 Save.load();
                 final int cost = 60000;
-                if(!Save.gd.isBrickPurchased()){
+                if(!Save.gd.isBootPurchased()){
                     ShopDialog dialog = new ShopDialog(Shop.this,
                             "\n\n" +
-                                    "BRICK SUMMON\n" +
+                                    "BOOTS\n" +
                                     "\n" +
-                                    "Blocks and can crush enemies.\n" +
-                                    "Swipe down to summon 1 brick \nat a time (unlimited).\n" +
+                                    "Make you run faster.\n" +
                                     "COST: "+cost+" coins.\n" +
                                     "\n" +
-                                    "Buy brick summon?", "buttonBrickUp"){
+                                    "Buy boots?", "buttonBootUp"){
                         public void result(Object obj) {
-                            System.out.println("result Buy Brick?"+obj);
+                            System.out.println("result Buy boot?"+obj);
                             System.out.println(obj);
 
                             if(obj.toString().equals("true") && Save.gd.getMoney() >= cost){
                                 if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
                                     MyGdxGame.res.getSound("newScreen").play();
                                 }
-                                Save.gd.setBrickPurchased(true);
-                                Save.gd.setBrickEquiped(true);
-                                Save.gd.setBrick2Equiped(false);
+                                Save.gd.setBootPurchased(true);
+                                Save.gd.setBootEquiped(true);
                                 Save.gd.setMoney(Save.gd.getMoney() - cost);
                                 Save.save();
                                 labelMoney.setText(Integer.toString(Save.gd.getMoney()));
@@ -986,24 +982,23 @@ public class Shop extends GameState {
                 }else{
                     ShopDialog dialog = new ShopDialog(Shop.this,
                             "\n\n" +
-                                    "BRICK SUMMON\n" +
+                                    "BOOTS\n" +
                                     "\n" +
-                                    "Blocks and can crush enemies.\n" +
-                                    "Swipe down to summon 1 brick \nat a time (unlimited).\n" +
+                                    "Make you run faster.\n" +
+                                    "COST: "+cost+" coins.\n" +
                                     "\n" +
-                                    "Equip brick summon?", "buttonBrickUp"){
+                                    "Buy boots?", "buttonBootUp"){
                         public void result(Object obj) {
                             System.out.println("result Equip Fire ball?"+obj);
                             System.out.println(obj);
                             if(obj.toString().equals("true")){
-                                Save.gd.setBrickEquiped(true);
-                                Save.gd.setBrick2Equiped(false);
-                                if (Save.gd.isBrickEquiped() && (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
+                                Save.gd.setBootEquiped(true);
+                                if (Save.gd.isBootEquiped() && (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
                                     MyGdxGame.res.getSound("newScreen").play();
                                 }
                             }
                             if(obj.toString().equals("false")){
-                                Save.gd.setBrickEquiped(false);
+                                Save.gd.setBootEquiped(false);
                             }
                             Save.save();
                             Save.load();
@@ -1053,7 +1048,6 @@ public class Shop extends GameState {
                                 }
                                 Save.gd.setBrick2Purchased(true);
                                 Save.gd.setBrick2Equiped(true);
-                                Save.gd.setBrickEquiped(false);
                                 Save.gd.setMoney(Save.gd.getMoney() - cost);
                                 Save.save();
                                 labelMoney.setText(Integer.toString(Save.gd.getMoney()));
@@ -1091,8 +1085,7 @@ public class Shop extends GameState {
                             System.out.println(obj);
                             if(obj.toString().equals("true")){
                                 Save.gd.setBrick2Equiped(true);
-                                Save.gd.setBrickEquiped(false);
-                                if (Save.gd.isBrickEquiped() && (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
+                                if (Save.gd.isBootEquiped() && (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
                                     MyGdxGame.res.getSound("newScreen").play();
                                 }
                             }
@@ -1127,7 +1120,7 @@ public class Shop extends GameState {
                 System.out.println("buttonLightning clicked!");
                 Save.load();
                 final int cost = 10;
-                if(!Save.gd.isBrick2Purchased()){
+                if(!Save.gd.isLightningPurchased()){
                     ShopDialog dialog = new ShopDialog(Shop.this,
                             "\n\n" +
                                     "LIGHTNING SUMMON\n" +
@@ -1452,7 +1445,7 @@ public class Shop extends GameState {
         updateItem(Save.gd.isKamehamehaEquiped(), "buttonKamehameha", buttonKamehameha);
         updateItem(Save.gd.isLightningEquiped(), "buttonLightning", buttonLightning);
         updateItem(Save.gd.isMegaJumpEquiped(), "buttonMegaJump", buttonMegaJump);
-        updateItem(Save.gd.isBrickEquiped(), "buttonBrick", buttonBrick);
+        updateItem(Save.gd.isBootEquiped(), "buttonBoot", buttonBoot);
         updateItem(Save.gd.isBrick2Equiped(), "buttonBrick2", buttonBrick2);
         updateItem(Save.gd.getAdsRemoverPurchased(), "buttonAds", buttonAds);
 
@@ -1508,9 +1501,9 @@ public class Shop extends GameState {
             MyGdxGame.background_shop.render(sb);
             float w = 57*3.5f;
             float h = 23*3.5f;
-            sb.begin();
-            sb.draw(animTitle.getFrame(), MyGdxGame.V_WIDTH/2 - w/2, MyGdxGame.V_HEIGHT/2.75f , MyGdxGame.V_WIDTH/2, 670.0f -95/2 ,  w, h,1,1, 0);
-            sb.end();
+//            sb.begin();
+//            sb.draw(animTitle.getFrame(), MyGdxGame.V_WIDTH/2 - w/2, MyGdxGame.V_HEIGHT/2.75f , MyGdxGame.V_WIDTH/2, 670.0f -95/2 ,  w, h,1,1, 0);
+//            sb.end();
 
             shapeRenderer.setColor(Color.BLACK);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);

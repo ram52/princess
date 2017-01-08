@@ -12,34 +12,9 @@ import com.mygdx.core.handlers.Save;
 public class FireBall extends B2DSprite{
 
     private Sprite tex;
-
-    public Boolean getLeft() {
-        return left;
-    }
-
-    public void setLeft(Boolean left) {
-        this.left = left;
-    }
-
-    public Boolean getRight() {
-        return right;
-    }
-
-    public void setRight(Boolean right) {
-        this.right = right;
-    }
-
+    private Boolean plasma = false;
     private Boolean left;
     private Boolean right;
-
-    public Boolean getDead() {
-        return dead;
-    }
-
-    public void setDead(Boolean dead) {
-        this.dead = dead;
-    }
-
     private Boolean dead;
 
     public FireBall(Body body) {
@@ -82,6 +57,38 @@ public class FireBall extends B2DSprite{
         setAnimation(sprites, 1 / 5f);
         left = true;
         right = false;
+    }
+
+    public Boolean getLeft() {
+        return left;
+    }
+
+    public void setLeft(Boolean left) {
+        this.left = left;
+    }
+
+    public Boolean getRight() {
+        return right;
+    }
+
+    public void setRight(Boolean right) {
+        this.right = right;
+    }
+
+    public Boolean getPlasma() {
+        return plasma;
+    }
+
+    public void setPlasma(Boolean plasma) {
+        this.plasma = plasma;
+    }
+
+    public Boolean getDead() {
+        return dead;
+    }
+
+    public void setDead(Boolean dead) {
+        this.dead = dead;
     }
 
 }

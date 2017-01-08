@@ -389,6 +389,7 @@ public class Enemy extends B2DSprite
         climbing = false;
         hurtRight = false;
         hurtLeft = false;
+        fading = false;
     }
 
     public void normalAnimation_rev(){
@@ -409,6 +410,7 @@ public class Enemy extends B2DSprite
         climbing = false;
         hurtRight = false;
         hurtLeft = false;
+        fading = false;
     }
 
     public void attackAnimation(){
@@ -501,6 +503,7 @@ public class Enemy extends B2DSprite
         dieLeft = false;
         hurtRight = true;
         hurtLeft = false;
+        fading = false;
     }
 
     public void hurtAnimation_rev(boolean isClimbing){
@@ -623,7 +626,7 @@ public class Enemy extends B2DSprite
 
     @Override
     public String toString() {
-        return "Enemy:="+"health:"+health+" "+"normalRight:"+normalRight+" "+"normalLeft:"+normalLeft+" "+"fromLeft:"+fromLeft+" "+"climbRight:"+climbRight+" "+"climblLeft:"+climblLeft;
+        return "Enemy:="+"isDead:"+isDead()+" "+"health:"+health+" "+"normalRight:"+normalRight+" "+"normalLeft:"+normalLeft+" "+"fromLeft:"+fromLeft+" "+"climbRight:"+climbRight+" "+"climblLeft:"+climblLeft;
     }
 
 

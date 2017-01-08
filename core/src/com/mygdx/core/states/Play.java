@@ -1,7 +1,7 @@
 package com.mygdx.core.states;
 
+import static com.mygdx.core.MyGdxGame.font;
 import static com.mygdx.core.handlers.B2DVars.BIT_BLOCK;
-import static com.mygdx.core.handlers.B2DVars.BIT_ENEMY;
 import static com.mygdx.core.handlers.B2DVars.PPM;
 
 import java.util.Iterator;
@@ -139,11 +139,12 @@ public class Play extends GameState {
     private float reloadKamehameha = 0.0f;
     private float reloadLightning = 0.0f;
     private boolean lightningRunning = false;
-    private float boost = 1.2f;
+    private float boost = 1.4f;
     private double dificulty = 0.0;
     boolean blockKamehameha = false;
     boolean blockLightning = false;
     boolean kamehaReachLimit = false;
+    boolean megaKameha = false;
     boolean lightningReachLimit = false;
     private Runnable runnable;
     private Boolean stopEnemies = false;
@@ -156,6 +157,7 @@ public class Play extends GameState {
     private Button buttonLeft, buttonRight, buttonFire, buttonJump;
     private Stage stageUiControl;
     private SpriteBatch spriteBatch;
+    private SpriteBatch spriteBatchLightning;
     private Animation animKamehameha0, animKamehameha0_rev, animKamehameha1, animKamehameha1_rev, animKamehameha2, animKamehameha2_rev;
     protected BoundingBox boundingBoxCastle, boundingBoxKamehameha;
     protected double cpt_sound_hit = 0;
@@ -202,30 +204,30 @@ public class Play extends GameState {
 
         Sprite tex = new Sprite(MyGdxGame.atlas.findRegion("kameha1"));
         TextureRegion[] sprites = tex.split(16, 43)[0];
-        animKamehameha0 = new Animation(sprites, 1 / 5f);
+        animKamehameha0 = new Animation(sprites, 1 / 15f);
 
         TextureRegion[] spritesFliped = tex.split(16, 43)[0];
         for (int i = 0; i < spritesFliped.length; i++)
             spritesFliped[i].flip(true, false);
-        animKamehameha0_rev = new Animation(spritesFliped, 1 / 5f);
+        animKamehameha0_rev = new Animation(spritesFliped, 1 / 15f);
 
         tex = new Sprite(MyGdxGame.atlas.findRegion("kameha2"));
         sprites = tex.split(2, 43)[0];
-        animKamehameha1 = new Animation(sprites, 1 / 5f);
+        animKamehameha1 = new Animation(sprites, 1 / 15f);
 
         spritesFliped = tex.split(2, 43)[0];
         for (int i = 0; i < spritesFliped.length; i++)
             spritesFliped[i].flip(true, false);
-        animKamehameha1_rev = new Animation(spritesFliped, 1 / 5f);
+        animKamehameha1_rev = new Animation(spritesFliped, 1 / 15f);
 
         tex = new Sprite(MyGdxGame.atlas.findRegion("kameha3"));
         sprites = tex.split(42, 43)[0];
-        animKamehameha2 = new Animation(sprites, 1 / 5f);
+        animKamehameha2 = new Animation(sprites, 1 / 15f);
 
         spritesFliped = tex.split(42, 43)[0];
         for (int i = 0; i < spritesFliped.length; i++)
             spritesFliped[i].flip(true, false);
-        animKamehameha2_rev = new Animation(spritesFliped, 1 / 5f);
+        animKamehameha2_rev = new Animation(spritesFliped, 1 / 15f);
 
 
         if(Save.gd.isPlayerBlue() && Save.gd.isPlayerGreen() && Save.gd.isPlayerYellow() && Save.gd.isPlayerRed()){
@@ -278,6 +280,7 @@ public class Play extends GameState {
         b2dr = new Box2DDebugRenderer();
 
         spriteBatch = new SpriteBatch();
+        spriteBatchLightning = new SpriteBatch();
 
         cam.setToOrtho(false, MyGdxGame.V_WIDTH, MyGdxGame.V_HEIGHT);
 
@@ -405,7 +408,12 @@ public class Play extends GameState {
         buttonJump.setDisabled(true);
         buttonJump.setWidth(buttonFire.getWidth());
         buttonJump.setHeight(buttonFire.getHeight());
-        buttonJump.setPosition(buttonFire.getRight()+space, buttonLeft.getY());
+        if(Save.gd.isFireBall2Equiped()|Save.gd.isLightningEquiped()|Save.gd.isFireBallEquiped()|Save.gd.isKamehamehaEquiped()){
+            buttonJump.setPosition(buttonFire.getRight()+space, buttonLeft.getY());
+        }else{
+            buttonJump.setPosition(buttonFire.getRight()- buttonFire.getWidth()/2, buttonLeft.getY());
+        }
+
         stageUiControl.addActor(buttonJump);
 
 
@@ -500,6 +508,7 @@ public class Play extends GameState {
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
                 left = true;
+                right = false;
 
                 return true;
             }
@@ -511,6 +520,7 @@ public class Play extends GameState {
                     float y, int pointer, int button) {
                 //System.out.println("clicked left!");
                 left = false;
+                right = false;
 
             }
 
@@ -522,6 +532,7 @@ public class Play extends GameState {
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
                 right = true;
+                left = false;
 
                 return true;
             }
@@ -533,6 +544,7 @@ public class Play extends GameState {
                     float y, int pointer, int button) {
                 //System.out.println("clicked right!");
                 right = false;
+                left = false;
 
             }
 
@@ -593,11 +605,11 @@ public class Play extends GameState {
                             executor.scheduleAtFixedRate(runnable, 0, 1000, TimeUnit.MILLISECONDS);
                         }
 
-//                        if(player.getNumCoins() >= 50 && !step3){
-//                            step3 = true;
-//                            executor = Executors.newScheduledThreadPool(1);
-//                            executor.scheduleAtFixedRate(runnable, 0, 800, TimeUnit.MILLISECONDS);
-//                        }
+                        if(player.getNumCoins() >= 50 && !step3){
+                            step3 = true;
+                            executor = Executors.newScheduledThreadPool(1);
+                            executor.scheduleAtFixedRate(runnable, 0, 900, TimeUnit.MILLISECONDS);
+                        }
 
                     }
                 }
@@ -682,72 +694,85 @@ public class Play extends GameState {
 
                     @Override
                     public void onUp() {
-                        if(!player.isPlayerDead() && !MyGdxGame.pause ) {
-                            jump = true;
-
-                            System.out.println("up");
+                        System.out.println("onUp"+" "+Gdx.input.getY()+" "+MyGdxGame.PAD_ZONE);
+                        if(Gdx.input.getY() < MyGdxGame.PAD_ZONE){
+                            if(!player.isPlayerDead() && !MyGdxGame.pause ) {
+                                jump = true;
+                                System.out.println("up");
+                            }
                         }
                     }
 
                     @Override
                     public void onRight() {
-                        System.out.println("right");
+                        System.out.println("onRight"+" "+Gdx.input.getY()+" "+MyGdxGame.PAD_ZONE);
+                        if(Gdx.input.getY() < MyGdxGame.PAD_ZONE){
+                            right = true;
+                            left = false;
+                        }
+
                     }
 
                     @Override
                     public void onLeft() {
-                        System.out.println("left");
+                        System.out.println("onLeft"+" "+Gdx.input.getY()+" "+MyGdxGame.PAD_ZONE);
+                        if(Gdx.input.getY() < MyGdxGame.PAD_ZONE){
+                            left = true;
+                            right = false;
+                        }
                     }
 
                     @Override
                     public void onDown() {
 
-                        if(Save.gd.isBrickEquiped()){
-                            if(brick == null){
-                                brick = createBrick(lastClickPos, player.getHeight()/PPM + Gdx.graphics.getHeight()/PPM);
-                            }else{
-                                if(brick.getDead()){
+                        //if(Gdx.input.getY() < MyGdxGame.PAD_ZONE){
+                            if(!Save.gd.isBrick2Equiped()){
+                                if(brick == null){
+                                    brick = createBrick(lastClickPos, Gdx.graphics.getHeight()/PPM);
+                                }else{
+                                    if(brick.getDead()){
+                                        brick = createBrick(lastClickPos, Gdx.graphics.getHeight()/PPM);
+                                    }
+                                }
+
+                                brick.setLife(400);
+
+                                if(!MyGdxGame.pause){
+                                    if(!brick.isSummoned() && enableBrick){
+                                        enableBrick = false;
+                                        brick.setFalling(true);
+                                        brick.setSummoned(true);
+                                        if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("newScreen").play();
+                                    }
+                                }
+
+                                System.out.println("down");
+                            }
+
+
+                            if(Save.gd.isBrick2Equiped()){
+                                if(brick == null){
                                     brick = createBrick(lastClickPos, player.getHeight()/PPM + Gdx.graphics.getHeight()/PPM);
+                                }else{
+                                    if(brick.getDead()){
+                                        brick = createBrick(lastClickPos, player.getHeight()/PPM + Gdx.graphics.getHeight()/PPM);
+                                    }
                                 }
-                            }
 
-                            brick.setLife(400);
+                                brick.setLife(400*5);
 
-                            if(!MyGdxGame.pause){
-                                if(!brick.isSummoned() && enableBrick){
-                                    enableBrick = false;
-                                    brick.setFalling(true);
-                                    brick.setSummoned(true);
-                                    if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("newScreen").play();
+                                if(!MyGdxGame.pause){
+                                    if(!brick.isSummoned() && enableBrick){
+                                        enableBrick = false;
+                                        brick.setFalling(true);
+                                        brick.setSummoned(true);
+                                        if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("newScreen").play();
+                                    }
                                 }
+
+                                System.out.println("down");
                             }
-
-                            System.out.println("down");
-                        }
-
-
-                        if(Save.gd.isBrick2Equiped()){
-                            if(brick == null){
-                                brick = createBrick(lastClickPos, player.getHeight()/PPM + Gdx.graphics.getHeight()/PPM);
-                            }else{
-                                if(brick.getDead()){
-                                    brick = createBrick(lastClickPos, player.getHeight()/PPM + Gdx.graphics.getHeight()/PPM);
-                                }
-                            }
-
-                            brick.setLife(400*5);
-
-                            if(!MyGdxGame.pause){
-                                if(!brick.isSummoned() && enableBrick){
-                                    enableBrick = false;
-                                    brick.setFalling(true);
-                                    brick.setSummoned(true);
-                                    if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("newScreen").play();
-                                }
-                            }
-
-                            System.out.println("down");
-                        }
+                        //}
 
                     }
                 });
@@ -1039,7 +1064,7 @@ public class Play extends GameState {
         //player not moving
         if((!left | !right)){
 
-            if(Save.gd.isExcaliburEquiped() | Save.gd.isKamehamehaEquiped()) {
+            if(Save.gd.isBootEquiped()) {
                 if (player.getBody().getLinearVelocity().x != 0 && Math.abs(player.getBody().getLinearVelocity().x) <= MyGdxGame.PLAYER_VELOCITY * boost) {
                     //System.out.println("STILL");
                     player.getBody().setLinearVelocity(0, player.getBody().getLinearVelocity().y);
@@ -1057,12 +1082,12 @@ public class Play extends GameState {
 
         /**Handle keyboard input**/
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            if( (cl.isPlayerOnGround() |cl.isPlayerOnBrick() ) && !jump && (!player.isSlashingLeft()|!player.isSlashingRight()) && (player.getPosition().y*PPM) < 325 ){
+            if( (cl.isPlayerOnGround() |cl.isPlayerOnBrick() ) && !jump && !player.isJumpLeft() && !player.isJumpRight() && (!player.isSlashingLeft()|!player.isSlashingRight()) && (player.getPosition().y*PPM) < 325 ){
                 player.getBody().setLinearVelocity(new Vector2(player.getBody().getLinearVelocity().x,0));
                 player.getBody().setAngularVelocity(0);
 
                 if(Save.gd.isMegaJumpEquiped()){
-                    player.getBody().applyForceToCenter(new Vector2(0,200),false);
+                    player.getBody().applyForceToCenter(new Vector2(0,220),false);
                 }else{
                     player.getBody().applyForceToCenter(new Vector2(0,160),false);
                 }
@@ -1112,7 +1137,7 @@ public class Play extends GameState {
             fire = false;
             //todo sound
             if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("fireball").play();
-            lightning = createLightning(player.getPosition().x, player.getPosition().y,4);
+            lightning = createLightning(player.getPosition().x, 0,4);
             lightningRunning = true;
 
         }
@@ -1143,13 +1168,13 @@ public class Play extends GameState {
             if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("fireball").play();
             float gap = 10.0f/PPM;
             if(player.isRight()){
-                FireBall fireball = createFireBall(player.getPosition().x + gap, player.getPosition().y,1.9f);
+                FireBall fireball = createFireBall(player.getPosition().x + gap, player.getPosition().y,2.5f);
                 if(!fireball.getRight())
                     fireball.normalAnimation_rev();
                 fireBalls.add(fireball);
             }
             else {
-                fireBalls.add(createFireBall(player.getPosition().x - gap, player.getPosition().y,-1.9f));
+                fireBalls.add(createFireBall(player.getPosition().x - gap, player.getPosition().y,-2.5f));
             }
 
         }
@@ -1190,7 +1215,7 @@ public class Play extends GameState {
 
         if (left && player.getBody().getLinearVelocity().x != -MyGdxGame.PLAYER_VELOCITY) {
             //System.out.println("LEFT");
-            if(Save.gd.isExcaliburEquiped() | Save.gd.isKamehamehaEquiped()) {
+            if(Save.gd.isBootEquiped()) {
                 player.getBody().setLinearVelocity(-MyGdxGame.PLAYER_VELOCITY*boost, player.getBody().getLinearVelocity().y);
             }else{
                 player.getBody().setLinearVelocity(-MyGdxGame.PLAYER_VELOCITY, player.getBody().getLinearVelocity().y);
@@ -1201,7 +1226,7 @@ public class Play extends GameState {
         //moves right
         if (right && player.getBody().getLinearVelocity().x != MyGdxGame.PLAYER_VELOCITY) {
             //System.out.println("RIGHT");
-            if(Save.gd.isExcaliburEquiped() | Save.gd.isKamehamehaEquiped()) {
+            if(Save.gd.isBootEquiped()) {
                 player.getBody().setLinearVelocity(MyGdxGame.PLAYER_VELOCITY*boost, player.getBody().getLinearVelocity().y);
             }else{
                 player.getBody().setLinearVelocity(MyGdxGame.PLAYER_VELOCITY, player.getBody().getLinearVelocity().y);
@@ -1256,9 +1281,9 @@ public class Play extends GameState {
         Iterator<Enemy> iter = enemies.iterator();
         while (iter.hasNext()) {
             Enemy enemy = iter.next();
-            player.updateBoundingBox(player);
-            princess.updateBoundingBox(princess);
-            enemy.updateBoundingBox(enemy);
+            player.updateBoundingBox(player,64,64);
+            princess.updateBoundingBox(princess,64,64);
+            enemy.updateBoundingBox(enemy,64,64);
 
             if(cl.intersect(player,enemy)){
                 makeEnemySensor(enemy,true);
@@ -1289,6 +1314,8 @@ public class Play extends GameState {
                 }
 
                 enemy.setTouched(true);
+//                right = false;
+//                left = false;
                 isTouchingEnemy = true;
             }else{
                 enemy.setTouched(false);
@@ -1298,9 +1325,29 @@ public class Play extends GameState {
             //kamehameha
             if(enemy.getBoundingBox().intersects(boundingBoxKamehameha)){
                 enemy.setTouched(true);
-                enemy.setHealth(enemy.getHealth()-0.6f);
+                if(megaKameha){
+                    enemy.setHealth(enemy.getHealth()-99f);
+                }else{
+                    enemy.setHealth(enemy.getHealth()-0.6f);
+                }
+
             }else{
                 enemy.setTouched(false);
+            }
+
+            if(lightning != null){
+                lightning.updateBoundingBox(lightning, Gdx.graphics.getWidth()/10, 2*Gdx.graphics.getHeight() );
+
+                if(enemy.getBoundingBox().intersects(lightning.getBoundingBox())){
+                    enemy.setTouched(true);
+                    enemy.setHealth(-99);
+                    sb.begin();
+                    sb.end();
+                }else{
+                    enemy.setTouched(false);
+                    sb.begin();
+                    sb.end();
+                }
             }
 
             if(isTouchingEnemy && enemy.isFromLeft() && player.isStillRight()){
@@ -1519,7 +1566,7 @@ public class Play extends GameState {
             if(!MyGdxGame.pause){
 
                 fireBall.update(MyGdxGame.STEP);
-                fireBall.updateBoundingBox(fireBall);
+                fireBall.updateBoundingBox(fireBall,64,64);
 
                 if(!fireBall.getDead() && (fireBall.getPosition().x < 0 | fireBall.getPosition().x > Gdx.graphics.getWidth()/PPM)){
                     System.out.println("FIRE BALL REMOVED!");
@@ -1529,15 +1576,16 @@ public class Play extends GameState {
                     fireBall.destroy();
                 }
 
-                if(!enemy.isDead() && enemy.getBoundingBox().intersects(fireBall.getBoundingBox())){
+                if(!enemy.isDead() && cl.intersect(fireBall,enemy)){
                     System.out.println("FIRE BALL TOUCH ENEMY!");
                     enemy.setHealth(0);
-                    fireBall.setDead(true);
-                    /*enemies.removeValue(enemy, true);
-                    removeBodySafely(enemy.getBody());*/
-                    fireBalls.removeValue(fireBall, true);
-                    //removeBodySafely(fireBall.getBody());
-                    fireBall.destroy();
+
+                    if(!Save.gd.isFireBall2Equiped()){
+                        fireBall.setDead(true);
+                        fireBalls.removeValue(fireBall, true);
+                        fireBall.destroy();
+                    }
+
                 }
 
             }
@@ -1546,15 +1594,35 @@ public class Play extends GameState {
 
     public void lightningIA(Enemy enemy){
         if(!MyGdxGame.pause && lightning != null){
-            lightning.updateBoundingBox(lightning);
-            enemy.updateBoundingBox(enemy);
 
             if(!MyGdxGame.pause){
                 lightning.update(MyGdxGame.STEP);
             }
 
+            enemy.updateBoundingBox(enemy,64,64);
             if(cl.intersect(lightning,enemy)){
                 enemy.setHealth(-99);
+            }else{
+                //System.out.println(lightning.getBoundingBox()+" "+enemy.getBoundingBox());
+            }
+
+        }
+    }
+
+    public void lightningUpdate(float dt){
+
+        if(!MyGdxGame.pause && lightning != null){
+
+
+            lightning.update(dt);
+
+            if(lightning.getBody().getPosition().x + lightning.getWidth()/PPM >= MyGdxGame.V_WIDTH/PPM){
+                lightning.getBody().setLinearVelocity(-4, lightning.getBody().getLinearVelocity().y);
+                lightning.normalAnimation();
+            }
+            if(lightning.getBody().getPosition().x <= 0){
+                lightning.normalAnimation_rev();
+                lightning.getBody().setLinearVelocity(4, lightning.getBody().getLinearVelocity().y);
             }
 
             if(MyGdxGame.pause){
@@ -1577,22 +1645,27 @@ public class Play extends GameState {
                 lightningReachLimit = !lightningReachLimit;
             }
 
+
+            //System.out.println("beamWidth:"+beamWidth+" "+lightningReachLimit);
+
             if(!lightningReachLimit){
-                if(!MyGdxGame.pause)
+                if(!MyGdxGame.pause){
                     beamWidth+= speed;
+                }
+
             }else{
-                fire = !fire;
+                fire = false;
                 lightningReachLimit = false;
                 beamWidth = 0;
                 blockLightning = true;
-
                 lightningRunning = false;
                 lightning.destroy();
                 lightning = null;
             }
 
-        }
 
+
+        }
 
     }
 
@@ -1609,8 +1682,20 @@ public class Play extends GameState {
 
         float speed = 10.0f;
 
+        float reduce = 1.0f;
+
+        float scaledValue = Math.abs(1 - ((beamWidth - 0) / (MyGdxGame.V_WIDTH*10 - 0)));
+
+        System.out.println(scaledValue);
         if(Math.abs(beamWidth) > MyGdxGame.V_WIDTH*10){
             kamehaReachLimit = !kamehaReachLimit;
+        }
+
+        if(Math.abs(beamWidth) > MyGdxGame.V_WIDTH*7){
+            reduce = (float) Math.exp(scaledValue*5f);
+            megaKameha = true;
+        }else{
+            megaKameha = false;
         }
 
         //MyGdxGame.res.getMusic("main").stop();
@@ -1646,21 +1731,21 @@ public class Play extends GameState {
             if(player.isRight()){
                 sb.draw(animKamehameha0.getFrame(),
                         player.getPosition().x*PPM + gap2,
-                        player.getPosition().y*PPM - animKamehameha0.getFrame().getRegionHeight()*scale/2,
+                        player.getPosition().y*PPM - animKamehameha0.getFrame().getRegionHeight()*reduce*scale/2,
                         animKamehameha0.getFrame().getRegionWidth()*scale,
-                        animKamehameha0.getFrame().getRegionHeight()*scale);
+                        animKamehameha0.getFrame().getRegionHeight()*scale*reduce);
 
                 sb.draw(animKamehameha1.getFrame(),
                         player.getPosition().x*PPM + gap2 + animKamehameha0.getFrame().getRegionWidth()*scale,
-                        player.getPosition().y*PPM - animKamehameha1.getFrame().getRegionHeight()*scale/2,
+                        player.getPosition().y*PPM - animKamehameha1.getFrame().getRegionHeight()*reduce*scale/2,
                         beamWidth,
-                        animKamehameha1.getFrame().getRegionHeight()*scale);
+                        animKamehameha1.getFrame().getRegionHeight()*scale*reduce);
 
                 sb.draw(animKamehameha2.getFrame(),
                         player.getPosition().x*PPM + gap2 + beamWidth +  animKamehameha2.getFrame().getRegionWidth()*scale/4,
-                        player.getPosition().y*PPM - animKamehameha2.getFrame().getRegionHeight()*scale/2,
+                        player.getPosition().y*PPM - animKamehameha2.getFrame().getRegionHeight()*reduce*scale/2,
                         animKamehameha2.getFrame().getRegionWidth()*scale,
-                        animKamehameha2.getFrame().getRegionHeight()*scale);
+                        animKamehameha2.getFrame().getRegionHeight()*scale*reduce);
 
                 beamX = player.getPosition().x*PPM + gap2 + beamWidth +  animKamehameha2.getFrame().getRegionWidth()*scale/4 + animKamehameha2.getFrame().getRegionWidth()*scale;
 
@@ -1673,21 +1758,21 @@ public class Play extends GameState {
             else {
                 sb.draw(animKamehameha0_rev.getFrame(),
                         player.getPosition().x*PPM - gap,
-                        player.getPosition().y*PPM - animKamehameha0_rev.getFrame().getRegionHeight()*scale/2,
+                        player.getPosition().y*PPM - animKamehameha0_rev.getFrame().getRegionHeight()*reduce*scale/2,
                         animKamehameha0.getFrame().getRegionWidth()*scale,
-                        animKamehameha0.getFrame().getRegionHeight()*scale);
+                        animKamehameha0.getFrame().getRegionHeight()*scale*reduce);
 
                 sb.draw(animKamehameha1_rev.getFrame(),
                         player.getPosition().x*PPM - gap,
-                        player.getPosition().y*PPM - animKamehameha1.getFrame().getRegionHeight()*scale/2,
+                        player.getPosition().y*PPM - animKamehameha1.getFrame().getRegionHeight()*reduce*scale/2,
                         animKamehameha1_rev.getFrame().getRegionWidth()*scale - beamWidth,
-                        animKamehameha1.getFrame().getRegionHeight()*scale);
+                        animKamehameha1.getFrame().getRegionHeight()*scale*reduce);
 
                 sb.draw(animKamehameha2_rev.getFrame(),
                         player.getPosition().x*PPM - gap - beamWidth - animKamehameha2_rev.getFrame().getRegionWidth()*scale + animKamehameha1_rev.getFrame().getRegionWidth()*scale,
-                        player.getPosition().y*PPM - animKamehameha2_rev.getFrame().getRegionHeight()*scale/2,
+                        player.getPosition().y*PPM - animKamehameha2_rev.getFrame().getRegionHeight()*reduce*scale/2,
                         animKamehameha2_rev.getFrame().getRegionWidth()*scale,
-                        animKamehameha2_rev.getFrame().getRegionHeight()*scale);
+                        animKamehameha2_rev.getFrame().getRegionHeight()*scale*reduce);
 
                 beamX = player.getPosition().x*PPM - gap - beamWidth - animKamehameha2_rev.getFrame().getRegionWidth()*scale + animKamehameha1_rev.getFrame().getRegionWidth()*scale;
 
@@ -1759,7 +1844,11 @@ public class Play extends GameState {
 
     }
 
-
+    public void makeBrickSensor(Brick brick, boolean isSensor){
+        for (Fixture fixture: brick.getBody().getFixtureList()) {
+            fixture.setSensor(isSensor);
+        }
+    }
 
     public void brickIA(Enemy enemy){
 
@@ -1768,7 +1857,7 @@ public class Play extends GameState {
 //        while (iter.hasNext()) {
 
         if(!MyGdxGame.pause && brick != null){
-            brick.updateBoundingBox(brick);
+            brick.updateBoundingBox(brick,64,64);
             brick.update(MyGdxGame.STEP);
         }
         //brick.getBoundingBox().set(brick.getBoundingBox().min, brick.getBoundingBox().max);
@@ -1916,17 +2005,14 @@ public class Play extends GameState {
                 enemy.update(MyGdxGame.STEP);
 
                 if(!MyGdxGame.pause | !stopEnemies){
-                    enemy.updateBoundingBox(enemy);
+                    enemy.updateBoundingBox(enemy,64,64);
 
 
                     if(brick != null){
                         brickIA(enemy);
                     }
 
-                    if(lightning != null){
-                        lightningIA(enemy);
-                    }
-
+                    lightningIA(enemy);
                     princessIA(enemy);
                     fireBallIA(enemy);
 
@@ -1949,7 +2035,7 @@ public class Play extends GameState {
                                 System.out.println("enemy killed="+enemiesKilled);
                             }
 
-                            if(Save.gd.isFireBall2Equiped() && player.getFireBallCount()<player.MAXFIREBALLCOUNT){
+                            if(Save.gd.isFireBall2Equiped() && enemiesKilled >= 4 && player.getFireBallCount()<player.MAXFIREBALLCOUNT){
                                 fire = false;
                                 player.setFireBallCount(player.getFireBallCount()+1);
                                 enemiesKilled = 0;
@@ -2155,13 +2241,8 @@ public class Play extends GameState {
     public void princessIA(Enemy enemy){
         if(MyGdxGame.pause){
             princess.update(MyGdxGame.STEP);
-            princess.updateBoundingBox(princess);
+            princess.updateBoundingBox(princess,64,64);
         }
-
-        if(!enemy.isDead() && enemy.getPosition().y*PPM > 350){
-            princess.setCry(true);
-        }
-
         if(!enemy.isDead() && princess.getBoundingBox().intersects(enemy.getBoundingBox()) && enemy.getBody().getLinearVelocity().x != 0 ){
             princess.setTouched(true);
             if((enemy.getBody().getLinearVelocity().x < 0) && !enemy.isMockRight()){
@@ -2181,6 +2262,7 @@ public class Play extends GameState {
             //player.setPlayerDead(true);
 
             princess.getBody().setLinearVelocity(0,0);
+            princess.getBody().setType(BodyType.StaticBody);
 
             if(princess.isLeft()){
                 if(!princess.isDieRight()){
@@ -2235,33 +2317,6 @@ public class Play extends GameState {
             }
         }
 
-
-//        if(princess.isLeft()){
-//            if(!princess.isNormalRight()){
-//                if(princess.isTouched() ){
-//                    if(!princess.isCryRight())
-//                        princess.cryAnimation();
-//                }else{
-//                    princess.normalAnimation();
-//                }
-//            }
-//            princess.getBody().setLinearVelocity(-1,0);
-//        }
-//
-//        if(princess.isRight()){
-//            if(!princess.isNormalLeft()){
-//                if(princess.isTouched()){
-//                    if(!princess.isCryLeft())
-//                        princess.cryAnimation_rev();
-//                }else{
-//                    IF5
-//                    princess.normalAnimation_rev();
-//                }
-//            }
-//            princess.getBody().setLinearVelocity(1,0);
-//        }
-
-
     }
 
     public void removeBodySafely(Body body) {
@@ -2275,6 +2330,21 @@ public class Play extends GameState {
     }
 
     public void update(float dt) {
+
+        Iterator<Enemy> iter = enemies.iterator();
+        while (iter.hasNext()) {
+            final Enemy enemy = iter.next();
+            if(!MyGdxGame.pause){
+                if(!princess.isTouched()){
+                    if(!enemy.isDead() && enemy.getPosition().y*PPM > 350){
+                        princess.setCry(true);
+                        break;
+                    }else{
+                        princess.setCry(false);
+                    }
+                }
+            }
+        }
 
         if(brick!=null){
             MyGdxGame.debugString = "fps: "+Gdx.graphics.getFramesPerSecond()+'\n'+
@@ -2330,10 +2400,11 @@ public class Play extends GameState {
 
         MyGdxGame.fadeIn.update(dt);
 
+
         if(brick != null){
-            if(isEnemyTouchingBrick() | brick.getPosition().x*PPM <= 33 | brick.getPosition().x*PPM >= 607 ){
+            if(isEnemyTouchingBrick() /*&& (brick.getPosition().x*PPM <= 33 | brick.getPosition().x*PPM >= 607 )*/){
                 brick.hurtAnimation();
-                System.out.println("hurt"+" "+world.getContactCount()+" "+Gdx.graphics.getFramesPerSecond());
+                //System.out.println("hurt"+" "+world.getContactCount()+" "+Gdx.graphics.getFramesPerSecond());
                 brick.getBody().setType(BodyType.StaticBody);
             }else{
                 brick.normalAnimation();
@@ -2345,21 +2416,9 @@ public class Play extends GameState {
             }
         }
 
-        if(lightning != null){
-
-            if(!MyGdxGame.pause){
-                lightning.update(dt);
-            }
-
-            if(lightning.getBody().getPosition().x + lightning.getWidth()/PPM >= MyGdxGame.V_WIDTH/PPM){
-                lightning.getBody().setLinearVelocity(-4, lightning.getBody().getLinearVelocity().y);
-                lightning.normalAnimation();
-            }
-            if(lightning.getBody().getPosition().x <= 0){
-                lightning.normalAnimation_rev();
-                lightning.getBody().setLinearVelocity(4, lightning.getBody().getLinearVelocity().y);
-            }
-        }
+//        if(lightning != null && Save.gd.isLightningEquiped()){
+//            lightningUpdate(dt);
+//        }
 
         if(princess.getPosition().x - princess.getWidth()/2/PPM <= 150/PPM){
             princess.setRight(true);
@@ -2394,13 +2453,19 @@ public class Play extends GameState {
         }
 
 
-        if( (cl.isPlayerOnGround() |cl.isPlayerOnBrick() ) && jump && (!player.isSlashingLeft()|!player.isSlashingRight()) && (player.getPosition().y*PPM) < 325 ){
+        if(princess.isDieLeft()||princess.isDieRight()){
+            princess.getBody().setLinearVelocity(0,0);
+            princess.getBody().setType(BodyType.StaticBody);
+        }
+
+
+        if( (cl.isPlayerOnGround() |cl.isPlayerOnBrick() ) && jump && !player.isJumpRight() && !player.isJumpRight() && (!player.isSlashingLeft()|!player.isSlashingRight()) && (player.getPosition().y*PPM) < 325 ){
             jump = false;
             player.getBody().setLinearVelocity(new Vector2(player.getBody().getLinearVelocity().x,0));
             player.getBody().setAngularVelocity(0);
             //player.getBody().applyForceToCenter(new Vector2(0,180),false);
             if(Save.gd.isMegaJumpEquiped()){
-                player.getBody().applyForceToCenter(new Vector2(0,200),false);
+                player.getBody().applyForceToCenter(new Vector2(0,220),false);
             }else{
                 player.getBody().applyForceToCenter(new Vector2(0,180),false);
             }
@@ -2474,9 +2539,9 @@ public class Play extends GameState {
         if(!MyGdxGame.pause){
             player.update(dt);
 
-            player.updateBoundingBox(player);
+            player.updateBoundingBox(player,64,64);
             princess.update(dt);
-            princess.updateBoundingBox(princess);
+            princess.updateBoundingBox(princess,64,64);
             animKamehameha0.update(dt);
             animKamehameha0_rev.update(dt);
             animKamehameha1.update(dt);
@@ -2564,11 +2629,16 @@ public class Play extends GameState {
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         //MyGdxGame.background_skyDay.render(sb);
 
-        System.out.println("lightningRunning:"+lightningRunning);
+        //System.out.println("lightningRunning:"+lightningRunning);
 
         if(!lightningRunning){
             MyGdxGame.background_wood1.render(sb);
             MyGdxGame.background_cloud.render(sb);
+        }
+
+        if(lightning != null && Save.gd.isLightningEquiped()){
+            lightning.updateBoundingBox(lightning, Gdx.graphics.getWidth()/10, 2*Gdx.graphics.getHeight() );
+            lightningUpdate(MyGdxGame.STEP);
         }
 
         //if (MyGdxGame.isNightEnable())MyGdxGame.displayBlinkingStars();
@@ -2578,6 +2648,7 @@ public class Play extends GameState {
             cam.position.y = baseY;
             screenShake.update(MyGdxGame.STEP, cam);
             spriteBatch.setProjectionMatrix(cam.combined);
+            spriteBatchLightning.setProjectionMatrix(cam.combined);
             cam.update();
         }else {
             if(baseX > 0){
@@ -2624,15 +2695,14 @@ public class Play extends GameState {
 
             if(lightning != null){
                 //lightning.render(sb);
-                lightning.updateBoundingBox(lightning);
                 sb.begin();
-                sb.draw(lightning.getAnimation().getFrame(),(lightning.getPosition().x*PPM)-Gdx.graphics.getWidth()/3/2 ,-100,Gdx.graphics.getWidth()/3,1.2f*Gdx.graphics.getHeight());
+                sb.draw(lightning.getAnimation().getFrame(),(lightning.getPosition().x*PPM) - Gdx.graphics.getWidth()/3/2 ,-100,Gdx.graphics.getWidth()/3,1.2f*Gdx.graphics.getHeight());
                 sb.end();
             }
 
             if(!MyGdxGame.pause ) {
                 //power up bar
-                float c = MyGdxGame.V_WIDTH/6.7f;
+                float c = MyGdxGame.V_WIDTH/6.8f;
                 float w = MyGdxGame.V_WIDTH/6.2f;
                 float h = c;
                 float max = c;
@@ -2647,6 +2717,7 @@ public class Play extends GameState {
                     shapeRenderer.setColor(Color.GRAY);
                     shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
                     shapeRenderer.rect(x, y, w, h);
+                    shapeRenderer.end();
 
                     if(reloadKamehameha != 0)
                         shapeRenderer.setColor(Color.YELLOW);
@@ -2657,11 +2728,13 @@ public class Play extends GameState {
                     if(!blockKamehameha){
                         reloadKamehameha = 0;
                         h = max -(beamWidth*1.5f/max);
+                        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
                         shapeRenderer.rect(x, y, w, h);
+                        shapeRenderer.end();
                     }else{
                         if(reloadKamehameha <= max){
                             //System.out.println(reloadKamehameha+" "+max);
-                            if(!MyGdxGame.pause) reloadKamehameha+=0.1;
+                            if(!MyGdxGame.pause) reloadKamehameha+=0.3;
                         }
                         else{
                             System.out.println("kamehameha reloaded!");
@@ -2671,16 +2744,18 @@ public class Play extends GameState {
                             blockKamehameha = false;
                             reloadKamehameha = 0;
                         }
+                        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
                         shapeRenderer.rect(x, y, w, reloadKamehameha);
+                        shapeRenderer.end();
                     }
-                    shapeRenderer.end();
                 }
 
                 if(Save.gd.isLightningEquiped()){
 
-                    shapeRenderer.setColor(Color.GRAY);
                     shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+                    shapeRenderer.setColor(Color.GRAY);
                     shapeRenderer.rect(x, y, w, h);
+                    shapeRenderer.end();
 
                     if(reloadLightning != 0)
                         shapeRenderer.setColor(Color.YELLOW);
@@ -2691,7 +2766,9 @@ public class Play extends GameState {
                     if(!blockLightning){
                         reloadLightning = 0;
                         h = max -(beamWidth*1.5f/max);
+                        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
                         shapeRenderer.rect(x, y, w, h);
+                        shapeRenderer.end();
                     }else{
                         if(reloadLightning <= max){
                             //System.out.println("reloadLightning"+reloadLightning+" "+max);
@@ -2705,23 +2782,30 @@ public class Play extends GameState {
                             }
                             blockLightning = false;
                             reloadLightning = 0;
+                            beamWidth = 0;
                         }
+                        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
                         shapeRenderer.rect(x, y, w, reloadLightning);
+                        shapeRenderer.end();
                     }
-                    shapeRenderer.end();
+
                 }
 
                 if(Save.gd.isFireBallEquiped()|Save.gd.isFireBall2Equiped()){
                     shapeRenderer.setColor(Color.GRAY);
                     shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
                     shapeRenderer.rect(x, y, w, h);
+                    shapeRenderer.end();
                     shapeRenderer.setColor(Color.RED);
                     //System.out.println("h="+h);
                     h = (max/3)*player.getFireBallCount();
                     //System.out.println("h="+h+" "+"player.MAXFIREBALLCOUNT="+player.MAXFIREBALLCOUNT+" "+"player.getFireBallCount()="+player.getFireBallCount());
-                    if(player.getFireBallCount()>0)
+                    if(player.getFireBallCount()>0){
+                        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
                         shapeRenderer.rect(x, y, w, h);
-                    shapeRenderer.end();
+                        shapeRenderer.end();
+                    }
+
                 }
 
 
@@ -2808,41 +2892,48 @@ public class Play extends GameState {
         cam.update();
         cpt_cameraIntro++;
 
-
-
         if(debug){
-            shapeRenderer.setColor(Color.BLACK);
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            shapeRenderer.circle((float)player.getBoundingBox().getMin().x, (float)player.getBoundingBox().getMin().y, 10);
-            shapeRenderer.circle((float)player.getBoundingBox().getMax().x, (float)player.getBoundingBox().getMax().y, 10);
 
-            shapeRenderer.circle(beamX,(float)player.getBoundingBox().getMax().y, 10);
+            shapeRenderer.setColor(Color.GREEN);
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 
-            shapeRenderer.circle((float)princess.getBoundingBox().getMin().x, (float)princess.getBoundingBox().getMin().y, 10);
-            shapeRenderer.circle((float)princess.getBoundingBox().getMax().x, (float)princess.getBoundingBox().getMax().y, 10);
-
-            shapeRenderer.setColor(Color.RED);
-            shapeRenderer.circle(boundingBoxCastle.getMin().x , boundingBoxCastle.getMin().y, 10);
-            shapeRenderer.circle(boundingBoxCastle.getMax().x , boundingBoxCastle.getMax().y, 10);
-
-            shapeRenderer.circle(boundingBoxKamehameha.getMin().x , boundingBoxKamehameha.getMin().y, 10);
-            shapeRenderer.circle(boundingBoxKamehameha.getMax().x , boundingBoxKamehameha.getMax().y, 10);
-
-
+            shapeRenderer.rect(player.getBoundingBox().getMin().x, player.getBoundingBox().getMin().y, player.getBoundingBox().getWidth(), player.getBoundingBox().getHeight());
+            shapeRenderer.rect(princess.getBoundingBox().getMin().x, princess.getBoundingBox().getMin().y, princess.getBoundingBox().getWidth(), princess.getBoundingBox().getHeight());
+            shapeRenderer.rect(boundingBoxKamehameha.getMin().x, boundingBoxKamehameha.getMin().y, boundingBoxKamehameha.getWidth(), boundingBoxKamehameha.getHeight());
+            //shapeRenderer.rect(boundingBoxCastle.getMin().x, boundingBoxCastle.getMin().y, boundingBoxCastle.getWidth(), boundingBoxCastle.getHeight());
+            if(lightning != null){
+                shapeRenderer.setColor(Color.RED);
+                shapeRenderer.rect(lightning.getBoundingBox().getMin().x, lightning.getBoundingBox().getMin().y, lightning.getBoundingBox().getWidth(), lightning.getBoundingBox().getHeight());
+                shapeRenderer.setColor(Color.GREEN);
+            }
 
             shapeRenderer.end();
 
             Iterator<Enemy> iterEnemies = enemies.iterator();
             while (iterEnemies.hasNext()) {
                 Enemy enemy = iterEnemies.next();
-                if(!enemy.isDead()){
-                    shapeRenderer.setColor(Color.BLACK);
-                    shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-                    shapeRenderer.circle((float)enemy.getBoundingBox().getMin().x, (float)enemy.getBoundingBox().getMin().y, 10);
-                    shapeRenderer.circle((float)enemy.getBoundingBox().getMax().x, (float)enemy.getBoundingBox().getMax().y, 10);
-                    shapeRenderer.end();
+                if(enemy != null && lightning != null){
+
+//                    shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+//                    shapeRenderer.rect(enemy.getBoundingBox().getMin().x, enemy.getBoundingBox().getMin().y, enemy.getBoundingBox().getWidth(), enemy.getBoundingBox().getHeight());
+//                    shapeRenderer.end();
+
+                    if(cl.intersect(enemy,lightning)){
+                        spriteBatch.begin();
+                        font.setColor(Color.BLUE);
+                        font.drawMultiLine(spriteBatch, "true", enemy.getBoundingBox().getMin().x, enemy.getBoundingBox().getMin().y, enemy.getBoundingBox().getWidth(), BitmapFont.HAlignment.LEFT);
+                        spriteBatch.end();
+                    }else{
+                        spriteBatch.begin();
+                        font.setColor(Color.RED);
+                        font.drawMultiLine(spriteBatch, "false", enemy.getBoundingBox().getMin().x, enemy.getBoundingBox().getMin().y, enemy.getBoundingBox().getWidth(), BitmapFont.HAlignment.LEFT);
+                        spriteBatch.end();
+                    }
+
+
                 }
             }
+
         }
 
         sb.setProjectionMatrix(hudCam.combined);
@@ -2856,7 +2947,7 @@ public class Play extends GameState {
         if(player.isPlayerDead()) buttonPause.setVisible(false);
 
         if (debug) {
-            b2dr.render(world, b2dCam.combined);
+            //b2dr.render(world, b2dCam.combined);
         }
 
         Gdx.gl.glViewport(0,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
@@ -2930,7 +3021,7 @@ public class Play extends GameState {
         PolygonShape shape = new PolygonShape();
 
         float w = 60/PPM;
-        float h = Gdx.graphics.getHeight();
+        float h = 64*8/PPM;
         bdef.position.set(x,y);
         addNewLightning = true;
         bdef.type = BodyType.DynamicBody;
@@ -2984,6 +3075,8 @@ public class Play extends GameState {
         fdef.friction = 0;
         fdef.restitution = 0;
         body.createFixture(fdef).setUserData("bricktop");
+
+        body.setGravityScale(1.2f);
 
 
         /*shape.setAsBox(w, h, new Vector2(0 , 0 ), 0);
@@ -3187,7 +3280,9 @@ public class Play extends GameState {
         Gdx.gl.glViewport(0,0, (int)viewport.width+ (int)offsetX, Gdx.graphics.getHeight());
         stage0.act();
         sb.begin();
+
         if(!lightningRunning){
+            //hide sky
             stage0.draw();
         }
 
@@ -3213,6 +3308,7 @@ public class Play extends GameState {
 
     public void dispose() {
         spriteBatch.dispose();
+        spriteBatchLightning.dispose();
     }
 
 }

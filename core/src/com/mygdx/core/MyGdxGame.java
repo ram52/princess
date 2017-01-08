@@ -42,6 +42,7 @@ public class MyGdxGame implements ApplicationListener {
     public static final String TITLE = "PRINCESS";
     public static final int V_WIDTH = 640;
     public static final int V_HEIGHT = 960;
+    public static int PAD_ZONE = 0;
     public static final int SCALE = 1;
     public static final float ASPECT_RATIO = (float) V_WIDTH / (float) V_HEIGHT;
     public static float STEP = 1 / 30f;
@@ -63,7 +64,7 @@ public class MyGdxGame implements ApplicationListener {
     private static boolean android = true;
     public static B2DSprite fadeIn, fadeOut;
     public static float FADE_DELAY = 1/50f;
-    public BitmapFont font;
+    public static BitmapFont font;
     public static String debugString = "";
     public static float GROUND = 2.5621998f;
 
@@ -251,6 +252,7 @@ public class MyGdxGame implements ApplicationListener {
         System.out.println("SCREEN SIZE: " + Gdx.graphics.getWidth() + "X" + Gdx.graphics.getHeight());
         Save.load();
         soundEnable = Save.gd.isSoundEnable();
+        PAD_ZONE= Gdx.graphics.getHeight() - (Gdx.graphics.getHeight() / 7);
 
     }
 
@@ -320,12 +322,13 @@ public class MyGdxGame implements ApplicationListener {
                             "java heap: "+ (int)(Gdx.app.getJavaHeap()/Math.pow(10, 6))+"Mb"+'\n'+
                             "native heap: "+ (int)(Gdx.app.getNativeHeap()/Math.pow(10, 6))+"Mb";
                 }
-                gsm.update(STEP);
-                try{
+//                try{
+                    gsm.update(STEP);
                     gsm.render();
-                }catch (NullPointerException e){
-                    System.out.println(e.toString());
-                }
+//                }catch(NullPointerException e){
+//                    System.out.println("error"+e.getMessage());
+//                }
+
 
                 if (Gdx.input.isKeyPressed(Keys.BACK)) showConfirmDialog();
             }
@@ -334,7 +337,6 @@ public class MyGdxGame implements ApplicationListener {
 //            font.setColor(Color.GREEN);
 //            font.drawMultiLine(sb, debugString, MyGdxGame.V_WIDTH/15 , MyGdxGame.V_HEIGHT/1.1f, MyGdxGame.V_WIDTH, BitmapFont.HAlignment.LEFT);
 //            sb.end();
-
 
 
         } else {
@@ -372,8 +374,6 @@ public class MyGdxGame implements ApplicationListener {
             shapeRenderer.setColor(r / 255f, g / 255f, b / 255f, 1f);
             shapeRenderer.rect(first, barPosY, barWidth*(progress/100), recSize);
         }
-
-        System.out.println(barWidth*(progress/100));
 
         shapeRenderer.setColor(r / 155f, g / 155f, b / 155f, 0.1f);
         shapeRenderer.rect(first, barPosY, barWidth, recSize);
