@@ -8,7 +8,8 @@ import com.mygdx.core.handlers.Save;
 
 public class Player extends B2DSprite 
 {
-    public static final int MAXFIREBALLCOUNT = 3 ;
+    public static final int MAXFIREBALLCOUNT = 10 ;
+    public static final int MAXFIREBALLCOUNT2 = 3 ;
     private int numCoins;
 	private int totalCoins;
     private boolean runnigLeft = false;
@@ -20,7 +21,7 @@ public class Player extends B2DSprite
     private boolean stillRight = true;
     private boolean stillLeft = false;
     private boolean playerDead = false;
-    private int fireBallCount = 3;
+    private int fireBallCount = 10;
     private boolean right = false;
     private boolean left = false;
     private boolean isSlashingRight = false;

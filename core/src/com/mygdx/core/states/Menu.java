@@ -63,6 +63,7 @@ public class Menu extends GameState {
     boolean left = false;
     boolean right2 = true;
     boolean left2 = false;
+    boolean jp = false;
     float y = 670.0f;
     private Stage stage0;
     private Image intro;
@@ -121,6 +122,18 @@ public class Menu extends GameState {
         animPrincessIdle = new Animation(new Sprite(MyGdxGame.atlas.findRegion("princesscry")).split(64, 64)[0], 1 / 5f);
 
         animTitle = new Animation(new Sprite(MyGdxGame.atlas.findRegion("princess!")).split(111, 44)[0], 1 / 5f);
+
+        System.out.println("LANG-->"+java.util.Locale.getDefault().toString());
+        if(java.util.Locale.getDefault().toString().equals("ja_JP")){
+            jp = true;
+        }else{
+            jp = false;
+        }
+
+        if(jp){
+            animTitle = new Animation(new Sprite(MyGdxGame.atlas.findRegion("princessjp")).split(153, 52)[0], 1 / 5f);
+        }
+
 
         animHelpMe = new Animation(new Sprite(MyGdxGame.atlas.findRegion("protectme")).split(123, 75)[0], 1 / 5f);
 
@@ -958,7 +971,13 @@ public class Menu extends GameState {
                 y-=0.3f;
             }
 
-            sb.draw(animTitle.getFrame(), MyGdxGame.V_WIDTH/2 - w/2, MyGdxGame.V_HEIGHT - h*1.2f , MyGdxGame.V_WIDTH/2, 670.0f -95/2 ,  w, h,1,1, 0);
+            if(jp){
+                w = w*1.1f;
+                sb.draw(animTitle.getFrame(), MyGdxGame.V_WIDTH/2 - w/2, MyGdxGame.V_HEIGHT - h*1.2f , MyGdxGame.V_WIDTH/2, 670.0f -95/2 ,  w, h,1,1, 0);
+            } else{
+                sb.draw(animTitle.getFrame(), MyGdxGame.V_WIDTH/2 - w/2, MyGdxGame.V_HEIGHT - h*1.2f , MyGdxGame.V_WIDTH/2, 670.0f -95/2 ,  w, h,1,1, 0);
+            }
+
 
 
             if(posX+(96/2) >= MyGdxGame.V_WIDTH){

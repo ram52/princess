@@ -194,7 +194,6 @@ public class MyGdxGame implements ApplicationListener {
 
         res = new Content();
         res.loadMusic(onSoundPath, "on");
-        res.getMusic("on").play();
         res.loadSound(errorSoundPath, "error");
         res.loadSound(reviveSoundPath, "revive");
         res.loadSound(yaSoundPath, "ya");
@@ -277,6 +276,11 @@ public class MyGdxGame implements ApplicationListener {
                 Gdx.gl.glViewport((int) viewport.x, (int) viewport.y, (int) viewport.width, (int) viewport.height);
 
                 progress = 100;
+
+                if(!res.getMusic("on").isPlaying()){
+                    res.getMusic("on").play();
+                }
+
                 System.out.println("LOADING...  " + progress+"%");
 
                 Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -298,7 +302,7 @@ public class MyGdxGame implements ApplicationListener {
                                     wait = true;
                                 }
                             },
-                            500
+                            1000
                     );
                 }
             }
@@ -322,21 +326,21 @@ public class MyGdxGame implements ApplicationListener {
                             "java heap: "+ (int)(Gdx.app.getJavaHeap()/Math.pow(10, 6))+"Mb"+'\n'+
                             "native heap: "+ (int)(Gdx.app.getNativeHeap()/Math.pow(10, 6))+"Mb";
                 }
-//                try{
+                try{
                     gsm.update(STEP);
                     gsm.render();
-//                }catch(NullPointerException e){
-//                    System.out.println("error"+e.getMessage());
-//                }
+                }catch(NullPointerException e){
+                    System.out.println("error"+e.getMessage());
+                }
 
 
                 if (Gdx.input.isKeyPressed(Keys.BACK)) showConfirmDialog();
             }
 
-//            sb.begin();
-//            font.setColor(Color.GREEN);
-//            font.drawMultiLine(sb, debugString, MyGdxGame.V_WIDTH/15 , MyGdxGame.V_HEIGHT/1.1f, MyGdxGame.V_WIDTH, BitmapFont.HAlignment.LEFT);
-//            sb.end();
+            sb.begin();
+            font.setColor(Color.GREEN);
+            font.drawMultiLine(sb, debugString, MyGdxGame.V_WIDTH/15 , MyGdxGame.V_HEIGHT/1.1f, MyGdxGame.V_WIDTH, BitmapFont.HAlignment.LEFT);
+            sb.end();
 
 
         } else {

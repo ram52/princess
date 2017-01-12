@@ -25,7 +25,6 @@ public class MyContactListener implements ContactListener {
 	private Array<Body> coinsToRemove;
     private boolean boosHit = false;
     private boolean touchBorder = false;
-	private Play play;
 
 	public Array<Body> getEnemiesToRemove() {
 		return enemiesToRemove;
@@ -37,11 +36,10 @@ public class MyContactListener implements ContactListener {
 
 	private Array<Body> enemiesToRemove;
 
-	public MyContactListener(Play play) {
+	public MyContactListener() {
 		super();
 		coinsToRemove = new Array<Body>();
 		enemiesToRemove = new Array<Body>();
-		this.play = play;
 	}
 
 	public boolean intersect(B2DSprite entity1, B2DSprite entity2){

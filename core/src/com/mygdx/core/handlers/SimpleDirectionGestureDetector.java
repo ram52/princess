@@ -37,7 +37,7 @@ private static class DirectionGestureListener extends GestureAdapter{
                     directionListener.onLeft();
                 }
             }else{
-                if(velocityY>200){
+                if(velocityY>0){
                     directionListener.onDown();
                 }else{
                     directionListener.onUp();

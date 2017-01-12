@@ -19,13 +19,16 @@ public class FireBall extends B2DSprite{
 
     public FireBall(Body body) {
         super(body);
+        TextureRegion[] sprites;
         if(Save.gd.isFireBall2Equiped()){
             tex = new Sprite(MyGdxGame.atlas.findRegion("fireball2"));
+            sprites = tex.split( 179, 128)[0];
         }else{
             tex = new Sprite(MyGdxGame.atlas.findRegion("fireball"));
+            sprites = tex.split( 64, 64)[0];
         }
-        TextureRegion[] sprites = tex.split( 64, 64)[0];
-        setAnimation(sprites, 1 / 5f);
+
+        setAnimation(sprites, 1 / 15f);
         left = false;
         right = false;
         dead = false;
@@ -33,28 +36,32 @@ public class FireBall extends B2DSprite{
 
     public void normalAnimation(){
         setLoop(true);
+        TextureRegion[] sprites;
         if(Save.gd.isFireBall2Equiped()){
             tex = new Sprite(MyGdxGame.atlas.findRegion("fireball2"));
+            sprites = tex.split( 179, 128)[0];
         }else{
             tex = new Sprite(MyGdxGame.atlas.findRegion("fireball"));
+            sprites = tex.split( 64, 64)[0];
         }
-        TextureRegion[] sprites = tex.split( 64, 64)[0];
-        setAnimation(sprites, 1 / 5f);
+        setAnimation(sprites, 1 / 15f);
         left = false;
         right = true;
     }
 
     public void normalAnimation_rev(){
         setLoop(true);
+        TextureRegion[] sprites;
         if(Save.gd.isFireBall2Equiped()){
             tex = new Sprite(MyGdxGame.atlas.findRegion("fireball2"));
+            sprites = tex.split( 179, 128)[0];
         }else{
             tex = new Sprite(MyGdxGame.atlas.findRegion("fireball"));
+            sprites = tex.split( 64, 64)[0];
         }
-        TextureRegion[] sprites = tex.split( 64, 64)[0];
         for(int i=0;i<sprites.length;i++)
             sprites[i].flip(true,false);
-        setAnimation(sprites, 1 / 5f);
+        setAnimation(sprites, 1 / 15f);
         left = true;
         right = false;
     }

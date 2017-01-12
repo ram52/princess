@@ -74,10 +74,7 @@ import com.mygdx.core.handlers.SimpleDirectionGestureDetector;
 
 public class Play extends GameState {
 
-    private static int NJUMP = 2;
     private boolean debug = false;
-    private boolean stopMain = false;
-    private boolean jump1 = false;
     public World world;
     private Box2DDebugRenderer b2dr;
     private BoundedCamera b2dCam, cam2;
@@ -88,32 +85,22 @@ public class Play extends GameState {
     private Player player;
     private Princess princess;
     private Array<Enemy> enemies;
-    //private Array<Brick> bricks;
     private Brick brick;
     private Lightning lightning;
     private Array<FireBall> fireBalls;
     private ScheduledExecutorService executor;
-    private Array<Coin> coins;
-    long d = 3000;
-    private int cpt0 = 0, cpt1 = 0, cpt2 = 0, cpt_cameraIntro = 0;
+    private int cpt_cameraIntro = 0;
     private int player_selector = 0;
     private Stage stage1, stageUiContinue;
     private Label labelScore, labelMoney;
-    private TextButtonStyle buttonStyle;
     private Button.ButtonStyle pauseButtonStyle;
-    private TextButton button;
     private Rectangle viewport;
-    private Image fade;
-    private int fly = 0;
-    private int cpt_fly;
     private Vector2 crop;
     private Button buttonPause, buttonSound, buttonPlay, imageCoin, imageUiBackground;
     private Skin skin;
     private boolean cameraMotionOver = false, playerStartMoving = false;
     private int cpt_translate_animation = 0;
-    private int cptJump = 0;
     private int enemiesKilled = 0;
-    private int jumpDelay = 0;
     private boolean isSlideInEnd = false;
     private boolean isSlideOutEnd = false;
     private  boolean uiIsSliding = false;
@@ -159,8 +146,8 @@ public class Play extends GameState {
     private SpriteBatch spriteBatch;
     private SpriteBatch spriteBatchLightning;
     private Animation animKamehameha0, animKamehameha0_rev, animKamehameha1, animKamehameha1_rev, animKamehameha2, animKamehameha2_rev;
-    protected BoundingBox boundingBoxCastle, boundingBoxKamehameha;
-    protected double cpt_sound_hit = 0;
+    private BoundingBox boundingBoxCastle, boundingBoxKamehameha;
+    private double cpt_sound_hit = 0;
     private Stage stage0;
     private Image intro;
     private ScreenShake screenShake;
@@ -262,7 +249,7 @@ public class Play extends GameState {
         }
 
         // WINGS
-        if (Save.gd.getFullBarPurchased() == false) {
+        if (!Save.gd.getFullBarPurchased()) {
             Save.gd.setWingState(1);
             if(MyGdxGame.isSecretDiscovered()) {
                 Save.gd.setWingState(2);
@@ -271,8 +258,6 @@ public class Play extends GameState {
         }
         else
             Save.gd.setWingState(3);
-
-        cpt_fly = (int) Save.gd.getWingState();
 
         // set up box2d
         world = new World(new Vector2(0, -9.81f), false);
@@ -369,7 +354,7 @@ public class Play extends GameState {
         float space = (Gdx.graphics.getWidth() - (size*4))/5;
         buttonLeft.setWidth(size);
         buttonLeft.setHeight(size);
-        buttonLeft.setPosition(space, space*2);
+        buttonLeft.setPosition(space, space*3);
         //buttonLeft.setBounds(0,0,Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight());
         stageUiControl.addActor(buttonLeft);
 
@@ -509,7 +494,7 @@ public class Play extends GameState {
                     float y, int pointer, int button) {
                 left = true;
                 right = false;
-
+                buttonLeft.setChecked(true);
                 return true;
             }
 
@@ -521,6 +506,8 @@ public class Play extends GameState {
                 //System.out.println("clicked left!");
                 left = false;
                 right = false;
+                buttonLeft.setChecked(false);
+                buttonRight.setChecked(false);
 
             }
 
@@ -533,6 +520,7 @@ public class Play extends GameState {
                     float y, int pointer, int button) {
                 right = true;
                 left = false;
+                buttonRight.setChecked(true);
 
                 return true;
             }
@@ -545,6 +533,8 @@ public class Play extends GameState {
                 //System.out.println("clicked right!");
                 right = false;
                 left = false;
+                buttonLeft.setChecked(false);
+                buttonRight.setChecked(false);
 
             }
 
@@ -621,7 +611,7 @@ public class Play extends GameState {
         //enemies.add(createEnemy(MyGdxGame.V_WIDTH*1.0f/PPM, MyGdxGame.GROUND, false));
         //enemies.add(createEnemy(1/PPM, MyGdxGame.GROUND, true));
 
-        cl = new MyContactListener(this);
+        cl = new MyContactListener();
         world.setContactListener(cl);
 
         player.setNumCoins(0);
@@ -696,7 +686,7 @@ public class Play extends GameState {
                     public void onUp() {
                         System.out.println("onUp"+" "+Gdx.input.getY()+" "+MyGdxGame.PAD_ZONE);
                         if(Gdx.input.getY() < MyGdxGame.PAD_ZONE){
-                            if(!player.isPlayerDead() && !MyGdxGame.pause ) {
+                            if(!player.isPlayerDead() && !MyGdxGame.pause && !isGamePadTouched()) {
                                 jump = true;
                                 System.out.println("up");
                             }
@@ -706,7 +696,7 @@ public class Play extends GameState {
                     @Override
                     public void onRight() {
                         System.out.println("onRight"+" "+Gdx.input.getY()+" "+MyGdxGame.PAD_ZONE);
-                        if(Gdx.input.getY() < MyGdxGame.PAD_ZONE){
+                        if(Gdx.input.getY() < MyGdxGame.PAD_ZONE && !MyGdxGame.pause && !isGamePadTouched() ){
                             right = true;
                             left = false;
                         }
@@ -716,7 +706,7 @@ public class Play extends GameState {
                     @Override
                     public void onLeft() {
                         System.out.println("onLeft"+" "+Gdx.input.getY()+" "+MyGdxGame.PAD_ZONE);
-                        if(Gdx.input.getY() < MyGdxGame.PAD_ZONE){
+                        if(Gdx.input.getY() < MyGdxGame.PAD_ZONE && !MyGdxGame.pause && !isGamePadTouched()){
                             left = true;
                             right = false;
                         }
@@ -725,7 +715,7 @@ public class Play extends GameState {
                     @Override
                     public void onDown() {
 
-                        //if(Gdx.input.getY() < MyGdxGame.PAD_ZONE){
+                        if(Gdx.input.getY() < MyGdxGame.PAD_ZONE && !MyGdxGame.pause){
                             if(!Save.gd.isBrick2Equiped()){
                                 if(brick == null){
                                     brick = createBrick(lastClickPos, Gdx.graphics.getHeight()/PPM);
@@ -772,7 +762,7 @@ public class Play extends GameState {
 
                                 System.out.println("down");
                             }
-                        //}
+                        }
 
                     }
                 });
@@ -1048,17 +1038,39 @@ public class Play extends GameState {
 
     }
 
+    public boolean isGamePadTouched(){
+        boolean isTouched = false;
+        if(buttonFire.isChecked()) isTouched = true;
+        if(buttonJump.isChecked()) isTouched = true;
+        if(buttonLeft.isChecked()) isTouched = true;
+        if(buttonRight.isChecked()) isTouched = true;
+        return isTouched;
+    }
+
     public void handleInput() {
+
+
+        if(!buttonRight.isOver() && buttonRight.isChecked()){
+            right = false;
+        }
+        if(!buttonLeft.isOver() && buttonLeft.isChecked()){
+            left = false;
+        }
+
 
         //bound player in screen
         if(player.getPosition().x - player.getWidth()/2/PPM < 0){
             //System.out.println("OUT");
             player.getBody().setTransform(player.getWidth()/2/PPM , player.getPosition().y, player.getBody().getAngle());
+            left = false;
+            right = false;
         }
 
         if(player.getPosition().x + player.getWidth()/2/PPM >  MyGdxGame.V_WIDTH/PPM){
             //System.out.println("OUT");
             player.getBody().setTransform(MyGdxGame.V_WIDTH/PPM - player.getWidth()/2/PPM, player.getPosition().y, player.getBody().getAngle());
+            left = false;
+            right = false;
         }
 
         //player not moving
@@ -1577,13 +1589,17 @@ public class Play extends GameState {
                 }
 
                 if(!enemy.isDead() && cl.intersect(fireBall,enemy)){
-                    System.out.println("FIRE BALL TOUCH ENEMY!");
-                    enemy.setHealth(0);
-
-                    if(!Save.gd.isFireBall2Equiped()){
+                    if(Save.gd.isFireBallEquiped()){
                         fireBall.setDead(true);
                         fireBalls.removeValue(fireBall, true);
                         fireBall.destroy();
+                        enemy.setHealth(0);
+                        System.out.println("FIRE BALL 1 TOUCH ENEMY!");
+                    }
+
+                    if(Save.gd.isFireBall2Equiped()){
+                        enemy.setHealth(0);
+                        System.out.println("FIRE BALL 2 TOUCH ENEMY!");
                     }
 
                 }
@@ -2035,7 +2051,7 @@ public class Play extends GameState {
                                 System.out.println("enemy killed="+enemiesKilled);
                             }
 
-                            if(Save.gd.isFireBall2Equiped() && enemiesKilled >= 4 && player.getFireBallCount()<player.MAXFIREBALLCOUNT){
+                            if(Save.gd.isFireBall2Equiped() && enemiesKilled >= 4 && player.getFireBallCount()<player.MAXFIREBALLCOUNT2){
                                 fire = false;
                                 player.setFireBallCount(player.getFireBallCount()+1);
                                 enemiesKilled = 0;
@@ -2459,7 +2475,7 @@ public class Play extends GameState {
         }
 
 
-        if( (cl.isPlayerOnGround() |cl.isPlayerOnBrick() ) && jump && !player.isJumpRight() && !player.isJumpRight() && (!player.isSlashingLeft()|!player.isSlashingRight()) && (player.getPosition().y*PPM) < 325 ){
+        if( (cl.isPlayerOnGround() |cl.isPlayerOnBrick() ) && jump && !player.isJumpRight() && !player.isJumpRight() && (!player.isSlashingLeft()|!player.isSlashingRight()) /*&& (player.getPosition().y*PPM) < 625*/ ){
             jump = false;
             player.getBody().setLinearVelocity(new Vector2(player.getBody().getLinearVelocity().x,0));
             player.getBody().setAngularVelocity(0);
@@ -2555,26 +2571,6 @@ public class Play extends GameState {
         MyGdxGame.background_cloud.update(dt);
 
 
-        Array<Body> bodies = cl.getCoinsBodies();
-        for (int i = 0; i < bodies.size; i++) {
-            //*****
-            Body b = bodies.get(i);
-            coins.removeValue((Coin) b.getUserData(), true);
-            world.destroyBody(bodies.get(i));
-            //player.collectCoin();
-            if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("point").play();
-        }
-        bodies.clear();
-
-        /*Array<Body> bodiesEnemy = cl.getEnemiesToRemove();
-        for (int i = 0; i < bodiesEnemy.size; i++) {
-            Body b = bodiesEnemy.get(i);
-            //enemies.removeValue((Enemy) b.getUserData(), true);
-            world.destroyBody(bodiesEnemy.get(i));
-            player.collectCoin();
-            if (MyGdxGame.isSoundEnable()) MyGdxGame.res.getSound("point").play();
-        }
-        bodiesEnemy.clear();*/
 
 
         labelScore.setText(Integer.toString(player.getNumCoins()));
@@ -2798,7 +2794,7 @@ public class Play extends GameState {
                     shapeRenderer.end();
                     shapeRenderer.setColor(Color.RED);
                     //System.out.println("h="+h);
-                    h = (max/3)*player.getFireBallCount();
+                    h = (max/player.MAXFIREBALLCOUNT)*player.getFireBallCount();
                     //System.out.println("h="+h+" "+"player.MAXFIREBALLCOUNT="+player.MAXFIREBALLCOUNT+" "+"player.getFireBallCount()="+player.getFireBallCount());
                     if(player.getFireBallCount()>0){
                         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -2947,7 +2943,7 @@ public class Play extends GameState {
         if(player.isPlayerDead()) buttonPause.setVisible(false);
 
         if (debug) {
-            //b2dr.render(world, b2dCam.combined);
+            b2dr.render(world, b2dCam.combined);
         }
 
         Gdx.gl.glViewport(0,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
@@ -3187,7 +3183,7 @@ public class Play extends GameState {
             fdef.filter.maskBits =  B2DVars.BIT_GROUND|BIT_BLOCK;
             body.createFixture(fdef).setUserData("player");
             // foot
-            shape.setAsBox(w/1.95f, h/5, new Vector2(0 , -h*0.99f ), 0);
+            shape.setAsBox(w*2f, h/5, new Vector2(0 , -h*0.99f ), 0);
             fdef.shape = shape;
             fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
             fdef.filter.maskBits = B2DVars.BIT_GROUND|BIT_BLOCK;
