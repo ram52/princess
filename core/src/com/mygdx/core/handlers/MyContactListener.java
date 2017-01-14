@@ -20,6 +20,11 @@ import static com.mygdx.core.handlers.B2DVars.PPM;
 public class MyContactListener implements ContactListener {
 
 	private int numFootContacts = 0;
+
+	public void setNumFootBrickContacts(int numFootBrickContacts) {
+		this.numFootBrickContacts = numFootBrickContacts;
+	}
+
 	private int numFootBrickContacts = 0;
 	private Boolean touch_enemy = false;
 	private Array<Body> coinsToRemove;

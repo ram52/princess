@@ -2104,6 +2104,7 @@ public class Play extends GameState {
                 brick.hurtAnimation();
                 //System.out.println("hurt"+" "+world.getContactCount()+" "+Gdx.graphics.getFramesPerSecond());
                 brick.getBody().setType(BodyType.StaticBody);
+                cl.setNumFootBrickContacts(0);
             }else{
                 brick.normalAnimation();
                 brick.getBody().setType(BodyType.DynamicBody);
@@ -2595,7 +2596,7 @@ public class Play extends GameState {
         if(player.isPlayerDead()) buttonPause.setVisible(false);
 
         if (DEBUG) {
-            b2dr.render(world, b2dCam.combined);
+            //b2dr.render(world, b2dCam.combined);
         }
 
         Gdx.gl.glViewport(0,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
@@ -2623,7 +2624,7 @@ public class Play extends GameState {
         fdef.isSensor = true;
         fdef.restitution = 0;
         fdef.filter.categoryBits = B2DVars.BIT_ENEMY;
-        fdef.filter.maskBits = B2DVars.BIT_PRINCESS | B2DVars.BIT_BLOCK | B2DVars.BIT_GROUND;
+        fdef.filter.maskBits = /*B2DVars.BIT_PRINCESS | B2DVars.BIT_BLOCK |*/ B2DVars.BIT_GROUND;
         body.setGravityScale(0);
         body.createFixture(fdef).setUserData("enemy");
 
@@ -2706,7 +2707,7 @@ public class Play extends GameState {
         fdef.isSensor = false;
         fdef.restitution = 0;
         fdef.filter.categoryBits = B2DVars.BIT_BLOCK ;
-        fdef.filter.maskBits =  B2DVars.BIT_GROUND | B2DVars.BIT_ENEMY | B2DVars.BIT_PLAYER;
+        fdef.filter.maskBits =  B2DVars.BIT_GROUND | B2DVars.BIT_ENEMY /*| B2DVars.BIT_PLAYER*/;
         body.createFixture(fdef).setUserData("brick");
         // foot
         shape.setAsBox(w, 0.05f, new Vector2(0 , h), 0);
@@ -2720,17 +2721,6 @@ public class Play extends GameState {
         body.createFixture(fdef).setUserData("bricktop");
 
         body.setGravityScale(1.2f);
-
-
-        /*shape.setAsBox(w, h, new Vector2(0 , 0 ), 0);
-        fdef.shape = shape;
-        fdef.filter.categoryBits = B2DVars.BIT_ENEMY;
-        fdef.filter.maskBits = B2DVars.BIT_PLAYER;
-        fdef.isSensor = true;
-        fdef.density = 0;
-        fdef.friction = 0;
-        fdef.restitution = 0;
-        body.createFixture(fdef).setUserData("enemySensor");*/
 
         shape.dispose();
 
@@ -2761,27 +2751,6 @@ public class Play extends GameState {
         fdef.filter.maskBits = B2DVars.BIT_ENEMY;
         body.setGravityScale(0);
         body.createFixture(fdef).setUserData("princess");
-        // foot
-        /*shape.setAsBox(w, h, new Vector2(0 , 0 ), 0);
-        fdef.shape = shape;
-        fdef.filter.categoryBits = B2DVars.BIT_ENEMY;
-        fdef.filter.maskBits = B2DVars.BIT_GROUND;
-        fdef.isSensor = true;
-        fdef.density = 0;
-        fdef.friction = 0;
-        fdef.restitution = 0;
-        body.createFixture(fdef).setUserData("foot");*/
-
-        /*shape.setAsBox(w, h, new Vector2(0 , 0 ), 0);
-        fdef.shape = shape;
-        fdef.filter.categoryBits = B2DVars.BIT_ENEMY;
-        fdef.filter.maskBits = B2DVars.BIT_PLAYER;
-        fdef.isSensor = true;
-        fdef.density = 0;
-        fdef.friction = 0;
-        fdef.restitution = 0;
-        body.createFixture(fdef).setUserData("enemySensor");*/
-
         shape.dispose();
 
         body.setLinearVelocity(-1,0);
