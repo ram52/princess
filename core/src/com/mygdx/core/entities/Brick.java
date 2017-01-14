@@ -167,17 +167,6 @@ public class Brick extends B2DSprite{
             normal = false;
             broken = true;
             hurt = false;
-
-            new java.util.Timer().schedule(
-                    new java.util.TimerTask() {
-                        @Override
-                        public void run() {
-                            setDead(true);
-                            destroy();
-                        }
-                    },
-                    800
-            );
         }
     }
 

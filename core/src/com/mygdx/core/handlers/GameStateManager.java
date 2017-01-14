@@ -12,7 +12,7 @@ import com.mygdx.core.states.Play;
 import com.mygdx.core.states.Ending;
 import com.mygdx.core.states.Shop;
 import com.mygdx.core.states.Opening;
-import com.mygdx.core.states.Tuto;
+import com.mygdx.core.states.Tutorial;
 
 public class GameStateManager {
 
@@ -94,7 +94,7 @@ public class GameStateManager {
             flag_opening = false;
 			flag_credits = false;
 			flag_shop = false;
-			return new Play(this);
+			return new Play(this,false);
 			}
 		if(state == GAME_OVER){
 			flag_menu = false;
@@ -116,7 +116,7 @@ public class GameStateManager {
             flag_opening = false;
 			flag_credits = false;
 			flag_shop = false;
-			return new Tuto(this);
+			return new Tutorial(this);
 			}
 
         if(state == ENDING){

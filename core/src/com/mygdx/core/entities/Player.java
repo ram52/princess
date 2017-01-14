@@ -10,6 +10,8 @@ public class Player extends B2DSprite
 {
     public static final int MAXFIREBALLCOUNT = 10 ;
     public static final int MAXFIREBALLCOUNT2 = 3 ;
+    public static float PLAYER_VELOCITY = 1.4f;
+    public static float PLAYER_VELOCITYBOOST = 1.4f;
     private int numCoins;
 	private int totalCoins;
     private boolean runnigLeft = false;

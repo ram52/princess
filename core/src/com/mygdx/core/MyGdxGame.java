@@ -32,17 +32,17 @@ import com.mygdx.core.handlers.MyInputProcessor;
 import com.mygdx.core.handlers.Save;
 
 public class MyGdxGame implements ApplicationListener {
-    private static final String TAG = "MyGdxGame";
+    private static final String TAG = MyGdxGame.class.getSimpleName();
     private Stage stage0;
     private Image intro;
     private FPSLogger fps;
-    //private com.badlogic.gdx.graphics.g2d.Animation loading;
     public static Rectangle viewport;
     public static ActionResolver actionResolver;
     public static final String TITLE = "PRINCESS";
     public static final int V_WIDTH = 640;
     public static final int V_HEIGHT = 960;
     public static int PAD_ZONE = 0;
+    public static int BRICK_SUMON_ZONE = 0;
     public static final int SCALE = 1;
     public static final float ASPECT_RATIO = (float) V_WIDTH / (float) V_HEIGHT;
     public static float STEP = 1 / 30f;
@@ -67,6 +67,7 @@ public class MyGdxGame implements ApplicationListener {
     public static BitmapFont font;
     public static String debugString = "";
     public static float GROUND = 2.5621998f;
+    public static boolean DEBUG = false;
 
 
     public static void setIsBoosTerritory(boolean isBoosTerritory) {
@@ -153,7 +154,6 @@ public class MyGdxGame implements ApplicationListener {
     private static boolean wait = false;
     private static boolean init = false;
     public static int continueCount = 0;
-    public static float PLAYER_VELOCITY = 1.4f;
 
     public static boolean isContinue() {
         return Continue;
@@ -248,10 +248,11 @@ public class MyGdxGame implements ApplicationListener {
         hudCam = new OrthographicCamera();
         hudCam.setToOrtho(false, V_WIDTH, V_HEIGHT);
         size(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        System.out.println("SCREEN SIZE: " + Gdx.graphics.getWidth() + "X" + Gdx.graphics.getHeight());
+        System.out.println(TAG+"-->"+ "SCREEN SIZE: " + Gdx.graphics.getWidth() + "X" + Gdx.graphics.getHeight());
         Save.load();
         soundEnable = Save.gd.isSoundEnable();
         PAD_ZONE= Gdx.graphics.getHeight() - (Gdx.graphics.getHeight() / 7);
+        BRICK_SUMON_ZONE= Gdx.graphics.getHeight() - (Gdx.graphics.getHeight() / 2);
 
     }
 
@@ -281,7 +282,7 @@ public class MyGdxGame implements ApplicationListener {
                     res.getMusic("on").play();
                 }
 
-                System.out.println("LOADING...  " + progress+"%");
+                System.out.println(TAG+"-->"+"LOADING...  " + progress+"%");
 
                 Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
                 sb.setProjectionMatrix(cam.combined);
@@ -326,29 +327,30 @@ public class MyGdxGame implements ApplicationListener {
                             "java heap: "+ (int)(Gdx.app.getJavaHeap()/Math.pow(10, 6))+"Mb"+'\n'+
                             "native heap: "+ (int)(Gdx.app.getNativeHeap()/Math.pow(10, 6))+"Mb";
                 }
-                try{
+//                try{
                     gsm.update(STEP);
                     gsm.render();
-                }catch(NullPointerException e){
-                    System.out.println("error"+e.getMessage());
-                }
+//                }catch(NullPointerException e){
+//                    System.out.println("error"+e.getMessage());
+//                }
 
 
                 if (Gdx.input.isKeyPressed(Keys.BACK)) showConfirmDialog();
             }
 
-            sb.begin();
-            font.setColor(Color.GREEN);
-            font.drawMultiLine(sb, debugString, MyGdxGame.V_WIDTH/15 , MyGdxGame.V_HEIGHT/1.1f, MyGdxGame.V_WIDTH, BitmapFont.HAlignment.LEFT);
-            sb.end();
-
+            if(DEBUG){
+                sb.begin();
+                font.setColor(Color.GREEN);
+                font.drawMultiLine(sb, debugString, MyGdxGame.V_WIDTH/15 , MyGdxGame.V_HEIGHT/1.1f, MyGdxGame.V_WIDTH, BitmapFont.HAlignment.LEFT);
+                sb.end();
+            }
 
         } else {
             //display loading screen
             resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
             Gdx.gl.glViewport((int) viewport.x, (int) viewport.y, (int) viewport.width, (int) viewport.height);
             progress = 100 * (assets.getLoadedAssets() / numberOfAssets);
-            System.out.println("LOADING...  " + progress +"%");
+            System.out.println(TAG+"-->"+"LOADING...  " + progress +"%");
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
             sb.setProjectionMatrix(cam.combined);
             stage0.act();
@@ -361,11 +363,9 @@ public class MyGdxGame implements ApplicationListener {
         }
     }
 
-    public void displayLoadingBar(int r, int g, int b, float posY, boolean full) {
+    private void displayLoadingBar(int r, int g, int b, float posY, boolean full) {
         float recSize = 40f;
-        float space = 5f;
         float barWidth = V_WIDTH/1.5f;
-        float barPosY = posY;
         float first = (V_WIDTH - barWidth)/2;
         Gdx.gl.glEnable(GL20.GL_BLEND);
         shapeRenderer.setProjectionMatrix(cam.combined);
@@ -373,14 +373,14 @@ public class MyGdxGame implements ApplicationListener {
 
         if(full){
             shapeRenderer.setColor(r / 255f, g / 255f, b / 255f, 1f);
-            shapeRenderer.rect(first, barPosY, barWidth, recSize);
+            shapeRenderer.rect(first, posY, barWidth, recSize);
         }else{
             shapeRenderer.setColor(r / 255f, g / 255f, b / 255f, 1f);
-            shapeRenderer.rect(first, barPosY, barWidth*(progress/100), recSize);
+            shapeRenderer.rect(first, posY, barWidth*(progress/100), recSize);
         }
 
         shapeRenderer.setColor(r / 155f, g / 155f, b / 155f, 0.1f);
-        shapeRenderer.rect(first, barPosY, barWidth, recSize);
+        shapeRenderer.rect(first, posY, barWidth, recSize);
 
         shapeRenderer.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
@@ -515,7 +515,7 @@ public class MyGdxGame implements ApplicationListener {
 //        Gdx.gl.glDisable(GL20.GL_BLEND);
     }
 
-    public void setBackgrounds() {
+    private void setBackgrounds() {
         Sprite tex;
         tex = new Sprite(MyGdxGame.atlas.findRegion("buttonSecret"));
         background_cloud = new Background(new TextureRegion(tex), cam, 1f);
@@ -569,13 +569,13 @@ public class MyGdxGame implements ApplicationListener {
         Save.gd.setSound(soundEnable);
         Save.save();
         soundEnable = Save.gd.isSoundEnable();
-        System.out.println("SOUND: " + soundEnable);
+        System.out.println(TAG+"-->"+"SOUND: " + soundEnable);
     }
 
     public void size(int width, int height) {
         // calculate new viewport
         float aspectRatio = (float) width / (float) height;
-        float scale = 1f;
+        float scale;
         Vector2 crop = new Vector2(0f, 0f);
 
         if (aspectRatio > MyGdxGame.ASPECT_RATIO) {
@@ -638,8 +638,6 @@ public class MyGdxGame implements ApplicationListener {
     }
 
     public void resize(int width, int height) {
-        //System.out.println(TAG+" "+"resize:"+width+"x"+height+" "+"viewport.x:"+viewport.x);
-
         float aspectRatio = (float) width / (float) height;
         float scale = 1f;
         Vector2 crop = new Vector2(0f, 0f);

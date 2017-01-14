@@ -1,6 +1,5 @@
 package com.mygdx.core.handlers;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.input.GestureDetector;
 
 public class SimpleDirectionGestureDetector extends GestureDetector {

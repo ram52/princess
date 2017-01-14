@@ -40,7 +40,7 @@ public class Shop extends GameState {
     private Button buttonFireBall, buttonExcalibur, buttonKamehameha, buttonBoot;
     private Button buttonFireBall2, buttonMegaJump, buttonLightning, buttonBrick2;
     private Button buttonAds, buttonCoin1, buttonCoin2,buttonCoin3;
-    private int cpt_secret1 = 0, cpt_secret2 = 0;
+    private int cpt_secret1 = 0;
     private int cpt_translate_animation1 = 0;
     private Label labelMoney;
     public Skin skin;
@@ -52,7 +52,6 @@ public class Shop extends GameState {
     private Image intro;
     private float offsetY = 0;
 
-
     public Shop(GameStateManager gsm) {
 
         super(gsm);
@@ -60,13 +59,10 @@ public class Shop extends GameState {
         intro.setFillParent(true);
         stage0 = new Stage();
         stage0.addActor(intro);
-
         viewport = new Rectangle();
         skin = new Skin();
         skin.addRegions(MyGdxGame.atlas);
-
         Save.load();
-
         game.actionResolver.hideBannerAd();
 
         Sprite tex = new Sprite(MyGdxGame.atlas.findRegion("enemy"));
@@ -82,8 +78,6 @@ public class Shop extends GameState {
         animationEnemyMock = new Animation(sprites, 1 / 5f);
 
         animTitle = new Animation(new Sprite(MyGdxGame.atlas.findRegion("shop")).split(57,23)[0], 1 / 5f);
-
-
 
         if (!Save.gd.getAdsRemoverPurchased()) {
             String network = game.actionResolver.getNetworkClass();
@@ -156,15 +150,11 @@ public class Shop extends GameState {
         buttonSecret1.setPosition((Gdx.graphics.getWidth() - buttonSecret1.getWidth())/ 2.05f, (Gdx.graphics.getHeight() - buttonSecret1.getWidth())/4.3f );
         //stage1.addActor(buttonSecret1);
 
-
-
-
         buttonSecret2 = new Button(buttonStyleSecret);
         buttonSecret2.setWidth(Gdx.graphics.getWidth() / 8f);
         buttonSecret2.setHeight(Gdx.graphics.getWidth() / 8f);
         buttonSecret2.setPosition((Gdx.graphics.getWidth() - buttonSecret1.getWidth())/ 1.12f, (Gdx.graphics.getHeight() - buttonSecret1.getWidth())/21f );
         //stage1.addActor(buttonSecret2);
-
 
         ButtonStyle style = new ButtonStyle();
         style = new Button.ButtonStyle();
@@ -175,7 +165,6 @@ public class Shop extends GameState {
         imageCoin.setHeight(Gdx.graphics.getWidth() / 10f);
         imageCoin.setPosition((Gdx.graphics.getWidth()- 5*imageCoin.getWidth()) , imageCoin.getHeight()/2);
         //stage1.addActor(imageCoin);
-
 
         /**FIRST ITEM ROW*/
         style = new Button.ButtonStyle();
@@ -336,9 +325,6 @@ public class Shop extends GameState {
                 if (Save.gd.isSoundEnable() == 1 | Save.gd.isSoundEnable() == 2) MyGdxGame.res.getSound("select").play();
                 return true;
             }
-
-            ;
-
             public void touchUp(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
@@ -370,10 +356,7 @@ public class Shop extends GameState {
                     };
                     stage1.addActor(dialog);
                 }
-
             }
-
-            ;
         });
 
         buttonCoin1.addListener(new InputListener() {
@@ -383,9 +366,6 @@ public class Shop extends GameState {
                 if (Save.gd.isSoundEnable() == 1 | Save.gd.isSoundEnable() == 2) MyGdxGame.res.getSound("select").play();
                 return true;
             }
-
-            ;
-
             public void touchUp(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
@@ -416,11 +396,7 @@ public class Shop extends GameState {
                         }
                     };
                     stage1.addActor(dialog);
-
-
             }
-
-            ;
         });
 
         buttonCoin2.addListener(new InputListener() {
@@ -430,8 +406,6 @@ public class Shop extends GameState {
                 if (Save.gd.isSoundEnable() == 1 | Save.gd.isSoundEnable() == 2) MyGdxGame.res.getSound("select").play();
                 return true;
             }
-
-            ;
 
             public void touchUp(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
@@ -464,11 +438,7 @@ public class Shop extends GameState {
                     }
                 };
                 stage1.addActor(dialog);
-
-
             }
-
-            ;
         });
 
         buttonCoin3.addListener(new InputListener() {
@@ -478,8 +448,6 @@ public class Shop extends GameState {
                 if (Save.gd.isSoundEnable() == 1 | Save.gd.isSoundEnable() == 2) MyGdxGame.res.getSound("select").play();
                 return true;
             }
-
-            ;
 
             public void touchUp(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
@@ -511,11 +479,7 @@ public class Shop extends GameState {
                     }
                 };
                 stage1.addActor(dialog);
-
-
             }
-
-            ;
         });
 
 
@@ -929,8 +893,6 @@ public class Shop extends GameState {
                 return true;
             }
 
-            ;
-
             public void touchUp(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
@@ -1006,8 +968,6 @@ public class Shop extends GameState {
                     };
                     stage1.addActor(dialog);
                 }
-
-
             }
         });
 
@@ -1019,9 +979,6 @@ public class Shop extends GameState {
                 if (Save.gd.isSoundEnable() == 1 | Save.gd.isSoundEnable() == 2) MyGdxGame.res.getSound("select").play();
                 return true;
             }
-
-            ;
-
             public void touchUp(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
@@ -1103,7 +1060,6 @@ public class Shop extends GameState {
             }
         });
 
-
         buttonLightning.addListener(new InputListener() {
             public boolean touchDown(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
@@ -1111,9 +1067,6 @@ public class Shop extends GameState {
                 if (Save.gd.isSoundEnable() == 1 | Save.gd.isSoundEnable() == 2) MyGdxGame.res.getSound("select").play();
                 return true;
             }
-
-            ;
-
             public void touchUp(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
@@ -1167,11 +1120,7 @@ public class Shop extends GameState {
                     };
                     stage1.addActor(dialog);
                 }
-
                 else{
-
-
-
                     ShopDialog dialog = new ShopDialog(Shop.this,
                             "\n\n" +
                                     "LIGHTNING SUMMON\n" +
@@ -1199,10 +1148,7 @@ public class Shop extends GameState {
                         }
                     };
                     stage1.addActor(dialog);
-
-
                 }
-
             }
         });
 
@@ -1213,9 +1159,6 @@ public class Shop extends GameState {
                 if (Save.gd.isSoundEnable() == 1 | Save.gd.isSoundEnable() == 2) MyGdxGame.res.getSound("select").play();
                 return true;
             }
-
-            ;
-
             public void touchUp(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
@@ -1260,7 +1203,6 @@ public class Shop extends GameState {
                                                 }
                                             }, 500);
                                 }
-
                             }
                         }
                     };
@@ -1303,17 +1245,12 @@ public class Shop extends GameState {
                 if (Save.gd.isSoundEnable() == 1 | Save.gd.isSoundEnable() == 2) MyGdxGame.res.getSound("select").play();
                 return true;
             }
-
-            ;
-
             public void touchUp(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
                 click_on_play = true;
                 //Gdx.gl.glClearColor(0, 0, 0, 1);
             }
-
-            ;
         });
 
         buttonSecret2.addListener(new InputListener() {
@@ -1321,11 +1258,8 @@ public class Shop extends GameState {
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
 
-
                 return true;
             }
-
-            ;
 
             public void touchUp(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
@@ -1334,31 +1268,23 @@ public class Shop extends GameState {
                 buttonSecret2.setVisible(false);
                 //Gdx.gl.glClearColor(0, 0, 0, 1);
             }
-
-            ;
         });
 
         buttonSecret1.addListener(new InputListener() {
             public boolean touchDown(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
-
                 cpt_secret1++;
                 System.out.println("CLICK SECRET 1: " + cpt_secret1);
                 if(Save.gd.isSoundEnable() == 1 | Save.gd.isSoundEnable() == 2) MyGdxGame.res.getMusic("laugh").play();
-
                 return true;
             }
-
-            ;
 
             public void touchUp(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
                 //Gdx.gl.glClearColor(0, 0, 0, 1);
             }
-
-            ;
         });
 
         MyGdxGame.setIsBoosTerritory(false);
@@ -1368,7 +1294,7 @@ public class Shop extends GameState {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         // calculate new viewport
         float aspectRatio = (float) width / (float) height;
-        float scale = 1f;
+        float scale;
         Vector2 crop = new Vector2(0f, 0f);
 
         if (aspectRatio > MyGdxGame.ASPECT_RATIO) {
@@ -1397,14 +1323,6 @@ public class Shop extends GameState {
 
         stage1.getViewport().update((int) (width - offsetX), (int) (height - offsetY), true);
         stage2.getViewport().update((int) (width - offsetX), (int) (height - offsetY), true);
-
-//        stage1.getViewport().update((int) (width- offsetX), (int) (height- offsetY), true);
-//        stage2.getViewport().update((int) (width- offsetX), (int) (height- offsetY), true);
-//        //System.out.println(crop);
-//
-//        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-//        Gdx.gl.glViewport((int) viewport.x, (int) viewport.y, (int) viewport.width - (int)offsetX, (int) viewport.height);
-
     }
 
     public void handleInput() {
@@ -1430,11 +1348,9 @@ public class Shop extends GameState {
     }
 
     public void update(float dt) {
-
         animationEnemy.update(dt);
         animationEnemyMock.update(dt);
         animationCoin.update(dt);
-
         if (Save.gd.getAdsRemoverPurchased()) {
                 game.actionResolver.hideBannerAd();
         }
@@ -1448,7 +1364,6 @@ public class Shop extends GameState {
         updateItem(Save.gd.isBootEquiped(), "buttonBoot", buttonBoot);
         updateItem(Save.gd.isBrick2Equiped(), "buttonBrick2", buttonBrick2);
         updateItem(Save.gd.getAdsRemoverPurchased(), "buttonAds", buttonAds);
-
 
         if(MyGdxGame.isSoundEnable() == 2) {
             MyGdxGame.res.getMusic("main").setVolume(0.4f);
@@ -1476,9 +1391,6 @@ public class Shop extends GameState {
             if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("secretUnlock").play();
         }
     }
-
-
-
 
     public void render() {
 
