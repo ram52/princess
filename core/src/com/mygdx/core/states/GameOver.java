@@ -48,7 +48,7 @@ public class GameOver extends GameState {
     int cpt_translate_animation = 0;
     int cpt_translate_animation2 = 0;
     int cpt_translate_animation3 = 0;
-    private Animation animTitle, animSad;
+    private Animation animTitle, animSad, animHappy;
     private Stage stage0;
     private Image intro;
 
@@ -78,6 +78,18 @@ public class GameOver extends GameState {
 
         TextureRegion[] sprites = tex.split(110, 168)[0];
         animSad = new Animation(sprites, 1 / 5f);
+
+
+        if(Save.gd.isExcaliburEquiped()){
+            tex = new Sprite(MyGdxGame.atlas.findRegion("happyEx"));
+        }else{
+            tex = new Sprite(MyGdxGame.atlas.findRegion("happy"));
+        }
+
+        sprites = tex.split(132, 169)[0];
+        animHappy = new Animation(sprites, 1 / 5f);
+
+
 
         viewport = new Rectangle();
         click1 = false;
@@ -429,6 +441,7 @@ public class GameOver extends GameState {
         //MyGdxGame.background_skyDay.update(dt);
 
         animSad.update(dt);
+        animHappy.update(dt);
     }
 
     public void resize(int width, int height) {
@@ -563,7 +576,13 @@ public class GameOver extends GameState {
         float h = 47*6f;
         sb.begin();
         sb.draw(animTitle.getFrame(), MyGdxGame.V_WIDTH/2 - w/2, MyGdxGame.V_HEIGHT - h*1.1f , MyGdxGame.V_WIDTH/2, 670.0f -95/2 ,  w, h,1,1, 0);
-        sb.draw(animSad.getFrame(), MyGdxGame.V_WIDTH/2, 202);
+
+        if(score < 99){
+            sb.draw(animSad.getFrame(), MyGdxGame.V_WIDTH/2, 202);
+        }else {
+            sb.draw(animHappy.getFrame(), MyGdxGame.V_WIDTH/2 - 132/2, 202);
+        }
+
         sb.end();
 
 

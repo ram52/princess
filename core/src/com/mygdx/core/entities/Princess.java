@@ -107,7 +107,7 @@ public class Princess extends B2DSprite
         super(body);
         tex = new Sprite(MyGdxGame.atlas.findRegion("princess"));
         TextureRegion[] sprites = tex.split( 64, 64)[0];
-        setAnimation(sprites, 1 / 3f);
+        setAnimation(sprites, 1 / 5f);
 
         normalRight = true;
         normalLeft = false;
@@ -124,7 +124,7 @@ public class Princess extends B2DSprite
     public void fadeInAnimation(){
         tex = new Sprite(MyGdxGame.atlas.findRegion("enemyEscapeFadeIn"));
         TextureRegion[] sprites = tex.split( 64, 64)[0];
-        setAnimation(sprites, 1 / 3f);
+        setAnimation(sprites, 1 / 5f);
         normalRight = false;
         normalLeft = false;
         hitRight = false;
@@ -159,7 +159,7 @@ public class Princess extends B2DSprite
         TextureRegion[] sprites = tex.split( 64, 64)[0];
         for(int i=0;i<sprites.length;i++)
             sprites[i].flip(true,false);
-        setAnimation(sprites, 1 / 3f);
+        setAnimation(sprites, 1 / 5f);
         normalRight = false;
         normalLeft = false;
         hitRight = false;
@@ -176,7 +176,7 @@ public class Princess extends B2DSprite
     public void fadeOutAnimation(){
         tex = new Sprite(MyGdxGame.atlas.findRegion("enemyEscapeFadeOut"));
         TextureRegion[] sprites = tex.split( 64, 64)[0];
-        setAnimation(sprites, 1 / 8f);
+        setAnimation(sprites, 1 / 5f);
         setLoop(false);
         normalRight = false;
         normalLeft = false;
@@ -197,7 +197,7 @@ public class Princess extends B2DSprite
         TextureRegion[] sprites = tex.split( 64, 64)[0];
         for(int i=0;i<sprites.length;i++)
             sprites[i].flip(true,false);
-        setAnimation(sprites, 1 / 8f);
+        setAnimation(sprites, 1 / 5f);
         setLoop(false);
         normalRight = false;
         normalLeft = false;
@@ -216,7 +216,7 @@ public class Princess extends B2DSprite
         setLoop(true);
         tex = new Sprite(MyGdxGame.atlas.findRegion("princess"));
         TextureRegion[] sprites = tex.split( 64, 64)[0];
-        setAnimation(sprites, 1 / 3f);
+        setAnimation(sprites, 1 / 5f);
         normalRight = true;
         normalLeft = false;
         hitRight = false;
@@ -231,7 +231,7 @@ public class Princess extends B2DSprite
         TextureRegion[] sprites = tex.split( 64, 64)[0];
         for(int i=0;i<sprites.length;i++)
             sprites[i].flip(true,false);
-        setAnimation(sprites, 1 / 3f);
+        setAnimation(sprites, 1 / 5f);
         normalRight = false;
         normalLeft = true;
         hitRight = false;
@@ -243,7 +243,7 @@ public class Princess extends B2DSprite
     public void attackAnimation(){
         tex = new Sprite(MyGdxGame.atlas.findRegion("walk"));
         TextureRegion[] sprites = tex.split( 64, 64)[0];
-        setAnimation(sprites, 1 / 3f);
+        setAnimation(sprites, 1 / 5f);
     }
 
     public void cryAnimation(){

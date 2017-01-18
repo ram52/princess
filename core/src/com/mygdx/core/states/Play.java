@@ -42,6 +42,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.core.MyGdxGame;
+import com.mygdx.core.entities.B2DSprite;
 import com.mygdx.core.entities.Brick;
 import com.mygdx.core.entities.Enemy;
 import com.mygdx.core.entities.FireBall;
@@ -65,7 +66,6 @@ import java.util.concurrent.TimeUnit;
 import static com.mygdx.core.MyGdxGame.DEBUG;
 import static com.mygdx.core.MyGdxGame.font;
 import static com.mygdx.core.entities.Player.MAXFIREBALLCOUNT;
-import static com.mygdx.core.entities.Player.MAXFIREBALLCOUNT2;
 import static com.mygdx.core.entities.Player.PLAYER_VELOCITY;
 import static com.mygdx.core.entities.Player.PLAYER_VELOCITYBOOST;
 import static com.mygdx.core.handlers.B2DVars.BIT_BLOCK;
@@ -83,6 +83,7 @@ public class Play extends GameState {
     private Player player;
     private Princess princess;
     private Array<Enemy> enemies;
+    private Array<B2DSprite> bodyToDestroy;
     private Brick brick;
     private Lightning lightning;
     private Array<FireBall> fireBalls;
@@ -110,7 +111,8 @@ public class Play extends GameState {
     private boolean left = false;
     private boolean right = false;
     private boolean falling = false;
-    private boolean addNewEnemy = false;
+    private boolean addNewEnemy = true;
+    private boolean addPowerUpOrBrick = false;
     private boolean isMalicious = false;
     private boolean toggle = true;
     private boolean isTouchingEnemy = false;
@@ -128,10 +130,13 @@ public class Play extends GameState {
     private boolean lightningReachLimit = false;
     private Runnable runnable;
     private Boolean stopEnemies = false;
+    private Boolean isStepping = false;
     private Boolean step0 = false;
     private Boolean step1 = false;
     private Boolean step2 = false;
     private Boolean step3 = false;
+    private Boolean step4 = false;
+    private Boolean step5 = false;
     private Boolean jump = false;
     private Boolean enableBrick = true;
     private Button buttonLeft, buttonRight, buttonFire, buttonJump;
@@ -155,6 +160,8 @@ public class Play extends GameState {
     public Play(final GameStateManager gsm, boolean isTutorial) {
         super(gsm);
         this.isTutorial = isTutorial;
+
+        bodyToDestroy = new Array<B2DSprite>();
 
         screenShake = new ScreenShake(50000.0f,20.0f);
 
@@ -343,7 +350,7 @@ public class Play extends GameState {
         leftButtonStyle.up = skin.getDrawable("buttonUiBossLeftUp");
         leftButtonStyle.down = skin.getDrawable("buttonUiBossLeftDown");
         buttonLeft = new Button(leftButtonStyle);
-        float size = (Gdx.graphics.getWidth() / 4.5f);
+        float size = (Gdx.graphics.getWidth() / 4.2f);
         float space = (Gdx.graphics.getWidth() - (size*4))/5;
         buttonLeft.setWidth(size);
         buttonLeft.setHeight(size);
@@ -396,6 +403,7 @@ public class Play extends GameState {
             public boolean touchDown(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
+                buttonFire.setChecked(true);
                 if(Save.gd.isFireBallEquiped()|Save.gd.isFireBall2Equiped()){
                     System.out.println("clicked fire!");
                     fire = true;
@@ -418,6 +426,7 @@ public class Play extends GameState {
             public void touchUp(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
+                buttonFire.setChecked(false);
             }
         });
 
@@ -537,6 +546,18 @@ public class Play extends GameState {
                             executor.scheduleAtFixedRate(runnable, 0, 900, TimeUnit.MILLISECONDS);
                         }
 
+                        if(player.getNumCoins() >= 100 && !step4){
+                            step4 = true;
+                            executor = Executors.newScheduledThreadPool(1);
+                            executor.scheduleAtFixedRate(runnable, 0, 800, TimeUnit.MILLISECONDS);
+                        }
+
+                        if(player.getNumCoins() >= 200 && !step5){
+                            step5 = true;
+                            executor = Executors.newScheduledThreadPool(1);
+                            executor.scheduleAtFixedRate(runnable, 0, 600, TimeUnit.MILLISECONDS);
+                        }
+
                     }
                 }
             }
@@ -631,7 +652,7 @@ public class Play extends GameState {
 
                     @Override
                     public void onLeft() {
-                        System.out.println("onLeft"+" "+Gdx.input.getY()+" "+MyGdxGame.PAD_ZONE);
+                        System.out.println("onLeft"+" "+Gdx.input.getY()+" "+MyGdxGame.PAD_ZONE+" "+isGamePadTouched());
                         if(Gdx.input.getY() < MyGdxGame.PAD_ZONE && !MyGdxGame.pause && !isGamePadTouched()){
                             left = true;
                             right = false;
@@ -689,7 +710,8 @@ public class Play extends GameState {
                         enemy.setCptDieRunning(100);
                         enemies.removeValue(enemy, true);
                         //removeBodySafely(enemy.getBody());
-                        enemy.destroy();
+                        bodyToDestroy.add(enemy);
+                        //enemy.destroy();
                     }
                     if(princess != null){
                         princess.setTouched(false);
@@ -981,8 +1003,15 @@ public class Play extends GameState {
         }
 
         /**Handle keyboard input**/
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            if( (cl.isPlayerOnGround() |cl.isPlayerOnBrick() ) && !jump && !player.isJumpLeft() && !player.isJumpRight() && (!player.isSlashingLeft()|!player.isSlashingRight()) && (player.getPosition().y*PPM) < 325 ){
+        if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
+            if(     (cl.isPlayerOnGround() |cl.isPlayerOnBrick() ) &&
+                    !jump &&
+                    !player.isJumpLeft() &&
+                    !player.isJumpRight()
+//                    &&
+//                    (player.getPosition().y*PPM) < 325
+                    )
+            {
                 player.getBody().setLinearVelocity(new Vector2(player.getBody().getLinearVelocity().x,0));
                 player.getBody().setAngularVelocity(0);
 
@@ -991,11 +1020,10 @@ public class Play extends GameState {
                 }else{
                     player.getBody().applyForceToCenter(new Vector2(0,160),false);
                 }
-
             }
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
             //todo summon brick
             if(brick == null){
                 lastClickPos = player.getPosition().x;
@@ -1345,14 +1373,16 @@ public class Play extends GameState {
                     fireBall.setDead(true);
                     fireBalls.removeValue(fireBall, true);
                     //removeBodySafely(fireBall.getBody());
-                    fireBall.destroy();
+                    bodyToDestroy.add(fireBall);
+                    //fireBall.destroy();
                 }
 
                 if(!enemy.isDead() && cl.intersect(fireBall,enemy)){
                     if(Save.gd.isFireBallEquiped()){
                         fireBall.setDead(true);
                         fireBalls.removeValue(fireBall, true);
-                        fireBall.destroy();
+                        bodyToDestroy.add(fireBall);
+                        //fireBall.destroy();
                         enemy.setHealth(0);
                         System.out.println("FIRE BALL 1 TOUCH ENEMY!");
                     }
@@ -1428,7 +1458,8 @@ public class Play extends GameState {
                 beamWidth = 0;
                 blockLightning = true;
                 lightningRunning = false;
-                lightning.destroy();
+                bodyToDestroy.add(lightning);
+                //lightning.destroy();
                 lightning = null;
                 if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2){
                     MyGdxGame.res.getMusic("main").play();
@@ -1625,11 +1656,13 @@ public class Play extends GameState {
                                 @Override
                                 public void run() {
                                     brick.setDead(true);
-                                    brick.destroy();
+                                    brick.getBody().setType(BodyType.DynamicBody);//can't destroy static body for some reason.
+                                    bodyToDestroy.add(brick);
+                                    //brick.destroy();
                                     brick = null;
                                 }
                             },
-                            800
+                            500
                     );
                 }
                 brick.brokeAnimation();
@@ -1779,7 +1812,7 @@ public class Play extends GameState {
                                 System.out.println("enemy killed="+enemiesKilled);
                             }
 
-                            if(Save.gd.isFireBall2Equiped() && enemiesKilled >= 4 && player.getFireBallCount()<MAXFIREBALLCOUNT2){
+                            if(Save.gd.isFireBall2Equiped() && enemiesKilled >= 4 && player.getFireBallCount()<MAXFIREBALLCOUNT){
                                 fire = false;
                                 player.setFireBallCount(player.getFireBallCount()+1);
                                 enemiesKilled = 0;
@@ -1797,7 +1830,8 @@ public class Play extends GameState {
                         if(enemy.getCptDieRunning() > 80){
                             enemy.setDead(true);
                             enemies.removeValue(enemy, true);
-                            enemy.destroy();
+                            bodyToDestroy.add(enemy);
+                            //enemy.destroy();
                             //removeBodySafely(enemy.getBody());
                         }
 
@@ -2054,6 +2088,21 @@ public class Play extends GameState {
 
     }
 
+    private void purgeBodyToDestroy(){
+        for (B2DSprite sprite: bodyToDestroy) {
+
+            if (sprite.getBody() == null) continue;
+
+            sprite.destroy();
+
+            bodyToDestroy.removeValue(sprite, true);
+        }
+    }
+
+    private boolean isAddingBody(){
+        return (addNewEnemy | addPowerUpOrBrick);
+    }
+
     public void update(float dt) {
 
         if(princess != null){
@@ -2075,15 +2124,20 @@ public class Play extends GameState {
 
         }
 
-        String xBrick = String.valueOf((brick == null)? "null":brick.getPosition().x*PPM);
+        String xyBrick = String.valueOf((brick == null)? "null":brick.getPosition().x*PPM+" "+brick.getPosition().y*PPM);
 
         MyGdxGame.debugString = "fps: "+Gdx.graphics.getFramesPerSecond()+'\n'+
                 "java heap: "+ (int)(Gdx.app.getJavaHeap()/Math.pow(10, 6))+" Mb"+'\n'+
                 "native heap: "+ (int)(Gdx.app.getNativeHeap()/Math.pow(10, 6))+" Mb"+'\n'+
+                "bodyToDestroy: "+bodyToDestroy.size+'\n'+
+                "isAddingBody: "+isAddingBody()+'\n'+
+                "isStepping: "+isStepping+'\n'+
                 "d0: "+ step0+'\n'+
                 "d1: "+ step1+'\n'+
                 "d2: "+ step2+'\n'+
                 "d3: "+ step3+'\n'+
+                "d4: "+ step4+'\n'+
+                "d5: "+ step5+'\n'+
                 "world contact: "+ world.getContactCount()+'\n'+
                 "offDisplay: "+ offsetY+'\n'+
                 "enemy count: "+ enemies.size+'\n'+
@@ -2091,7 +2145,7 @@ public class Play extends GameState {
                 "onBrick: "+ cl.isPlayerOnBrick()+'\n'+
                 "xPlayer: "+ (int)(player.getPosition().x*PPM)+'\n'+
                 "yPlayer: "+ (int)(player.getPosition().y*PPM)+'\n'+
-                "xBrick: "+ xBrick+'\n'+
+                "xBrick: "+ xyBrick+'\n'+
                 "velocity: "+ player.getBody().getLinearVelocity()+'\n'+
                 "R: "+ player.isRight()+'\n'+
                 "L: "+ player.isLeft()+'\n'+
@@ -2100,7 +2154,7 @@ public class Play extends GameState {
         MyGdxGame.fadeIn.update(dt);
 
         if(brick != null){
-            if(isEnemyTouchingBrick() | (brick.getPosition().x*PPM <= 33 | brick.getPosition().x*PPM >= 607 )){
+            if( brick.getPosition().y*PPM <= 256.5 && (isEnemyTouchingBrick() | (brick.getPosition().x*PPM <= 33 | brick.getPosition().x*PPM >= 607 ))){
                 brick.hurtAnimation();
                 //System.out.println("hurt"+" "+world.getContactCount()+" "+Gdx.graphics.getFramesPerSecond());
                 brick.getBody().setType(BodyType.StaticBody);
@@ -2161,7 +2215,7 @@ public class Play extends GameState {
 
 
 
-        if( (cl.isPlayerOnGround() |cl.isPlayerOnBrick() ) && jump && !player.isJumpRight() && !player.isJumpRight() && (!player.isSlashingLeft()|!player.isSlashingRight()) /*&& (player.getPosition().y*PPM) < 625*/ ){
+        if( (cl.isPlayerOnGround() |cl.isPlayerOnBrick() ) && jump && !player.isJumpRight() && !player.isJumpRight() /*&& (player.getPosition().y*PPM) < 625*/ ){
             jump = false;
             player.getBody().setLinearVelocity(new Vector2(player.getBody().getLinearVelocity().x,0));
             player.getBody().setAngularVelocity(0);
@@ -2215,9 +2269,12 @@ public class Play extends GameState {
         MyGdxGame.background_wood1.update(dt);
 
 
-        if(!addNewEnemy){
+        if(!isAddingBody()){
             world.step(dt, 6, 2);
+            isStepping = true;
+            purgeBodyToDestroy(); /**MUST BE DONE AFTER WORLD STEP http://badlogicgames.com/forum/viewtopic.php?t=8459&p=38446**/
         }else{
+            isStepping = false;
             //createEnemy();
 
 
@@ -2228,10 +2285,16 @@ public class Play extends GameState {
             //double rangeMax = difficulty;
             //have'nt decide if speed should be random
             //double randomSpeed = rangeMin + (rangeMax - rangeMin) * r.nextDouble();
-            if(getRandomBoolean()){
-                enemies.add(createEnemy(MyGdxGame.V_WIDTH*1.0f/PPM , MyGdxGame.GROUND, false));
-            }else{
-                enemies.add(createEnemy(1/PPM , MyGdxGame.GROUND, true));
+            try{
+                if(getRandomBoolean()){
+                    if(!fire) //helps fireball animation when many enemies
+                        enemies.add(createEnemy(MyGdxGame.V_WIDTH*1.0f/PPM , MyGdxGame.GROUND, false));
+                }else{
+                    if(!fire) //helps fireball animation when many enemies
+                        enemies.add(createEnemy(1/PPM , MyGdxGame.GROUND, true));
+                }
+            }catch(Exception e){
+                System.out.println(e.getMessage());
             }
             //System.out.println(randomSpeed);
         }
@@ -2381,15 +2444,16 @@ public class Play extends GameState {
 
         if(!MyGdxGame.pause ) {
             //power up bar
-            float c = buttonFire.getHeight()/1.3f;
+            float c = MyGdxGame.V_WIDTH / 4.2f/1.6f;
             float w = MyGdxGame.V_WIDTH/6.2f;
             float h = c;
 
-            Vector3 v = new Vector3(buttonFire.getX()*1.06f,buttonFire.getY(),0);
+            Vector3 v = new Vector3(buttonFire.getX()*1.06f,buttonFire.getY()*1.06f,3);
             cam.unproject(v);
             float x = v.x;
 
-            float y = MyGdxGame.V_WIDTH/13f;
+            float size = (Gdx.graphics.getWidth() / 4.2f);
+            float y = ((Gdx.graphics.getWidth() - (size*2.5f))/5)-offsetY/3.5f;
 
             if(Save.gd.isKamehamehaEquiped()){
                 shapeRenderer.setColor(Color.GRAY);
@@ -2596,7 +2660,7 @@ public class Play extends GameState {
         if(player.isPlayerDead()) buttonPause.setVisible(false);
 
         if (DEBUG) {
-            //b2dr.render(world, b2dCam.combined);
+            b2dr.render(world, b2dCam.combined);
         }
 
         Gdx.gl.glViewport(0,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
@@ -2605,6 +2669,7 @@ public class Play extends GameState {
     }
 
     private Enemy createEnemy(float x, float y, boolean fromLeft) {
+        addNewEnemy = true;
         System.out.println("create enemy...");
         BodyDef bdef = new BodyDef();
         FixtureDef fdef = new FixtureDef();
@@ -2634,6 +2699,7 @@ public class Play extends GameState {
     }
 
     private FireBall createFireBall(float x, float y, float velocity) {
+        addPowerUpOrBrick = true;
         System.out.println("create fireball...");
         BodyDef bdef = new BodyDef();
         FixtureDef fdef = new FixtureDef();
@@ -2644,6 +2710,7 @@ public class Play extends GameState {
         bdef.position.set(x,y);
         bdef.type = BodyType.DynamicBody;
         Body body = world.createBody(bdef);
+        addPowerUpOrBrick = false;
         shape.setAsBox(w, h, new Vector2(0 ,0), 0);
         fdef.shape = shape;
         fdef.density = 0;
@@ -2662,6 +2729,7 @@ public class Play extends GameState {
     }
 
     private Lightning createLightning(float x, float y, float velocity) {
+        addPowerUpOrBrick = true;
         System.out.println("create lightning...");
         BodyDef bdef = new BodyDef();
         FixtureDef fdef = new FixtureDef();
@@ -2672,6 +2740,7 @@ public class Play extends GameState {
         bdef.position.set(x,y);
         bdef.type = BodyType.DynamicBody;
         Body body = world.createBody(bdef);
+        addPowerUpOrBrick = false;
         shape.setAsBox(w, h, new Vector2(0 ,0), 0);
         fdef.shape = shape;
         fdef.density = 0;
@@ -2689,6 +2758,7 @@ public class Play extends GameState {
     }
 
     private Brick createBrick(float x, float y) {
+        addPowerUpOrBrick = true;
         System.out.println("create brick...");
         BodyDef bdef = new BodyDef();
         FixtureDef fdef = new FixtureDef();
@@ -2700,16 +2770,18 @@ public class Play extends GameState {
 
         bdef.type = BodyType.DynamicBody;
         Body body = world.createBody(bdef);
+        addPowerUpOrBrick = false;
         shape.setAsBox(w, h, new Vector2(0 ,0), 0);
         fdef.shape = shape;
         fdef.density = 0;
-        fdef.friction = 0;
+        fdef.friction = 10;
         fdef.isSensor = false;
         fdef.restitution = 0;
         fdef.filter.categoryBits = B2DVars.BIT_BLOCK ;
         fdef.filter.maskBits =  B2DVars.BIT_GROUND | B2DVars.BIT_ENEMY /*| B2DVars.BIT_PLAYER*/;
         body.createFixture(fdef).setUserData("brick");
         // foot
+        fdef = new FixtureDef();
         shape.setAsBox(w, 0.05f, new Vector2(0 , h), 0);
         fdef.shape = shape;
         fdef.filter.categoryBits = B2DVars.BIT_BLOCK;
@@ -2799,7 +2871,8 @@ public class Play extends GameState {
             fdef.filter.maskBits =  B2DVars.BIT_GROUND|BIT_BLOCK;
             body.createFixture(fdef).setUserData("player");
             // foot
-            shape.setAsBox(w*2f, h/5, new Vector2(0 , -h*0.99f ), 0);
+            fdef = new FixtureDef();
+            shape.setAsBox(w*1.2f, h/5, new Vector2(0 , -h*0.99f ), 0);
             fdef.shape = shape;
             fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
             fdef.filter.maskBits = B2DVars.BIT_GROUND|BIT_BLOCK;

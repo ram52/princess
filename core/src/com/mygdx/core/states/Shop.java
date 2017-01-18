@@ -1,6 +1,7 @@
 package com.mygdx.core.states;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -118,6 +119,25 @@ public class Shop extends GameState {
                             MyGdxGame.res.getMusic("laugh").play();
                             cpt_secret1++;
                             System.out.println("CLICK SECRET 1: " + cpt_secret1);
+                            Input.TextInputListener textListener = new Input.TextInputListener()
+                            {
+                                @Override
+                                public void input(String input)
+                                {
+                                    System.out.println(input);
+                                    if(getSecretCode().equals(input)){
+                                        //todo unlock every items
+                                    }
+                                }
+
+                                @Override
+                                public void canceled()
+                                {
+                                    System.out.println("Aborted");
+                                }
+                            };
+
+                            Gdx.input.getTextInput(textListener, "Secret found!", "", "");
                         }
                         System.out.println("down");
                     }
@@ -335,11 +355,11 @@ public class Shop extends GameState {
                     String cur = currencyFormatter.format(1).replaceAll("[0-9.,]","");;
                     ShopDialog dialog = new ShopDialog(Shop.this,
                             "\n\n" +
-                                    "ADS FREE\n" +
+                                    "ADS REMOVER\n" +
                                     "\n" +
                                     "Removes all ads in game.\n" +
                                     "\n\n" +
-                                    "Buy Ads Free?", "buttonAdsUp"){
+                                    "Remove ads?", "buttonAdsUp"){
                         public void result(Object obj) {
                             System.out.println("result Equip ads free?"+obj);
                             System.out.println(obj);
@@ -496,18 +516,18 @@ public class Shop extends GameState {
                     float y, int pointer, int button) {
                 System.out.println("buttonFireBall clicked!");
                 Save.load();
-                final int cost = 10000;
+                final int cost = 1000;
                 if(!Save.gd.isFireBallPurchased()){
                     ShopDialog dialog = new ShopDialog(Shop.this,
                             "\n\n" +
                                     "FIRE BALL\n" +
                                     "\n" +
-                                    "Fire ball can destroy one enemy  \nin one hit.\n" +
-                                    "COST: 1000 coins.\n" +
+                                    "Reloads every 2 enemies killed.\n" +
+                                    "COST: "+cost+" coins.\n" +
                                     "\n\n" +
                                     "Buy Fire ball?", "buttonFireBallUp"){
                         public void result(Object obj) {
-                            System.out.println("result Equip Fire ball?"+obj);
+                            System.out.println("result Buy Fire ball?"+obj);
                             System.out.println(obj);
                             if(obj.toString().equals("true") && Save.gd.getMoney() >= cost){
                                 if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
@@ -548,7 +568,7 @@ public class Shop extends GameState {
                             "\n\n" +
                                     "FIRE BALL\n" +
                                     "\n" +
-                                    "Fire ball can destroy one enemy  \nin one hit.\n" +
+                                    "Reloads every 2 enemies killed.\n" +
                                     "\n\n" +
                                     "Equip Fire ball?", "buttonFireBallUp"){
                         public void result(Object obj) {
@@ -597,16 +617,17 @@ public class Shop extends GameState {
                     float y, int pointer, int button) {
                 System.out.println("buttonFireBall2 clicked!");
                 Save.load();
-                final int cost = 10;
+                final int cost = 3000;
                 if(!Save.gd.isFireBall2Purchased()){
                     ShopDialog dialog = new ShopDialog(Shop.this,
                             "\n\n" +
-                                    "PLASMA BALL\n" +
+                                    "HADOU BALL\n" +
                                     "\n" +
-                                    "Reloads faster than fire ball.\n" +
+                                    "Can kill multiple enemies.\n"+
+                                    "Reloads every 4 enemies killed.\n" +
                                     "COST: "+cost+" coins.\n" +
                                     "\n\n" +
-                                    "Buy Plasma ball?", "buttonFireBall2Up"){
+                                    "Buy Hadou ball?", "buttonFireBall2Up"){
                         public void result(Object obj) {
                             System.out.println("result Equip Fire ball2?"+obj);
                             System.out.println(obj);
@@ -647,11 +668,12 @@ public class Shop extends GameState {
 
                     ShopDialog dialog = new ShopDialog(Shop.this,
                             "\n\n" +
-                                    "PLASMA BALL\n" +
+                                    "HADOU BALL\n" +
                                     "\n" +
-                                    "Reloads faster than fire ball.\n" +
-                                    "\n\n" +
-                                    "Equip Plasma ball?", "buttonFireBall2Up"){
+                                    "Can kill multiple enemies.\n"+
+                                    "Reloads every 4 enemies killed.\n" +
+                                    "\n" +
+                                    "Equip Hadou ball?", "buttonFireBall2Up"){
                         public void result(Object obj) {
                             System.out.println("result Equip Fire ball?"+obj);
                             System.out.println(obj);
@@ -676,12 +698,7 @@ public class Shop extends GameState {
                         }
                     };
                     stage1.addActor(dialog);
-
-
                 }
-
-
-
             }
         });
 
@@ -707,7 +724,6 @@ public class Shop extends GameState {
                                 "EXCALIBUR\n" +
                                 "\n" +
                                 "Excalibur kill enemy in one swing.\n" +
-                                "The power of Excalibur makes\nyou faster.\n" +
                                 "COST: "+cost+" coins.\n" +
                                 "\n" +
                                 "Buy Excalibur?", "buttonExcaliburUp"){
@@ -745,14 +761,11 @@ public class Shop extends GameState {
                 };
                 stage1.addActor(dialog);
                 }else{
-
-
                     ShopDialog dialog = new ShopDialog(Shop.this,
                             "\n\n" +
                                     "EXCALIBUR\n" +
                                     "\n" +
                                     "Excalibur kill enemy in one swing.\n" +
-                                    "The power of Excalibur makes\nyou faster.\n" +
                                     "\n" +
                                     "Equip Excalibur?", "buttonExcaliburUp"){
                         public void result(Object obj) {
@@ -774,15 +787,8 @@ public class Shop extends GameState {
                         }
                     };
                     stage1.addActor(dialog);
-
-
                 }
-
-
-
             }
-
-            ;
         });
 
         buttonKamehameha.addListener(new InputListener() {
@@ -793,24 +799,21 @@ public class Shop extends GameState {
                 return true;
             }
 
-            ;
-
             public void touchUp(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
                 System.out.println("buttonKamehameha clicked!");
                 Save.load();
-                final int cost = 10;
+                final int cost = 4000;
                 if(!Save.gd.isKamehamehaPurchased()){
                     ShopDialog dialog = new ShopDialog(Shop.this,
                             "\n\n" +
-                                    "KAMEHAMEHA\n" +
+                                    "KAME BEAM\n" +
                                     "\n" +
-                                    "Kamehameha destroys everything.\n" +
-                                    "The power of Kamehameha makes\nyou faster.\n" +
+                                    "Destroys everything.\n" +
                                     "COST: "+cost+" coins.\n" +
                                     "\n" +
-                                    "Buy Kamehameha?", "buttonKamehamehaUp"){
+                                    "Buy Kame beam?", "buttonKamehamehaUp"){
                         public void result(Object obj) {
                             System.out.println("result Buy Kamehameha?"+obj);
                             System.out.println(obj);
@@ -852,10 +855,9 @@ public class Shop extends GameState {
 
                     ShopDialog dialog = new ShopDialog(Shop.this,
                             "\n\n" +
-                                    "KAMEHAMEHA\n" +
+                                    "KAME BEAM\n" +
                                     "\n" +
-                                    "Kamehameha destroys everything.\n" +
-                                    "The power of Kamehameha makes\nyou faster.\n" +
+                                    "Destroys everything.\n" +
                                     "\n" +
                                     "Equip Kamehameha?", "buttonKamehamehaUp"){
                         public void result(Object obj) {
@@ -898,16 +900,16 @@ public class Shop extends GameState {
                     float y, int pointer, int button) {
                 System.out.println("buttonBoot clicked!");
                 Save.load();
-                final int cost = 60000;
+                final int cost = 3000;
                 if(!Save.gd.isBootPurchased()){
                     ShopDialog dialog = new ShopDialog(Shop.this,
                             "\n\n" +
                                     "BOOTS\n" +
                                     "\n" +
-                                    "Make you run faster.\n" +
+                                    "Make you faster.\n" +
                                     "COST: "+cost+" coins.\n" +
                                     "\n" +
-                                    "Buy boots?", "buttonBootUp"){
+                                    "Buy Boots?", "buttonBootUp"){
                         public void result(Object obj) {
                             System.out.println("result Buy boot?"+obj);
                             System.out.println(obj);
@@ -946,12 +948,11 @@ public class Shop extends GameState {
                             "\n\n" +
                                     "BOOTS\n" +
                                     "\n" +
-                                    "Make you run faster.\n" +
-                                    "COST: "+cost+" coins.\n" +
+                                    "Make you faster.\n" +
                                     "\n" +
-                                    "Buy boots?", "buttonBootUp"){
+                                    "Equip Boots?", "buttonBootUp"){
                         public void result(Object obj) {
-                            System.out.println("result Equip Fire ball?"+obj);
+                            System.out.println("result Equip boots ball?"+obj);
                             System.out.println(obj);
                             if(obj.toString().equals("true")){
                                 Save.gd.setBootEquiped(true);
@@ -984,17 +985,16 @@ public class Shop extends GameState {
                     float y, int pointer, int button) {
                 System.out.println("buttonBrick2 clicked!");
                 Save.load();
-                final int cost = 10;
+                final int cost = 4000;
                 if(!Save.gd.isBrick2Purchased()){
                     ShopDialog dialog = new ShopDialog(Shop.this,
                             "\n\n" +
                                     "SUPER BRICK SUMMON\n" +
                                     "\n" +
                                     "Stronger than regular brick.\n" +
-                                    "Swipe down to summon 1 brick \nat a time (unlimited).\n" +
                                     "COST: "+cost+" coins.\n" +
                                     "\n" +
-                                    "Buy super brick summon?", "buttonBrick2Up"){
+                                    "Buy Super brick summon?", "buttonBrick2Up"){
                         public void result(Object obj) {
                             System.out.println("result Buy Brick?"+obj);
                             System.out.println(obj);
@@ -1034,9 +1034,8 @@ public class Shop extends GameState {
                                     "SUPER BRICK SUMMON\n" +
                                     "\n" +
                                     "Stronger than regular brick.\n" +
-                                    "Swipe down to summon 1 brick \nat a time (unlimited).\n" +
                                     "\n" +
-                                    "Equip super brick summon?", "buttonBrick2Up"){
+                                    "Equip Super brick summon?", "buttonBrick2Up"){
                         public void result(Object obj) {
                             System.out.println("result Equip Fire ball?"+obj);
                             System.out.println(obj);
@@ -1072,7 +1071,7 @@ public class Shop extends GameState {
                     float y, int pointer, int button) {
                 System.out.println("buttonLightning clicked!");
                 Save.load();
-                final int cost = 10;
+                final int cost = 5000;
                 if(!Save.gd.isLightningPurchased()){
                     ShopDialog dialog = new ShopDialog(Shop.this,
                             "\n\n" +
@@ -1081,7 +1080,7 @@ public class Shop extends GameState {
                                     "Unleash mighty attack.\n" +
                                     "COST: "+cost+" coins.\n" +
                                     "\n" +
-                                    "Buy lightning summon?", "buttonLightningUp"){
+                                    "Buy Lightning summon?", "buttonLightningUp"){
                         public void result(Object obj) {
                             System.out.println("result Buy Brick?"+obj);
                             System.out.println(obj);
@@ -1127,7 +1126,7 @@ public class Shop extends GameState {
                                     "\n" +
                                     "Unleash mighty attack.\n" +
                                     "\n" +
-                                    "Equip lightning summon?", "buttonLightningUp"){
+                                    "Equip Lightning summon?", "buttonLightningUp"){
                         public void result(Object obj) {
                             System.out.println("result Equip buttonLightningUp"+obj);
                             System.out.println(obj);
@@ -1164,7 +1163,7 @@ public class Shop extends GameState {
                     float y, int pointer, int button) {
                 System.out.println("buttonMegaJump clicked!");
                 Save.load();
-                final int cost = 10;
+                final int cost = 3600;
                 if(!Save.gd.isMegaJumpPurchased()){
                     ShopDialog dialog = new ShopDialog(Shop.this,
                             "\n\n" +
@@ -1478,6 +1477,12 @@ public class Shop extends GameState {
     }
 
     public void dispose() {
+        stage2.dispose();
+        stage1.dispose();
+        stage0.dispose();
     }
 
+    public String getSecretCode(){
+        return "secret";
+    }
 }

@@ -382,7 +382,7 @@ public class MyGdxGame implements ApplicationListener {
         Gdx.gl.glDisable(GL20.GL_BLEND);
         //for vanity
         try {
-            Thread.sleep(100);
+            Thread.sleep(50);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
