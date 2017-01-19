@@ -2154,11 +2154,12 @@ public class Play extends GameState {
         MyGdxGame.fadeIn.update(dt);
 
         if(brick != null){
+
             if( brick.getPosition().y*PPM <= 256.5 && (isEnemyTouchingBrick() | (brick.getPosition().x*PPM <= 33 | brick.getPosition().x*PPM >= 607 ))){
                 brick.hurtAnimation();
                 //System.out.println("hurt"+" "+world.getContactCount()+" "+Gdx.graphics.getFramesPerSecond());
                 brick.getBody().setType(BodyType.StaticBody);
-                cl.setNumFootBrickContacts(0);
+                cl.setNumFootBrickContacts(1);
             }else{
                 brick.normalAnimation();
                 brick.getBody().setType(BodyType.DynamicBody);
