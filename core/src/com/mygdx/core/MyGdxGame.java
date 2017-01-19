@@ -66,8 +66,8 @@ public class MyGdxGame implements ApplicationListener {
     public static float FADE_DELAY = 1/50f;
     public static BitmapFont font;
     public static String debugString = "";
-    public static float GROUND = 2.5621998f;
-    public static boolean DEBUG = true;
+    public static float GROUND = 2.5621998f; //todo use box2d
+    public static boolean DEBUG = false;
 
 
     public static void setIsBoosTerritory(boolean isBoosTerritory) {

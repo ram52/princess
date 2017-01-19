@@ -2872,7 +2872,7 @@ public class Play extends GameState {
             body.createFixture(fdef).setUserData("player");
             // foot
             fdef = new FixtureDef();
-            shape.setAsBox(w*1.2f, h/5, new Vector2(0 , -h*0.99f ), 0);
+            shape.setAsBox(w*2f, h/5, new Vector2(0 , -h*0.99f ), 0);
             fdef.shape = shape;
             fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
             fdef.filter.maskBits = B2DVars.BIT_GROUND|BIT_BLOCK;
