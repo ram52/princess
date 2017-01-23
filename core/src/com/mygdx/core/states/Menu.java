@@ -767,7 +767,16 @@ public class Menu extends GameState {
             isfadeOutStarted++;
 
             if(isfadeOutStarted > 30){
-                gsm.setState(GameStateManager.PLAY);
+                Save.load();
+
+                if(!Save.gd.isFirstPlay()){
+                    gsm.setState(GameStateManager.PLAY);
+                }else{
+                    gsm.setState(GameStateManager.TUTO);
+                    Save.gd.setFirstPlay(false);
+                    Save.save();
+                }
+
                 isfadeOutStarted = 0;
             }
         }

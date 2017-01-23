@@ -67,7 +67,9 @@ public class MyGdxGame implements ApplicationListener {
     public static BitmapFont font;
     public static String debugString = "";
     public static float GROUND = 2.5621998f; //todo use box2d
-    public static boolean DEBUG = true;
+    public static int MONEY_BY_ENEMY = 2;
+    public static boolean DEBUG = false;
+    public static Vector2 lastPlayerPosition = new Vector2(0,0);
 
 
     public static void setIsBoosTerritory(boolean isBoosTerritory) {
@@ -336,7 +338,7 @@ public class MyGdxGame implements ApplicationListener {
 
             if(DEBUG){
                 sb.begin();
-                font.setColor(Color.GREEN);
+                font.setColor(Color.RED);
                 font.drawMultiLine(sb, debugString, MyGdxGame.V_WIDTH/15 , MyGdxGame.V_HEIGHT/1.1f, MyGdxGame.V_WIDTH, BitmapFont.HAlignment.LEFT);
                 sb.end();
             }
@@ -531,9 +533,9 @@ public class MyGdxGame implements ApplicationListener {
         background_shop = new Background(new TextureRegion(tex), cam, 1f);
         background_shop.setVector(0, 0);
 
-        tex = new Sprite(MyGdxGame.atlas.findRegion("backgroundTuto"));
-        background_tuto = new Background(new TextureRegion(tex), cam, 1f);
-        background_tuto.setVector(0, 0);
+//        tex = new Sprite(MyGdxGame.atlas.findRegion("backgroundTuto"));
+//        background_tuto = new Background(new TextureRegion(tex), cam, 1f);
+//        background_tuto.setVector(0, 0);
 
 
 

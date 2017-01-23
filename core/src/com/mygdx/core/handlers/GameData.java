@@ -38,6 +38,7 @@ public class GameData implements Serializable {
 	private boolean playerRed = false;
 	private boolean playerYellow = false;
 	private boolean playerGreen = false;
+	private boolean isFirstPlay = true;
 
 	public GameData() {
         selector = "random";
@@ -70,6 +71,7 @@ public class GameData implements Serializable {
 		lightningEquiped = false;
 		megaJumpEquiped = false;
 		fireBall2Equiped = false;
+		isFirstPlay = true;
 	}
 	
 	// sets up an empty high scores table
@@ -340,6 +342,14 @@ public class GameData implements Serializable {
 
 	public void setFireBall2Equiped(boolean fireBall2Equiped) {
 		this.fireBall2Equiped = fireBall2Equiped;
+	}
+
+	public boolean isFirstPlay() {
+		return isFirstPlay;
+	}
+
+	public void setFirstPlay(boolean firstPlay) {
+		isFirstPlay = firstPlay;
 	}
 }
 

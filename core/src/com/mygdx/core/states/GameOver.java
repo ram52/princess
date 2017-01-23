@@ -577,10 +577,10 @@ public class GameOver extends GameState {
         sb.begin();
         sb.draw(animTitle.getFrame(), MyGdxGame.V_WIDTH/2 - w/2, MyGdxGame.V_HEIGHT - h*1.1f , MyGdxGame.V_WIDTH/2, 670.0f -95/2 ,  w, h,1,1, 0);
 
-        if(score < 99){
-            sb.draw(animSad.getFrame(), MyGdxGame.V_WIDTH/2, 202);
-        }else {
+        if(score >=50){
             sb.draw(animHappy.getFrame(), MyGdxGame.V_WIDTH/2 - 132/2, 202);
+        }else {
+            sb.draw(animSad.getFrame(), MyGdxGame.V_WIDTH/2, 202);
         }
 
         sb.end();

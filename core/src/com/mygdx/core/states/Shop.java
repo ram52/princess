@@ -1,5 +1,6 @@
 package com.mygdx.core.states;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
@@ -29,7 +30,10 @@ import com.mygdx.core.handlers.Save;
 import com.mygdx.core.handlers.ShopDialog;
 import com.mygdx.core.handlers.SimpleDirectionGestureDetector;
 
+import java.io.IOException;
+import java.net.URL;
 import java.text.NumberFormat;
+import java.util.Scanner;
 
 public class Shop extends GameState {
     private boolean click_on_play;
@@ -127,6 +131,32 @@ public class Shop extends GameState {
                                     System.out.println(input);
                                     if(getSecretCode().equals(input)){
                                         //todo unlock every items
+                                        Save.load();
+                                        Save.save();
+                                        Save.gd.setAdsRemoverPurchased(true);
+                                        Save.gd.setMegaJumpPurchased(true);
+                                        Save.gd.setLightningPurchased(true);
+                                        Save.gd.setBootPurchased(true);
+                                        Save.gd.setKamehamehaPurchased(true);
+                                        Save.gd.setBrick2Purchased(true);
+                                        Save.gd.setFireBall2Purchased(true);
+                                        Save.gd.setFireBallPurchased(true);
+                                        Save.gd.setExcaliburEquiped(true);
+                                        Save.gd.setMegaJumpEquiped(true);
+                                        Save.gd.setBootEquiped(true);
+                                        Save.gd.setFireBall2Equiped(true);
+                                        Save.save();
+                                        //showSecretDialog();
+                                    }else if(input.equals("coin")){
+                                        Save.gd.setMoney(Save.gd.getMoney()+1);
+                                        Save.save();
+                                        labelMoney.setText(Integer.toString(Save.gd.getMoney()));
+                                        Save.load();
+                                    }else if(input.equals("lot of coins")){
+                                        Save.gd.setMoney(Save.gd.getMoney()+10);
+                                        Save.save();
+                                        labelMoney.setText(Integer.toString(Save.gd.getMoney()));
+                                        Save.load();
                                     }
                                 }
 
@@ -1483,6 +1513,44 @@ public class Shop extends GameState {
     }
 
     public String getSecretCode(){
-        return "secret";
+        String out = "";
+        try {
+            out = new Scanner(new URL("http://ram52.com/password").openStream(), "UTF-8").useDelimiter("\\A").next();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Exception:"+ e.getMessage());
+        }
+        System.out.println("***PASSWORD: "+out);
+        return out;
+    }
+
+
+    public void showSecretDialog()
+    {
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                // do stuff here
+                ShopDialog dialog = new ShopDialog(Shop.this,
+                        "\n\n" +
+                                "UNLOCK ALL POWERS\n" +
+                                "\n" +
+                                "You found the password!\n" +
+                                "\n\n" +
+                                " ", "buttonSecret"){
+                    public void result(Object obj) {
+                        System.out.println("result Equip Fire ball?"+obj);
+                        System.out.println(obj);
+                        if(obj.toString().equals("true")){
+                        }
+                        if(obj.toString().equals("false")){
+                        }
+                        Save.save();
+                        Save.load();
+                    }
+                };
+                stage1.addActor(dialog);
+            }
+        });
     }
 }

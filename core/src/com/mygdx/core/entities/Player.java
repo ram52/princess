@@ -6,6 +6,8 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.mygdx.core.MyGdxGame;
 import com.mygdx.core.handlers.Save;
 
+import static com.mygdx.core.MyGdxGame.MONEY_BY_ENEMY;
+
 public class Player extends B2DSprite 
 {
     public static final int MAXFIREBALLCOUNT = 10 ;
@@ -323,7 +325,7 @@ public class Player extends B2DSprite
 	public void collectCoin() {
         numCoins++;
         Save.load();
-        Save.gd.setMoney(Save.gd.getMoney() + 2);
+        Save.gd.setMoney(Save.gd.getMoney() + MONEY_BY_ENEMY);
         Save.save();
     }
 

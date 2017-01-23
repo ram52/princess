@@ -16,6 +16,7 @@ public class FireBall extends B2DSprite{
     private Boolean left;
     private Boolean right;
     private Boolean dead;
+    private int health;
 
     public FireBall(Body body) {
         super(body);
@@ -23,15 +24,18 @@ public class FireBall extends B2DSprite{
         if(Save.gd.isFireBall2Equiped()){
             tex = new Sprite(MyGdxGame.atlas.findRegion("fireball2"));
             sprites = tex.split( 179, 128)[0];
+            health = 3;
         }else{
             tex = new Sprite(MyGdxGame.atlas.findRegion("fireball"));
             sprites = tex.split( 64, 64)[0];
+            health = 1;
         }
 
         setAnimation(sprites, 1 / 15f);
         left = false;
         right = false;
         dead = false;
+
     }
 
     public void normalAnimation(){
@@ -96,6 +100,14 @@ public class FireBall extends B2DSprite{
 
     public void setDead(Boolean dead) {
         this.dead = dead;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
     }
 
 }
