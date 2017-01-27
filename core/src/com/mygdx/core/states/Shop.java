@@ -145,6 +145,7 @@ public class Shop extends GameState {
                                         Save.gd.setMegaJumpEquiped(true);
                                         Save.gd.setBootEquiped(true);
                                         Save.gd.setFireBall2Equiped(true);
+                                        Save.gd.setFireBallEquiped(false);
                                         Save.save();
                                         //showSecretDialog();
                                     }else if(input.equals("coin")){
@@ -598,7 +599,7 @@ public class Shop extends GameState {
                             "\n\n" +
                                     "FIRE BALL\n" +
                                     "\n" +
-                                    "Reloads every 2 enemies killed.\n" +
+                                    "Reloads by killing enemies.\n" +
                                     "\n\n" +
                                     "Equip Fire ball?", "buttonFireBallUp"){
                         public void result(Object obj) {
@@ -647,14 +648,14 @@ public class Shop extends GameState {
                     float y, int pointer, int button) {
                 System.out.println("buttonFireBall2 clicked!");
                 Save.load();
-                final int cost = 3000;
+                final int cost = 300;
                 if(!Save.gd.isFireBall2Purchased()){
                     ShopDialog dialog = new ShopDialog(Shop.this,
                             "\n\n" +
                                     "HADOU BALL\n" +
                                     "\n" +
                                     "Can kill multiple enemies.\n"+
-                                    "Reloads every 4 enemies killed.\n" +
+                                    "Reloads by killing enemies.\n" +
                                     "COST: "+cost+" coins.\n" +
                                     "\n\n" +
                                     "Buy Hadou ball?", "buttonFireBall2Up"){
@@ -747,7 +748,7 @@ public class Shop extends GameState {
                     float y, int pointer, int button) {
                 System.out.println("buttonExcalibur clicked!");
                 Save.load();
-                final int cost = 50000;
+                final int cost = 1000;
                 if(!Save.gd.isExcaliburPurchased()){
                 ShopDialog dialog = new ShopDialog(Shop.this,
                         "\n\n" +
@@ -834,7 +835,7 @@ public class Shop extends GameState {
                     float y, int pointer, int button) {
                 System.out.println("buttonKamehameha clicked!");
                 Save.load();
-                final int cost = 4000;
+                final int cost = 400;
                 if(!Save.gd.isKamehamehaPurchased()){
                     ShopDialog dialog = new ShopDialog(Shop.this,
                             "\n\n" +
@@ -930,7 +931,7 @@ public class Shop extends GameState {
                     float y, int pointer, int button) {
                 System.out.println("buttonBoot clicked!");
                 Save.load();
-                final int cost = 3000;
+                final int cost = 300;
                 if(!Save.gd.isBootPurchased()){
                     ShopDialog dialog = new ShopDialog(Shop.this,
                             "\n\n" +
@@ -1015,7 +1016,7 @@ public class Shop extends GameState {
                     float y, int pointer, int button) {
                 System.out.println("buttonBrick2 clicked!");
                 Save.load();
-                final int cost = 4000;
+                final int cost = 800;
                 if(!Save.gd.isBrick2Purchased()){
                     ShopDialog dialog = new ShopDialog(Shop.this,
                             "\n\n" +
@@ -1101,7 +1102,7 @@ public class Shop extends GameState {
                     float y, int pointer, int button) {
                 System.out.println("buttonLightning clicked!");
                 Save.load();
-                final int cost = 5000;
+                final int cost = 2000;
                 if(!Save.gd.isLightningPurchased()){
                     ShopDialog dialog = new ShopDialog(Shop.this,
                             "\n\n" +
@@ -1193,7 +1194,7 @@ public class Shop extends GameState {
                     float y, int pointer, int button) {
                 System.out.println("buttonMegaJump clicked!");
                 Save.load();
-                final int cost = 3600;
+                final int cost = 250;
                 if(!Save.gd.isMegaJumpPurchased()){
                     ShopDialog dialog = new ShopDialog(Shop.this,
                             "\n\n" +

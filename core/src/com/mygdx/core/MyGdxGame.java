@@ -70,6 +70,8 @@ public class MyGdxGame implements ApplicationListener {
     public static int MONEY_BY_ENEMY = 2;
     public static boolean DEBUG = false;
     public static Vector2 lastPlayerPosition = new Vector2(0,0);
+    public static Vector2 lastBrickPosition = new Vector2(0,0);
+    public static Vector2 lastPrincessPosition = new Vector2(0,0);
 
 
     public static void setIsBoosTerritory(boolean isBoosTerritory) {
@@ -252,6 +254,13 @@ public class MyGdxGame implements ApplicationListener {
         size(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         System.out.println(TAG+"-->"+ "SCREEN SIZE: " + Gdx.graphics.getWidth() + "X" + Gdx.graphics.getHeight());
         Save.load();
+
+        if(!Save.gd.isFireBall2Equiped()| !Save.gd.isKamehamehaEquiped() | !Save.gd.isLightningEquiped()){
+            Save.gd.setFireBallEquiped(true);
+            Save.gd.setFireBall2Purchased(true);
+            Save.save();
+        }
+
         soundEnable = Save.gd.isSoundEnable();
         PAD_ZONE= Gdx.graphics.getHeight() - (Gdx.graphics.getHeight() / 7);
         BRICK_SUMON_ZONE= Gdx.graphics.getHeight() - (Gdx.graphics.getHeight() / 2);

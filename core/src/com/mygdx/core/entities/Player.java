@@ -11,7 +11,7 @@ import static com.mygdx.core.MyGdxGame.MONEY_BY_ENEMY;
 public class Player extends B2DSprite 
 {
     public static final int MAXFIREBALLCOUNT = 10 ;
-    public static final int MAXFIREBALLCOUNT2 = 3 ;
+    public static final int MAXFIREBALLCOUNT2 = 10 ;
     public static float PLAYER_VELOCITY = 1.4f;
     public static float PLAYER_VELOCITYBOOST = 1.4f;
     private int numCoins;

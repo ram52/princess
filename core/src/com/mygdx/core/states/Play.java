@@ -66,7 +66,9 @@ import java.util.concurrent.TimeUnit;
 
 import static com.mygdx.core.MyGdxGame.DEBUG;
 import static com.mygdx.core.MyGdxGame.font;
+import static com.mygdx.core.MyGdxGame.lastBrickPosition;
 import static com.mygdx.core.MyGdxGame.lastPlayerPosition;
+import static com.mygdx.core.MyGdxGame.lastPrincessPosition;
 import static com.mygdx.core.entities.Player.MAXFIREBALLCOUNT;
 import static com.mygdx.core.entities.Player.PLAYER_VELOCITY;
 import static com.mygdx.core.entities.Player.PLAYER_VELOCITYBOOST;
@@ -146,7 +148,7 @@ public class Play extends GameState {
     private Stage stageUiControl;
     private SpriteBatch spriteBatch;
     private SpriteBatch spriteBatchLightning;
-    private Animation animKamehameha0, animKamehameha0_rev, animKamehameha1, animKamehameha1_rev, animKamehameha2, animKamehameha2_rev, animLabelMoney;
+    private Animation animKamehameha0, animKamehameha0_rev, animKamehameha1, animKamehameha1_rev, animKamehameha2, animKamehameha2_rev, animLabelMoney, animKillEnemy, animAh, animTip;
     private BoundingBox boundingBoxKamehameha;
     private double cpt_sound_hit = 0;
     private Stage stage0;
@@ -154,6 +156,7 @@ public class Play extends GameState {
     private float baseX = 0f;
     private float baseY = 0f;
     private boolean isTutorial = false;
+    private boolean hideScream = false;
     private Hand pointer;
     private Boolean tuto_step1 = false;
     private Boolean tuto_step2 = false;
@@ -182,9 +185,7 @@ public class Play extends GameState {
 
         Save.load();
 
-        if(!Save.gd.isFireBallPurchased()){
-            Save.gd.setFireBallEquiped(false);
-        }
+
         if(!Save.gd.isFireBall2Purchased()){
             Save.gd.setFireBall2Equiped(false);
         }
@@ -241,6 +242,21 @@ public class Play extends GameState {
         tex = new Sprite(MyGdxGame.atlas.findRegion("plusMoney"));
         sprites = tex.split(107, 112)[0];
         animLabelMoney = new Animation(sprites, 1 / 15f);
+
+
+        tex = new Sprite(MyGdxGame.atlas.findRegion("killEnemy"));
+        sprites = tex.split(137, 111)[0];
+        animKillEnemy = new Animation(sprites, 1 / 15f);
+
+        tex = new Sprite(MyGdxGame.atlas.findRegion("ah"));
+        sprites = tex.split(137, 111)[0];
+        animAh = new Animation(sprites, 1 / 15f);
+
+
+        tex = new Sprite(MyGdxGame.atlas.findRegion("tip"));
+        sprites = tex.split(238, 489)[0];
+        animTip = new Animation(sprites, 1 / 15f);
+
 
         if(Save.gd.isPlayerBlue() && Save.gd.isPlayerGreen() && Save.gd.isPlayerYellow() && Save.gd.isPlayerRed()){
             MyGdxGame.actionResolver.unlockAchievementGPGS(MyGdxGame.achievementPeace);
@@ -528,8 +544,14 @@ public class Play extends GameState {
         if(!Play.this.isTutorial){
             createPrincess(MyGdxGame.V_WIDTH/2/PPM, 2*MyGdxGame.GROUND);
         }else{
-            createHand(MyGdxGame.V_WIDTH/8f/PPM , MyGdxGame.GROUND);
+            createHand(MyGdxGame.V_WIDTH/8f/PPM , MyGdxGame.GROUND/1.15f);
         }
+
+        if(lastBrickPosition.x != 0)
+            brick = createBrick(lastBrickPosition.x, lastBrickPosition.y);
+
+        if(!isTutorial)
+            lastBrickPosition = new Vector2(0,0);
 
         enemies = new Array<Enemy>();
 
@@ -696,6 +718,12 @@ public class Play extends GameState {
                 System.out.println("clicked play!");
 
                 gsm.setState(GameStateManager.PLAY);
+                tuto_step1 = false;
+                tuto_step2 = false;
+                tuto_step3 = false;
+                tuto_step4 = false;
+                tuto_step5 = false;
+                tuto_step6 = false;
 
                 if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("newScreen").play();
             }
@@ -972,6 +1000,15 @@ public class Play extends GameState {
         MyGdxGame.setIsBoosTerritory(false);
 
         System.out.println("init completed without errors.");
+
+
+        Timer.schedule(new Timer.Task(){
+            @Override
+            public void run() {
+                hideScream = true;
+            }
+        }, 1);
+
     }
 
     private boolean isGamePadTouched(){
@@ -1148,7 +1185,7 @@ public class Play extends GameState {
         if(Save.gd.isFireBallEquiped() && fire && player.getFireBallCount()>0){
             fire = false;
             if(!isTutorial){
-                player.setFireBallCount(player.getFireBallCount()-1);
+                player.setFireBallCount(player.getFireBallCount()-3);
             }
             //todo sound
             if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("fireball").play();
@@ -1911,14 +1948,13 @@ public class Play extends GameState {
                         sb.end();
                     }
 
-
                         enemy.getBody().setLinearVelocity(new Vector2(0,0));
                         enemy.setCptDieRunning(enemy.getCptDieRunning()+1);
 
                         if(!enemy.isDead()){
                             player.collectCoin();
                             if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("boom").play();
-                            if(Save.gd.isFireBallEquiped() && enemiesKilled >= 1 && player.getFireBallCount()< MAXFIREBALLCOUNT){
+                            if(Save.gd.isFireBallEquiped() && enemiesKilled >= 4 && player.getFireBallCount()< MAXFIREBALLCOUNT){
                                 fire = false;
                                 player.setFireBallCount(player.getFireBallCount()+1);
                                 enemiesKilled = 0;
@@ -2124,6 +2160,10 @@ public class Play extends GameState {
     }
 
     private void princessIA(Enemy enemy){
+
+
+
+
         if(MyGdxGame.pause){
             princess.update(MyGdxGame.STEP);
             princess.updateBoundingBox(princess,64,64);
@@ -2220,20 +2260,19 @@ public class Play extends GameState {
     }
 
     public void updateTutorial(){
+        MyGdxGame.pause = false;
 
         MyGdxGame.lastPlayerPosition = new Vector2(player.getPosition());
+
+        if(princess != null)
+            MyGdxGame.lastPrincessPosition = new Vector2(princess.getPosition());
+
+        if(brick != null)
+            MyGdxGame.lastBrickPosition = new Vector2(brick.getPosition());
 
         buttonPause.setVisible(false);
         buttonPause.setTouchable(null);
 
-        if(!Save.gd.isFireBall2Equiped()){
-            Save.gd.setFireBall2Equiped(true);
-            Save.gd.setFireBallEquiped(false);
-        }
-
-        if(Save.gd.isBootEquiped()){
-            Save.gd.setBootEquiped(true);
-        }
 
         if(!tuto_step1) right = false;
 
@@ -2283,9 +2322,17 @@ public class Play extends GameState {
             tuto_step5 = true;
             //bodyToDestroy.add(pointer);
             pointer = null;
-            isMalicious = false;
-            enemies.add(createEnemy(1/PPM , MyGdxGame.GROUND, true));
-            enemies.add(createEnemy(MyGdxGame.V_WIDTH*1.0f/PPM , MyGdxGame.GROUND, false));
+
+
+            Timer.schedule(new Timer.Task(){
+                @Override
+                public void run() {
+                    isMalicious = false;
+                    enemies.add(createEnemy(1/PPM , MyGdxGame.GROUND, true));
+                    enemies.add(createEnemy(MyGdxGame.V_WIDTH*1.0f/PPM , MyGdxGame.GROUND, false));
+                }
+            }, 1);
+
         }
 
         if(!tuto_step6 && player.getNumCoins() == 2){
@@ -2302,6 +2349,12 @@ public class Play extends GameState {
                 public void run() {
                     //start
                     gsm.setState(GameStateManager.PLAY);
+                    tuto_step1 = false;
+                    tuto_step2 = false;
+                    tuto_step3 = false;
+                    tuto_step4 = false;
+                    tuto_step5 = false;
+                    tuto_step6 = false;
                 }
             }, 5);
 
@@ -2358,12 +2411,12 @@ public class Play extends GameState {
                 "blockKamehameha: "+blockKamehameha+'\n'+
                 "fire: "+fire+'\n'+
                 "maxEnemiesOnScreen: "+ maxEnemiesOnScreen+'\n'+
-                "d0: "+ step0+'\n'+
-                "d1: "+ step1+'\n'+
-                "d2: "+ step2+'\n'+
-                "d3: "+ step3+'\n'+
-                "d4: "+ step4+'\n'+
-                "d5: "+ step5+'\n'+
+                "tuto_step1: "+ tuto_step1+'\n'+
+                "tuto_step2: "+ tuto_step2+'\n'+
+                "tuto_step3: "+ tuto_step3+'\n'+
+                "tuto_step4: "+ tuto_step4+'\n'+
+                "tuto_step5: "+ tuto_step5+'\n'+
+                "tuto_step6: "+ tuto_step6+'\n'+
                 "world contact: "+ world.getContactCount()+'\n'+
                 "offDisplay: "+ offsetY+'\n'+
                 "enemy count: "+ enemies.size+'\n'+
@@ -2528,6 +2581,9 @@ public class Play extends GameState {
 
             if(isTutorial){
                 animLabelMoney.update(dt);
+                animKillEnemy.update(dt);
+                animAh.update(dt);
+                animTip.update(dt);
             }
 
             animKamehameha0.update(dt);
@@ -2781,11 +2837,11 @@ public class Play extends GameState {
             princess.render(sb);
         }
 
-        if(pointer != null) pointer.render(sb);
-
         if(!player.isPlayerDead()) {
             player.render(sb);
         }
+
+        if(pointer != null) pointer.render(sb);
 
         for (FireBall fireBall: fireBalls) {
             fireBall.render(sb);
@@ -2864,6 +2920,37 @@ public class Play extends GameState {
 
         }
 
+
+        if(isTutorial && princess != null){
+            sb.begin();
+            sb.draw(animKillEnemy.getFrame(),
+                    princess.getPosition().x*PPM - animKillEnemy.getFrame().getRegionWidth()/2,
+                    princess.getPosition().y*PPM + animKillEnemy.getFrame().getRegionHeight()/4,
+                    (float)animKillEnemy.getFrame().getRegionWidth(),
+                    (float)animKillEnemy.getFrame().getRegionHeight());
+            sb.end();
+        }
+
+
+        if(!hideScream && princess != null){
+            sb.begin();
+            sb.draw(animAh.getFrame(),
+                    princess.getPosition().x*PPM - animAh.getFrame().getRegionWidth()/2,
+                    princess.getPosition().y*PPM + animAh.getFrame().getRegionHeight()/4,
+                    (float)animAh.getFrame().getRegionWidth(),
+                    (float)animAh.getFrame().getRegionHeight());
+            sb.end();
+        }
+
+        if(isTutorial && !tuto_step2){
+            sb.begin();
+            sb.draw(animTip.getFrame(),
+                    player.getPosition().x*PPM - animTip.getFrame().getRegionWidth()/2,
+                    player.getPosition().y*PPM + animTip.getFrame().getRegionHeight()/13,
+                    (float)animTip.getFrame().getRegionWidth(),
+                    (float)animTip.getFrame().getRegionHeight());
+            sb.end();
+        }
 
 
 
@@ -3055,7 +3142,15 @@ public class Play extends GameState {
 
         float w = 64/PPM;
         float h = 64/PPM;
-        bdef.position.set(x,y);
+
+        if(lastPrincessPosition.x != 0 && !isTutorial){
+            bdef.position.set(lastPrincessPosition.x, lastPrincessPosition.y);
+            System.out.print("Last princess position:"+ lastPrincessPosition);
+        }else{
+            bdef.position.set(x, y);
+        }
+
+        //bdef.position.set(x,y);
 
         bdef.type = BodyType.DynamicBody;
         Body body = world.createBody(bdef);
@@ -3095,7 +3190,7 @@ public class Play extends GameState {
             x = ((RectangleMapObject) mo).getRectangle().x / PPM + w/2;
             y = ((RectangleMapObject) mo).getRectangle().y / PPM + h/2;
 
-            if(MyGdxGame.lastPlayerPosition.x != 0){
+            if(MyGdxGame.lastPlayerPosition.x != 0 && !isTutorial){
                 bdef.position.set(lastPlayerPosition.x, lastPlayerPosition.y);
                 System.out.print("Last player position:"+ lastPlayerPosition);
             }else{

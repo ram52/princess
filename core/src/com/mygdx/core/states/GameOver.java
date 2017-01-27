@@ -69,6 +69,10 @@ public class GameOver extends GameState {
 
         animTitle = new Animation(new Sprite(MyGdxGame.atlas.findRegion("gameover")).split(59,47)[0], 1 / 5f);
 
+        MyGdxGame.lastPlayerPosition = new Vector2(0,0);
+        MyGdxGame.lastBrickPosition = new Vector2(0,0);
+        MyGdxGame.lastPrincessPosition = new Vector2(0,0);
+
         Sprite tex = null;
         if(Save.gd.isExcaliburEquiped()){
             tex = new Sprite(MyGdxGame.atlas.findRegion("sadEx"));
