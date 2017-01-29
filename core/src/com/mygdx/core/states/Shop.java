@@ -84,14 +84,14 @@ public class Shop extends GameState {
 
         animTitle = new Animation(new Sprite(MyGdxGame.atlas.findRegion("shop")).split(57,23)[0], 1 / 5f);
 
-        if (!Save.gd.getAdsRemoverPurchased()) {
-            String network = game.actionResolver.getNetworkClass();
-            if(network == null) network = "ABSENT";
-            System.out.print("NETWORK: "+network);
-            if(network.equals("4G")|network.equals("3G")|network.equals("WIFI"))
-                game.actionResolver.showOrLoadInterstital();
-            System.out.println(network);
-        }
+//        if (!Save.gd.getAdsRemoverPurchased()) {
+//            String network = game.actionResolver.getNetworkClass();
+//            if(network == null) network = "ABSENT";
+//            System.out.print("NETWORK: "+network);
+//            if(network.equals("4G")|network.equals("3G")|network.equals("WIFI"))
+//                game.actionResolver.showOrLoadInterstital();
+//            System.out.println(network);
+//        }
 
         MyGdxGame.background_cloud.setVector(+10, 0);
         //MyGdxGame.background_skyDay.setVector(0, 0);
@@ -139,6 +139,7 @@ public class Shop extends GameState {
                                         Save.gd.setBootPurchased(true);
                                         Save.gd.setKamehamehaPurchased(true);
                                         Save.gd.setBrick2Purchased(true);
+                                        Save.gd.setBrick2Equiped(true);
                                         Save.gd.setFireBall2Purchased(true);
                                         Save.gd.setFireBallPurchased(true);
                                         Save.gd.setExcaliburEquiped(true);
@@ -147,6 +148,7 @@ public class Shop extends GameState {
                                         Save.gd.setFireBall2Equiped(true);
                                         Save.gd.setFireBallEquiped(false);
                                         Save.save();
+                                        Save.load();
                                         //showSecretDialog();
                                     }else if(input.equals("coin")){
                                         Save.gd.setMoney(Save.gd.getMoney()+1);
@@ -395,11 +397,12 @@ public class Shop extends GameState {
                             System.out.println("result Equip ads free?"+obj);
                             System.out.println(obj);
                             if(obj.toString().equals("true")){
-                                if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
-                                    MyGdxGame.res.getSound("equiped").play();
-                                }
-                                Save.gd.setAdsRemoverPurchased(true);
-                                Save.save();
+                                MyGdxGame.actionResolver.purchaseAdsRemover();
+//                                if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
+//                                    MyGdxGame.res.getSound("equiped").play();
+//                                }
+//                                Save.gd.setAdsRemoverPurchased(true);
+//                                Save.save();
                             }
                             Save.save();
                             Save.load();
@@ -423,24 +426,26 @@ public class Shop extends GameState {
                 System.out.println("buttonCoin1 clicked!");
                 Save.load();
                     NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
-                    String cur = currencyFormatter.format(1).replaceAll("[0-9.,]","");;
+                    String cur = currencyFormatter.format(1).replaceAll("[0-9.,]","");
+                    final int money = 100;
                     ShopDialog dialog = new ShopDialog(Shop.this,
                             "\n\n" +
-                                    "1000 Coins\n" +
+                                    money+" COINS\n" +
                                     "\n" +
-                                    "Purchase 1000 coins.\n" +
+                                    "Purchase "+money+" coins.\n" +
                                     "\n\n" +
-                                    "Buy 1000 coins.?", "buttonCoins1Up"){
+                                    "Buy "+money+" coins.?", "buttonCoins1Up"){
                         public void result(Object obj) {
                             System.out.println("result"+obj);
                             System.out.println(obj);
                             if(obj.toString().equals("true")){
-                                if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
-                                    MyGdxGame.res.getSound("point").play();
-                                }
-                                Save.gd.setMoney(Save.gd.getMoney()+1000);
-                                Save.save();
-                                labelMoney.setText(Integer.toString(Save.gd.getMoney()));
+//                                if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
+//                                    MyGdxGame.res.getSound("point").play();
+//                                }
+//                                Save.gd.setMoney(Save.gd.getMoney()+money);
+//                                Save.save();
+//                                labelMoney.setText(Integer.toString(Save.gd.getMoney()));
+                                MyGdxGame.actionResolver.purchaseHundredCoins();
                             }
                             Save.save();
                             Save.load();
@@ -465,24 +470,26 @@ public class Shop extends GameState {
                 System.out.println("buttonCoin1 clicked!");
                 Save.load();
                 NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
-                String cur = currencyFormatter.format(1).replaceAll("[0-9.,]","");;
+                String cur = currencyFormatter.format(1).replaceAll("[0-9.,]","");
+                final int money = 1000;
                 ShopDialog dialog = new ShopDialog(Shop.this,
                         "\n\n" +
-                                "10000 Coins\n" +
+                                money+" COINS\n" +
                                 "\n" +
-                                "Purchase 10000 coins.\n" +
+                                "Purchase "+money+" coins.\n" +
                                 "\n\n" +
-                                "Buy 10000 coins.?", "buttonCoins2Up"){
+                                "Buy "+money+" coins.?", "buttonCoins2Up"){
                     public void result(Object obj) {
                         System.out.println("result"+obj);
                         System.out.println(obj);
                         if(obj.toString().equals("true")){
-                            if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
-                                MyGdxGame.res.getSound("point").play();
-                            }
-                            Save.gd.setMoney(Save.gd.getMoney()+10000);
-                            Save.save();
-                            labelMoney.setText(Integer.toString(Save.gd.getMoney()));
+//                            if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
+//                                MyGdxGame.res.getSound("point").play();
+//                            }
+//                            Save.gd.setMoney(Save.gd.getMoney()+money);
+//                            Save.save();
+//                            labelMoney.setText(Integer.toString(Save.gd.getMoney()));
+                            MyGdxGame.actionResolver.purchaseThousandCoins();
                         }
                         Save.save();
                         Save.load();
@@ -507,23 +514,31 @@ public class Shop extends GameState {
                 Save.load();
                 NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
                 String cur = currencyFormatter.format(1).replaceAll("[0-9.,]","");;
+                int value = 20;
                 ShopDialog dialog = new ShopDialog(Shop.this,
                         "\n\n" +
-                                "100 FREE Coins\n" +
+                                value+" FREE COINS\n" +
                                 "\n" +
-                                "Watch a video for 100 coins FREE.\n" +
+                                "Watch a video for "+value+" coins FREE.\n" +
                                 "\n\n" +
                                 "Watch video ?", "buttonCoins3Up"){
                     public void result(Object obj) {
                         System.out.println("result"+obj);
                         System.out.println(obj);
                         if(obj.toString().equals("true")){
-                            if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
-                                MyGdxGame.res.getSound("point").play();
+                            String network = MyGdxGame.actionResolver.getNetworkClass();
+                            if(network == null) network = "ABSENT";
+                            System.out.println("NETWORK: " + network);
+                            if(network.equals("4G")|network.equals("3G")|network.equals("WIFI")) {
+                                MyGdxGame.actionResolver.showRewardedVideoChartBoost();
+                                //game.actionResolver.showRewardedVideoChartBoost();
                             }
-                            Save.gd.setMoney(Save.gd.getMoney()+100);
-                            Save.save();
-                            labelMoney.setText(Integer.toString(Save.gd.getMoney()));
+//                            if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
+//                                MyGdxGame.res.getSound("point").play();
+//                            }
+//                            Save.gd.setMoney(Save.gd.getMoney()+20);
+//                            Save.save();
+//                            labelMoney.setText(Integer.toString(Save.gd.getMoney()));
                         }
                         Save.save();
                         Save.load();
@@ -675,6 +690,7 @@ public class Shop extends GameState {
                                 Save.gd.setMoney(Save.gd.getMoney() - cost);
                                 Save.save();
                                 labelMoney.setText(Integer.toString(Save.gd.getMoney()));
+                                //MyGdxGame.actionResolver.purchaseHadouBall();
                             }else{
                                 if(obj.toString().equals("true")){
                                     if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("error").play();
@@ -772,6 +788,7 @@ public class Shop extends GameState {
                             Save.gd.setMoney(Save.gd.getMoney() - cost);
                             Save.save();
                             labelMoney.setText(Integer.toString(Save.gd.getMoney()));
+                            //MyGdxGame.actionResolver.purchaseExcalibur();
                         }else{
                             if(obj.toString().equals("true")){
                                 if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("error").play();
@@ -855,13 +872,13 @@ public class Shop extends GameState {
                                 }
                                 Save.gd.setKamehamehaPurchased(true);
                                 Save.gd.setKamehamehaEquiped(true);
-                                //Save.gd.setExcaliburEquiped(false);
                                 Save.gd.setFireBallEquiped(false);
                                 Save.gd.setFireBall2Equiped(false);
                                 Save.gd.setLightningEquiped(false);
                                 Save.gd.setMoney(Save.gd.getMoney() - cost);
                                 Save.save();
                                 labelMoney.setText(Integer.toString(Save.gd.getMoney()));
+                                //MyGdxGame.actionResolver.purchaseKamebeam();
                             }else{
 
                                 if(obj.toString().equals("true")){
@@ -954,6 +971,7 @@ public class Shop extends GameState {
                                 Save.gd.setMoney(Save.gd.getMoney() - cost);
                                 Save.save();
                                 labelMoney.setText(Integer.toString(Save.gd.getMoney()));
+                                //MyGdxGame.actionResolver.purchaseBoots();
                             }else{
 
                                 if(obj.toString().equals("true")){
@@ -1039,6 +1057,7 @@ public class Shop extends GameState {
                                 Save.gd.setMoney(Save.gd.getMoney() - cost);
                                 Save.save();
                                 labelMoney.setText(Integer.toString(Save.gd.getMoney()));
+                                //MyGdxGame.actionResolver.purchaseSuperBrick();
                             }else{
 
                                 if(obj.toString().equals("true")){
@@ -1129,6 +1148,7 @@ public class Shop extends GameState {
                                 Save.gd.setMoney(Save.gd.getMoney() - cost);
                                 Save.save();
                                 labelMoney.setText(Integer.toString(Save.gd.getMoney()));
+
                             }else{
 
                                 if(obj.toString().equals("true")){
@@ -1209,15 +1229,16 @@ public class Shop extends GameState {
                             System.out.println(obj);
 
                             if(obj.toString().equals("true") && Save.gd.getMoney() >= cost){
-                                if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
-                                    MyGdxGame.res.getSound("newScreen").play();
-                                }
-
-                                Save.gd.setMegaJumpPurchased(true);
-                                Save.gd.setMegaJumpEquiped(true);
-                                Save.gd.setMoney(Save.gd.getMoney() - cost);
-                                Save.save();
-                                labelMoney.setText(Integer.toString(Save.gd.getMoney()));
+//                                if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
+//                                    MyGdxGame.res.getSound("newScreen").play();
+//                                }
+//
+//                                Save.gd.setMegaJumpPurchased(true);
+//                                Save.gd.setMegaJumpEquiped(true);
+//                                Save.gd.setMoney(Save.gd.getMoney() - cost);
+//                                Save.save();
+//                                labelMoney.setText(Integer.toString(Save.gd.getMoney()));
+                                MyGdxGame.actionResolver.purchaseThousandCoins();
                             }else{
 
                                 if(obj.toString().equals("true")){
@@ -1378,6 +1399,9 @@ public class Shop extends GameState {
     }
 
     public void update(float dt) {
+
+        labelMoney.setText(Integer.toString(Save.gd.getMoney()));
+
         animationEnemy.update(dt);
         animationEnemyMock.update(dt);
         animationCoin.update(dt);

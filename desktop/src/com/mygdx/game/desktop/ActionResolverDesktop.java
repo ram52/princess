@@ -53,6 +53,51 @@ public class ActionResolverDesktop implements ActionResolver {
 	}
 
 	@Override
+	public void purchaseExcalibur() {
+		System.out.println("purchaseExcalibur");
+	}
+
+	@Override
+	public void purchaseKamebeam() {
+		System.out.println("purchaseExcalibur");
+	}
+
+	@Override
+	public void purchaseBoots() {
+		System.out.println("purchaseBoots");
+	}
+
+	@Override
+	public void purchaseHadouBall() {
+		System.out.println("purchaseHadouBall");
+	}
+
+	@Override
+	public void purchaseMegaJump() {
+		System.out.println("purchaseMegaJump");
+	}
+
+	@Override
+	public void purchaseLightning() {
+		System.out.println("purchaseLightning");
+	}
+
+	@Override
+	public void purchaseSuperBrick() {
+		System.out.println("purchaseSuperBrick");
+	}
+
+	@Override
+	public void purchaseHundredCoins() {
+		System.out.println("purchaseHundredCoins");
+	}
+
+	@Override
+	public void purchaseThousandCoins() {
+		System.out.println("purchaseThousandCoins");
+	}
+
+	@Override
 	public void showOrLoadInterstitalVideo() {
 		System.out.println("showOrLoadInterstitalVideo");
 	}
@@ -60,16 +105,6 @@ public class ActionResolverDesktop implements ActionResolver {
 	@Override
 	public void showOrLoadBanner() {
 
-	}
-
-	@Override
-	public boolean fullBarPurchased() {
-		return false;
-	}
-
-	@Override
-	public boolean adsRemoverPurchased() {
-		return false;
 	}
 
 	@Override
@@ -98,22 +133,7 @@ public class ActionResolverDesktop implements ActionResolver {
 	}
 
 	@Override
-	public void loadRewardedVideoMoPub() {
-
-	}
-
-	@Override
-	public void userClickedToWatchAdMoPub() {
-
-	}
-
-	@Override
 	public void showRewardedVideoChartBoost() {
-
-	}
-
-	@Override
-	public void showOrLoadRewardedVideoChartboost() {
 
 	}
 

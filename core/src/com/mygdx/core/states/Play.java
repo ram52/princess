@@ -254,7 +254,7 @@ public class Play extends GameState {
 
 
         tex = new Sprite(MyGdxGame.atlas.findRegion("tip"));
-        sprites = tex.split(238, 489)[0];
+        sprites = tex.split(238, 520)[0];
         animTip = new Animation(sprites, 1 / 15f);
 
 
@@ -857,8 +857,6 @@ public class Play extends GameState {
                 if(network == null) network = "ABSENT";
                 System.out.println("NETWORK: " + network);
                 if(network.equals("4G")|network.equals("3G")|network.equals("WIFI")) {
-                    MyGdxGame.actionResolver.showOrLoadRewardedVideoChartboost();
-                    //game.actionResolver.showRewardedVideoChartBoost();
                 }
             }
         });
@@ -2331,7 +2329,7 @@ public class Play extends GameState {
                     enemies.add(createEnemy(1/PPM , MyGdxGame.GROUND, true));
                     enemies.add(createEnemy(MyGdxGame.V_WIDTH*1.0f/PPM , MyGdxGame.GROUND, false));
                 }
-            }, 1);
+            }, 2);
 
         }
 
@@ -2942,7 +2940,7 @@ public class Play extends GameState {
             sb.end();
         }
 
-        if(isTutorial && !tuto_step2){
+        if(isTutorial && tuto_step3 && !tuto_step4){
             sb.begin();
             sb.draw(animTip.getFrame(),
                     player.getPosition().x*PPM - animTip.getFrame().getRegionWidth()/2,

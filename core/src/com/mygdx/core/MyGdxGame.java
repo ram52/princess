@@ -125,17 +125,11 @@ public class MyGdxGame implements ApplicationListener {
     public static String AndroidFacebookGameUrl = "https://www.facebook.com/Axl.RunningBird/";
     public static String AndroidTwitterGameUrl = "https://twitter.com/axldotm";
     public static String developerWebSite = "https://axldotm.com";
-    public static String achievementScore10 = "CgkI_sup0ooGEAIQAQ";
-    public static String achievementScore50 = "CgkI_sup0ooGEAIQAg";
-    public static String achievementScore70 = "CgkI_sup0ooGEAIQAw";
-    public static String achievementScore80 = "CgkI_sup0ooGEAIQBA";
-    public static String achievementScore90 = "CgkI_sup0ooGEAIQBQ";
-    public static String achievementScore100 = "CgkI_sup0ooGEAIQBg";
-    public static String achievementPeace = "CgkI_sup0ooGEAIQCw";
-    public static String achievementBossDefeated = "CgkI_sup0ooGEAIQBg";
-    public static String achievementSecretLadyBug = "CgkI_sup0ooGEAIQCA";
-    public static String achievementSecretBossShortcut = "CgkI_sup0ooGEAIQCQ";
-    public static String achievementDecriptSecretMessage = "CgkI_sup0ooGEAIQCg";
+    public static String achievement1 = "CgkIw6iVjJQdEAIQAg";
+    public static String achievement2 = "CgkIw6iVjJQdEAIQAw";
+    public static String achievement3 = "CgkIw6iVjJQdEAIQBA";
+    public static String achievement4 = "CgkIw6iVjJQdEAIQBQ";
+    public static String achievement5 = "CgkIw6iVjJQdEAIQBg";
 
     private static float cptBlinkingStarSlow = 0.0f;
     private static float cptBlinkingStarNormal = 0.0f;
@@ -152,6 +146,9 @@ public class MyGdxGame implements ApplicationListener {
     private static int CONTINUE_MAX = 9999999;
     private static int CONTINUE_PRICE = 100;
     private static int CONTINUE_STORE_PACK = 500;
+    public static int TWENTY_COINS_STORE_PACK = 20;
+    public static int HUNDRED_COINS_STORE_PACK = 100;
+    public static int THOUSAND_COINS_STORE_PACK = 1000;
     private static boolean secretDiscovered = false;
     private static int TAPNUMB_SECRET = 50;
     private static boolean shortcutDiscovered = false;
@@ -257,7 +254,7 @@ public class MyGdxGame implements ApplicationListener {
 
         if(!Save.gd.isFireBall2Equiped()| !Save.gd.isKamehamehaEquiped() | !Save.gd.isLightningEquiped()){
             Save.gd.setFireBallEquiped(true);
-            Save.gd.setFireBall2Purchased(true);
+            Save.gd.setFireBallPurchased(true);
             Save.save();
         }
 
@@ -752,84 +749,46 @@ public class MyGdxGame implements ApplicationListener {
         MyGdxGame.shortcutDiscovered = shortcutDiscovered;
     }
 
-    public static String getAchievementScore10() {
-        return achievementScore10;
+
+    public static String getAchievement1() {
+        return achievement1;
     }
 
-    public static void setAchievementScore10(String achievementScore10) {
-        MyGdxGame.achievementScore10 = achievementScore10;
+    public static void setAchievement1(String achievement1) {
+        MyGdxGame.achievement1 = achievement1;
     }
 
-    public static String getAchievementScore50() {
-        return achievementScore50;
+    public static String getAchievement2() {
+        return achievement2;
     }
 
-    public static void setAchievementScore50(String achievementScore50) {
-        MyGdxGame.achievementScore50 = achievementScore50;
+    public static void setAchievement2(String achievement2) {
+        MyGdxGame.achievement2 = achievement2;
     }
 
-    public static String getAchievementScore70() {
-        return achievementScore70;
+    public static String getAchievement3() {
+        return achievement3;
     }
 
-    public static void setAchievementScore70(String achievementScore70) {
-        MyGdxGame.achievementScore70 = achievementScore70;
+    public static void setAchievement3(String achievement3) {
+        MyGdxGame.achievement3 = achievement3;
     }
 
-    public static String getAchievementScore80() {
-        return achievementScore80;
+    public static String getAchievement4() {
+        return achievement4;
     }
 
-    public static void setAchievementScore80(String achievementScore80) {
-        MyGdxGame.achievementScore80 = achievementScore80;
+    public static void setAchievement4(String achievement4) {
+        MyGdxGame.achievement4 = achievement4;
     }
 
-    public static String getAchievementScore90() {
-        return achievementScore90;
+    public static String getAchievement5() {
+        return achievement5;
     }
 
-    public static void setAchievementScore90(String achievementScore90) {
-        MyGdxGame.achievementScore90 = achievementScore90;
+    public static void setAchievement5(String achievement5) {
+        MyGdxGame.achievement5 = achievement5;
     }
 
-    public static String getAchievementScore100() {
-        return achievementScore100;
-    }
-
-    public static void setAchievementScore100(String achievementScore100) {
-        MyGdxGame.achievementScore100 = achievementScore100;
-    }
-
-    public static String getAchievementBossDefeated() {
-        return achievementBossDefeated;
-    }
-
-    public static void setAchievementBossDefeated(String achievementBossDefeated) {
-        MyGdxGame.achievementBossDefeated = achievementBossDefeated;
-    }
-
-    public static String getAchievementSecretLadyBug() {
-        return achievementSecretLadyBug;
-    }
-
-    public static void setAchievementSecretLadyBug(String achievementSecretLadyBug) {
-        MyGdxGame.achievementSecretLadyBug = achievementSecretLadyBug;
-    }
-
-    public static String getAchievementSecretBossShortcut() {
-        return achievementSecretBossShortcut;
-    }
-
-    public static void setAchievementSecretBossShortcut(String achievementSecretBossShortcut) {
-        MyGdxGame.achievementSecretBossShortcut = achievementSecretBossShortcut;
-    }
-
-    public static String getAchievementDecriptSecretMessage() {
-        return achievementDecriptSecretMessage;
-    }
-
-    public static void setAchievementDecriptSecretMessage(String achievementDecriptSecretMessage) {
-        MyGdxGame.achievementDecriptSecretMessage = achievementDecriptSecretMessage;
-    }
 
 }

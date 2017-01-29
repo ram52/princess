@@ -27,8 +27,6 @@ import com.mygdx.core.handlers.Animation;
 import com.mygdx.core.handlers.GameStateManager;
 import com.mygdx.core.handlers.Save;
 
-import static com.mygdx.core.handlers.B2DVars.PPM;
-
 public class GameOver extends GameState {
     Stage stage1;
     Label labelScore, labelBestScore;
@@ -210,12 +208,11 @@ public class GameOver extends GameState {
         labelBestScore.setPosition(0, 0);
         labelBestScore.setAlignment(Align.center);
 
-        if (score >= 10) game.actionResolver.unlockAchievementGPGS(MyGdxGame.achievementScore10);
-        if (score >= 50) game.actionResolver.unlockAchievementGPGS(MyGdxGame.achievementScore50);
-        if (score >= 70) game.actionResolver.unlockAchievementGPGS(MyGdxGame.achievementScore70);
-        if (score >= 80) game.actionResolver.unlockAchievementGPGS(MyGdxGame.achievementScore80);
-        if (score >= 90) game.actionResolver.unlockAchievementGPGS(MyGdxGame.achievementScore90);
-        if (score >= 100) game.actionResolver.unlockAchievementGPGS(MyGdxGame.achievementScore100);
+        if (score >= 5) game.actionResolver.unlockAchievementGPGS(MyGdxGame.achievement1);
+        if (score >= 15) game.actionResolver.unlockAchievementGPGS(MyGdxGame.achievement2);
+        if (score >= 30) game.actionResolver.unlockAchievementGPGS(MyGdxGame.achievement3);
+        if (score >= 80) game.actionResolver.unlockAchievementGPGS(MyGdxGame.achievement4);
+        if (score >= 100) game.actionResolver.unlockAchievementGPGS(MyGdxGame.achievement5);
 
 
         stage1.addActor(background);

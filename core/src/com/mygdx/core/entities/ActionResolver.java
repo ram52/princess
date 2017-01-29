@@ -12,18 +12,22 @@ public interface ActionResolver {
     public void purchaseFullBar();
 	public void purchaseExtraCoins();
     public void purchaseAdsRemover();
+	public void purchaseExcalibur();
+	public void purchaseKamebeam();
+	public void purchaseBoots();
+	public void purchaseHadouBall();
+	public void purchaseMegaJump();
+	public void purchaseLightning();
+	public void purchaseSuperBrick();
+	public void purchaseHundredCoins();
+	public void purchaseThousandCoins();
     public void showOrLoadInterstitalVideo();
 	public void showOrLoadBanner();
-    public boolean fullBarPurchased();
-    public boolean adsRemoverPurchased();
     public String getNetworkClass();
 	public void showOrLoadInterstital();
     public void shareOnFacebook();
     public void showBannerAd();
     public void hideBannerAd();
-	public void loadRewardedVideoMoPub();
-	public void userClickedToWatchAdMoPub();
 	public void showRewardedVideoChartBoost();
-	public void showOrLoadRewardedVideoChartboost();
 	void confirm(ConfirmInterface confirmInterface);
 }

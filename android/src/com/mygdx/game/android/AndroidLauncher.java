@@ -1,9 +1,7 @@
 package com.mygdx.game.android;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,28 +9,23 @@ import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Adapter;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
+
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.TransactionDetails;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+import com.chartboost.sdk.Model.CBError;
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -45,12 +38,6 @@ import com.google.android.gms.games.Games;
 import com.google.android.gms.games.GamesActivityResultCodes;
 import com.google.example.games.basegameutils.GameHelper;
 import com.google.example.games.basegameutils.GameHelper.GameHelperListener;
-
-/*import com.mopub.common.MoPub;
-import com.mopub.common.MoPubReward;
-import com.mopub.mobileads.MoPubErrorCode;
-import com.mopub.mobileads.MoPubRewardedVideoListener;
-import com.mopub.nativeads.RequestParameters;*/
 import com.mygdx.core.MyGdxGame;
 import com.mygdx.core.MyGdxGame.ConfirmInterface;
 import com.mygdx.core.MyGdxGame.RequestHandler;
@@ -59,13 +46,17 @@ import com.mygdx.core.handlers.Save;
 import com.ram52.princess.R;
 
 import java.util.ArrayList;
-import java.util.Set;
 
 import io.fabric.sdk.android.Fabric;
+
+import com.chartboost.sdk.Chartboost;
+import com.chartboost.sdk.CBLocation;
+import com.chartboost.sdk.ChartboostDelegate;
 
 public class AndroidLauncher extends AndroidApplication implements
         GameHelperListener, ActionResolver, RequestHandler,PlayStorePurchaseListener, BillingProcessor.IBillingHandler {
 
+    private static String LOG_TAG = AndroidLauncher.class.getSimpleName();
     public static final int BILLING_RESPONSE_RESULT_OK = 0;
     private GameHelper gameHelper;
     public AdView bannerAdView;
@@ -74,16 +65,212 @@ public class AndroidLauncher extends AndroidApplication implements
     private CustomDialogClass dialog;
     public boolean created;
     private BillingProcessor bp;
-    private boolean fullBarPurchased = false;
-    private boolean adsRemoverPurchased = false;
-    private String productId = "";
-    private String res = "";
     private Display display;
     public boolean debug = false; //IN DEBUG DO NOT SUBMIT SCORE && DO NOT SHOW ADS && DO NOT UNLOCK ACHIEVEMENTS
     public ProgressDialog pdialog;
-    private static boolean b = true;
-    //private MoPubRewardedVideoListener rewardedVideoListener;
-    private boolean rewardCompleted = false;
+
+    /**
+     * Chartboost Delegates
+     */
+
+    public ChartboostDelegate delegate = new ChartboostDelegate() {
+
+        @Override
+        public boolean shouldRequestInterstitial(String location) {
+            Log.e(LOG_TAG,"Should request interstitial at " + location + "?");
+            return true;
+        }
+
+        @Override
+        public boolean shouldDisplayInterstitial(String location) {
+            Log.e(LOG_TAG,"Should display interstitial at " + location + "?");
+            return true;
+        }
+
+        @Override
+        public void didCacheInterstitial(String location) {
+            Log.e(LOG_TAG,"Interstitial cached at " + location);
+        }
+
+        @Override
+        public void didFailToLoadInterstitial(String location, CBError.CBImpressionError error) {
+            Log.e(LOG_TAG,"Interstitial failed to load at " + location + " with error: " + error.name());
+        }
+
+        @Override
+        public void didDismissInterstitial(String location) {
+            Log.e(LOG_TAG,"Interstitial dismissed at " + location);
+        }
+
+        @Override
+        public void didCloseInterstitial(String location) {
+            Log.e(LOG_TAG,"Interstitial closed at " + location);
+        }
+
+        @Override
+        public void didClickInterstitial(String location) {
+            Log.e(LOG_TAG,"Interstitial clicked at " + location );
+        }
+
+        @Override
+        public void didDisplayInterstitial(String location) {
+            Log.e(LOG_TAG,"Interstitial displayed at " + location);
+        }
+
+        @Override
+        public boolean shouldRequestMoreApps(String location) {
+            Log.e(LOG_TAG,"Should request More Apps at " + location + "?");
+            return true;
+        }
+
+        @Override
+        public boolean shouldDisplayMoreApps(String location) {
+            Log.e(LOG_TAG,"Should display More Apps at " + location + "?");
+            return true;
+        }
+
+        @Override
+        public void didFailToLoadMoreApps(String location, CBError.CBImpressionError error) {
+            Log.e(LOG_TAG,"More Apps failed to load at " + location + " with error: " + error.name());
+        }
+
+        @Override
+        public void didCacheMoreApps(String location) {
+            Log.e(LOG_TAG,"More Apps cached at " + location);
+        }
+
+        @Override
+        public void didDismissMoreApps(String location) {
+            Log.e(LOG_TAG,"More Apps dismissed at " + location);
+        }
+
+        @Override
+        public void didCloseMoreApps(String location) {
+            Log.e(LOG_TAG,"More Apps closed at " + location);
+        }
+
+        @Override
+        public void didClickMoreApps(String location) {
+            Log.e(LOG_TAG,"More Apps clicked at " + location);
+        }
+
+        @Override
+        public void didDisplayMoreApps(String location) {
+            Log.e(LOG_TAG,"More Apps displayed at " + location);
+        }
+
+        @Override
+        public void didFailToRecordClick(String uri, CBError.CBClickError error) {
+            Log.e(LOG_TAG,"Failed to record click " + (uri != null ? uri : "null") + ", error: " + error.name());
+        }
+
+        @Override
+        public boolean shouldDisplayRewardedVideo(String location) {
+            Log.e(LOG_TAG,"Should display rewarded video at " + location + "?");
+            return true;
+        }
+
+        @Override
+        public void didCacheRewardedVideo(String location) {
+            Log.e(LOG_TAG,"Did cache rewarded video " + location);
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    pdialog.dismiss();
+                    Chartboost.showRewardedVideo(CBLocation.LOCATION_ITEM_STORE);
+                }
+            });
+        }
+
+        @Override
+        public void didFailToLoadRewardedVideo(String location,
+                                               CBError.CBImpressionError error) {
+            Log.e(LOG_TAG,"Rewarded Video failed to load at " + location + " with error: " + error.name());
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    pdialog.dismiss();
+                    new AlertDialog.Builder(AndroidLauncher.this)
+                            .setTitle("Sorry :(")
+                            .setMessage("No video available. Make sure that your internet connection is working.")
+                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // continue with delete
+                                }
+                            })
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+                }
+            });
+        }
+
+        @Override
+        public void didDismissRewardedVideo(String location) {
+            Log.e(LOG_TAG,"Rewarded video dismissed at " + location);
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    pdialog.dismiss();
+                }
+            });
+        }
+
+        @Override
+        public void didCloseRewardedVideo(String location) {
+            Log.e(LOG_TAG,"Rewarded video closed at " + location);
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    pdialog.dismiss();
+                }
+            });
+        }
+
+        @Override
+        public void didClickRewardedVideo(String location) {
+            Log.e(LOG_TAG,"Rewarded video clicked at " + location);
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    pdialog.dismiss();
+                }
+            });
+        }
+
+        @Override
+        public void didCompleteRewardedVideo(String location, int reward) {
+            Log.e(LOG_TAG,"Rewarded video completed at " + location + "for reward: " + reward);
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    //TODO Give free coins
+                    Save.load();
+                    Save.gd.setMoney(Save.gd.getMoney() + MyGdxGame.TWENTY_COINS_STORE_PACK);
+                    Save.save();
+                }
+            });
+        }
+
+        @Override
+        public void didDisplayRewardedVideo(String location) {
+            Log.e(LOG_TAG,"Rewarded video displayed at " + location);
+        }
+
+        @Override
+        public void willDisplayVideo(String location) {
+            Log.e(LOG_TAG,"Will display rewarded video at " + location);
+        }
+
+        @Override
+        public void didCacheInPlay(String location) {
+            Log.e(LOG_TAG,"In Play loaded at " + location);
+        }
+
+        @Override
+        public void didFailToLoadInPlay(String location, CBError.CBImpressionError error) {
+            Log.e(LOG_TAG,"In play failed to load at " + location + ", with error: " + error);
+        }
+
+        @Override
+        public void didInitialize() {
+            Log.e(LOG_TAG,"Chartboost SDK is initialized and ready!");
+        }
+
+    };
 
     public void displayDialogBillingNonAvailable(){
         runOnUiThread(new Runnable() {
@@ -112,6 +299,10 @@ public class AndroidLauncher extends AndroidApplication implements
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
         Fabric.with(this, new Crashlytics());
+
+        Chartboost.startWithAppId(this, getString(R.string.chartboost_app_id), getString(R.string.chartboost_appSignature));
+        Chartboost.setDelegate(delegate);
+        Chartboost.onCreate(this);
 
         display = getWindowManager().getDefaultDisplay();
         interstitialAd = new InterstitialAd(this);
@@ -172,24 +363,6 @@ public class AndroidLauncher extends AndroidApplication implements
         else
             bp = null;
 
-    }
-
-
-    // Native video ads work by delegating to your existing Adaptor. Use this method if
-    // you don't already have an Adaptor in your app with at least 10 rows of data.
-    private Adapter makeSampleAdapter() {
-        ArrayList<String> sampleItems = new ArrayList<String>();
-        for (int i = 1; i <= 20; i++) {
-            sampleItems.add("Item " + i);
-        }
-
-        ArrayAdapter<String> sampleAdapter = new ArrayAdapter<String>(
-                this,
-                android.R.layout.simple_list_item_1,
-                sampleItems
-        );
-
-        return sampleAdapter;
     }
 
     private void hideVirtualButtons() {
@@ -283,40 +456,19 @@ public class AndroidLauncher extends AndroidApplication implements
     }
 
     @Override
-    public void loadRewardedVideoMoPub() {
-        runOnUiThread(new Runnable() {
-            public void run() {
-                pdialog = new ProgressDialog(AndroidLauncher.this);
-                pdialog.setCancelable(false);
-                pdialog.setMessage("Loading...");
-                pdialog.show();
-            }
-        });
-
-        //MoPub.loadRewardedVideo(getResources().getString(R.string.ad_unit_mopub_reward_video));
-    }
-
-    @Override
-    public void userClickedToWatchAdMoPub() {
-        //MoPub.showRewardedVideoChartBoost(getResources().getString(R.string.ad_unit_mopub_reward_video));
-    }
-
-    @Override
     public void showRewardedVideoChartBoost() {
-    }
-
-    @Override
-    public void showOrLoadRewardedVideoChartboost() {
         runOnUiThread(new Runnable() {
             public void run() {
                 pdialog = new ProgressDialog(AndroidLauncher.this);
-                pdialog.setCanceledOnTouchOutside(false);
                 pdialog.setCancelable(false);
                 pdialog.setMessage("Loading...");
                 pdialog.show();
             }
         });
+        Chartboost.cacheRewardedVideo(CBLocation.LOCATION_ITEM_STORE);
     }
+
+
 
     @Override
     public String getNetworkClass() {
@@ -357,7 +509,7 @@ public class AndroidLauncher extends AndroidApplication implements
     @Override
     protected void onPause() {
         super.onPause();
-        //MoPub.onPause(this);
+        Chartboost.onPause(this);
 
         if(MyGdxGame.isSoundEnable() != 0) {
             if(Save.gd != null) {
@@ -368,20 +520,13 @@ public class AndroidLauncher extends AndroidApplication implements
         if (ScreenReceiver.wasScreenOn) {
             // this is the case when onPause() is called by the system due to a screen state change
             System.out.println("SCREEN TURNED OFF");
-        } else {
-            // this is when onPause() is called when the screen state has not changed
         }
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        //MoPub.onResume(this);
-        // Optional targeting parameters
-        /*RequestParameters parameters = new RequestParameters.Builder()
-                //.keywords("your target words here")
-                .build();*/
+        Chartboost.onResume(this);
 
 
         if(MyGdxGame.isSoundEnable() != 0) {
@@ -393,23 +538,20 @@ public class AndroidLauncher extends AndroidApplication implements
         if (!ScreenReceiver.wasScreenOn) {
             // this is when onResume() is called due to a screen state change
             System.out.println("SCREEN TURNED ON");
-        } else {
-            // this is when onResume() is called when the screen state has not changed
         }
-
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        //MoPub.onStart(this);
+        Chartboost.onStart(this);
         gameHelper.onStart(this);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        //MoPub.onRestart(this);
+        Chartboost.onStop(this);
         gameHelper.onStop();
     }
 
@@ -419,14 +561,17 @@ public class AndroidLauncher extends AndroidApplication implements
             showDialog();
             MyGdxGame.gsm.game().pause();
         }
-
-        super.onBackPressed();
+        // If an interstitial is on screen, close it.
+        if (Chartboost.onBackPressed())
+            return;
+        else
+            super.onBackPressed();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        //MoPub.onRestart(this);
+        Chartboost.onDestroy(this);
         if (bp != null)
             bp.release();
 
@@ -439,9 +584,9 @@ public class AndroidLauncher extends AndroidApplication implements
 
         if(bp!=null) if (!bp.handleActivityResult(request, response, data))
 
-        if ( response == GamesActivityResultCodes.RESULT_RECONNECT_REQUIRED && request == 100 ){
-            gameHelper.disconnect();
-        }
+            if ( response == GamesActivityResultCodes.RESULT_RECONNECT_REQUIRED && request == 100 ){
+                gameHelper.disconnect();
+            }
         gameHelper.onActivityResult(request, response, data);
 
     }
@@ -525,104 +670,213 @@ public class AndroidLauncher extends AndroidApplication implements
     }
 
     @Override
+    public void purchaseExcalibur() {
+        try {
+            if(bp!=null)
+                bp.purchase(this,getResources().getString(R.string.excalibur));
+            else{
+                displayDialogBillingNonAvailable();
+            }
+        } catch (final Exception ex) {
+            Log.e("EXCEPTION",ex.getMessage());
+        }
+    }
+
+    @Override
+    public void purchaseKamebeam() {
+        try {
+            if(bp!=null)
+                bp.purchase(this,getResources().getString(R.string.kame_beam));
+            else{
+                displayDialogBillingNonAvailable();
+            }
+        } catch (final Exception ex) {
+            Log.e("EXCEPTION",ex.getMessage());
+        }
+    }
+
+    @Override
+    public void purchaseBoots() {
+        try {
+            if(bp!=null)
+                bp.purchase(this,getResources().getString(R.string.boots));
+            else{
+                displayDialogBillingNonAvailable();
+            }
+        } catch (final Exception ex) {
+            Log.e("EXCEPTION",ex.getMessage());
+        }
+    }
+
+    @Override
+    public void purchaseHadouBall() {
+        try {
+            if(bp!=null)
+                bp.purchase(this,getResources().getString(R.string.hadou_ball));
+            else{
+                displayDialogBillingNonAvailable();
+            }
+        } catch (final Exception ex) {
+            Log.e("EXCEPTION",ex.getMessage());
+        }
+    }
+
+    @Override
+    public void purchaseMegaJump() {
+        try {
+            if(bp!=null)
+                bp.purchase(this,getResources().getString(R.string.mega_jump));
+            else{
+                displayDialogBillingNonAvailable();
+            }
+        } catch (final Exception ex) {
+            Log.e("EXCEPTION",ex.getMessage());
+        }
+    }
+
+    @Override
+    public void purchaseLightning() {
+        try {
+            if(bp!=null)
+                bp.purchase(this,getResources().getString(R.string.lightning_summon));
+            else{
+                displayDialogBillingNonAvailable();
+            }
+        } catch (final Exception ex) {
+            Log.e("EXCEPTION",ex.getMessage());
+        }
+    }
+
+    @Override
+    public void purchaseSuperBrick() {
+        try {
+            if(bp!=null)
+                bp.purchase(this,getResources().getString(R.string.super_brick));
+            else{
+                displayDialogBillingNonAvailable();
+            }
+        } catch (final Exception ex) {
+            Log.e("EXCEPTION",ex.getMessage());
+        }
+    }
+
+    @Override
+    public void purchaseHundredCoins() {
+        try {
+            if(bp!=null)
+                bp.purchase(this,getResources().getString(R.string.hundred_coins));
+            else{
+                displayDialogBillingNonAvailable();
+            }
+        } catch (final Exception ex) {
+            Log.e("EXCEPTION",ex.getMessage());
+        }
+    }
+
+    @Override
+    public void purchaseThousandCoins() {
+        try {
+            if(bp!=null)
+                bp.purchase(this,getResources().getString(R.string.thousand_coins));
+            else{
+                displayDialogBillingNonAvailable();
+            }
+        } catch (final Exception ex) {
+            Log.e("EXCEPTION",ex.getMessage());
+        }
+    }
+
+
+
+    @Override
     public void showOrLoadInterstitalVideo() {
 
         try
         {
-        String network = getNetworkClass();
-        if(network == null) network = "ABSENT";
-        System.out.print("NETWORK: " + network);
-        if(network.equals("4G")|network.equals("3G")|network.equals("WIFI")) {
+            String network = getNetworkClass();
+            if(network == null) network = "ABSENT";
+            System.out.print("NETWORK: " + network);
+            if(network.equals("4G")|network.equals("3G")|network.equals("WIFI")) {
 
-            runOnUiThread(new Runnable() {
-                public void run() {
-                    pdialog = new ProgressDialog(AndroidLauncher.this);
-                    pdialog.setCanceledOnTouchOutside(true);
-                    pdialog.setCancelable(true);
-                    pdialog.setMessage("Loading...");
-                    pdialog.show();
-                }
-            });
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        pdialog = new ProgressDialog(AndroidLauncher.this);
+                        pdialog.setCanceledOnTouchOutside(true);
+                        pdialog.setCancelable(true);
+                        pdialog.setMessage("Loading...");
+                        pdialog.show();
+                    }
+                });
 
-            interstitialVideoAd = new InterstitialAd(AndroidLauncher.this);
-            //interstitialAd.setPlayStorePurchaseParams(AndroidLauncher.this, getResources().getString(R.string.billing));
-            interstitialVideoAd.setAdUnitId(getResources().getString(R.string.ad_unit_id_video));
-            interstitialVideoAd.setAdListener(new AdListener() {
-                @Override
-                public void onAdLoaded() {
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            pdialog.dismiss();
-                            interstitialVideoAd.show();
+                interstitialVideoAd = new InterstitialAd(AndroidLauncher.this);
+                //interstitialAd.setPlayStorePurchaseParams(AndroidLauncher.this, getResources().getString(R.string.billing));
+                interstitialVideoAd.setAdUnitId(getResources().getString(R.string.ad_unit_id_video));
+                interstitialVideoAd.setAdListener(new AdListener() {
+                    @Override
+                    public void onAdLoaded() {
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                pdialog.dismiss();
+                                interstitialVideoAd.show();
 
-                        }
-                    });
+                            }
+                        });
 
-                }
+                    }
 
-                @Override
-                public void onAdClosed() {
+                    @Override
+                    public void onAdClosed() {
                     /*MyGdxGame.setPause(false);
                     MyGdxGame.playContinueSound();
                     MyGdxGame.setContinue(true);*/
 
-                    //pdialog.dismiss();
-                    // Optional: your custom code here.
-                    Log.i("VIDEO AD", "CLOSED");
-                }
-            });
-            final AdRequest interstitialVideoRequest = new AdRequest.Builder()
-                    .addTestDevice(getResources().getString(R.string.ad_test_device1))
-                    .addTestDevice(getResources().getString(R.string.ad_test_device2))
-                    .build();
+                        //pdialog.dismiss();
+                        // Optional: your custom code here.
+                        Log.i("VIDEO AD", "CLOSED");
+                    }
+                });
+                final AdRequest interstitialVideoRequest = new AdRequest.Builder()
+                        .addTestDevice(getResources().getString(R.string.ad_test_device1))
+                        .addTestDevice(getResources().getString(R.string.ad_test_device2))
+                        .build();
 
-            runOnUiThread(new Runnable() {
-                public void run() {
-                    interstitialVideoAd.loadAd(interstitialVideoRequest);
-                }
-            });
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        interstitialVideoAd.loadAd(interstitialVideoRequest);
+                    }
+                });
+            }
+
+        } catch (final Exception ex) {
+            Log.e("EXCEPTION",ex.getMessage());
         }
-
-    } catch (final Exception ex) {
-        Log.e("EXCEPTION",ex.getMessage());
-    }
     }
 
     @Override
     public void showOrLoadBanner() {
         try{
-        runOnUiThread(new Runnable() {
-            public void run() {
-                AdRequest adRequest = new AdRequest.Builder()
-                        .addTestDevice(getResources().getString(R.string.ad_test_device1))
-                        .addTestDevice(getResources().getString(R.string.ad_test_device2))
-                        .build();
-                bannerAdView.loadAd(adRequest);
-                bannerAdView.setVisibility(View.VISIBLE);
-            }
-        });
-    } catch (final Exception ex) {
-        Log.e("EXCEPTION",ex.getMessage());
-    }
-    }
-
-    @Override
-    public boolean fullBarPurchased() {
-        return fullBarPurchased;
-    }
-
-    @Override
-    public boolean adsRemoverPurchased() {
-        return adsRemoverPurchased;
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    AdRequest adRequest = new AdRequest.Builder()
+                            .addTestDevice(getResources().getString(R.string.ad_test_device1))
+                            .addTestDevice(getResources().getString(R.string.ad_test_device2))
+                            .build();
+                    bannerAdView.loadAd(adRequest);
+                    bannerAdView.setVisibility(View.VISIBLE);
+                }
+            });
+        } catch (final Exception ex) {
+            Log.e("EXCEPTION",ex.getMessage());
+        }
     }
 
     @Override
     public void purchaseFullBar() {
         try{
-        if(bp!=null)
-            bp.purchase(this,getResources().getString(R.string.full_bar));
-        else
-            displayDialogBillingNonAvailable();
+            if(bp!=null)
+                bp.purchase(this,getResources().getString(R.string.full_bar));
+            else
+                displayDialogBillingNonAvailable();
         } catch (final Exception ex) {
             Log.e("EXCEPTION",ex.getMessage());
         }
@@ -631,13 +885,13 @@ public class AndroidLauncher extends AndroidApplication implements
     @Override
     public void purchaseExtraCoins() {
         try{
-        if(bp!=null)
-            bp.purchase(this,getResources().getString(R.string.extra_coins));
-        else
-            displayDialogBillingNonAvailable();
-    } catch (final Exception ex) {
-        Log.e("EXCEPTION",ex.getMessage());
-    }
+            if(bp!=null)
+                bp.purchase(this,getResources().getString(R.string.extra_coins));
+            else
+                displayDialogBillingNonAvailable();
+        } catch (final Exception ex) {
+            Log.e("EXCEPTION",ex.getMessage());
+        }
     }
 
     @Override
@@ -653,24 +907,25 @@ public class AndroidLauncher extends AndroidApplication implements
 
         if(bp!=null) {
 
-            if (bp.getPurchaseTransactionDetails(getResources().getString(R.string.full_bar)) == null) {
-                Save.gd.setFullBarPurchased(false);
+            Save.load();
+
+            if (bp.getPurchaseTransactionDetails(getResources().getString(R.string.excalibur)) == null) {
+                Save.gd.setExcaliburPurchased(false);
                 Save.save();
-                fullBarPurchased = false;
                 Save.load();
 
             } else {
 
-                if (bp.getPurchaseTransactionDetails(getResources().getString(R.string.full_bar)).purchaseInfo.parseResponseData().purchaseState.ordinal() == 0) {
-                    Save.gd.setFullBarPurchased(true);
+                if (bp.getPurchaseTransactionDetails(getResources().getString(R.string.excalibur)).purchaseInfo.parseResponseData().purchaseState.ordinal() == 0) {
+                    Save.gd.setExcaliburPurchased(true);
+                    Save.gd.setExcaliburEquiped(true);
                     Save.save();
-                    fullBarPurchased = true;
                     Save.load();
 
                     try {
                         runOnUiThread(new Runnable() {
                             public void run() {
-                                Toast.makeText(getApplicationContext(), "Full Bar Unlocked!",
+                                Toast.makeText(getApplicationContext(), "Excalibur Unlocked!",
                                         Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -679,17 +934,185 @@ public class AndroidLauncher extends AndroidApplication implements
                 }
             }
 
+
+
+            if (bp.getPurchaseTransactionDetails(getResources().getString(R.string.kame_beam)) == null) {
+                Save.gd.setKamehamehaPurchased(false);
+                Save.save();
+                Save.load();
+
+            } else {
+
+                if (bp.getPurchaseTransactionDetails(getResources().getString(R.string.kame_beam)).purchaseInfo.parseResponseData().purchaseState.ordinal() == 0) {
+                    Save.gd.setKamehamehaPurchased(true);
+                    Save.gd.setKamehamehaEquiped(true);
+                    Save.gd.setFireBall2Equiped(false);
+                    Save.gd.setFireBallEquiped(false);
+                    Save.gd.setLightningEquiped(false);
+                    Save.save();
+                    Save.load();
+
+                    try {
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), "Kame beam Unlocked!",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } catch (final Exception ex) {
+                    }
+                }
+            }
+
+
+            if (bp.getPurchaseTransactionDetails(getResources().getString(R.string.hadou_ball)) == null) {
+                Save.gd.setFireBall2Purchased(false);
+                Save.save();
+                Save.load();
+
+            } else {
+
+                if (bp.getPurchaseTransactionDetails(getResources().getString(R.string.hadou_ball)).purchaseInfo.parseResponseData().purchaseState.ordinal() == 0) {
+                    Save.gd.setFireBall2Purchased(true);
+                    Save.gd.setKamehamehaEquiped(false);
+                    Save.gd.setFireBall2Equiped(true);
+                    Save.gd.setFireBallEquiped(false);
+                    Save.gd.setLightningEquiped(false);
+                    Save.save();
+                    Save.load();
+
+                    try {
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), "Hadou ball Unlocked!",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } catch (final Exception ex) {
+                    }
+                }
+            }
+
+
+
+            if (bp.getPurchaseTransactionDetails(getResources().getString(R.string.boots)) == null) {
+                Save.gd.setBootPurchased(false);
+                Save.save();
+                Save.load();
+
+            } else {
+
+                if (bp.getPurchaseTransactionDetails(getResources().getString(R.string.boots)).purchaseInfo.parseResponseData().purchaseState.ordinal() == 0) {
+                    Save.gd.setBootPurchased(true);
+                    Save.gd.setBootEquiped(true);
+                    Save.save();
+                    Save.load();
+
+                    try {
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), "Boot Unlocked!",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } catch (final Exception ex) {
+                    }
+                }
+            }
+
+
+
+            if (bp.getPurchaseTransactionDetails(getResources().getString(R.string.mega_jump)) == null) {
+                Save.gd.setMegaJumpPurchased(false);
+                Save.save();
+                Save.load();
+
+            } else {
+
+                if (bp.getPurchaseTransactionDetails(getResources().getString(R.string.mega_jump)).purchaseInfo.parseResponseData().purchaseState.ordinal() == 0) {
+                    Save.gd.setMegaJumpPurchased(true);
+                    Save.gd.setMegaJumpEquiped(true);
+                    Save.save();
+                    Save.load();
+
+                    try {
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), "Mega jump Unlocked!",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } catch (final Exception ex) {
+                    }
+                }
+            }
+
+
+
+            if (bp.getPurchaseTransactionDetails(getResources().getString(R.string.lightning_summon)) == null) {
+                Save.gd.setLightningPurchased(false);
+                Save.save();
+                Save.load();
+
+            } else {
+
+                if (bp.getPurchaseTransactionDetails(getResources().getString(R.string.lightning_summon)).purchaseInfo.parseResponseData().purchaseState.ordinal() == 0) {
+                    Save.gd.setLightningPurchased(true);
+                    Save.gd.setLightningEquiped(true);
+                    Save.gd.setKamehamehaEquiped(false);
+                    Save.gd.setFireBall2Equiped(false);
+                    Save.gd.setFireBallEquiped(false);
+                    Save.save();
+                    Save.load();
+
+                    try {
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), "Lightning Unlocked!",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } catch (final Exception ex) {
+                    }
+                }
+            }
+
+
+
+            if (bp.getPurchaseTransactionDetails(getResources().getString(R.string.super_brick)) == null) {
+                Save.gd.setBrick2Purchased(false);
+                Save.save();
+                Save.load();
+
+            } else {
+
+                if (bp.getPurchaseTransactionDetails(getResources().getString(R.string.super_brick)).purchaseInfo.parseResponseData().purchaseState.ordinal() == 0) {
+                    Save.gd.setBrick2Purchased(true);
+                    Save.save();
+                    Save.load();
+
+                    try {
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), "Super Brick Unlocked!",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } catch (final Exception ex) {
+                    }
+                }
+            }
+
+
             if (bp.getPurchaseTransactionDetails(getResources().getString(R.string.ads_remover)) == null) {
                 Save.gd.setAdsRemoverPurchased(false);
                 Save.save();
-                adsRemoverPurchased = false;
                 Save.load();
             } else {
 
                 if (bp.getPurchaseTransactionDetails(getResources().getString(R.string.ads_remover)).purchaseInfo.parseResponseData().purchaseState.ordinal() == 0) {
                     Save.gd.setAdsRemoverPurchased(true);
                     Save.save();
-                    adsRemoverPurchased = true;
                     Save.load();
                     try {
                         runOnUiThread(new Runnable() {
@@ -702,6 +1125,53 @@ public class AndroidLauncher extends AndroidApplication implements
                     }
                 }
             }
+
+
+
+            if (bp.getPurchaseTransactionDetails(getResources().getString(R.string.hundred_coins)) == null) {
+                //do nothing
+            } else {
+                if (bp.getPurchaseTransactionDetails(getResources().getString(R.string.hundred_coins)).purchaseInfo.parseResponseData().purchaseState.ordinal() == 0) {
+                    Save.load();
+                    Save.gd.setMoney(Save.gd.getMoney() + MyGdxGame.HUNDRED_COINS_STORE_PACK);
+                    Save.save();
+                    try {
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), "You purchased " + MyGdxGame.HUNDRED_COINS_STORE_PACK + " coins !",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } catch (final Exception ex) {
+                    }
+                    bp.consumePurchase(getResources().getString(R.string.hundred_coins));
+                    if (MyGdxGame.isSoundEnable() != 0) MyGdxGame.res.getSound("point").play();
+                }
+            }
+
+
+            if (bp.getPurchaseTransactionDetails(getResources().getString(R.string.thousand_coins)) == null) {
+                //do nothing
+            } else {
+                if (bp.getPurchaseTransactionDetails(getResources().getString(R.string.thousand_coins)).purchaseInfo.parseResponseData().purchaseState.ordinal() == 0) {
+                    Save.load();
+                    Save.gd.setMoney(Save.gd.getMoney() + MyGdxGame.THOUSAND_COINS_STORE_PACK);
+                    Save.save();
+                    try {
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), "You purchased " + MyGdxGame.THOUSAND_COINS_STORE_PACK + " coins !",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } catch (final Exception ex) {
+                    }
+                    bp.consumePurchase(getResources().getString(R.string.thousand_coins));
+                    if (MyGdxGame.isSoundEnable() != 0) MyGdxGame.res.getSound("point").play();
+                }
+            }
+
+
 
 
             if (bp.getPurchaseTransactionDetails(getResources().getString(R.string.extra_coins)) == null) {
@@ -724,6 +1194,7 @@ public class AndroidLauncher extends AndroidApplication implements
                     if (MyGdxGame.isSoundEnable() != 0) MyGdxGame.res.getSound("point").play();
                 }
             }
+
         }else{
             displayDialogBillingNonAvailable();
         }
@@ -801,6 +1272,9 @@ public class AndroidLauncher extends AndroidApplication implements
             inAppPurchaseResult.finishPurchase();
         }*/
     }
+
+
+
 
 }
 
