@@ -68,7 +68,7 @@ public class AndroidLauncher extends AndroidApplication implements
     public boolean created;
     private BillingProcessor bp;
     private Display display;
-    public boolean debug = false; //IN DEBUG DO NOT SUBMIT SCORE && DO NOT SHOW ADS && DO NOT UNLOCK ACHIEVEMENTS
+    public boolean debug = false; //IF TRUE DO NOT SUBMIT SCORE && DO NOT SHOW ADS && DO NOT UNLOCK ACHIEVEMENTS
     public ProgressDialog pdialog;
 
     /**

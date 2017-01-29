@@ -189,7 +189,7 @@ public class Play extends GameState {
         if(!Save.gd.isFireBall2Purchased()){
             Save.gd.setFireBall2Equiped(false);
         }
-        if(Save.gd.isBootPurchased()){
+        if(!Save.gd.isBootPurchased()){
             Save.gd.setBootEquiped(false);
         }
 
@@ -1258,8 +1258,10 @@ public class Play extends GameState {
     }
 
     private void makeBrickSensor(Brick brick, boolean isSensor){
-        for (Fixture fixture: brick.getBody().getFixtureList()) {
-            fixture.setSensor(isSensor);
+        Array<Fixture> fixtures = brick.getBody().getFixtureList();
+
+        for (int i = 0; i<fixtures.size; i++) {
+            fixtures.get(i).setSensor(isSensor);
         }
     }
 
@@ -1780,9 +1782,7 @@ public class Play extends GameState {
                 enemy.setHealth(-99);
             }
 
-            if(brick.getPosition().y*PPM <= 264.8){
-                brick.setFalling(false);
-            }
+
 
         }else{
             stopEnemyIfTouchBrick(enemy);
@@ -1974,7 +1974,7 @@ public class Play extends GameState {
                                 System.out.println("enemy killed="+enemiesKilled);
                             }
 
-                            if(Save.gd.isFireBall2Equiped() && enemiesKilled >= 4 && player.getFireBallCount()<MAXFIREBALLCOUNT){
+                            if(Save.gd.isFireBall2Equiped() && enemiesKilled >= 10 && player.getFireBallCount()<MAXFIREBALLCOUNT){
                                 fire = false;
                                 player.setFireBallCount(player.getFireBallCount()+1);
                                 enemiesKilled = 0;
@@ -2443,6 +2443,16 @@ public class Play extends GameState {
         MyGdxGame.fadeIn.update(dt);
 
         if(brick != null){
+
+            if(brick.getPosition().y*PPM <= 264.8){
+                brick.setFalling(false);
+            }
+
+            if(brick.isFalling()){
+                makeBrickSensor(brick, true);
+            }else{
+                makeBrickSensor(brick, false);
+            }
 
 //            if (brick.getPosition().x * PPM <= -30) {
 //                brick.getBody().setType(BodyType.DynamicBody);

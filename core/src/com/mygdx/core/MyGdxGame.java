@@ -68,7 +68,7 @@ public class MyGdxGame implements ApplicationListener {
     public static String debugString = "";
     public static float GROUND = 2.5621998f; //todo use box2d
     public static int MONEY_BY_ENEMY = 2;
-    public static boolean DEBUG = true;
+    public static boolean DEBUG = false;
     public static Vector2 lastPlayerPosition = new Vector2(0,0);
     public static Vector2 lastBrickPosition = new Vector2(0,0);
     public static Vector2 lastPrincessPosition = new Vector2(0,0);
@@ -252,11 +252,13 @@ public class MyGdxGame implements ApplicationListener {
         System.out.println(TAG+"-->"+ "SCREEN SIZE: " + Gdx.graphics.getWidth() + "X" + Gdx.graphics.getHeight());
         Save.load();
 
-        if(!Save.gd.isFireBall2Equiped()| !Save.gd.isKamehamehaEquiped() | !Save.gd.isLightningEquiped()){
+        Save.gd.setFireBallPurchased(true);
+        if(Save.gd.isFireBall2Equiped()| Save.gd.isKamehamehaEquiped() | Save.gd.isLightningEquiped()){
+            Save.gd.setFireBallEquiped(false);
+        }else{
             Save.gd.setFireBallEquiped(true);
-            Save.gd.setFireBallPurchased(true);
-            Save.save();
         }
+        Save.save();
 
         soundEnable = Save.gd.isSoundEnable();
         PAD_ZONE= Gdx.graphics.getHeight() - (Gdx.graphics.getHeight() / 7);
