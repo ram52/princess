@@ -788,14 +788,6 @@ public class Menu extends GameState {
                 MyGdxGame.res.getMusic("main").play();
         }
 
-        if(code.length() == 4){
-            System.out.println("CODE: " + code);
-            if(code.equals("rgby")){
-                MyGdxGame.actionResolver.unlockAchievementGPGS(MyGdxGame.achievementDecriptSecretMessage);
-                code = "";
-            }
-            code = "";
-        }
 
         labelMoney.setText(Integer.toString(Save.gd.getMoney()));
 

@@ -663,7 +663,7 @@ public class Shop extends GameState {
                     float y, int pointer, int button) {
                 System.out.println("buttonFireBall2 clicked!");
                 Save.load();
-                final int cost = 300;
+                final int cost = 800;
                 if(!Save.gd.isFireBall2Purchased()){
                     ShopDialog dialog = new ShopDialog(Shop.this,
                             "\n\n" +
@@ -852,7 +852,7 @@ public class Shop extends GameState {
                     float y, int pointer, int button) {
                 System.out.println("buttonKamehameha clicked!");
                 Save.load();
-                final int cost = 400;
+                final int cost = 900;
                 if(!Save.gd.isKamehamehaPurchased()){
                     ShopDialog dialog = new ShopDialog(Shop.this,
                             "\n\n" +
@@ -1229,16 +1229,15 @@ public class Shop extends GameState {
                             System.out.println(obj);
 
                             if(obj.toString().equals("true") && Save.gd.getMoney() >= cost){
-//                                if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
-//                                    MyGdxGame.res.getSound("newScreen").play();
-//                                }
-//
-//                                Save.gd.setMegaJumpPurchased(true);
-//                                Save.gd.setMegaJumpEquiped(true);
-//                                Save.gd.setMoney(Save.gd.getMoney() - cost);
-//                                Save.save();
-//                                labelMoney.setText(Integer.toString(Save.gd.getMoney()));
-                                MyGdxGame.actionResolver.purchaseThousandCoins();
+                                if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
+                                    MyGdxGame.res.getSound("newScreen").play();
+                                }
+
+                                Save.gd.setMegaJumpPurchased(true);
+                                Save.gd.setMegaJumpEquiped(true);
+                                Save.gd.setMoney(Save.gd.getMoney() - cost);
+                                Save.save();
+                                labelMoney.setText(Integer.toString(Save.gd.getMoney()));
                             }else{
 
                                 if(obj.toString().equals("true")){
@@ -1432,18 +1431,18 @@ public class Shop extends GameState {
 
         if (fade1.getTime() > fade1.getDuration()) click_on_play = true;
 
-        if(cpt_secret1 == MyGdxGame.getTapnumbSecret()){
-            cpt_secret1 = 0;
-            game.actionResolver.unlockAchievementGPGS(MyGdxGame.achievementSecretBossShortcut);
-
-            System.out.println("BOSS SHORTCUT DISCOVERED");
-            MyGdxGame.setShortcutDiscovered(true);
-            gsm.setState(GameStateManager.PLAY);
-
-            if(MyGdxGame.res.getMusic("main").isPlaying())MyGdxGame.res.getMusic("main").setVolume(0);
-
-            if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("secretUnlock").play();
-        }
+//        if(cpt_secret1 == MyGdxGame.getTapnumbSecret()){
+//            cpt_secret1 = 0;
+//            game.actionResolver.unlockAchievementGPGS(MyGdxGame.achievementSecretBossShortcut);
+//
+//            System.out.println("BOSS SHORTCUT DISCOVERED");
+//            MyGdxGame.setShortcutDiscovered(true);
+//            gsm.setState(GameStateManager.PLAY);
+//
+//            if(MyGdxGame.res.getMusic("main").isPlaying())MyGdxGame.res.getMusic("main").setVolume(0);
+//
+//            if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("secretUnlock").play();
+//        }
     }
 
     public void render() {

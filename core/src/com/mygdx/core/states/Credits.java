@@ -236,18 +236,18 @@ public class Credits extends GameState {
 
         if (fade1.getTime() > fade1.getDuration()) click_on_play = true;
 
-        if(cpt_secret1 == MyGdxGame.getTapnumbSecret()){
-            cpt_secret1 = 0;
-            game.actionResolver.unlockAchievementGPGS(MyGdxGame.achievementSecretBossShortcut);
-
-            System.out.println("BOSS SHORTCUT DISCOVERED");
-            MyGdxGame.setShortcutDiscovered(true);
-            gsm.setState(GameStateManager.PLAY);
-
-            if(MyGdxGame.res.getMusic("main").isPlaying())MyGdxGame.res.getMusic("main").setVolume(0);
-
-            if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("secretUnlock").play();
-        }
+//        if(cpt_secret1 == MyGdxGame.getTapnumbSecret()){
+//            cpt_secret1 = 0;
+//            game.actionResolver.unlockAchievementGPGS(MyGdxGame.achievementSecretBossShortcut);
+//
+//            System.out.println("BOSS SHORTCUT DISCOVERED");
+//            MyGdxGame.setShortcutDiscovered(true);
+//            gsm.setState(GameStateManager.PLAY);
+//
+//            if(MyGdxGame.res.getMusic("main").isPlaying())MyGdxGame.res.getMusic("main").setVolume(0);
+//
+//            if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("secretUnlock").play();
+//        }
     }
 
     public void resize(int width, int height) {

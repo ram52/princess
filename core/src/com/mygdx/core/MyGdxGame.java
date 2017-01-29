@@ -68,7 +68,7 @@ public class MyGdxGame implements ApplicationListener {
     public static String debugString = "";
     public static float GROUND = 2.5621998f; //todo use box2d
     public static int MONEY_BY_ENEMY = 2;
-    public static boolean DEBUG = false;
+    public static boolean DEBUG = true;
     public static Vector2 lastPlayerPosition = new Vector2(0,0);
     public static Vector2 lastBrickPosition = new Vector2(0,0);
     public static Vector2 lastPrincessPosition = new Vector2(0,0);

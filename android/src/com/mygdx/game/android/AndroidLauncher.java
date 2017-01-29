@@ -45,13 +45,15 @@ import com.mygdx.core.entities.ActionResolver;
 import com.mygdx.core.handlers.Save;
 import com.ram52.princess.R;
 
+import io.fabric.sdk.android.Fabric;
 import java.util.ArrayList;
 
-import io.fabric.sdk.android.Fabric;
 
 import com.chartboost.sdk.Chartboost;
 import com.chartboost.sdk.CBLocation;
 import com.chartboost.sdk.ChartboostDelegate;
+
+import static com.chartboost.sdk.CBLocation.LOCATION_ITEM_STORE;
 
 public class AndroidLauncher extends AndroidApplication implements
         GameHelperListener, ActionResolver, RequestHandler,PlayStorePurchaseListener, BillingProcessor.IBillingHandler {
@@ -175,8 +177,12 @@ public class AndroidLauncher extends AndroidApplication implements
             Log.e(LOG_TAG,"Did cache rewarded video " + location);
             runOnUiThread(new Runnable() {
                 public void run() {
-                    pdialog.dismiss();
-                    Chartboost.showRewardedVideo(CBLocation.LOCATION_ITEM_STORE);
+
+                    if(pdialog.isShowing()){
+                        Chartboost.showRewardedVideo(LOCATION_ITEM_STORE);
+                        pdialog.dismiss();
+                    }
+
                 }
             });
         }
@@ -235,6 +241,7 @@ public class AndroidLauncher extends AndroidApplication implements
         @Override
         public void didCompleteRewardedVideo(String location, int reward) {
             Log.e(LOG_TAG,"Rewarded video completed at " + location + "for reward: " + reward);
+
             runOnUiThread(new Runnable() {
                 public void run() {
                     //TODO Give free coins
@@ -296,9 +303,8 @@ public class AndroidLauncher extends AndroidApplication implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
         Fabric.with(this, new Crashlytics());
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
         Chartboost.startWithAppId(this, getString(R.string.chartboost_app_id), getString(R.string.chartboost_appSignature));
         Chartboost.setDelegate(delegate);
@@ -465,7 +471,12 @@ public class AndroidLauncher extends AndroidApplication implements
                 pdialog.show();
             }
         });
-        Chartboost.cacheRewardedVideo(CBLocation.LOCATION_ITEM_STORE);
+        if(Chartboost.hasRewardedVideo(LOCATION_ITEM_STORE)){
+            Chartboost.showRewardedVideo(LOCATION_ITEM_STORE);
+        }else{
+            Chartboost.cacheRewardedVideo(CBLocation.LOCATION_ITEM_STORE);
+        }
+
     }
 
 

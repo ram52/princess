@@ -208,9 +208,9 @@ public class GameOver extends GameState {
         labelBestScore.setPosition(0, 0);
         labelBestScore.setAlignment(Align.center);
 
-        if (score >= 5) game.actionResolver.unlockAchievementGPGS(MyGdxGame.achievement1);
-        if (score >= 15) game.actionResolver.unlockAchievementGPGS(MyGdxGame.achievement2);
-        if (score >= 30) game.actionResolver.unlockAchievementGPGS(MyGdxGame.achievement3);
+        if (score >= 10) game.actionResolver.unlockAchievementGPGS(MyGdxGame.achievement1);
+        if (score >= 25) game.actionResolver.unlockAchievementGPGS(MyGdxGame.achievement2);
+        if (score >= 50) game.actionResolver.unlockAchievementGPGS(MyGdxGame.achievement3);
         if (score >= 80) game.actionResolver.unlockAchievementGPGS(MyGdxGame.achievement4);
         if (score >= 100) game.actionResolver.unlockAchievementGPGS(MyGdxGame.achievement5);
 
@@ -578,7 +578,7 @@ public class GameOver extends GameState {
         sb.begin();
         sb.draw(animTitle.getFrame(), MyGdxGame.V_WIDTH/2 - w/2, MyGdxGame.V_HEIGHT - h*1.1f , MyGdxGame.V_WIDTH/2, 670.0f -95/2 ,  w, h,1,1, 0);
 
-        if(score >=50){
+        if(score >=100){
             sb.draw(animHappy.getFrame(), MyGdxGame.V_WIDTH/2 - 132/2, 202);
         }else {
             sb.draw(animSad.getFrame(), MyGdxGame.V_WIDTH/2, 202);

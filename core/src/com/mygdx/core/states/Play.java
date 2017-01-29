@@ -258,10 +258,6 @@ public class Play extends GameState {
         animTip = new Animation(sprites, 1 / 15f);
 
 
-        if(Save.gd.isPlayerBlue() && Save.gd.isPlayerGreen() && Save.gd.isPlayerYellow() && Save.gd.isPlayerRed()){
-            MyGdxGame.actionResolver.unlockAchievementGPGS(MyGdxGame.achievementPeace);
-        }
-
         if(Save.gd.getSelector().equals("random")){
             for (int i = 0; i < 3; i++) {
                 Random number = new Random();
@@ -1077,17 +1073,33 @@ public class Play extends GameState {
         }
 
 
-        //reach screen extrem
-        if(player.getPosition().x - player.getWidth()/2/PPM < 0 && left){
-            player.getBody().setTransform(MyGdxGame.V_WIDTH/PPM + player.getWidth()/2/PPM , player.getPosition().y, player.getBody().getAngle());
-            left = true;
+//        //reach screen extrem
+//        if(player.getPosition().x - player.getWidth()/2/PPM < 0 && left){
+//            player.getBody().setTransform(MyGdxGame.V_WIDTH/PPM + player.getWidth()/2/PPM , player.getPosition().y, player.getBody().getAngle());
+//            left = true;
+//            right = false;
+//        }
+//        if(player.getPosition().x + player.getWidth()/2/PPM >  MyGdxGame.V_WIDTH/PPM && right){
+//            player.getBody().setTransform(-player.getWidth()/2/PPM, player.getPosition().y, player.getBody().getAngle());
+//            left = false;
+//            right = true;
+//        }
+
+        //bound player in screen
+        if(player.getPosition().x - player.getWidth()/2/PPM < 0){
+            //System.out.println("OUT");
+            player.getBody().setTransform(player.getWidth()/2/PPM , player.getPosition().y, player.getBody().getAngle());
+            left = false;
             right = false;
         }
-        if(player.getPosition().x + player.getWidth()/2/PPM >  MyGdxGame.V_WIDTH/PPM && right){
-            player.getBody().setTransform(-player.getWidth()/2/PPM, player.getPosition().y, player.getBody().getAngle());
+
+        if(player.getPosition().x + player.getWidth()/2/PPM >  MyGdxGame.V_WIDTH/PPM){
+            //System.out.println("OUT");
+            player.getBody().setTransform(MyGdxGame.V_WIDTH/PPM - player.getWidth()/2/PPM, player.getPosition().y, player.getBody().getAngle());
             left = false;
-            right = true;
+            right = false;
         }
+
 
         //player not moving
         if((!left | !right)){
@@ -2280,7 +2292,7 @@ public class Play extends GameState {
 
         if(!tuto_step2) jump = false;
 
-        if(!tuto_step1 && player.getPosition().x*PPM > 350 && player.getPosition().x*PPM < 400){
+        if(!tuto_step1 && player.getPosition().x*PPM < 70){
             left = false;
             tuto_step1 = true;
             pointer.getBody().setTransform(MyGdxGame.V_WIDTH/2.8f/PPM, pointer.getPosition().y, pointer.getBody().getAngle());
@@ -2288,7 +2300,7 @@ public class Play extends GameState {
 
         if(tuto_step1 && !tuto_step2) left = false;
 
-        if(!tuto_step2 && tuto_step1 && player.getPosition().x*PPM > 140 && player.getPosition().x*PPM < 200 ){
+        if(!tuto_step2 && tuto_step1 && player.getPosition().x*PPM > 300 ){
             right = false;
             tuto_step2 = true;
             pointer.getBody().setTransform(MyGdxGame.V_WIDTH/1.15f/PPM, pointer.getPosition().y, pointer.getBody().getAngle());
@@ -2432,25 +2444,25 @@ public class Play extends GameState {
 
         if(brick != null){
 
-            if (brick.getPosition().x * PPM <= -30) {
-                brick.getBody().setType(BodyType.DynamicBody);
-                brick.getBody().setLinearVelocity(0,0);
-
-                brick.getBody().setTransform(MyGdxGame.V_WIDTH/PPM - brick.getWidth()/2/PPM, brick.getPosition().y, brick.getBody().getAngle());
-            }
-
-            if(brick.getPosition().x*PPM >= 670){
-                //brick.getBody().setGravityScale(0);
-                brick.getBody().setType(BodyType.DynamicBody);
-                brick.getBody().setLinearVelocity(0,0);
-                brick.getBody().setTransform(player.getPosition().x/PPM+player.getWidth()/2/PPM, brick.getPosition().y, brick.getBody().getAngle());
-            }
+//            if (brick.getPosition().x * PPM <= -30) {
+//                brick.getBody().setType(BodyType.DynamicBody);
+//                brick.getBody().setLinearVelocity(0,0);
+//
+//                brick.getBody().setTransform(MyGdxGame.V_WIDTH/PPM - brick.getWidth()/2/PPM, brick.getPosition().y, brick.getBody().getAngle());
+//            }
+//
+//            if(brick.getPosition().x*PPM >= 670){
+//                //brick.getBody().setGravityScale(0);
+//                brick.getBody().setType(BodyType.DynamicBody);
+//                brick.getBody().setLinearVelocity(0,0);
+//                brick.getBody().setTransform(player.getPosition().x/PPM+player.getWidth()/2/PPM, brick.getPosition().y, brick.getBody().getAngle());
+//            }
 
             if(player.getPosition().y*PPM > 256.5 + 64*1.5f){
                 cl.setNumFootBrickContacts(0);
             }
 
-            if( brick.getPosition().y*PPM <= 256.5 && (isEnemyTouchingBrick() /*| (brick.getPosition().x*PPM <= 33 | brick.getPosition().x*PPM >= 607 )*/)){
+            if( brick.getPosition().y*PPM <= 256.5 && (isEnemyTouchingBrick() | (brick.getPosition().x*PPM <= 33 | brick.getPosition().x*PPM >= 607 ))){
                 brick.hurtAnimation();
                 //System.out.println("hurt"+" "+world.getContactCount()+" "+Gdx.graphics.getFramesPerSecond());
                 brick.getBody().setType(BodyType.StaticBody);
