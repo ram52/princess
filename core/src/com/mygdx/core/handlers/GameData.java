@@ -40,6 +40,7 @@ public class GameData implements Serializable {
 	private boolean playerGreen = false;
 	private boolean isFirstPlay = true;
 
+
 	public GameData() {
         selector = "random";
 		wings = 1;
@@ -351,6 +352,7 @@ public class GameData implements Serializable {
 	public void setFirstPlay(boolean firstPlay) {
 		isFirstPlay = firstPlay;
 	}
+
 }
 
 

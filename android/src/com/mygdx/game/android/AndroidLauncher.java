@@ -355,6 +355,8 @@ public class AndroidLauncher extends AndroidApplication implements
         bannerAdView.setAdSize(AdSize.SMART_BANNER);
         layout.addView(bannerAdView, adParams);
 
+
+        hideVirtualButtons();
         setContentView(layout);
 
         dialog = new CustomDialogClass(AndroidLauncher.this);

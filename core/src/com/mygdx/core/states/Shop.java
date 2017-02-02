@@ -344,7 +344,7 @@ public class Shop extends GameState {
         stage1.addActor(labelMoney);
         labelMoney.setText(Integer.toString(Save.gd.getMoney()));
 
-        animationCoin = new Animation(new Sprite(MyGdxGame.atlas.findRegion("coin")).split(64,64)[0], 1 / 5f);
+        animationCoin = new Animation(new Sprite(MyGdxGame.atlas.findRegion("coinsprite")).split(64,64)[0], 1 / 5f);
 
         com.badlogic.gdx.graphics.g2d.Animation a = new com.badlogic.gdx.graphics.g2d.Animation(1/10f,animationCoin.getFrames());
 

@@ -69,6 +69,7 @@ import static com.mygdx.core.MyGdxGame.font;
 import static com.mygdx.core.MyGdxGame.lastBrickPosition;
 import static com.mygdx.core.MyGdxGame.lastPlayerPosition;
 import static com.mygdx.core.MyGdxGame.lastPrincessPosition;
+import static com.mygdx.core.MyGdxGame.pickedGameplay;
 import static com.mygdx.core.entities.Player.MAXFIREBALLCOUNT;
 import static com.mygdx.core.entities.Player.PLAYER_VELOCITY;
 import static com.mygdx.core.entities.Player.PLAYER_VELOCITYBOOST;
@@ -101,6 +102,7 @@ public class Play extends GameState {
     private Button buttonSound;
     private Button buttonPlay;
     private Button imageCoin;
+    private Button buttonGp1, buttonGp2;
     private Skin skin;
     private boolean playerStartMoving = false;
     private int cpt_translate_animation = 0;
@@ -158,12 +160,14 @@ public class Play extends GameState {
     private boolean isTutorial = false;
     private boolean hideScream = false;
     private Hand pointer;
+    private Boolean tuto_step0 = false;
     private Boolean tuto_step1 = false;
     private Boolean tuto_step2 = false;
     private Boolean tuto_step3 = false;
     private Boolean tuto_step4 = false;
     private Boolean tuto_step5 = false;
     private Boolean tuto_step6 = false;
+    private Image gamePlaySelection;
 
     private boolean getRandomBoolean() {
         Random random = new Random();
@@ -175,6 +179,9 @@ public class Play extends GameState {
         this.isTutorial = isTutorial;
 
         System.out.println("TUTORIAL--> "+isTutorial);
+        if(isTutorial){
+            pickedGameplay = -1;
+        }
 
         bodyToDestroy = new Array<B2DSprite>();
 
@@ -405,21 +412,13 @@ public class Play extends GameState {
         stageUiControl.addActor(buttonRight);
 
         Button.ButtonStyle fireButtonStyle = new Button.ButtonStyle();
-        if(Save.gd.isFireBallEquiped() | Save.gd.isKamehamehaEquiped() | Save.gd.isFireBall2Equiped()| Save.gd.isLightningEquiped() | isTutorial){
-            fireButtonStyle.up = skin.getDrawable("buttonUiBossJumpUp");
-            fireButtonStyle.down = skin.getDrawable("buttonUiBossJumpDown");
-        }else{
-            fireButtonStyle.up = skin.getDrawable("buttonSecret");
-            fireButtonStyle.down = skin.getDrawable("buttonSecret");
-        }
-
-
+        fireButtonStyle.up = skin.getDrawable("buttonUiBossJumpUp");
+        fireButtonStyle.down = skin.getDrawable("buttonUiBossJumpDown");
         buttonFire = new Button(fireButtonStyle);
         buttonFire.setWidth(buttonLeft.getWidth());
         buttonFire.setHeight(buttonLeft.getHeight());
         buttonFire.setPosition(buttonRight.getRight()+space, buttonLeft.getY());
         stageUiControl.addActor(buttonFire);
-
 
         Button.ButtonStyle jumpButtonStyle = new Button.ButtonStyle();
         jumpButtonStyle.up = skin.getDrawable("buttonJumpUp");
@@ -687,6 +686,72 @@ public class Play extends GameState {
         buttonSound.setPosition((Gdx.graphics.getWidth() / 1f) + 400, Gdx.graphics.getHeight() / 36f);
         stage1.addActor(buttonSound);
 
+        gamePlaySelection = new Image(MyGdxGame.atlas.findRegion("gamePlaySelection"));
+        gamePlaySelection.setWidth(Gdx.graphics.getWidth());
+        gamePlaySelection.setHeight(Gdx.graphics.getHeight());
+        gamePlaySelection.setPosition(0,(Gdx.graphics.getHeight())/2 - gamePlaySelection.getHeight()/2);
+
+        if(isTutorial)
+            stage1.addActor(gamePlaySelection);
+
+        Skin skinButtonGamePlay1 = new Skin();
+        skinButtonGamePlay1.addRegions(MyGdxGame.atlas);
+        Button.ButtonStyle buttonStyleGp1 = new Button.ButtonStyle();
+        buttonStyleGp1.up = skinButtonGamePlay1.getDrawable("gameplay1Up");
+        buttonStyleGp1.down = skinButtonGamePlay1.getDrawable("gameplay1Down");
+        buttonGp1 = new Button(buttonStyleGp1);
+        buttonGp1.setWidth(Gdx.graphics.getWidth() / 3f);
+        buttonGp1.setHeight(Gdx.graphics.getWidth() / 3f);
+        buttonGp1.setPosition((Gdx.graphics.getWidth()-(buttonGp1.getWidth() + buttonGp1.getWidth()*1.1f))/3.5f, (Gdx.graphics.getHeight() - buttonGp1.getWidth())/ 2.2f);
+        if(isTutorial)
+            stage1.addActor(buttonGp1);
+
+
+        Skin skinButtonGamePlay2 = new Skin();
+        skinButtonGamePlay2.addRegions(MyGdxGame.atlas);
+        Button.ButtonStyle buttonStyleGp2 = new Button.ButtonStyle();
+        buttonStyleGp2.up = skinButtonGamePlay2.getDrawable("gameplay2Up");
+        buttonStyleGp2.down = skinButtonGamePlay2.getDrawable("gameplay2Down");
+        buttonGp2 = new Button(buttonStyleGp2);
+        buttonGp2.setWidth(buttonGp1.getWidth());
+        buttonGp2.setHeight(buttonGp1.getWidth());
+        buttonGp2.setPosition(buttonGp1.getX()+buttonGp1.getWidth()*1.45f, buttonGp1.getY());
+
+        if(isTutorial)
+            stage1.addActor(buttonGp2);
+
+
+        buttonGp1.addListener(new InputListener() {
+            public boolean touchDown(
+                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
+                    float y, int pointer, int button) {
+
+                return true;
+            }
+            public void touchUp(
+                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
+                    float y, int pointer, int button) {
+                MyGdxGame.pickedGameplay = 1;
+                tuto_step0 = true;
+                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("newScreen").play();
+            }
+        });
+
+        buttonGp2.addListener(new InputListener() {
+            public boolean touchDown(
+                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
+                    float y, int pointer, int button) {
+
+                return true;
+            }
+            public void touchUp(
+                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
+                    float y, int pointer, int button) {
+                MyGdxGame.pickedGameplay = 2;
+                tuto_step0 = true;
+                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("newScreen").play();
+            }
+        });
 
         Skin skinButtonSkip = new Skin();
         skinButtonSkip.addRegions(MyGdxGame.atlas);
@@ -713,6 +778,7 @@ public class Play extends GameState {
                     float y, int pointer, int button) {
                 System.out.println("clicked play!");
 
+                if(MyGdxGame.pickedGameplay == -1) MyGdxGame.pickedGameplay = 2;
                 gsm.setState(GameStateManager.PLAY);
                 tuto_step1 = false;
                 tuto_step2 = false;
@@ -730,37 +796,46 @@ public class Play extends GameState {
 
                     @Override
                     public void onUp() {
-                        System.out.println("onUp"+" "+Gdx.input.getY()+" "+MyGdxGame.PAD_ZONE);
-                        if(Gdx.input.getY() < MyGdxGame.PAD_ZONE){
-                            if(!player.isPlayerDead() && !MyGdxGame.pause && !isGamePadTouched()) {
-                                jump = true;
-                                System.out.println("up");
+                        if(MyGdxGame.pickedGameplay == 1){
+                            System.out.println("onUp"+" "+Gdx.input.getY()+" "+MyGdxGame.PAD_ZONE);
+                            if(Gdx.input.getY() < MyGdxGame.PAD_ZONE){
+                                if(!player.isPlayerDead() && !MyGdxGame.pause && !isGamePadTouched()) {
+                                    jump = true;
+                                    System.out.println("up");
+                                }
+                            }
+                        }
+
+                    }
+
+                    @Override
+                    public void onRight() {
+                        if(MyGdxGame.pickedGameplay == 1){
+                            System.out.println("onRight"+" "+Gdx.input.getY()+" "+MyGdxGame.PAD_ZONE);
+                            if(Gdx.input.getY() < MyGdxGame.PAD_ZONE && !MyGdxGame.pause && !isGamePadTouched() ){
+                                right = true;
+                                left = false;
                             }
                         }
                     }
 
                     @Override
-                    public void onRight() {
-                        System.out.println("onRight"+" "+Gdx.input.getY()+" "+MyGdxGame.PAD_ZONE);
-                        if(Gdx.input.getY() < MyGdxGame.PAD_ZONE && !MyGdxGame.pause && !isGamePadTouched() ){
-                            right = true;
-                            left = false;
-                        }
-                    }
-
-                    @Override
                     public void onLeft() {
-                        System.out.println("onLeft"+" "+Gdx.input.getY()+" "+MyGdxGame.PAD_ZONE+" "+isGamePadTouched());
-                        if(Gdx.input.getY() < MyGdxGame.PAD_ZONE && !MyGdxGame.pause && !isGamePadTouched()){
-                            left = true;
-                            right = false;
+                        if(MyGdxGame.pickedGameplay == 1){
+                            System.out.println("onLeft"+" "+Gdx.input.getY()+" "+MyGdxGame.PAD_ZONE+" "+isGamePadTouched());
+                            if(Gdx.input.getY() < MyGdxGame.PAD_ZONE && !MyGdxGame.pause && !isGamePadTouched()){
+                                left = true;
+                                right = false;
+                            }
                         }
                     }
 
                     @Override
                     public void onDown() {
-                        left = false;
-                        right = false;
+                        if(MyGdxGame.pickedGameplay == 1){
+                            left = false;
+                            right = false;
+                        }
                     }
                 });
 
@@ -1428,7 +1503,6 @@ public class Play extends GameState {
             if(!isTutorial)
             if (stage1.getActors().items[5]!= null && stage1.getActors().items[5].getRight() >= Gdx.graphics.getWidth() + 5) {
                 stage1.getActors().items[5].setPosition((Gdx.graphics.getWidth() / 1f) - (cpt_translate_animation * speed), stage1.getActors().items[5].getY());
-
             }
 
         }else{
@@ -2272,6 +2346,35 @@ public class Play extends GameState {
     public void updateTutorial(){
         MyGdxGame.pause = false;
 
+        if(!tuto_step0){
+            labelScore.setVisible(false);
+        }else {
+            labelScore.setVisible(true);
+        }
+
+        //user picked gamplay style
+        if(!tuto_step0){
+            gamePlaySelection.setVisible(true);
+            buttonGp1.setVisible(true);
+            buttonGp2.setVisible(true);
+        }else{
+            gamePlaySelection.setVisible(false);
+            buttonGp1.setVisible(false);
+            buttonGp2.setVisible(false);
+        }
+
+        if(MyGdxGame.pickedGameplay == 2){
+            buttonLeft.setVisible(true);
+            buttonRight.setVisible(true);
+            buttonJump.setVisible(true);
+            buttonFire.setVisible(true);
+        }else {
+            buttonLeft.setVisible(false);
+            buttonRight.setVisible(false);
+            buttonJump.setVisible(false);
+            buttonFire.setVisible(false);
+        }
+
         MyGdxGame.lastPlayerPosition = new Vector2(player.getPosition());
 
         if(princess != null)
@@ -2283,7 +2386,21 @@ public class Play extends GameState {
         buttonPause.setVisible(false);
         buttonPause.setTouchable(null);
 
+        if(MyGdxGame.pickedGameplay == 1){
+            tutoGamePlay1();
+        }
 
+        if(MyGdxGame.pickedGameplay == 2){
+            tutoGamePlay2();
+        }
+
+    }
+
+    private void tutoGamePlay1(){
+
+    }
+
+    private void tutoGamePlay2(){
         if(!tuto_step1) right = false;
 
         if(!tuto_step3) fire = false;
@@ -2370,7 +2487,6 @@ public class Play extends GameState {
 
             tuto_step6 = true;
         }
-
     }
 
     public void update(float dt) {
@@ -2385,8 +2501,22 @@ public class Play extends GameState {
 
         }
 
-        if(Play.this.isTutorial)
+        if(Play.this.isTutorial){
             updateTutorial();
+        }else{
+            if(MyGdxGame.pickedGameplay == 2){
+                buttonLeft.setVisible(true);
+                buttonRight.setVisible(true);
+                buttonJump.setVisible(true);
+                buttonFire.setVisible(true);
+            }else {
+                buttonLeft.setVisible(false);
+                buttonRight.setVisible(false);
+                buttonJump.setVisible(false);
+                buttonFire.setVisible(false);
+            }
+        }
+
 
         stopEnemies = enemies.size > 6;
 
@@ -2744,7 +2874,7 @@ public class Play extends GameState {
             sb.end();
         }
 
-        if(!MyGdxGame.pause ) {
+        if(!MyGdxGame.pause && MyGdxGame.pickedGameplay == 2) {
             //power up bar
             float c = MyGdxGame.V_WIDTH / 4.2f/1.6f;
             float w = MyGdxGame.V_WIDTH/6.2f;
@@ -2861,7 +2991,7 @@ public class Play extends GameState {
             player.render(sb);
         }
 
-        if(pointer != null) pointer.render(sb);
+        if(pointer != null && tuto_step0) pointer.render(sb);
 
         for (FireBall fireBall: fireBalls) {
             fireBall.render(sb);
@@ -2884,8 +3014,11 @@ public class Play extends GameState {
         //princessIA();
 
         if(!MyGdxGame.pause){
-            stageUiControl.act();
-            stageUiControl.draw();
+            if(MyGdxGame.pickedGameplay == 2){
+                stageUiControl.act();
+                stageUiControl.draw();
+            }
+
             labelScore.setVisible(true);
             buttonPause.setVisible(true);
             buttonNo.setVisible(false);
@@ -2963,13 +3096,13 @@ public class Play extends GameState {
         }
 
         if(isTutorial && tuto_step3 && !tuto_step4){
-            sb.begin();
-            sb.draw(animTip.getFrame(),
-                    player.getPosition().x*PPM - animTip.getFrame().getRegionWidth()/2,
-                    player.getPosition().y*PPM + animTip.getFrame().getRegionHeight()/13,
-                    (float)animTip.getFrame().getRegionWidth(),
-                    (float)animTip.getFrame().getRegionHeight());
-            sb.end();
+//            sb.begin();
+//            sb.draw(animTip.getFrame(),
+//                    player.getPosition().x*PPM - animTip.getFrame().getRegionWidth()/2,
+//                    player.getPosition().y*PPM + animTip.getFrame().getRegionHeight()/13,
+//                    (float)animTip.getFrame().getRegionWidth(),
+//                    (float)animTip.getFrame().getRegionHeight());
+//            sb.end();
         }
 
 

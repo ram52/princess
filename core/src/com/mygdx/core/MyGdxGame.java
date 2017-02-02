@@ -156,6 +156,8 @@ public class MyGdxGame implements ApplicationListener {
     private static boolean init = false;
     public static int continueCount = 0;
 
+    public static int pickedGameplay = -1;
+
     public static boolean isContinue() {
         return Continue;
     }
@@ -790,6 +792,14 @@ public class MyGdxGame implements ApplicationListener {
 
     public static void setAchievement5(String achievement5) {
         MyGdxGame.achievement5 = achievement5;
+    }
+
+    public static int getPickedGameplay() {
+        return pickedGameplay;
+    }
+
+    public static void setPickedGameplay(int pickedGameplay) {
+        MyGdxGame.pickedGameplay = pickedGameplay;
     }
 
 
