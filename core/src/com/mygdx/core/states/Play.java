@@ -676,14 +676,14 @@ public class Play extends GameState {
         buttonPlay = new Button(buttonStylePlay);
         buttonPlay.setWidth(Gdx.graphics.getWidth() / 5f);
         buttonPlay.setHeight(Gdx.graphics.getHeight() / 7.8f);
-        buttonPlay.setPosition(-400, Gdx.graphics.getHeight() / 36f);
+        buttonPlay.setPosition(-400, Gdx.graphics.getHeight() / 4.5f);
         stage1.addActor(buttonPlay);
 
         Button.ButtonStyle soundButtonStyle = new Button.ButtonStyle();
         buttonSound = new Button(soundButtonStyle);
         buttonSound.setWidth(Gdx.graphics.getWidth() / 5f);
         buttonSound.setHeight(Gdx.graphics.getHeight() / 7.8f);
-        buttonSound.setPosition((Gdx.graphics.getWidth() / 1f) + 400, Gdx.graphics.getHeight() / 36f);
+        buttonSound.setPosition((Gdx.graphics.getWidth() / 1f) + 400, Gdx.graphics.getHeight() / 4.5f);
         stage1.addActor(buttonSound);
 
         gamePlaySelection = new Image(MyGdxGame.atlas.findRegion("gamePlaySelection"));
@@ -2857,11 +2857,9 @@ public class Play extends GameState {
             }
         }
 
-
-
-        stage1.act();
         spriteBatch.begin();
-        stage1.draw();
+
+
 
         stage1.getActors().items[0].setPosition((Gdx.graphics.getWidth() - labelScore.getWidth()) / 2,
                 Gdx.graphics.getHeight() / 1.27f);
@@ -2874,7 +2872,7 @@ public class Play extends GameState {
             sb.end();
         }
 
-        if(!MyGdxGame.pause && MyGdxGame.pickedGameplay == 2) {
+        if(MyGdxGame.pickedGameplay == 2) {
             //power up bar
             float c = MyGdxGame.V_WIDTH / 4.2f/1.6f;
             float w = MyGdxGame.V_WIDTH/6.2f;
@@ -3013,7 +3011,12 @@ public class Play extends GameState {
 
         //princessIA();
 
-        if(!MyGdxGame.pause){
+        spriteBatch.begin();
+        stage1.act();
+        stage1.draw();
+        spriteBatch.end();
+
+        //if(!MyGdxGame.pause){
             if(MyGdxGame.pickedGameplay == 2){
                 stageUiControl.act();
                 stageUiControl.draw();
@@ -3025,7 +3028,7 @@ public class Play extends GameState {
             buttonCoin.setVisible(false);
             buttonCamera.setVisible(false);
 
-        }
+        //}
 
         sb.setProjectionMatrix(cam2.combined);
         cam2.setPosition(player.getPosition().x, player.getPosition().y, 0);
