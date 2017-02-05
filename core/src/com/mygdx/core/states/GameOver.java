@@ -57,6 +57,8 @@ public class GameOver extends GameState {
     public GameOver(final GameStateManager gsm) {
 
         super(gsm);
+
+        //game.actionResolver.hideBannerAd();
         intro = new Image(MyGdxGame.atlas.findRegion("backgroundSky"));
         intro.setFillParent(true);
         stage0 = new Stage();
@@ -79,7 +81,7 @@ public class GameOver extends GameState {
         }
 
         TextureRegion[] sprites = tex.split(110, 168)[0];
-        animSad = new Animation(sprites, 1 / 5f);
+        animSad = new Animation(sprites, 0f);
 
 
         if(Save.gd.isExcaliburEquiped()){
@@ -89,7 +91,7 @@ public class GameOver extends GameState {
         }
 
         sprites = tex.split(132, 169)[0];
-        animHappy = new Animation(sprites, 1 / 5f);
+        animHappy = new Animation(sprites, 0f);
 
 
 
@@ -350,7 +352,7 @@ public class GameOver extends GameState {
             public void touchUp(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
-                Gdx.net.openURI(MyGdxGame.AndroidPlayStoreGameUrl);
+                //Gdx.net.openURI(MyGdxGame.AndroidPlayStoreGameUrl);
             };
         });
 

@@ -39,6 +39,7 @@ public class GameData implements Serializable {
 	private boolean playerYellow = false;
 	private boolean playerGreen = false;
 	private boolean isFirstPlay = true;
+	private int pickedGamePlay = 1;
 
 
 	public GameData() {
@@ -51,7 +52,7 @@ public class GameData implements Serializable {
         adsRemoverPurchased = false;
         sound = 2;
         night = false;
-        money = 100;
+        money = 10;
 		playerBlue = false;
 		playerRed = false;
 		playerYellow = false;
@@ -352,6 +353,148 @@ public class GameData implements Serializable {
 	public void setFirstPlay(boolean firstPlay) {
 		isFirstPlay = firstPlay;
 	}
+
+	public int getPickedGamePlay() {
+		return pickedGamePlay;
+	}
+
+	public void setPickedGamePlay(int pickedGamePlay) {
+		this.pickedGamePlay = pickedGamePlay;
+	}
+
+	/**Empty Data slot just in case. If data added after publish old file should be deleted
+	   to avoid previous user data loss keep some empty data slot available.**/
+	private int data1 = 1;
+	private int data2 = 1;
+	private int data3 = 1;
+	private int data4 = 1;
+	private int data5 = 1;
+
+	private boolean data6 = false;
+	private boolean data7 = false;
+	private boolean data8 = false;
+	private boolean data9 = false;
+	private boolean data10 = false;
+
+	private String[] data11;
+	private String[] data12;
+	private String[] data13;
+	private String[] data14;
+	private String[] data15;
+
+	public int getData2() {
+		return data2;
+	}
+
+	public void setData2(int data2) {
+		this.data2 = data2;
+	}
+
+	public int getData3() {
+		return data3;
+	}
+
+	public void setData3(int data3) {
+		this.data3 = data3;
+	}
+
+	public int getData4() {
+		return data4;
+	}
+
+	public void setData4(int data4) {
+		this.data4 = data4;
+	}
+
+	public int getData5() {
+		return data5;
+	}
+
+	public void setData5(int data5) {
+		this.data5 = data5;
+	}
+
+	public boolean isData6() {
+		return data6;
+	}
+
+	public void setData6(boolean data6) {
+		this.data6 = data6;
+	}
+
+	public boolean isData7() {
+		return data7;
+	}
+
+	public void setData7(boolean data7) {
+		this.data7 = data7;
+	}
+
+	public boolean isData8() {
+		return data8;
+	}
+
+	public void setData8(boolean data8) {
+		this.data8 = data8;
+	}
+
+	public boolean isData9() {
+		return data9;
+	}
+
+	public void setData9(boolean data9) {
+		this.data9 = data9;
+	}
+
+	public boolean isData10() {
+		return data10;
+	}
+
+	public void setData10(boolean data10) {
+		this.data10 = data10;
+	}
+
+	public String[] getData11() {
+		return data11;
+	}
+
+	public void setData11(String[] data11) {
+		this.data11 = data11;
+	}
+
+	public String[] getData12() {
+		return data12;
+	}
+
+	public void setData12(String[] data12) {
+		this.data12 = data12;
+	}
+
+	public String[] getData13() {
+		return data13;
+	}
+
+	public void setData13(String[] data13) {
+		this.data13 = data13;
+	}
+
+	public String[] getData14() {
+		return data14;
+	}
+
+	public void setData14(String[] data14) {
+		this.data14 = data14;
+	}
+
+	public String[] getData15() {
+		return data15;
+	}
+
+	public void setData15(String[] data15) {
+		this.data15 = data15;
+	}
+
+
 
 }
 

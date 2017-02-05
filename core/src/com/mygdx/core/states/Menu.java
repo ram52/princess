@@ -608,7 +608,7 @@ public class Menu extends GameState {
             public void touchUp(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
-                Gdx.net.openURI(MyGdxGame.AndroidFacebookGameUrl);
+                //Gdx.net.openURI(MyGdxGame.AndroidFacebookGameUrl);
 
             };
         });
@@ -624,7 +624,7 @@ public class Menu extends GameState {
             public void touchUp(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
-                Gdx.net.openURI(MyGdxGame.AndroidTwitterGameUrl);
+                //Gdx.net.openURI(MyGdxGame.AndroidTwitterGameUrl);
 
             };
         });

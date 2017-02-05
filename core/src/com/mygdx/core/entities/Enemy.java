@@ -40,6 +40,16 @@ public class Enemy extends B2DSprite
     private boolean fromLeft = false;
     private boolean isTouched = false;
 
+    public boolean isJump() {
+        return jump;
+    }
+
+    public void setJump(boolean jump) {
+        this.jump = jump;
+    }
+
+    private boolean jump = false;
+
     public boolean isTouchBrick() {
         return touchBrick;
     }

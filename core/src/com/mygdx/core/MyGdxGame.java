@@ -263,8 +263,9 @@ public class MyGdxGame implements ApplicationListener {
         Save.save();
 
         soundEnable = Save.gd.isSoundEnable();
-        PAD_ZONE= Gdx.graphics.getHeight() - (Gdx.graphics.getHeight() / 7);
-        BRICK_SUMON_ZONE= Gdx.graphics.getHeight() - (Gdx.graphics.getHeight() / 2);
+        PAD_ZONE= Gdx.graphics.getHeight();
+        BRICK_SUMON_ZONE= (int) (Gdx.graphics.getHeight() - (Gdx.graphics.getHeight() / 1.5f));
+        pickedGameplay = Save.gd.getPickedGamePlay();
 
     }
 
