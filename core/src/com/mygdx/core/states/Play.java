@@ -2480,7 +2480,7 @@ public class Play extends GameState {
     private void tutoGamePlay1(){
         //pointer.getBody().setTransform(MyGdxGame.V_WIDTH/2/PPM - pointer.getWidth()/6/PPM, pointer.getPosition().y, pointer.getBody().getAngle());
 
-        if(!tuto_step1) right = false;
+        if(!tuto_step2) right = false;
         if(!tuto_step4) jump = false;
         if(!tuto_step5) fire = false;
 
@@ -3338,14 +3338,14 @@ public class Play extends GameState {
             sbKyaa.end();
         }
 
-        if(isTutorial && tuto_step3 && !tuto_step4){
-//            sb.begin();
-//            sb.draw(animTip.getFrame(),
-//                    player.getPosition().x*PPM - animTip.getFrame().getRegionWidth()/2,
-//                    player.getPosition().y*PPM + animTip.getFrame().getRegionHeight()/13,
-//                    (float)animTip.getFrame().getRegionWidth(),
-//                    (float)animTip.getFrame().getRegionHeight());
-//            sb.end();
+        if(isTutorial && tuto_step5 && !tuto_step6 && pickedGameplay == 1){
+            sb.begin();
+            sb.draw(animTip.getFrame(),
+                    player.getPosition().x*PPM - animTip.getFrame().getRegionWidth()/2,
+                    player.getPosition().y*PPM + animTip.getFrame().getRegionHeight()/13,
+                    (float)animTip.getFrame().getRegionWidth(),
+                    (float)animTip.getFrame().getRegionHeight());
+            sb.end();
         }
 
 
