@@ -277,7 +277,7 @@ public class Menu extends GameState {
         buttonTuto.setPosition((Gdx.graphics.getWidth() / 2) - buttonTuto.getWidth() / 1.26f, 0);
         stage1.addActor(buttonTuto);
 
-        labelCopyright = new Label("Credits 2016", new LabelStyle(new BitmapFont( Gdx.files.internal(MyGdxGame.fontScorePath), false), Color.WHITE));
+        labelCopyright = new Label("(c) RAM52 Credits 2017", new LabelStyle(new BitmapFont( Gdx.files.internal(MyGdxGame.fontScorePath), false), Color.WHITE));
         labelCopyright.setWidth(Gdx.graphics.getWidth() / 2.5f);
         labelCopyright.setHeight(Gdx.graphics.getHeight() / 20);
         labelCopyright.setFontScale(Gdx.graphics.getWidth() / 500f);
@@ -946,7 +946,7 @@ public class Menu extends GameState {
             sb3.end();
 
             //TEXT HOW TO ANIM
-            if (stage1.getActors().items[2].getTop() <= Gdx.graphics.getHeight() / 8.8f) {
+            if (stage1.getActors().items[2].getTop() <= Gdx.graphics.getHeight() / 8.5f) {
                 stage1.getActors().items[2].setPosition((Gdx.graphics.getWidth() / 2f) - stage1.getActors().items[2].getWidth() / 2f, (-stage1.getActors().items[2].getHeight() + cpt_translate_animation1 * 10f));
                 cpt_translate_animation1++;
             } else {
@@ -954,7 +954,7 @@ public class Menu extends GameState {
             }
 
             //TEXT CREDIT ANIM
-            if (start2 && (stage1.getActors().items[3].getTop() <= Gdx.graphics.getHeight() / 20.2f)) {
+            if (start2 && (stage1.getActors().items[3].getTop() <= Gdx.graphics.getHeight() / 19.5f)) {
                 stage1.getActors().items[3].setPosition((Gdx.graphics.getWidth() / 2f) - stage1.getActors().items[3].getWidth() / 2f, (-stage1.getActors().items[3].getHeight() + cpt_translate_animation2 * 8f));
                 cpt_translate_animation2++;
             }

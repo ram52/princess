@@ -923,15 +923,14 @@ public class AndroidLauncher extends AndroidApplication implements
             Save.load();
 
             if (bp.getPurchaseTransactionDetails(getResources().getString(R.string.excalibur)) == null) {
-                Save.gd.setExcaliburPurchased(false);
                 Save.save();
                 Save.load();
 
             } else {
 
                 if (bp.getPurchaseTransactionDetails(getResources().getString(R.string.excalibur)).purchaseInfo.parseResponseData().purchaseState.ordinal() == 0) {
-                    Save.gd.setExcaliburPurchased(true);
-                    Save.gd.setExcaliburEquiped(true);
+//                    Save.gd.setExcaliburPurchased(true);
+//                    Save.gd.setExcaliburEquiped(true);
                     Save.save();
                     Save.load();
 
@@ -950,18 +949,18 @@ public class AndroidLauncher extends AndroidApplication implements
 
 
             if (bp.getPurchaseTransactionDetails(getResources().getString(R.string.kame_beam)) == null) {
-                Save.gd.setKamehamehaPurchased(false);
+                //Save.gd.setKamehamehaPurchased(false);
                 Save.save();
                 Save.load();
 
             } else {
 
                 if (bp.getPurchaseTransactionDetails(getResources().getString(R.string.kame_beam)).purchaseInfo.parseResponseData().purchaseState.ordinal() == 0) {
-                    Save.gd.setKamehamehaPurchased(true);
-                    Save.gd.setKamehamehaEquiped(true);
-                    Save.gd.setFireBall2Equiped(false);
-                    Save.gd.setFireBallEquiped(false);
-                    Save.gd.setLightningEquiped(false);
+//                    Save.gd.setKamehamehaPurchased(true);
+//                    Save.gd.setKamehamehaEquiped(true);
+//                    Save.gd.setFireBall2Equiped(false);
+//                    Save.gd.setFireBallEquiped(false);
+//                    Save.gd.setLightningEquiped(false);
                     Save.save();
                     Save.load();
 
@@ -979,18 +978,18 @@ public class AndroidLauncher extends AndroidApplication implements
 
 
             if (bp.getPurchaseTransactionDetails(getResources().getString(R.string.hadou_ball)) == null) {
-                Save.gd.setFireBall2Purchased(false);
+//                Save.gd.setFireBall2Purchased(false);
                 Save.save();
                 Save.load();
 
             } else {
 
                 if (bp.getPurchaseTransactionDetails(getResources().getString(R.string.hadou_ball)).purchaseInfo.parseResponseData().purchaseState.ordinal() == 0) {
-                    Save.gd.setFireBall2Purchased(true);
-                    Save.gd.setKamehamehaEquiped(false);
-                    Save.gd.setFireBall2Equiped(true);
-                    Save.gd.setFireBallEquiped(false);
-                    Save.gd.setLightningEquiped(false);
+//                    Save.gd.setFireBall2Purchased(true);
+//                    Save.gd.setKamehamehaEquiped(false);
+//                    Save.gd.setFireBall2Equiped(true);
+//                    Save.gd.setFireBallEquiped(false);
+//                    Save.gd.setLightningEquiped(false);
                     Save.save();
                     Save.load();
 
@@ -1009,15 +1008,15 @@ public class AndroidLauncher extends AndroidApplication implements
 
 
             if (bp.getPurchaseTransactionDetails(getResources().getString(R.string.boots)) == null) {
-                Save.gd.setBootPurchased(false);
+//                Save.gd.setBootPurchased(false);
                 Save.save();
                 Save.load();
 
             } else {
 
                 if (bp.getPurchaseTransactionDetails(getResources().getString(R.string.boots)).purchaseInfo.parseResponseData().purchaseState.ordinal() == 0) {
-                    Save.gd.setBootPurchased(true);
-                    Save.gd.setBootEquiped(true);
+//                    Save.gd.setBootPurchased(true);
+//                    Save.gd.setBootEquiped(true);
                     Save.save();
                     Save.load();
 
@@ -1036,15 +1035,15 @@ public class AndroidLauncher extends AndroidApplication implements
 
 
             if (bp.getPurchaseTransactionDetails(getResources().getString(R.string.mega_jump)) == null) {
-                Save.gd.setMegaJumpPurchased(false);
+//                Save.gd.setMegaJumpPurchased(false);
                 Save.save();
                 Save.load();
 
             } else {
 
                 if (bp.getPurchaseTransactionDetails(getResources().getString(R.string.mega_jump)).purchaseInfo.parseResponseData().purchaseState.ordinal() == 0) {
-                    Save.gd.setMegaJumpPurchased(true);
-                    Save.gd.setMegaJumpEquiped(true);
+//                    Save.gd.setMegaJumpPurchased(true);
+//                    Save.gd.setMegaJumpEquiped(true);
                     Save.save();
                     Save.load();
 
@@ -1063,18 +1062,18 @@ public class AndroidLauncher extends AndroidApplication implements
 
 
             if (bp.getPurchaseTransactionDetails(getResources().getString(R.string.lightning_summon)) == null) {
-                Save.gd.setLightningPurchased(false);
+//                Save.gd.setLightningPurchased(false);
                 Save.save();
                 Save.load();
 
             } else {
 
                 if (bp.getPurchaseTransactionDetails(getResources().getString(R.string.lightning_summon)).purchaseInfo.parseResponseData().purchaseState.ordinal() == 0) {
-                    Save.gd.setLightningPurchased(true);
-                    Save.gd.setLightningEquiped(true);
-                    Save.gd.setKamehamehaEquiped(false);
-                    Save.gd.setFireBall2Equiped(false);
-                    Save.gd.setFireBallEquiped(false);
+//                    Save.gd.setLightningPurchased(true);
+//                    Save.gd.setLightningEquiped(true);
+//                    Save.gd.setKamehamehaEquiped(false);
+//                    Save.gd.setFireBall2Equiped(false);
+//                    Save.gd.setFireBallEquiped(false);
                     Save.save();
                     Save.load();
 
@@ -1093,14 +1092,14 @@ public class AndroidLauncher extends AndroidApplication implements
 
 
             if (bp.getPurchaseTransactionDetails(getResources().getString(R.string.super_brick)) == null) {
-                Save.gd.setBrick2Purchased(false);
+//                Save.gd.setBrick2Purchased(false);
                 Save.save();
                 Save.load();
 
             } else {
 
                 if (bp.getPurchaseTransactionDetails(getResources().getString(R.string.super_brick)).purchaseInfo.parseResponseData().purchaseState.ordinal() == 0) {
-                    Save.gd.setBrick2Purchased(true);
+//                    Save.gd.setBrick2Purchased(true);
                     Save.save();
                     Save.load();
 

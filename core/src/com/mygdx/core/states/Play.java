@@ -817,6 +817,7 @@ public class Play extends GameState {
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
                 Play.this.isTutorial = false;
+                Timer.instance().clear();
                 return true;
             }
             public void touchUp(
@@ -832,6 +833,8 @@ public class Play extends GameState {
                 tuto_step4 = false;
                 tuto_step5 = false;
                 tuto_step6 = false;
+                Save.gd.setFirstPlay(false);
+                Save.save();
 
                 if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("newScreen").play();
             }
@@ -1149,52 +1152,64 @@ public class Play extends GameState {
     }
 
     public void handleInput() {
+
+//        if(Gdx.input.justTouched() && Gdx.input.getY() > MyGdxGame.BRICK_SUMON_ZONE && pickedGameplay == 1){
+//            System.out.println("fire!");
+//            InputEvent event1 = new InputEvent();
+//            event1.setType(InputEvent.Type.touchDown);
+//            buttonFire.fire(event1);
+//
+//            InputEvent event2 = new InputEvent();
+//            event2.setType(InputEvent.Type.touchUp);
+//            buttonFire.fire(event2);
+//        }
+
         //brick summon
         if((isTutorial && tuto_step4 && pickedGameplay == 2) | (isTutorial && tuto_step6 && pickedGameplay == 1) | !isTutorial)
-        if(Gdx.input.justTouched() && Gdx.input.getY() < MyGdxGame.BRICK_SUMON_ZONE && !MyGdxGame.pause && !buttonPause.isOver() && !buttonPlay.isOver() && !buttonSkip.isOver()){
-            if(!Save.gd.isBrick2Equiped()){
-                if(brick == null){
-                    brick = createBrick(lastClickPos, Gdx.graphics.getHeight()/PPM);
-                }else{
-                    if(brick.getDead()){
+            if(Gdx.input.justTouched() && Gdx.input.getY() < MyGdxGame.BRICK_SUMON_ZONE && !MyGdxGame.pause && !buttonPause.isOver() && !buttonPlay.isOver() && !buttonSkip.isOver()){
+                if(!Save.gd.isBrick2Equiped()){
+                    if(brick == null){
                         brick = createBrick(lastClickPos, Gdx.graphics.getHeight()/PPM);
+                    }else{
+                        if(brick.getDead()){
+                            brick = createBrick(lastClickPos, Gdx.graphics.getHeight()/PPM);
+                        }
+                    }
+
+                    brick.setLife(400);
+
+                    if(!MyGdxGame.pause){
+                        if(!brick.isSummoned() && enableBrick){
+                            enableBrick = false;
+                            brick.setFalling(true);
+                            brick.setSummoned(true);
+                            if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("newScreen").play();
+                        }
                     }
                 }
 
-                brick.setLife(400);
 
-                if(!MyGdxGame.pause){
-                    if(!brick.isSummoned() && enableBrick){
-                        enableBrick = false;
-                        brick.setFalling(true);
-                        brick.setSummoned(true);
-                        if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("newScreen").play();
-                    }
-                }
-            }
-
-
-            if(Save.gd.isBrick2Equiped()){
-                if(brick == null){
-                    brick = createBrick(lastClickPos, player.getHeight()/PPM + Gdx.graphics.getHeight()/PPM);
-                }else{
-                    if(brick.getDead()){
+                if(Save.gd.isBrick2Equiped()){
+                    if(brick == null){
                         brick = createBrick(lastClickPos, player.getHeight()/PPM + Gdx.graphics.getHeight()/PPM);
+                    }else{
+                        if(brick.getDead()){
+                            brick = createBrick(lastClickPos, player.getHeight()/PPM + Gdx.graphics.getHeight()/PPM);
+                        }
                     }
-                }
 
-                brick.setLife(400*5);
+                    brick.setLife(400*5);
 
-                if(!MyGdxGame.pause){
-                    if(!brick.isSummoned() && enableBrick){
-                        enableBrick = false;
-                        brick.setFalling(true);
-                        brick.setSummoned(true);
-                        if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("newScreen").play();
+                    if(!MyGdxGame.pause){
+                        if(!brick.isSummoned() && enableBrick){
+                            enableBrick = false;
+                            brick.setFalling(true);
+                            brick.setSummoned(true);
+                            if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("newScreen").play();
+                        }
                     }
                 }
             }
-        }
 
 
         if(!buttonRight.isOver() && buttonRight.isChecked()){
@@ -1566,9 +1581,9 @@ public class Play extends GameState {
             }
 
             if(!isTutorial)
-            if (stage1.getActors().items[5]!= null && stage1.getActors().items[5].getRight() >= Gdx.graphics.getWidth() + 5) {
-                stage1.getActors().items[5].setPosition((Gdx.graphics.getWidth() / 1f) - (cpt_translate_animation * speed), stage1.getActors().items[5].getY());
-            }
+                if (stage1.getActors().items[5]!= null && stage1.getActors().items[5].getRight() >= Gdx.graphics.getWidth() + 5) {
+                    stage1.getActors().items[5].setPosition((Gdx.graphics.getWidth() / 1f) - (cpt_translate_animation * speed), stage1.getActors().items[5].getY());
+                }
 
         }else{
 
@@ -1583,9 +1598,9 @@ public class Play extends GameState {
                 }
 
                 if(!isTutorial)
-                if (stage1.getActors().items[5]!= null && stage1.getActors().items[5].getRight() <= Gdx.graphics.getWidth() + stage1.getActors().items[5].getWidth()) {
-                    stage1.getActors().items[5].setPosition(stage1.getActors().items[5].getX() + (cpt_translate_animation * speed), stage1.getActors().items[5].getY());
-                }
+                    if (stage1.getActors().items[5]!= null && stage1.getActors().items[5].getRight() <= Gdx.graphics.getWidth() + stage1.getActors().items[5].getWidth()) {
+                        stage1.getActors().items[5].setPosition(stage1.getActors().items[5].getX() + (cpt_translate_animation * speed), stage1.getActors().items[5].getY());
+                    }
             }
         }
 
@@ -2081,22 +2096,22 @@ public class Play extends GameState {
                 enemy.update(MyGdxGame.STEP);
 
                 //if(!MyGdxGame.pause){
-                    enemy.updateBoundingBox(enemy,64,64);
+                enemy.updateBoundingBox(enemy,64,64);
 
-                    if(brick != null){
-                        brickIA(enemy);
-                    }
+                if(brick != null){
+                    brickIA(enemy);
+                }
 
-                    lightningIA(enemy);
-                    if(princess != null){
-                        princessIA(enemy);
-                    }
+                lightningIA(enemy);
+                if(princess != null){
+                    princessIA(enemy);
+                }
 
-                    fireBallIA(enemy);
+                fireBallIA(enemy);
 
-                    if(enemy.getHealth()<=0 | enemy.isDead()){
+                if(enemy.getHealth()<=0 | enemy.isDead()){
 
-                        /**ENEMY IS DEAD**/
+                    /**ENEMY IS DEAD**/
                     if(isTutorial){
                         sb.begin();
                         sb.draw(animLabelMoney.getFrame(),
@@ -2107,204 +2122,203 @@ public class Play extends GameState {
                         sb.end();
                     }
 
-                        enemy.getBody().setLinearVelocity(new Vector2(0,0));
-                        enemy.setCptDieRunning(enemy.getCptDieRunning()+1);
+                    enemy.getBody().setLinearVelocity(new Vector2(0,0));
+                    enemy.setCptDieRunning(enemy.getCptDieRunning()+1);
 
-                        if(!enemy.isDead()){
-                            player.collectCoin();
-                            if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("boom").play();
-                            if(Save.gd.isFireBallEquiped() && enemiesKilled >= 4 && player.getFireBallCount()< MAXFIREBALLCOUNT){
-                                fire = false;
-                                player.setFireBallCount(player.getFireBallCount()+1);
-                                enemiesKilled = 0;
-                                System.out.println("increment fireball count!");
-                            }else{
-                                enemiesKilled++;
-                                System.out.println("enemy killed="+enemiesKilled);
-                            }
-
-                            if(Save.gd.isFireBall2Equiped() && enemiesKilled >= 10 && player.getFireBallCount()<MAXFIREBALLCOUNT){
-                                fire = false;
-                                player.setFireBallCount(player.getFireBallCount()+1);
-                                enemiesKilled = 0;
-                                System.out.println("increment fireball count!");
-                            }else{
-                                enemiesKilled++;
-                                System.out.println("enemy killed="+enemiesKilled);
-                            }
-                            enemy.setDead(true);
+                    if(!enemy.isDead()){
+                        player.collectCoin();
+                        if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("boom").play();
+                        if(Save.gd.isFireBallEquiped() && enemiesKilled >= 4 && player.getFireBallCount()< MAXFIREBALLCOUNT){
+                            fire = false;
+                            player.setFireBallCount(player.getFireBallCount()+1);
+                            enemiesKilled = 0;
+                            System.out.println("increment fireball count!");
+                        }else{
+                            enemiesKilled++;
+                            System.out.println("enemy killed="+enemiesKilled);
                         }
 
-                        climbingIA(enemy);
-
-                        //todo timer
-                        if(enemy.getCptDieRunning() > 80){
-                            enemy.setDead(true);
-                            enemies.removeValue(enemy, true);
-                            bodyToDestroy.add(enemy);
-                            //enemy.destroy();
-                            //removeBodySafely(enemy.getBody());
+                        if(Save.gd.isFireBall2Equiped() && enemiesKilled >= 10 && player.getFireBallCount()<MAXFIREBALLCOUNT){
+                            fire = false;
+                            player.setFireBallCount(player.getFireBallCount()+1);
+                            enemiesKilled = 0;
+                            System.out.println("increment fireball count!");
+                        }else{
+                            enemiesKilled++;
+                            System.out.println("enemy killed="+enemiesKilled);
                         }
+                        enemy.setDead(true);
+                    }
 
-                    }else{
-                        /**ENEMY IS NOT DEAD**/
-                        if(!enemy.isStop()){
+                    climbingIA(enemy);
 
-                            if(enemy.isJumpOver()){
+                    //todo timer
+                    if(enemy.getCptDieRunning() > 80){
+                        enemy.setDead(true);
+                        enemies.removeValue(enemy, true);
+                        bodyToDestroy.add(enemy);
+                        //enemy.destroy();
+                        //removeBodySafely(enemy.getBody());
+                    }
 
-                                enemyJumpOverIA(enemy);
+                }else{
+                    /**ENEMY IS NOT DEAD**/
+                    if(!enemy.isStop()){
 
-                            }else{
+                        if(enemy.isJumpOver()){
 
-                                //todo enemyHurt animation
-                                if(enemy.isTouched()){
-                                    if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2){
-                                        if(cpt_sound_hit % 2 == 0){
-                                            MyGdxGame.res.getSound("hit").play();
-                                        }
-                                        if(cpt_sound_hit < 9999){
-                                            cpt_sound_hit+=0.5;
-                                        }else {
-                                            cpt_sound_hit = 0;
-                                        }
+                            enemyJumpOverIA(enemy);
 
+                        }else{
+
+                            //todo enemyHurt animation
+                            if(enemy.isTouched()){
+                                if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2){
+                                    if(cpt_sound_hit % 2 == 0){
+                                        MyGdxGame.res.getSound("hit").play();
+                                    }
+                                    if(cpt_sound_hit < 9999){
+                                        cpt_sound_hit+=0.5;
+                                    }else {
+                                        cpt_sound_hit = 0;
                                     }
 
-                                    //nemy.getBody().setLinearVelocity(enemy.getBody().getLinearVelocity().x/2, enemy.getBody().getLinearVelocity().y);
-                                    if(enemy.isClimbing()){
+                                }
 
-                                        if(!enemy.isFromLeft()){
+                                //nemy.getBody().setLinearVelocity(enemy.getBody().getLinearVelocity().x/2, enemy.getBody().getLinearVelocity().y);
+                                if(enemy.isClimbing()){
 
-                                            if(!enemy.isHurtRight()){
-                                                //enemy.getBody().setTransform((MyGdxGame.V_WIDTH/PPM)-65/PPM, enemy.getPosition().y, enemy.getBody().getAngle());
-                                                enemy.hurtAnimation(true);
-                                            }
+                                    if(!enemy.isFromLeft()){
+
+                                        if(!enemy.isHurtRight()){
+                                            //enemy.getBody().setTransform((MyGdxGame.V_WIDTH/PPM)-65/PPM, enemy.getPosition().y, enemy.getBody().getAngle());
+                                            enemy.hurtAnimation(true);
                                         }
-                                        if(enemy.isFromLeft()){
-                                            if(!enemy.isHurtLeft()){
-                                                //enemy.getBody().setTransform(65/PPM, enemy.getPosition().y, enemy.getBody().getAngle());
-                                                enemy.hurtAnimation_rev(true);
-                                            }
+                                    }
+                                    if(enemy.isFromLeft()){
+                                        if(!enemy.isHurtLeft()){
+                                            //enemy.getBody().setTransform(65/PPM, enemy.getPosition().y, enemy.getBody().getAngle());
+                                            enemy.hurtAnimation_rev(true);
                                         }
+                                    }
 
 
 
-                                    }else{
+                                }else{
 
-                                        if(!enemy.isFromLeft()){
-                                            if(!enemy.isHurtRight()){
-                                                enemy.hurtAnimation(false);
-                                            }
+                                    if(!enemy.isFromLeft()){
+                                        if(!enemy.isHurtRight()){
+                                            enemy.hurtAnimation(false);
                                         }
-                                        if(enemy.isFromLeft()){
-                                            if(!enemy.isHurtLeft()){
-                                                enemy.hurtAnimation_rev(false);
-                                            }
+                                    }
+                                    if(enemy.isFromLeft()){
+                                        if(!enemy.isHurtLeft()){
+                                            enemy.hurtAnimation_rev(false);
+                                        }
+                                    }
+                                }
+                            }else{
+                                //enemy on the ground
+
+                                if(!enemy.isClimbing() ){
+                                    if(!enemy.isFromLeft()) {
+                                        enemy.getBody().setLinearVelocity(-enemy.getSpeed(),enemy.getBody().getLinearVelocity().y);
+                                    }
+                                    else {
+                                        enemy.getBody().setLinearVelocity(enemy.getSpeed(),enemy.getBody().getLinearVelocity().y);
+                                        if(!enemy.isNormalLeft() && !enemy.isFadeOutLeft() && !enemy.isClimbRight() && !enemy.isClimblLeft() && !enemy.isTouched()){
+                                            enemy.normalAnimation_rev();
                                         }
                                     }
                                 }else{
-                                    //enemy on the ground
-
-                                    if(!enemy.isClimbing() ){
-                                        if(!enemy.isFromLeft()) {
-                                            enemy.getBody().setLinearVelocity(-enemy.getSpeed(),enemy.getBody().getLinearVelocity().y);
-                                        }
-                                        else {
-                                            enemy.getBody().setLinearVelocity(enemy.getSpeed(),enemy.getBody().getLinearVelocity().y);
-                                            if(!enemy.isNormalLeft() && !enemy.isFadeOutLeft() && !enemy.isClimbRight() && !enemy.isClimblLeft() && !enemy.isTouched()){
-                                                enemy.normalAnimation_rev();
-                                            }
+                                    if(!enemy.isFromLeft()){
+                                        if(!enemy.isClimbRight()){
+                                            enemy.climbAnimation();
                                         }
                                     }else{
-                                        if(!enemy.isFromLeft()){
-                                            if(!enemy.isClimbRight()){
-                                                enemy.climbAnimation();
-                                            }
-                                        }else{
-                                            if(!enemy.isClimblLeft()){
-                                                enemy.climbAnimation_rev();
-                                            }
+                                        if(!enemy.isClimblLeft()){
+                                            enemy.climbAnimation_rev();
+                                        }
+                                    }
+                                }
+
+                                //enemy in door 1
+                                if(!enemy.isMalicious() && (enemy.getPosition().x > (MyGdxGame.V_WIDTH/2/PPM)-0.03f && enemy.getPosition().x < (MyGdxGame.V_WIDTH/2/PPM)+0.03f)){
+
+                                    enemy.getBody().setLinearVelocity(0,enemy.getBody().getLinearVelocity().y);
+                                    enemy.setFading(true);
+                                    //todo fadeIn
+                                    if(!enemy.isFromLeft()){
+                                        if(!enemy.isFadeOutRight()){
+                                            enemy.fadeOutAnimation();
+                                        }
+                                    }else{
+                                        if(!enemy.isFadeOutLeft()){
+                                            enemy.fadeOutAnimation_rev();
                                         }
                                     }
 
-                                    //enemy in door 1
-                                    if(!enemy.isMalicious() && (enemy.getPosition().x > (MyGdxGame.V_WIDTH/2/PPM)-0.03f && enemy.getPosition().x < (MyGdxGame.V_WIDTH/2/PPM)+0.03f)){
+                                    enemy.setCptFadeOutRunning(enemy.getCptFadeOutRunning()+1);
 
-                                        enemy.getBody().setLinearVelocity(0,enemy.getBody().getLinearVelocity().y);
-                                        enemy.setFading(true);
-                                        //todo fadeIn
-                                        if(!enemy.isFromLeft()){
-                                            if(!enemy.isFadeOutRight()){
-                                                enemy.fadeOutAnimation();
-                                            }
-                                        }else{
-                                            if(!enemy.isFadeOutLeft()){
-                                                enemy.fadeOutAnimation_rev();
-                                            }
-                                        }
+                                    if(enemy.getCptFadeOutRunning() > 30){
+                                        enemy.setCptFadeOutRunning(0);
+                                        enemy.getBody().setTransform(enemy.getBody().getPosition().x, enemy.getBody().getPosition().y*2, enemy.getBody().getAngle());
+                                        enemy.setJumpOver(true);
+                                        //enemy.getBody().applyForceToCenter(new Vector2(0,50),false);
+                                    }
+                                }
 
-                                        enemy.setCptFadeOutRunning(enemy.getCptFadeOutRunning()+1);
 
-                                        if(enemy.getCptFadeOutRunning() > 30){
-                                            enemy.setCptFadeOutRunning(0);
-                                            enemy.getBody().setTransform(enemy.getBody().getPosition().x, enemy.getBody().getPosition().y*2, enemy.getBody().getAngle());
+                                if( enemy.isMalicious() &&
+                                        (enemy.isClimbing() |
+                                                ((enemy.getPosition().x > 100/PPM && enemy.isFromLeft())
+                                                        | (enemy.getPosition().x < MyGdxGame.V_WIDTH/PPM - 100/PPM && !enemy.isFromLeft()))) ){
+
+                                    enemy.setWaited(true);
+                                    enemy.getBody().setLinearVelocity(0,enemy.getBody().getLinearVelocity().y);
+
+                                    enemy.setCptWaitRunning(enemy.getCptWaitRunning()+1);
+
+
+                                    if(enemy.getCptWaitRunning() > 2 && !enemy.isJumpOver()){
+                                        //enemy.setCptWaitRunning(0);
+                                        //enemy.setCptWaitRunning(0);
+
+                                        float posClimb = enemy.getBody().getPosition().y + enemy.getCptWaitRunning()/5000f;
+
+                                        posClimb = (float) (posClimb+ difficulty /1000.0f);
+
+                                        if(posClimb >= MyGdxGame.GROUND*2f){
+
                                             enemy.setJumpOver(true);
-                                            //enemy.getBody().applyForceToCenter(new Vector2(0,50),false);
-                                        }
-                                    }
+                                            //stopEnemies = true;
 
-
-                                    if( enemy.isMalicious() &&
-                                            (enemy.isClimbing() |
-                                                    ((enemy.getPosition().x > 100/PPM && enemy.isFromLeft())
-                                                            | (enemy.getPosition().x < MyGdxGame.V_WIDTH/PPM - 100/PPM && !enemy.isFromLeft()))) ){
-
-                                        enemy.setWaited(true);
-                                        enemy.getBody().setLinearVelocity(0,enemy.getBody().getLinearVelocity().y);
-
-                                        enemy.setCptWaitRunning(enemy.getCptWaitRunning()+1);
-
-
-                                        if(enemy.getCptWaitRunning() > 2 && !enemy.isJumpOver()){
-                                            //enemy.setCptWaitRunning(0);
-                                            //enemy.setCptWaitRunning(0);
-
-                                            float posClimb = enemy.getBody().getPosition().y + enemy.getCptWaitRunning()/5000f;
-
-                                            posClimb = (float) (posClimb+ difficulty /1000.0f);
-
-                                            if(posClimb >= MyGdxGame.GROUND*2f){
-
-                                                enemy.setJumpOver(true);
-                                                //stopEnemies = true;
-
-                                                if(!enemy.isFromLeft()){
-                                                    enemy.getBody().setTransform(enemy.getBody().getPosition().x-65/PPM, MyGdxGame.GROUND*2f, enemy.getBody().getAngle());
-                                                    if(!enemy.isRight()){
-                                                        enemy.normalAnimation();
-                                                    }
-                                                }else{
-                                                    enemy.getBody().setTransform(enemy.getBody().getPosition().x+65/PPM, MyGdxGame.GROUND*2f, enemy.getBody().getAngle());
-                                                    if(!enemy.isLeft()){
-                                                        enemy.normalAnimation_rev();
-                                                    }
+                                            if(!enemy.isFromLeft()){
+                                                enemy.getBody().setTransform(enemy.getBody().getPosition().x-65/PPM, MyGdxGame.GROUND*2f, enemy.getBody().getAngle());
+                                                if(!enemy.isRight()){
+                                                    enemy.normalAnimation();
                                                 }
-
                                             }else{
-                                                enemy.getBody().setTransform(enemy.getBody().getPosition().x , posClimb, enemy.getBody().getAngle());
+                                                enemy.getBody().setTransform(enemy.getBody().getPosition().x+65/PPM, MyGdxGame.GROUND*2f, enemy.getBody().getAngle());
+                                                if(!enemy.isLeft()){
+                                                    enemy.normalAnimation_rev();
+                                                }
+                                            }
 
-                                                if(!enemy.isFromLeft()){
-                                                    enemy.getBody().setTransform((MyGdxGame.V_WIDTH/PPM)-65/PPM, posClimb, enemy.getBody().getAngle());
-                                                    if(!enemy.isClimbRight()){
+                                        }else{
+                                            enemy.getBody().setTransform(enemy.getBody().getPosition().x , posClimb, enemy.getBody().getAngle());
 
-                                                        enemy.climbAnimation();
-                                                    }
-                                                }else{
-                                                    enemy.getBody().setTransform(65/PPM , posClimb, enemy.getBody().getAngle());
-                                                    if(!enemy.isClimblLeft()){
+                                            if(!enemy.isFromLeft()){
+                                                enemy.getBody().setTransform((MyGdxGame.V_WIDTH/PPM)-65/PPM, posClimb, enemy.getBody().getAngle());
+                                                if(!enemy.isClimbRight()){
 
-                                                        enemy.climbAnimation_rev();
-                                                    }
+                                                    enemy.climbAnimation();
+                                                }
+                                            }else{
+                                                enemy.getBody().setTransform(65/PPM , posClimb, enemy.getBody().getAngle());
+                                                if(!enemy.isClimblLeft()){
+
+                                                    enemy.climbAnimation_rev();
                                                 }
                                             }
                                         }
@@ -2313,6 +2327,7 @@ public class Play extends GameState {
                             }
                         }
                     }
+                }
                 //}
             }
         }
@@ -2432,22 +2447,22 @@ public class Play extends GameState {
             gamePlaySelection.setVisible(true);
             buttonGp1.setVisible(true);
             buttonGp2.setVisible(true);
+            buttonFire.setVisible(false);
         }else{
             gamePlaySelection.setVisible(false);
             buttonGp1.setVisible(false);
             buttonGp2.setVisible(false);
+            buttonFire.setVisible(true);
         }
 
         if(MyGdxGame.pickedGameplay == 2){
             buttonLeft.setVisible(true);
             buttonRight.setVisible(true);
             buttonJump.setVisible(true);
-            buttonFire.setVisible(true);
         }else {
             buttonLeft.setVisible(false);
             buttonRight.setVisible(false);
             buttonJump.setVisible(false);
-            buttonFire.setVisible(true);
         }
 
         MyGdxGame.lastPlayerPosition = new Vector2(player.getPosition());
@@ -2485,8 +2500,11 @@ public class Play extends GameState {
         if(!tuto_step5) fire = false;
 
 
-        //move pointer from left to right
+        //move pointer from right to left
         if(!tuto_step1 && !tuto_step2){
+
+            if(!pointer.getRotate45()) pointer.rotateAnimation45();
+
             if(pointer.getPosition().x < pointer.getWidth()/PPM){
                 cpt_tuto = 0;
                 pointer.getBody().setTransform(MyGdxGame.V_WIDTH/PPM - pointer.getWidth()/PPM , MyGdxGame.V_HEIGHT/3/PPM, pointer.getBody().getAngle());
@@ -2504,10 +2522,12 @@ public class Play extends GameState {
             pointer.getBody().setTransform(pointer.getWidth()/PPM , MyGdxGame.V_HEIGHT/3/PPM, pointer.getBody().getAngle());
         }
 
-        //move pointer from right to left
+        //move pointer from left to right
         if(!left && tuto_step1 && tuto_step2 && !tuto_step3){
-            tuto_step1 = true;
+
             hidePointer = false;
+
+            if(!pointer.getRotate45f()) pointer.rotateAnimation45_rev();
 
             if(pointer.getPosition().x < MyGdxGame.V_WIDTH/PPM - pointer.getWidth()/PPM){
                 cpt_tuto++;
@@ -2520,7 +2540,7 @@ public class Play extends GameState {
 
         if(right && tuto_step2 && !tuto_step3){
 
-            if(player.getPosition().x > MyGdxGame.V_WIDTH/1.1f/PPM )
+            if(player.getPosition().x > MyGdxGame.V_WIDTH/1.8f/PPM )
                 tuto_step3 = true;
 
             hidePointer = true;
@@ -2531,6 +2551,9 @@ public class Play extends GameState {
 
         //move pointer from top to bottom
         if (tuto_step3 && !tuto_step4){
+
+            if(!pointer.getRotate90f()) pointer.rotateAnimation90_rev();
+
             hidePointer = false;
             if(player.getPosition().x <= MyGdxGame.V_WIDTH/8/PPM ){
                 left = false;
@@ -2541,7 +2564,7 @@ public class Play extends GameState {
             }
 
 
-            if(pointer.getPosition().y < MyGdxGame.V_HEIGHT/2.8f/PPM - pointer.getHeight()/PPM){
+            if(pointer.getPosition().y < MyGdxGame.V_HEIGHT/2.5f/PPM - pointer.getHeight()/PPM){
                 pointer.getBody().setTransform(MyGdxGame.V_WIDTH/2/PPM, MyGdxGame.V_HEIGHT/1.7f/PPM, pointer.getBody().getAngle());
                 cpt_tuto = 0;
             }else{
@@ -2553,16 +2576,17 @@ public class Play extends GameState {
         if(!tuto_step4 && tuto_step3 && !right && !left){
             hidePointer = true;
             tuto_step4 = true;
-            pointer.getBody().setTransform( pointer.getPosition().x, MyGdxGame.V_WIDTH/2.3f/PPM - pointer.getHeight()/PPM, pointer.getBody().getAngle());
+            pointer.getBody().setTransform( pointer.getPosition().x, MyGdxGame.V_WIDTH/1.5f/PPM - pointer.getHeight()/PPM, pointer.getBody().getAngle());
         }
 
         //move pointer from bottom to top
         if(!tuto_step5 && tuto_step4){
             hidePointer = false;
-            if(!pointer.getFliped())
-                pointer.flipedAnimation();
-            if(pointer.getPosition().y > MyGdxGame.V_HEIGHT/1.5f/PPM - pointer.getHeight()/PPM){
-                pointer.getBody().setTransform(pointer.getPosition().x, MyGdxGame.V_WIDTH/2.3f/PPM - pointer.getHeight()/PPM , pointer.getBody().getAngle());
+
+            if(!pointer.getRotate90()) pointer.rotateAnimation90();
+
+            if(pointer.getPosition().y > MyGdxGame.V_HEIGHT/1.2f/PPM - pointer.getHeight()/PPM){
+                pointer.getBody().setTransform(pointer.getPosition().x, MyGdxGame.V_WIDTH/1.5f/PPM - pointer.getHeight()/PPM , pointer.getBody().getAngle());
                 cpt_tuto = 0;
             }else{
                 cpt_tuto++;
@@ -2571,11 +2595,19 @@ public class Play extends GameState {
         }
 
         if(!tuto_step5 && jump){
-            tuto_step5 = true;
-            if(!pointer.getPlaying())
-                pointer.normalAnimation();
 
-            pointer.getBody().setTransform(pointer.getPosition().x, MyGdxGame.GROUND/1.25f, pointer.getBody().getAngle());
+            Timer.schedule(new Timer.Task(){
+                @Override
+                public void run() {
+                    tuto_step5 = true;
+                    if(!pointer.getPlaying())
+                        pointer.normalAnimation();
+
+                    pointer.getBody().setTransform(pointer.getPosition().x, MyGdxGame.GROUND/1.25f, pointer.getBody().getAngle());
+                }
+            }, 1);
+
+
         }
 
         if(fire && !tuto_step6 && tuto_step5){
@@ -2623,6 +2655,8 @@ public class Play extends GameState {
                     tuto_step6 = false;
                     tuto_step7 = false;
                     tuto_step8 = false;
+                    Save.gd.setFirstPlay(false);
+                    Save.save();
                 }
             }, 5);
 
@@ -2714,6 +2748,8 @@ public class Play extends GameState {
                     tuto_step4 = false;
                     tuto_step5 = false;
                     tuto_step6 = false;
+                    Save.gd.setFirstPlay(false);
+                    Save.save();
                 }
             }, 5);
 
@@ -2725,13 +2761,9 @@ public class Play extends GameState {
 
 
         if(pointer != null ) {
-
-            if(!pointer.getPlaying())pointer.normalAnimation();
-
-            if(MyGdxGame.pickedGameplay == 2 | (MyGdxGame.pickedGameplay == 1 && (tuto_step5|tuto_step6)))
-                pointer.update(dt);
-
-
+            if(!pointer.getPlaying() && MyGdxGame.pickedGameplay == 2)pointer.normalAnimation();
+            //if(MyGdxGame.pickedGameplay == 2 | (MyGdxGame.pickedGameplay == 1 && (tuto_step5|tuto_step6)))
+            pointer.update(dt);
         }
 
         if(Play.this.isTutorial){
@@ -2749,7 +2781,6 @@ public class Play extends GameState {
                 buttonFire.setVisible(true);
             }
         }
-
 
         stopEnemies = enemies.size > 6;
 
@@ -2940,15 +2971,15 @@ public class Play extends GameState {
         }else{
 
 
-                isStepping = false;
-                difficulty = 1.0+player.getNumCoins()/50;
-                if(getRandomBoolean()){
-                    //if(!fire) //helps fireball animation when many enemies
-                    enemies.add(createEnemy(MyGdxGame.V_WIDTH*1.0f/PPM , MyGdxGame.GROUND, false));
-                }else{
-                    //if(!fire) //helps fireball animation when many enemies
-                    enemies.add(createEnemy(1/PPM , MyGdxGame.GROUND, true));
-                }
+            isStepping = false;
+            difficulty = 1.0+player.getNumCoins()/50;
+            if(getRandomBoolean()){
+                //if(!fire) //helps fireball animation when many enemies
+                enemies.add(createEnemy(MyGdxGame.V_WIDTH*1.0f/PPM , MyGdxGame.GROUND, false));
+            }else{
+                //if(!fire) //helps fireball animation when many enemies
+                enemies.add(createEnemy(1/PPM , MyGdxGame.GROUND, true));
+            }
 
 
         }
@@ -3125,7 +3156,6 @@ public class Play extends GameState {
                     buttonRed.setHeight(h);
                 }else{
                     if(reloadKamehameha <= c){
-                        //System.out.println(reloadKamehameha+" "+max);
                         if(!MyGdxGame.pause) reloadKamehameha+=0.3;
                     }
                     else{
@@ -3184,8 +3214,6 @@ public class Play extends GameState {
                     buttonRed.setHeight(0);
                 }
             }
-
-
         }
 
         spriteBatch.end();
@@ -3228,16 +3256,16 @@ public class Play extends GameState {
 
 
         //if(!MyGdxGame.pause){
-            if(MyGdxGame.pickedGameplay > 0){
-                stageUiControl.act();
-                stageUiControl.draw();
-            }
+        if(MyGdxGame.pickedGameplay > 0){
+            stageUiControl.act();
+            stageUiControl.draw();
+        }
 
-            labelScore.setVisible(true);
-            buttonPause.setVisible(true);
-            buttonNo.setVisible(false);
-            buttonCoin.setVisible(false);
-            buttonCamera.setVisible(false);
+        labelScore.setVisible(true);
+        buttonPause.setVisible(true);
+        buttonNo.setVisible(false);
+        buttonCoin.setVisible(false);
+        buttonCamera.setVisible(false);
 
         //}
 
