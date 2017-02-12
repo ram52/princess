@@ -72,6 +72,7 @@ public class MyGdxGame implements ApplicationListener {
     public static Vector2 lastPlayerPosition = new Vector2(0,0);
     public static Vector2 lastBrickPosition = new Vector2(0,0);
     public static Vector2 lastPrincessPosition = new Vector2(0,0);
+    public static int lastScoreInTutorial = 0;
 
 
     public static void setIsBoosTerritory(boolean isBoosTerritory) {
@@ -130,6 +131,7 @@ public class MyGdxGame implements ApplicationListener {
     public static String achievement3 = "CgkIw6iVjJQdEAIQBA";
     public static String achievement4 = "CgkIw6iVjJQdEAIQBQ";
     public static String achievement5 = "CgkIw6iVjJQdEAIQBg";
+    public static String achievementSecret = "CgkIw6iVjJQdEAIQBw";
 
     private static float cptBlinkingStarSlow = 0.0f;
     private static float cptBlinkingStarNormal = 0.0f;
@@ -264,7 +266,7 @@ public class MyGdxGame implements ApplicationListener {
 
         soundEnable = Save.gd.isSoundEnable();
         PAD_ZONE= Gdx.graphics.getHeight();
-        BRICK_SUMON_ZONE= (int) (Gdx.graphics.getHeight() - (Gdx.graphics.getHeight() / 1.8f));
+        BRICK_SUMON_ZONE= (int) (Gdx.graphics.getHeight() - (Gdx.graphics.getHeight() / 2f));
         pickedGameplay = Save.gd.getPickedGamePlay();
 
     }

@@ -6,7 +6,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.mygdx.core.MyGdxGame;
 
-public class Enemy extends B2DSprite 
+public class Enemy extends B2DSprite
 {
 	private double health = 20;
 	private Sprite tex;
@@ -39,6 +39,7 @@ public class Enemy extends B2DSprite
     private boolean left = false;
     private boolean fromLeft = false;
     private boolean isTouched = false;
+    private boolean nextLevel = false;
 
     public boolean isJump() {
         return jump;
@@ -206,15 +207,27 @@ public class Enemy extends B2DSprite
         this.dead = dead;
     }
 
-	public Enemy(Body body, boolean fromLeft, boolean isMalicious, float speed)
-	{	
+	public Enemy(Body body, boolean fromLeft, boolean isMalicious, float speed, boolean nextLevel)
+	{
 		super(body);
         this.fromLeft = fromLeft;
         this.isMalicious = isMalicious;
         this.speed = speed;
-		tex = new Sprite(MyGdxGame.atlas.findRegion("enemy"));
-		TextureRegion[] sprites = tex.split( 64, 64)[0];
-		setAnimation(sprites, 1 / 5f);
+        this.nextLevel = nextLevel;
+
+        if(nextLevel) health = health*2;
+
+
+
+        if(nextLevel){
+            tex = new Sprite(MyGdxGame.atlas.findRegion("enemy2"));
+            TextureRegion[] sprites = tex.split( 64, 64)[0];
+            setAnimation(sprites, 1 / 5f);
+        }else {
+            tex = new Sprite(MyGdxGame.atlas.findRegion("enemy"));
+            TextureRegion[] sprites = tex.split( 64, 64)[0];
+            setAnimation(sprites, 1 / 5f);
+        }
 
         normalRight = true;
         normalLeft = false;
@@ -234,9 +247,20 @@ public class Enemy extends B2DSprite
 	}
 
     public void fadeInAnimation(){
-        tex = new Sprite(MyGdxGame.atlas.findRegion("enemyEscapeFadeIn"));
-        TextureRegion[] sprites = tex.split( 64, 64)[0];
-        setAnimation(sprites, 1 / 5f);
+
+        if(nextLevel){
+            tex = new Sprite(MyGdxGame.atlas.findRegion("enemyEscapeFadeIn2"));
+            TextureRegion[] sprites = tex.split( 64, 60)[0];
+            setAnimation(sprites, 1 / 5f);
+        }else{
+            tex = new Sprite(MyGdxGame.atlas.findRegion("enemyEscapeFadeIn"));
+            TextureRegion[] sprites = tex.split( 64, 64)[0];
+            setAnimation(sprites, 1 / 5f);
+        }
+
+
+
+
         normalRight = false;
         normalLeft = false;
         hitRight = false;
@@ -272,11 +296,22 @@ public class Enemy extends B2DSprite
     }
 
     public void fadeInAnimation_rev(){
-        tex = new Sprite(MyGdxGame.atlas.findRegion("enemyEscapeFadeIn"));
-        TextureRegion[] sprites = tex.split( 64, 64)[0];
-        for(int i=0;i<sprites.length;i++)
-            sprites[i].flip(true,false);
-        setAnimation(sprites, 1 / 5f);
+
+        if(nextLevel){
+            tex = new Sprite(MyGdxGame.atlas.findRegion("enemyEscapeFadeIn2"));
+            TextureRegion[] sprites = tex.split( 64, 60)[0];
+            for(int i=0;i<sprites.length;i++)
+                sprites[i].flip(true,false);
+            setAnimation(sprites, 1 / 5f);
+        }else{
+            tex = new Sprite(MyGdxGame.atlas.findRegion("enemyEscapeFadeIn"));
+            TextureRegion[] sprites = tex.split( 64, 64)[0];
+            for(int i=0;i<sprites.length;i++)
+                sprites[i].flip(true,false);
+            setAnimation(sprites, 1 / 5f);
+        }
+
+
         normalRight = false;
         normalLeft = false;
         hitRight = false;
@@ -296,9 +331,16 @@ public class Enemy extends B2DSprite
     }
 
     public void fadeOutAnimation(){
-        tex = new Sprite(MyGdxGame.atlas.findRegion("enemyEscapeFadeOut"));
-        TextureRegion[] sprites = tex.split( 64, 64)[0];
-        setAnimation(sprites, 1 / 8f);
+        if(nextLevel){
+            tex = new Sprite(MyGdxGame.atlas.findRegion("enemyEscapeFadeOut2"));
+            TextureRegion[] sprites = tex.split( 64, 60)[0];
+            setAnimation(sprites, 1 / 8f);
+        }else{
+            tex = new Sprite(MyGdxGame.atlas.findRegion("enemyEscapeFadeOut"));
+            TextureRegion[] sprites = tex.split( 64, 64)[0];
+            setAnimation(sprites, 1 / 8f);
+        }
+
         setLoop(false);
         normalRight = false;
         normalLeft = false;
@@ -320,11 +362,20 @@ public class Enemy extends B2DSprite
 
     public void fadeOutAnimation_rev(){
         System.out.println("fadeOutAnimation_rev");
-        tex = new Sprite(MyGdxGame.atlas.findRegion("enemyEscapeFadeOut"));
-        TextureRegion[] sprites = tex.split( 64, 64)[0];
-        for(int i=0;i<sprites.length;i++)
-            sprites[i].flip(true,false);
-        setAnimation(sprites, 1 / 8f);
+        if(nextLevel){
+            tex = new Sprite(MyGdxGame.atlas.findRegion("enemyEscapeFadeOut2"));
+            TextureRegion[] sprites = tex.split( 64, 64)[0];
+            for(int i=0;i<sprites.length;i++)
+                sprites[i].flip(true,false);
+            setAnimation(sprites, 1 / 8f);
+        }else{
+            tex = new Sprite(MyGdxGame.atlas.findRegion("enemyEscapeFadeOut"));
+            TextureRegion[] sprites = tex.split( 64, 64)[0];
+            for(int i=0;i<sprites.length;i++)
+                sprites[i].flip(true,false);
+            setAnimation(sprites, 1 / 8f);
+        }
+
         setLoop(false);
         normalRight = false;
         normalLeft = false;
@@ -346,10 +397,15 @@ public class Enemy extends B2DSprite
 
     public void climbAnimation(){
         setLoop(true);
-        tex = new Sprite(MyGdxGame.atlas.findRegion("enemyclimb"));
-        TextureRegion[] sprites = tex.split( 64, 64)[0];
-
-        setAnimation(sprites, 1 / 5f);
+        if(nextLevel){
+            tex = new Sprite(MyGdxGame.atlas.findRegion("enemyclimb2"));
+            TextureRegion[] sprites = tex.split( 64, 64)[0];
+            setAnimation(sprites, 1 / 5f);
+        }else{
+            tex = new Sprite(MyGdxGame.atlas.findRegion("enemyclimb"));
+            TextureRegion[] sprites = tex.split( 64, 64)[0];
+            setAnimation(sprites, 1 / 5f);
+        }
         normalRight = false;
         normalLeft = false;
         hitRight = false;
@@ -365,11 +421,20 @@ public class Enemy extends B2DSprite
 
     public void climbAnimation_rev(){
         setLoop(true);
-        tex = new Sprite(MyGdxGame.atlas.findRegion("enemyclimb"));
-        TextureRegion[] sprites = tex.split( 64, 64)[0];
-        for(int i=0;i<sprites.length;i++)
-            sprites[i].flip(true,false);
-        setAnimation(sprites, 1 / 5f);
+        if(nextLevel){
+            tex = new Sprite(MyGdxGame.atlas.findRegion("enemyclimb2"));
+            TextureRegion[] sprites = tex.split( 64, 64)[0];
+            for(int i=0;i<sprites.length;i++)
+                sprites[i].flip(true,false);
+            setAnimation(sprites, 1 / 5f);
+        }else{
+            tex = new Sprite(MyGdxGame.atlas.findRegion("enemyclimb"));
+            TextureRegion[] sprites = tex.split( 64, 64)[0];
+            for(int i=0;i<sprites.length;i++)
+                sprites[i].flip(true,false);
+            setAnimation(sprites, 1 / 5f);
+        }
+
         normalRight = false;
         normalLeft = false;
         hitRight = false;
@@ -385,9 +450,15 @@ public class Enemy extends B2DSprite
 
     public void normalAnimation(){
         setLoop(true);
-        tex = new Sprite(MyGdxGame.atlas.findRegion("enemy"));
-        TextureRegion[] sprites = tex.split( 64, 64)[0];
-        setAnimation(sprites, 1 / 5f);
+        if(nextLevel){
+            tex = new Sprite(MyGdxGame.atlas.findRegion("enemy2"));
+            TextureRegion[] sprites = tex.split( 64, 64)[0];
+            setAnimation(sprites, 1 / 5f);
+        }else {
+            tex = new Sprite(MyGdxGame.atlas.findRegion("enemy"));
+            TextureRegion[] sprites = tex.split( 64, 64)[0];
+            setAnimation(sprites, 1 / 5f);
+        }
         normalRight = true;
         normalLeft = false;
         hitRight = false;
@@ -404,11 +475,20 @@ public class Enemy extends B2DSprite
 
     public void normalAnimation_rev(){
         setLoop(true);
-        tex = new Sprite(MyGdxGame.atlas.findRegion("enemy"));
-        TextureRegion[] sprites = tex.split( 64, 64)[0];
-        for(int i=0;i<sprites.length;i++)
-            sprites[i].flip(true,false);
-        setAnimation(sprites, 1 / 5f);
+        if(nextLevel){
+            tex = new Sprite(MyGdxGame.atlas.findRegion("enemy2"));
+            TextureRegion[] sprites = tex.split( 64, 64)[0];
+            for(int i=0;i<sprites.length;i++)
+                sprites[i].flip(true,false);
+            setAnimation(sprites, 1 / 5f);
+        }else{
+            tex = new Sprite(MyGdxGame.atlas.findRegion("enemy"));
+            TextureRegion[] sprites = tex.split( 64, 64)[0];
+            for(int i=0;i<sprites.length;i++)
+                sprites[i].flip(true,false);
+            setAnimation(sprites, 1 / 5f);
+        }
+
         normalRight = false;
         normalLeft = true;
         hitRight = false;
@@ -431,13 +511,25 @@ public class Enemy extends B2DSprite
 
     public void dieAnimation(boolean isClimbing){
         setLoop(false);
-        if(isClimbing){
-            tex = new Sprite(MyGdxGame.atlas.findRegion("enemyClimbDie"));
+
+        if(nextLevel){
+            if(isClimbing){
+                tex = new Sprite(MyGdxGame.atlas.findRegion("enemyClimbDie2"));
+            }else{
+                tex = new Sprite(MyGdxGame.atlas.findRegion("enemyGroundDie2"));
+            }
+            TextureRegion[] sprites = tex.split( 64, 64)[0];
+            setAnimation(sprites, 1 / 5f);
         }else{
-            tex = new Sprite(MyGdxGame.atlas.findRegion("enemyGroundDie"));
+            if(isClimbing){
+                tex = new Sprite(MyGdxGame.atlas.findRegion("enemyClimbDie"));
+            }else{
+                tex = new Sprite(MyGdxGame.atlas.findRegion("enemyGroundDie"));
+            }
+            TextureRegion[] sprites = tex.split( 64, 64)[0];
+            setAnimation(sprites, 1 / 5f);
         }
-        TextureRegion[] sprites = tex.split( 64, 64)[0];
-        setAnimation(sprites, 1 / 5f);
+
 
         for (Fixture fixture: getBody().getFixtureList()) {
             fixture.setSensor(true);
@@ -455,15 +547,28 @@ public class Enemy extends B2DSprite
 
     public void dieAnimation_rev(boolean isClimbing){
         setLoop(false);
-        if(isClimbing){
-            tex = new Sprite(MyGdxGame.atlas.findRegion("enemyClimbDie"));
+
+        if(nextLevel){
+            if(isClimbing){
+                tex = new Sprite(MyGdxGame.atlas.findRegion("enemyClimbDie2"));
+            }else{
+                tex = new Sprite(MyGdxGame.atlas.findRegion("enemyGroundDie2"));
+            }
+            TextureRegion[] sprites = tex.split( 64, 64)[0];
+            for(int i=0;i<sprites.length;i++)
+                sprites[i].flip(true,false);
+            setAnimation(sprites, 1 / 5f);
         }else{
-            tex = new Sprite(MyGdxGame.atlas.findRegion("enemyGroundDie"));
+            if(isClimbing){
+                tex = new Sprite(MyGdxGame.atlas.findRegion("enemyClimbDie"));
+            }else{
+                tex = new Sprite(MyGdxGame.atlas.findRegion("enemyGroundDie"));
+            }
+            TextureRegion[] sprites = tex.split( 64, 64)[0];
+            for(int i=0;i<sprites.length;i++)
+                sprites[i].flip(true,false);
+            setAnimation(sprites, 1 / 5f);
         }
-        TextureRegion[] sprites = tex.split( 64, 64)[0];
-        for(int i=0;i<sprites.length;i++)
-            sprites[i].flip(true,false);
-        setAnimation(sprites, 1 / 5f);
         normalRight = false;
         normalLeft = false;
         hitRight = false;
@@ -479,32 +584,59 @@ public class Enemy extends B2DSprite
     }
 
     public void mockAnimation(){
-        tex = new Sprite(MyGdxGame.atlas.findRegion("enemyMock"));
-        TextureRegion[] sprites = tex.split( 64, 64)[0];
-        setAnimation(sprites, 1 / 10f);
+        if(nextLevel){
+            tex = new Sprite(MyGdxGame.atlas.findRegion("enemyMock2"));
+            TextureRegion[] sprites = tex.split( 64, 64)[0];
+            setAnimation(sprites, 1 / 10f);
+        }else{
+            tex = new Sprite(MyGdxGame.atlas.findRegion("enemyMock"));
+            TextureRegion[] sprites = tex.split( 64, 64)[0];
+            setAnimation(sprites, 1 / 10f);
+        }
+
         mockRight = true;
         mockLeft = false;
     }
 
     public void mockAnimation_rev(){
-        tex = new Sprite(MyGdxGame.atlas.findRegion("enemyMock"));
-        TextureRegion[] sprites = tex.split( 64, 64)[0];
-        for(int i=0;i<sprites.length;i++)
-            sprites[i].flip(true,false);
-        setAnimation(sprites, 1 / 10f);
+        if(nextLevel){
+            tex = new Sprite(MyGdxGame.atlas.findRegion("enemyMock2"));
+            TextureRegion[] sprites = tex.split( 64, 64)[0];
+            for(int i=0;i<sprites.length;i++)
+                sprites[i].flip(true,false);
+            setAnimation(sprites, 1 / 10f);
+        }else {
+            tex = new Sprite(MyGdxGame.atlas.findRegion("enemyMock"));
+            TextureRegion[] sprites = tex.split( 64, 64)[0];
+            for(int i=0;i<sprites.length;i++)
+                sprites[i].flip(true,false);
+            setAnimation(sprites, 1 / 10f);
+        }
+
         mockRight = false;
         mockLeft = true;
     }
 
     public void hurtAnimation(boolean isClimbing){
         setLoop(true);
-        if(isClimbing){
-            tex = new Sprite(MyGdxGame.atlas.findRegion("enemyClimbHurt"));
+        if(nextLevel){
+            if(isClimbing){
+                tex = new Sprite(MyGdxGame.atlas.findRegion("enemyClimbHurt2"));
+            }else{
+                tex = new Sprite(MyGdxGame.atlas.findRegion("enemyGroundHurt2"));
+            }
+            TextureRegion[] sprites = tex.split( 64, 64)[0];
+            setAnimation(sprites, 1 / 10f);
         }else{
-            tex = new Sprite(MyGdxGame.atlas.findRegion("enemyGroundHurt"));
+            if(isClimbing){
+                tex = new Sprite(MyGdxGame.atlas.findRegion("enemyClimbHurt"));
+            }else{
+                tex = new Sprite(MyGdxGame.atlas.findRegion("enemyGroundHurt"));
+            }
+            TextureRegion[] sprites = tex.split( 64, 64)[0];
+            setAnimation(sprites, 1 / 10f);
         }
-        TextureRegion[] sprites = tex.split( 64, 64)[0];
-        setAnimation(sprites, 1 / 10f);
+
         normalRight = false;
         normalLeft = false;
         hitRight = false;
@@ -518,15 +650,28 @@ public class Enemy extends B2DSprite
 
     public void hurtAnimation_rev(boolean isClimbing){
         setLoop(true);
-        if(isClimbing){
-            tex = new Sprite(MyGdxGame.atlas.findRegion("enemyClimbHurt"));
+        if(nextLevel){
+            if(isClimbing){
+                tex = new Sprite(MyGdxGame.atlas.findRegion("enemyClimbHurt2"));
+            }else{
+                tex = new Sprite(MyGdxGame.atlas.findRegion("enemyGroundHurt2"));
+            }
+            TextureRegion[] sprites = tex.split( 64, 64)[0];
+            for(int i=0;i<sprites.length;i++)
+                sprites[i].flip(true,false);
+            setAnimation(sprites, 1 / 10f);
         }else{
-            tex = new Sprite(MyGdxGame.atlas.findRegion("enemyGroundHurt"));
+            if(isClimbing){
+                tex = new Sprite(MyGdxGame.atlas.findRegion("enemyClimbHurt"));
+            }else{
+                tex = new Sprite(MyGdxGame.atlas.findRegion("enemyGroundHurt"));
+            }
+            TextureRegion[] sprites = tex.split( 64, 64)[0];
+            for(int i=0;i<sprites.length;i++)
+                sprites[i].flip(true,false);
+            setAnimation(sprites, 1 / 10f);
         }
-        TextureRegion[] sprites = tex.split( 64, 64)[0];
-        for(int i=0;i<sprites.length;i++)
-            sprites[i].flip(true,false);
-        setAnimation(sprites, 1 / 10f);
+
         normalRight = false;
         normalLeft = false;
         hitRight = false;

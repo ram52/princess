@@ -81,7 +81,7 @@ public class GameOver extends GameState {
         }
 
         TextureRegion[] sprites = tex.split(110, 168)[0];
-        animSad = new Animation(sprites, 0f);
+        animSad = new Animation(sprites, 1/5f);
 
 
         if(Save.gd.isExcaliburEquiped()){
@@ -91,8 +91,7 @@ public class GameOver extends GameState {
         }
 
         sprites = tex.split(132, 169)[0];
-        animHappy = new Animation(sprites, 0f);
-
+        animHappy = new Animation(sprites, 1/5f);
 
 
         viewport = new Rectangle();

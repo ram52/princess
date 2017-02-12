@@ -143,12 +143,14 @@ public class Shop extends GameState {
                                         Save.gd.setFireBall2Purchased(true);
                                         Save.gd.setFireBallPurchased(true);
                                         Save.gd.setExcaliburEquiped(true);
+                                        Save.gd.setExcaliburPurchased(true);
                                         Save.gd.setMegaJumpEquiped(true);
                                         Save.gd.setBootEquiped(true);
                                         Save.gd.setFireBall2Equiped(true);
                                         Save.gd.setFireBallEquiped(false);
                                         Save.save();
                                         Save.load();
+                                        game.actionResolver.unlockAchievementGPGS(MyGdxGame.achievementSecret);
                                         //showSecretDialog();
                                     }else if(input.equals("coin")){
                                         Save.gd.setMoney(Save.gd.getMoney()+1);
@@ -156,10 +158,10 @@ public class Shop extends GameState {
                                         labelMoney.setText(Integer.toString(Save.gd.getMoney()));
                                         Save.load();
                                     }else if(input.equals("lot of coins")){
-                                        Save.gd.setMoney(Save.gd.getMoney()+10);
-                                        Save.save();
-                                        labelMoney.setText(Integer.toString(Save.gd.getMoney()));
-                                        Save.load();
+//                                        Save.gd.setMoney(Save.gd.getMoney()+10);
+//                                        Save.save();
+//                                        labelMoney.setText(Integer.toString(Save.gd.getMoney()));
+//                                        Save.load();
                                     }
                                 }
 
@@ -514,7 +516,7 @@ public class Shop extends GameState {
                 Save.load();
                 NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
                 String cur = currencyFormatter.format(1).replaceAll("[0-9.,]","");;
-                int value = 20;
+                int value = 40;
                 ShopDialog dialog = new ShopDialog(Shop.this,
                         "\n\n" +
                                 value+" FREE COINS\n" +

@@ -278,8 +278,8 @@ public class Menu extends GameState {
         stage1.addActor(buttonTuto);
 
         labelCopyright = new Label("(c) RAM52 Credits 2017", new LabelStyle(new BitmapFont( Gdx.files.internal(MyGdxGame.fontScorePath), false), Color.WHITE));
-        labelCopyright.setWidth(Gdx.graphics.getWidth() / 2.5f);
-        labelCopyright.setHeight(Gdx.graphics.getHeight() / 20);
+        labelCopyright.setWidth(Gdx.graphics.getWidth() / 3f);
+        labelCopyright.setHeight(Gdx.graphics.getHeight() / 40);
         labelCopyright.setFontScale(Gdx.graphics.getWidth() / 500f);
         labelCopyright.setAlignment(Align.center);
         labelCopyright.setPosition(0, -500);
@@ -946,7 +946,7 @@ public class Menu extends GameState {
             sb3.end();
 
             //TEXT HOW TO ANIM
-            if (stage1.getActors().items[2].getTop() <= Gdx.graphics.getHeight() / 8.5f) {
+            if (stage1.getActors().items[2].getTop() <= Gdx.graphics.getHeight() / 7.5f) {
                 stage1.getActors().items[2].setPosition((Gdx.graphics.getWidth() / 2f) - stage1.getActors().items[2].getWidth() / 2f, (-stage1.getActors().items[2].getHeight() + cpt_translate_animation1 * 10f));
                 cpt_translate_animation1++;
             } else {

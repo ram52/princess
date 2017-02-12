@@ -98,6 +98,7 @@ public class Play extends GameState {
     private Player player;
     private Princess princess;
     private Array<Enemy> enemies;
+    private boolean enemyIsNextLevel = false;
     private Array<B2DSprite> bodyToDestroy;
     private Brick brick;
     private Lightning lightning;
@@ -185,6 +186,7 @@ public class Play extends GameState {
     private Image gamePlaySelection;
     private SpriteBatch sbKyaa;
     private int cpt_tuto = 0;
+    private float powerUpBar_MaxHeight = 0.0f;
 
     private boolean getRandomBoolean() {
         Random random = new Random();
@@ -199,6 +201,8 @@ public class Play extends GameState {
         if(isTutorial){
             pickedGameplay = -1;
         }
+
+
 
         sbKyaa = new SpriteBatch();
 
@@ -414,7 +418,7 @@ public class Play extends GameState {
         float space = (Gdx.graphics.getWidth() - (size*4))/5;
         buttonLeft.setWidth(size);
         buttonLeft.setHeight(size);
-        buttonLeft.setPosition(space, space*3);
+        buttonLeft.setPosition(space, space*4);
         //buttonLeft.setBounds(0,0,Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight());
         stageUiControl.addActor(buttonLeft);
 
@@ -436,7 +440,7 @@ public class Play extends GameState {
         if(MyGdxGame.pickedGameplay == 2){
             buttonFire.setPosition(buttonRight.getRight()+space, buttonLeft.getY());
         }else{
-            buttonFire.setPosition((Gdx.graphics.getWidth()-buttonFire.getWidth())/2, buttonLeft.getY()*0.65f);
+            buttonFire.setPosition((Gdx.graphics.getWidth()-buttonFire.getWidth())/2, buttonLeft.getY());
         }
 
         Button.ButtonStyle grayButtonStyle = new Button.ButtonStyle();
@@ -446,16 +450,19 @@ public class Play extends GameState {
         buttonGray.setWidth(buttonFire.getWidth());
         buttonGray.setHeight(buttonFire.getHeight()/1.7f);
         buttonGray.setPosition(buttonFire.getX(), buttonFire.getY()/2 + buttonGray.getHeight()/2);
-        stageUiControl.addActor(buttonGray);
+        //stageUiControl.addActor(buttonGray);
 
         Button.ButtonStyle redButtonStyle = new Button.ButtonStyle();
         redButtonStyle.up = skin.getDrawable("red");
         redButtonStyle.down = skin.getDrawable("red");
         buttonRed = new Button(redButtonStyle);
         buttonRed.setWidth(buttonFire.getWidth());
-        buttonRed.setHeight(buttonFire.getHeight()/1.7f);
-        buttonRed.setPosition(buttonFire.getX(), buttonFire.getY()/2 + buttonRed.getHeight()/2);
-        stageUiControl.addActor(buttonRed);
+
+
+        powerUpBar_MaxHeight = buttonFire.getHeight()/1.46f - offsetY;
+        buttonRed.setHeight(powerUpBar_MaxHeight);
+        buttonRed.setPosition(buttonFire.getX(), buttonFire.getY()+space);
+        //stageUiControl.addActor(buttonRed);
 
         stageUiControl.addActor(buttonFire);
 
@@ -570,6 +577,7 @@ public class Play extends GameState {
 
         createTiles();
         createPlayer();
+
         //createBrick(MyGdxGame.V_WIDTH/5/PPM, player.getPosition().y - player.getHeight()/2.8f/PPM);
 
         if(!Play.this.isTutorial){
@@ -1144,11 +1152,12 @@ public class Play extends GameState {
         if(pickedGameplay == 2){
             buttonFire.setPosition(buttonRight.getRight()+space, buttonLeft.getY());
         }else{
-            buttonFire.setPosition((Gdx.graphics.getWidth()-buttonFire.getWidth())/2, buttonLeft.getY()*0.65f);
+            buttonFire.setPosition((Gdx.graphics.getWidth()-buttonFire.getWidth())/2, buttonLeft.getY());
         }
         buttonGray.setPosition(buttonFire.getX(), buttonFire.getY()/2 + buttonGray.getHeight()/2);
-        buttonRed.setPosition(buttonFire.getX(), buttonFire.getY()/2 + buttonRed.getHeight()/2);
+        buttonRed.setPosition(buttonFire.getX(), buttonFire.getY()+space);
         buttonJump.setPosition(buttonFire.getRight()+space, buttonLeft.getY());
+
     }
 
     public void handleInput() {
@@ -1191,10 +1200,10 @@ public class Play extends GameState {
 
                 if(Save.gd.isBrick2Equiped()){
                     if(brick == null){
-                        brick = createBrick(lastClickPos, player.getHeight()/PPM + Gdx.graphics.getHeight()/PPM);
+                        brick = createBrick(lastClickPos, Gdx.graphics.getHeight()/PPM);
                     }else{
                         if(brick.getDead()){
-                            brick = createBrick(lastClickPos, player.getHeight()/PPM + Gdx.graphics.getHeight()/PPM);
+                            brick = createBrick(lastClickPos, Gdx.graphics.getHeight()/PPM);
                         }
                     }
 
@@ -1292,7 +1301,7 @@ public class Play extends GameState {
             //todo summon brick
             if(brick == null){
                 lastClickPos = player.getPosition().x;
-                brick = createBrick(lastClickPos, player.getHeight()/PPM + Gdx.graphics.getHeight()/PPM);
+                brick = createBrick(lastClickPos, Gdx.graphics.getHeight()/PPM);
                 brick.setX(lastClickPos);
                 if(!MyGdxGame.pause){
                     if(!brick.isSummoned() && enableBrick){
@@ -1635,14 +1644,12 @@ public class Play extends GameState {
             soundButtonStyle.down = skin.getDrawable("buttonSound2Full");
             buttonSound.setStyle(soundButtonStyle);
         }
-
-
     }
 
-    private void setButtonColor(Button button, String color){
+    private void setButtonColor(Button button, String color1, String color2){
         Button.ButtonStyle buttonStyle = new Button.ButtonStyle();
-        buttonStyle.up = skin.getDrawable(color);
-        buttonStyle.down = skin.getDrawable(color);
+        buttonStyle.up = skin.getDrawable(color1);
+        buttonStyle.down = skin.getDrawable(color2);
         button.setStyle(buttonStyle);
     }
 
@@ -1721,21 +1728,11 @@ public class Play extends GameState {
                 lightning.getBody().setLinearVelocity(4, lightning.getBody().getLinearVelocity().y);
             }
 
-            if(MyGdxGame.pause){
-                MyGdxGame.res.getMusic("epic").stop();
-            }else{
-                if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2){
-                    if(!MyGdxGame.res.getMusic("epic").isPlaying()){
-                        MyGdxGame.res.getMusic("epic").play();
-                    }
-                }else{
-                    MyGdxGame.res.getMusic("epic").stop();
-                }
-            }
 
-            float speed = 10.0f;
 
-            if(Math.abs(beamWidth) > MyGdxGame.V_WIDTH*10){
+            float speed = Gdx.graphics.getWidth()/64f;
+
+            if(Math.abs(beamWidth)/PPM > powerUpBar_MaxHeight){
                 lightningReachLimit = !lightningReachLimit;
             }
 
@@ -1756,9 +1753,7 @@ public class Play extends GameState {
                 bodyToDestroy.add(lightning);
                 //lightning.destroy();
                 lightning = null;
-                if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2){
-                    MyGdxGame.res.getMusic("main").play();
-                }
+
             }
 
 
@@ -1778,37 +1773,24 @@ public class Play extends GameState {
         float w = 0.0f;
         float h = 0.0f;
 
-        float speed = 10.0f;
+        float speed = Gdx.graphics.getWidth()/64f;
 
         float reduce = 1.0f;
 
-        float scaledValue = Math.abs(1 - ((beamWidth - 0) / (MyGdxGame.V_WIDTH*10)));
+        float scaledValue = Math.abs(1 - ((beamWidth - 0) / (powerUpBar_MaxHeight*PPM)));
 
-        System.out.println(scaledValue);
-        if(Math.abs(beamWidth) > MyGdxGame.V_WIDTH*10){
+
+        if(Math.abs(beamWidth)/PPM > powerUpBar_MaxHeight){
             kamehaReachLimit = !kamehaReachLimit;
         }
 
-        if(Math.abs(beamWidth) > MyGdxGame.V_WIDTH*7){
-            reduce = (float) Math.exp(scaledValue*5f);
+        if(Math.abs(beamWidth)/PPM > powerUpBar_MaxHeight/1.5f){
+            reduce = (float) Math.exp(scaledValue*1.35f);
             megaKameha = true;
         }else{
             megaKameha = false;
         }
 
-        MyGdxGame.res.getMusic("main").stop();
-
-        if(MyGdxGame.pause){
-            MyGdxGame.res.getMusic("epic").stop();
-        }else{
-            if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2){
-                if(!MyGdxGame.res.getMusic("epic").isPlaying()){
-                    MyGdxGame.res.getMusic("epic").play();
-                }
-            }else{
-                MyGdxGame.res.getMusic("epic").stop();
-            }
-        }
 
         if(!kamehaReachLimit){
             if(!MyGdxGame.pause)
@@ -1818,9 +1800,6 @@ public class Play extends GameState {
             kamehaReachLimit = false;
             beamWidth = 0;
             blockKamehameha = true;
-            if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2){
-                MyGdxGame.res.getMusic("main").play();
-            }
         }
 
         sb.begin();
@@ -1863,7 +1842,7 @@ public class Play extends GameState {
                         animKamehameha0.getFrame().getRegionHeight()*scale*reduce);
 
                 sb.draw(animKamehameha1_rev.getFrame(),
-                        player.getPosition().x*PPM - gap,
+                        player.getPosition().x*PPM - gap/1.15f,
                         player.getPosition().y*PPM - animKamehameha1.getFrame().getRegionHeight()*reduce*scale/2,
                         animKamehameha1_rev.getFrame().getRegionWidth()*scale - beamWidth,
                         animKamehameha1.getFrame().getRegionHeight()*scale*reduce);
@@ -2490,6 +2469,14 @@ public class Play extends GameState {
             tutoGamePlay2();
         }
 
+        try
+        {
+            MyGdxGame.lastScoreInTutorial = Integer.valueOf(labelScore.getText().toString());
+        }catch (NumberFormatException e){
+            System.out.println(e.getMessage());
+        }
+
+
     }
 
     private void tutoGamePlay1(){
@@ -2564,7 +2551,7 @@ public class Play extends GameState {
             }
 
 
-            if(pointer.getPosition().y < MyGdxGame.V_HEIGHT/2.5f/PPM - pointer.getHeight()/PPM){
+            if(pointer.getPosition().y < MyGdxGame.V_HEIGHT/1.9f/PPM - pointer.getHeight()/PPM){
                 pointer.getBody().setTransform(MyGdxGame.V_WIDTH/2/PPM, MyGdxGame.V_HEIGHT/1.7f/PPM, pointer.getBody().getAngle());
                 cpt_tuto = 0;
             }else{
@@ -2576,7 +2563,7 @@ public class Play extends GameState {
         if(!tuto_step4 && tuto_step3 && !right && !left){
             hidePointer = true;
             tuto_step4 = true;
-            pointer.getBody().setTransform( pointer.getPosition().x, MyGdxGame.V_WIDTH/1.5f/PPM - pointer.getHeight()/PPM, pointer.getBody().getAngle());
+            pointer.getBody().setTransform( pointer.getPosition().x, MyGdxGame.V_WIDTH/1.1f/PPM - pointer.getHeight()/PPM, pointer.getBody().getAngle());
         }
 
         //move pointer from bottom to top
@@ -2585,8 +2572,8 @@ public class Play extends GameState {
 
             if(!pointer.getRotate90()) pointer.rotateAnimation90();
 
-            if(pointer.getPosition().y > MyGdxGame.V_HEIGHT/1.2f/PPM - pointer.getHeight()/PPM){
-                pointer.getBody().setTransform(pointer.getPosition().x, MyGdxGame.V_WIDTH/1.5f/PPM - pointer.getHeight()/PPM , pointer.getBody().getAngle());
+            if(pointer.getPosition().y > MyGdxGame.V_HEIGHT/1.1f/PPM - pointer.getHeight()/PPM){
+                pointer.getBody().setTransform(pointer.getPosition().x, MyGdxGame.V_WIDTH/1.2f/PPM - pointer.getHeight()/PPM , pointer.getBody().getAngle());
                 cpt_tuto = 0;
             }else{
                 cpt_tuto++;
@@ -2759,6 +2746,7 @@ public class Play extends GameState {
 
     public void update(float dt) {
 
+        if(offsetY<=0) offsetY = 100f;
 
         if(pointer != null ) {
             if(!pointer.getPlaying() && MyGdxGame.pickedGameplay == 2)pointer.normalAnimation();
@@ -2850,16 +2838,19 @@ public class Play extends GameState {
             }
 
             //block brick at screen extremities
-            if (brick.getPosition().x * PPM <= brick.getWidth()/2) {
-                brick.getBody().setType(BodyType.DynamicBody);
-                brick.getBody().setLinearVelocity(0,0);
-                brick.getBody().setTransform(brick.getWidth()/2/PPM, brick.getPosition().y, brick.getBody().getAngle());
-            }else if(brick.getPosition().x*PPM + brick.getWidth()/2 >= Gdx.graphics.getWidth()){
-                //brick.getBody().setGravityScale(0);
-                brick.getBody().setType(BodyType.DynamicBody);
-                brick.getBody().setLinearVelocity(0,0);
-                brick.getBody().setTransform(MyGdxGame.V_WIDTH/PPM - brick.getWidth()/2/PPM, brick.getPosition().y, brick.getBody().getAngle());
+            if(!brick.isFalling()){
+                if (brick.getPosition().x * PPM <= brick.getWidth()/2) {
+                    brick.getBody().setType(BodyType.DynamicBody);
+                    brick.getBody().setLinearVelocity(0,0);
+                    brick.getBody().setTransform(brick.getWidth()/2/PPM, brick.getPosition().y, brick.getBody().getAngle());
+                }else if(brick.getPosition().x*PPM + brick.getWidth()/2 >= Gdx.graphics.getWidth()){
+                    //brick.getBody().setGravityScale(0);
+                    brick.getBody().setType(BodyType.DynamicBody);
+                    brick.getBody().setLinearVelocity(0,0);
+                    brick.getBody().setTransform(MyGdxGame.V_WIDTH/PPM - brick.getWidth()/2/PPM, brick.getPosition().y, brick.getBody().getAngle());
+                }
             }
+
 
             if(player.getPosition().y*PPM > 256.5 + 64*1.5f){
                 cl.setNumFootBrickContacts(0);
@@ -3013,9 +3004,11 @@ public class Play extends GameState {
         MyGdxGame.background_cloud.update(dt);
 
 
-
-
         labelScore.setText(Integer.toString(player.getNumCoins()));
+
+        if(player.getNumCoins() >= 100){
+            enemyIsNextLevel = true;
+        }
 
         if(player.getBody().getPosition().y < -0.3f){
 
@@ -3138,24 +3131,30 @@ public class Play extends GameState {
 
         if(MyGdxGame.pickedGameplay == 2 | MyGdxGame.pickedGameplay == 1) {
             //power up bar
-            float c = buttonFire.getHeight()/1.7f;
+
+            if(offsetY <= 0) offsetY = 100;
+
             float h = buttonRed.getHeight();
+
+//            buttonRed.setHeight(buttonFire.getHeight()/1.6f);
+//            buttonRed.setPosition(buttonFire.getX(), buttonFire.getY()*2.7f);
 
             if(Save.gd.isKamehamehaEquiped()){
                 buttonRed.setHeight(h);
 
                 if(reloadKamehameha != 0)
-                    setButtonColor(buttonRed,"yellow");
+                    setButtonColor(buttonFire,"yellow", "yellow");
                 else
-                    setButtonColor(buttonRed,"red");
+                    setButtonColor(buttonFire,"red","buttonUiBossJumpDown");
 
 
                 if(!blockKamehameha){
                     reloadKamehameha = 0;
-                    h = c -(beamWidth*1.5f/ c);
+                    System.out.println(offsetY);
+                    h = powerUpBar_MaxHeight - (beamWidth/ powerUpBar_MaxHeight)*offsetY/PPM;
                     buttonRed.setHeight(h);
                 }else{
-                    if(reloadKamehameha <= c){
+                    if(reloadKamehameha <= powerUpBar_MaxHeight){
                         if(!MyGdxGame.pause) reloadKamehameha+=0.3;
                     }
                     else{
@@ -3174,17 +3173,17 @@ public class Play extends GameState {
             if(Save.gd.isLightningEquiped()){
                 buttonRed.setHeight(h);
                 if(reloadLightning != 0)
-                    setButtonColor(buttonRed,"yellow");
+                    setButtonColor(buttonFire,"yellow", "yellow");
                 else {
-                    setButtonColor(buttonRed,"red");
+                    setButtonColor(buttonFire,"red","buttonUiBossJumpDown");
                 }
 
                 if(!blockLightning){
                     reloadLightning = 0;
-                    h = c -(beamWidth*1.5f/ c);
+                    h = powerUpBar_MaxHeight - (beamWidth/ powerUpBar_MaxHeight)*offsetY/PPM;
                     buttonRed.setHeight(h);
                 }else{
-                    if(reloadLightning <= c){
+                    if(reloadLightning <= powerUpBar_MaxHeight){
                         //System.out.println("reloadLightning"+reloadLightning+" "+max);
                         if(!MyGdxGame.pause) reloadLightning+=0.1;
                     } else{
@@ -3205,8 +3204,8 @@ public class Play extends GameState {
 
             if(Save.gd.isFireBallEquiped()|Save.gd.isFireBall2Equiped()){
                 buttonRed.setHeight(h);
-                setButtonColor(buttonRed,"red");
-                h = (c /MAXFIREBALLCOUNT)*player.getFireBallCount();
+                setButtonColor(buttonFire,"red","buttonUiBossJumpDown");
+                h = (powerUpBar_MaxHeight /MAXFIREBALLCOUNT)*player.getFireBallCount();
                 if(player.getFireBallCount()>0){
                     buttonRed.setHeight(h);
                 }
@@ -3427,7 +3426,7 @@ public class Play extends GameState {
         if(step4) speed = 1.2f;
         if(step5) speed = 1.4f;
 
-        return new Enemy(body, fromLeft, isMalicious, speed);
+        return new Enemy(body, fromLeft, isMalicious, speed, enemyIsNextLevel);
     }
 
     private void createHand(float x, float y) {
@@ -3726,7 +3725,18 @@ public class Play extends GameState {
         float w = (float) MyGdxGame.V_WIDTH * scale;
         float h = (float) MyGdxGame.V_HEIGHT * scale;
         viewport = new Rectangle(crop.x, 0, w, h);
+
+    if(offsetY <= 0){
+        float a = 0;
+        if(crop.y >= 0)
+            a = 2f*crop.y/PPM;
+
+        powerUpBar_MaxHeight = (buttonFire.getHeight()/1.46f) - a;
+        buttonRed.setHeight(powerUpBar_MaxHeight);
         offsetY = crop.y;
+    }
+
+
         float offsetY = crop.y;
         float offsetX = crop.x;
 
