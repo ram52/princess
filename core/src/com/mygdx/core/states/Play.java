@@ -66,6 +66,7 @@ import java.util.concurrent.TimeUnit;
 
 import static com.mygdx.core.MyGdxGame.DEBUG;
 import static com.mygdx.core.MyGdxGame.font;
+import static com.mygdx.core.MyGdxGame.font2;
 import static com.mygdx.core.MyGdxGame.lastBrickPosition;
 import static com.mygdx.core.MyGdxGame.lastPlayerPosition;
 import static com.mygdx.core.MyGdxGame.lastPrincessPosition;
@@ -201,8 +202,6 @@ public class Play extends GameState {
         if(isTutorial){
             pickedGameplay = -1;
         }
-
-
 
         sbKyaa = new SpriteBatch();
 
@@ -418,7 +417,7 @@ public class Play extends GameState {
         float space = (Gdx.graphics.getWidth() - (size*4))/5;
         buttonLeft.setWidth(size);
         buttonLeft.setHeight(size);
-        buttonLeft.setPosition(space, space*4);
+        buttonLeft.setPosition(space, space*3.2f);
         //buttonLeft.setBounds(0,0,Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight());
         stageUiControl.addActor(buttonLeft);
 
@@ -1350,9 +1349,9 @@ public class Play extends GameState {
         //FIRE BALL
         if(Save.gd.isFireBallEquiped() && fire && player.getFireBallCount()>0){
             fire = false;
-            if(!isTutorial){
+            //if(!isTutorial){
                 player.setFireBallCount(player.getFireBallCount()-4);
-            }
+            //}
             //todo sound
             if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("fireball").play();
             float gap = 10.0f/PPM;
@@ -1369,9 +1368,9 @@ public class Play extends GameState {
         //FIRE BALL2
         if(Save.gd.isFireBall2Equiped() && fire && player.getFireBallCount()>0){
             fire = false;
-            if(!isTutorial){
+            //if(!isTutorial){
                 player.setFireBallCount(player.getFireBallCount()-1);
-            }
+            //}
             //todo sound
             if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("fireball").play();
             float gap = 10.0f/PPM;
@@ -2109,7 +2108,7 @@ public class Play extends GameState {
                         if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("boom").play();
                         if(Save.gd.isFireBallEquiped() && enemiesKilled >= 4 && player.getFireBallCount()< MAXFIREBALLCOUNT){
                             fire = false;
-                            player.setFireBallCount(player.getFireBallCount()+1);
+                            player.setFireBallCount(player.getFireBallCount()+4);
                             enemiesKilled = 0;
                             System.out.println("increment fireball count!");
                         }else{
@@ -2746,7 +2745,6 @@ public class Play extends GameState {
 
     public void update(float dt) {
 
-        if(offsetY<=0) offsetY = 100f;
 
         if(pointer != null ) {
             if(!pointer.getPlaying() && MyGdxGame.pickedGameplay == 2)pointer.normalAnimation();
@@ -3132,8 +3130,6 @@ public class Play extends GameState {
         if(MyGdxGame.pickedGameplay == 2 | MyGdxGame.pickedGameplay == 1) {
             //power up bar
 
-            if(offsetY <= 0) offsetY = 100;
-
             float h = buttonRed.getHeight();
 
 //            buttonRed.setHeight(buttonFire.getHeight()/1.6f);
@@ -3375,6 +3371,45 @@ public class Play extends GameState {
             sb.end();
         }
 
+        //equipment bar
+        equipmentBar();
+
+        sb.begin();
+
+        font2.setColor(Color.WHITE);
+
+        String value = String.valueOf(player.getFireBallCount());
+
+        if(Save.gd.isFireBallEquiped()){
+            value = String.valueOf((int)Math.round((float)player.getFireBallCount()/3f));
+        }
+
+        if(player.getFireBallCount()< 1){
+            value = "0";
+        }
+
+        if(Save.gd.isFireBall2Equiped() | Save.gd.isFireBallEquiped()){
+            if(pickedGameplay == 2){
+                font2.drawMultiLine(sb,
+                        value ,
+                        MyGdxGame.V_WIDTH/1.733f,
+                        (MyGdxGame.V_HEIGHT/7.5f) - 11f*offsetY/PPM,
+                        MyGdxGame.V_WIDTH/10f,
+                        BitmapFont.HAlignment.CENTER);
+            }
+
+            if(pickedGameplay == 1){
+                font2.drawMultiLine(sb,
+                        value ,
+                        MyGdxGame.V_WIDTH/2.205f,
+                        (MyGdxGame.V_HEIGHT/7.5f) - 11f*offsetY/PPM,
+                        MyGdxGame.V_WIDTH/10f,
+                        BitmapFont.HAlignment.CENTER);
+            }
+        }
+
+
+        sb.end();
 
 
         sb.setProjectionMatrix(hudCam.combined);
@@ -3394,6 +3429,40 @@ public class Play extends GameState {
         Gdx.gl.glViewport(0,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         MyGdxGame.fadeIn.render(sb);
 
+    }
+
+    void equipmentBar(){
+        if(!isTutorial|tuto_step0){
+            shapeRenderer.setColor(new Color());
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.rect(0,0,Gdx.graphics.getWidth(), Gdx.graphics.getHeight()/14f);
+            shapeRenderer.end();
+
+
+        Animation coin = new Animation(new Sprite(MyGdxGame.atlas.findRegion("coin")).split(64, 64)[0], 1 / 5f);
+        coin.update(MyGdxGame.STEP);
+
+        sb.begin();
+        float x = Gdx.graphics.getHeight()/60f;
+        float y = Gdx.graphics.getHeight()/250f;
+        float w = Gdx.graphics.getHeight()/16f;
+        float h = Gdx.graphics.getHeight()/16f;
+
+        sb.draw(coin.getFrame(), x , y, w, h);
+
+        String value = "x"+String.valueOf(Save.gd.getMoney());
+        font2.getData().scaleX = 1.5f;
+        font2.getData().scaleY = 1.5f;
+        font2.drawMultiLine(sb,
+                value ,
+                x + w*1.1f,
+                h/1.15f,
+                font2.getBounds(value).width,
+                BitmapFont.HAlignment.CENTER);
+
+        sb.end();
+
+        }
     }
 
     private Enemy createEnemy(float x, float y, boolean fromLeft) {
@@ -3726,15 +3795,9 @@ public class Play extends GameState {
         float h = (float) MyGdxGame.V_HEIGHT * scale;
         viewport = new Rectangle(crop.x, 0, w, h);
 
-    if(offsetY <= 0){
-        float a = 0;
-        if(crop.y >= 0)
-            a = 2f*crop.y/PPM;
 
-        powerUpBar_MaxHeight = (buttonFire.getHeight()/1.46f) - a;
-        buttonRed.setHeight(powerUpBar_MaxHeight);
         offsetY = crop.y;
-    }
+
 
 
         float offsetY = crop.y;

@@ -64,7 +64,7 @@ public class MyGdxGame implements ApplicationListener {
     private static boolean android = true;
     public static B2DSprite fadeIn, fadeOut;
     public static float FADE_DELAY = 1/50f;
-    public static BitmapFont font;
+    public static BitmapFont font, font2;
     public static String debugString = "";
     public static float GROUND = 2.5621998f; //todo use box2d
     public static int MONEY_BY_ENEMY = 2;
@@ -120,6 +120,7 @@ public class MyGdxGame implements ApplicationListener {
     public static String fontTextPath = "data/font/font1.fnt";
     public static String fontScorePath = "data/font/font2.fnt";
     public static String fontPointPath = "data/font/font3.fnt";
+    public static String fontfsexPath = "data/font/FSEX300-32.fnt";
     public static String mapPath = "data/map/map1.tmx";
     public static String desktopIconPath = "data/sprite/icon/ic_launcher.png";
     public static String AndroidPlayStoreGameUrl = "https://play.google.com/store/apps/details?id=com.axldotm.runningbird";
@@ -190,6 +191,8 @@ public class MyGdxGame implements ApplicationListener {
         //font = new BitmapFont();
         fps = new FPSLogger();
         font = new BitmapFont(Gdx.files.internal(MyGdxGame.fontTextPath), false);
+        font2 = new BitmapFont(Gdx.files.internal(MyGdxGame.fontfsexPath), false);
+
         viewport = new Rectangle();
         intro = new Image(new Texture(Gdx.files.internal("data/sprite/loading.png")));
         intro.setFillParent(true);
@@ -294,7 +297,8 @@ public class MyGdxGame implements ApplicationListener {
                 progress = 100;
 
                 if(!res.getMusic("on").isPlaying()){
-                    res.getMusic("on").play();
+                    if((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2))
+                        res.getMusic("on").play();
                 }
 
                 System.out.println(TAG+"-->"+"LOADING...  " + progress+"%");
