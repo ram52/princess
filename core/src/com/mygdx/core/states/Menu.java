@@ -192,8 +192,8 @@ public class Menu extends GameState {
 
 
         style = new ButtonStyle();
-        style.up = skin.getDrawable("buttonUiOptionSkyUp");
-        style.down = skin.getDrawable("buttonUiOptionSkyDown");
+        style.up = skin.getDrawable("coin");
+        style.down = skin.getDrawable("coin");
         buttonBackImage = new Button(style);
         buttonBackImage.setWidth(Gdx.graphics.getHeight() / 7f);
         buttonBackImage.setHeight(Gdx.graphics.getHeight() / 7f);

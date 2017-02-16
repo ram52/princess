@@ -222,6 +222,11 @@ public class Play extends GameState {
             Save.gd.setBootEquiped(false);
         }
 
+        if(!Save.gd.isFireBallEquiped() && !Save.gd.isFireBall2Equiped() && !Save.gd.isKamehamehaEquiped() && !Save.gd.isLightningEquiped()){
+            Save.gd.setFireBallEquiped(true);
+            Save.save();
+        }
+
         /*if(MyGdxGame.isSoundEnable()) {
             MyGdxGame.res.getMusic("main").setVolume(0.15f);
             if(!MyGdxGame.res.getMusic("main").isPlaying())
@@ -416,8 +421,8 @@ public class Play extends GameState {
         float size = (Gdx.graphics.getWidth() / 4.2f);
         float space = (Gdx.graphics.getWidth() - (size*4))/5;
         buttonLeft.setWidth(size);
-        buttonLeft.setHeight(size);
-        buttonLeft.setPosition(space, space*3.2f);
+        buttonLeft.setHeight(size/1.2f);
+        buttonLeft.setPosition(space, space*12f);
         //buttonLeft.setBounds(0,0,Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight());
         stageUiControl.addActor(buttonLeft);
 
@@ -431,8 +436,8 @@ public class Play extends GameState {
         stageUiControl.addActor(buttonRight);
 
         Button.ButtonStyle fireButtonStyle = new Button.ButtonStyle();
-        fireButtonStyle.up = skin.getDrawable("buttonUiBossJumpUp");
-        fireButtonStyle.down = skin.getDrawable("buttonUiBossJumpDown");
+        fireButtonStyle.up = skin.getDrawable("buttonActionUp");
+        fireButtonStyle.down = skin.getDrawable("buttonActionDown");
         buttonFire = new Button(fireButtonStyle);
         buttonFire.setWidth(buttonLeft.getWidth());
         buttonFire.setHeight(buttonLeft.getHeight());
@@ -466,8 +471,8 @@ public class Play extends GameState {
         stageUiControl.addActor(buttonFire);
 
         Button.ButtonStyle jumpButtonStyle = new Button.ButtonStyle();
-        jumpButtonStyle.up = skin.getDrawable("buttonJumpUp");
-        jumpButtonStyle.down = skin.getDrawable("buttonJumpDown");
+        jumpButtonStyle.up = skin.getDrawable("buttonActionUp");
+        jumpButtonStyle.down = skin.getDrawable("buttonActionDown");
         buttonJump = new Button(jumpButtonStyle);
         buttonJump.setDisabled(true);
         buttonJump.setWidth(buttonFire.getWidth());
@@ -709,8 +714,8 @@ public class Play extends GameState {
         labelPause.setPosition((Gdx.graphics.getWidth() - labelPause.getWidth()) / 2, (Gdx.graphics.getHeight() - labelPause.getHeight()) / 2);
         //stage1.addActor(labelPause);
 
-        float ymargin = 36f;
-        if(MyGdxGame.pickedGameplay == 2) ymargin = 4.5f;
+        float ymargin = 4.5f;
+        //if(MyGdxGame.pickedGameplay == 2) ymargin = 24.5f;
         Skin skinButtonPlay = new Skin();
         skinButtonPlay.addRegions(MyGdxGame.atlas);
         Button.ButtonStyle buttonStylePlay = new Button.ButtonStyle();
@@ -1148,18 +1153,25 @@ public class Play extends GameState {
     private void updateButtonPosition(){
         float size = (Gdx.graphics.getWidth() / 4.2f);
         float space = (Gdx.graphics.getWidth() - (size*4))/5;
+
+        if(offsetY > 0){
+            buttonLeft.setPosition(space, space*15f);
+            buttonRight.setPosition(buttonRight.getX(), buttonLeft.getY());
+        }
+
+
         if(pickedGameplay == 2){
             buttonFire.setPosition(buttonRight.getRight()+space, buttonLeft.getY());
         }else{
             buttonFire.setPosition((Gdx.graphics.getWidth()-buttonFire.getWidth())/2, buttonLeft.getY());
         }
-        buttonGray.setPosition(buttonFire.getX(), buttonFire.getY()/2 + buttonGray.getHeight()/2);
-        buttonRed.setPosition(buttonFire.getX(), buttonFire.getY()+space);
+
         buttonJump.setPosition(buttonFire.getRight()+space, buttonLeft.getY());
 
     }
 
     public void handleInput() {
+        updateButtonPosition();
 
 //        if(Gdx.input.justTouched() && Gdx.input.getY() > MyGdxGame.BRICK_SUMON_ZONE && pickedGameplay == 1){
 //            System.out.println("fire!");
@@ -1350,7 +1362,7 @@ public class Play extends GameState {
         if(Save.gd.isFireBallEquiped() && fire && player.getFireBallCount()>0){
             fire = false;
             //if(!isTutorial){
-                player.setFireBallCount(player.getFireBallCount()-4);
+            player.setFireBallCount(player.getFireBallCount()-4);
             //}
             //todo sound
             if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("fireball").play();
@@ -1369,7 +1381,7 @@ public class Play extends GameState {
         if(Save.gd.isFireBall2Equiped() && fire && player.getFireBallCount()>0){
             fire = false;
             //if(!isTutorial){
-                player.setFireBallCount(player.getFireBallCount()-1);
+            player.setFireBallCount(player.getFireBallCount()-1);
             //}
             //todo sound
             if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("fireball").play();
@@ -1784,7 +1796,7 @@ public class Play extends GameState {
         }
 
         if(Math.abs(beamWidth)/PPM > powerUpBar_MaxHeight/1.5f){
-            reduce = (float) Math.exp(scaledValue*1.35f);
+            reduce = (float) Math.exp(scaledValue*1.75f);
             megaKameha = true;
         }else{
             megaKameha = false;
@@ -1847,7 +1859,7 @@ public class Play extends GameState {
                         animKamehameha1.getFrame().getRegionHeight()*scale*reduce);
 
                 sb.draw(animKamehameha2_rev.getFrame(),
-                        player.getPosition().x*PPM - gap - beamWidth - animKamehameha2_rev.getFrame().getRegionWidth()*scale + animKamehameha1_rev.getFrame().getRegionWidth()*scale,
+                        player.getPosition().x*PPM - gap/1.15f - beamWidth - animKamehameha2_rev.getFrame().getRegionWidth()*scale + animKamehameha1_rev.getFrame().getRegionWidth()*scale,
                         player.getPosition().y*PPM - animKamehameha2_rev.getFrame().getRegionHeight()*reduce*scale/2,
                         animKamehameha2_rev.getFrame().getRegionWidth()*scale,
                         animKamehameha2_rev.getFrame().getRegionHeight()*scale*reduce);
@@ -3141,12 +3153,11 @@ public class Play extends GameState {
                 if(reloadKamehameha != 0)
                     setButtonColor(buttonFire,"yellow", "yellow");
                 else
-                    setButtonColor(buttonFire,"red","buttonUiBossJumpDown");
+                    setButtonColor(buttonFire,"buttonActionUp","buttonActionDown");
 
 
                 if(!blockKamehameha){
                     reloadKamehameha = 0;
-                    System.out.println(offsetY);
                     h = powerUpBar_MaxHeight - (beamWidth/ powerUpBar_MaxHeight)*offsetY/PPM;
                     buttonRed.setHeight(h);
                 }else{
@@ -3171,7 +3182,7 @@ public class Play extends GameState {
                 if(reloadLightning != 0)
                     setButtonColor(buttonFire,"yellow", "yellow");
                 else {
-                    setButtonColor(buttonFire,"red","buttonUiBossJumpDown");
+                    setButtonColor(buttonFire,"buttonActionUp","buttonActionDown");
                 }
 
                 if(!blockLightning){
@@ -3200,7 +3211,7 @@ public class Play extends GameState {
 
             if(Save.gd.isFireBallEquiped()|Save.gd.isFireBall2Equiped()){
                 buttonRed.setHeight(h);
-                setButtonColor(buttonFire,"red","buttonUiBossJumpDown");
+                //setButtonColor(buttonFire,"red","buttonUiBossJumpDown");
                 h = (powerUpBar_MaxHeight /MAXFIREBALLCOUNT)*player.getFireBallCount();
                 if(player.getFireBallCount()>0){
                     buttonRed.setHeight(h);
@@ -3242,6 +3253,8 @@ public class Play extends GameState {
             brick.render(sb);
         }
 
+        //equipment bar
+        equipmentBar();
 
         spriteBatch.begin();
         stage1.act();
@@ -3371,45 +3384,44 @@ public class Play extends GameState {
             sb.end();
         }
 
-        //equipment bar
-        equipmentBar();
-
-        sb.begin();
-
-        font2.setColor(Color.WHITE);
-
-        String value = String.valueOf(player.getFireBallCount());
-
-        if(Save.gd.isFireBallEquiped()){
-            value = String.valueOf((int)Math.round((float)player.getFireBallCount()/3f));
-        }
-
-        if(player.getFireBallCount()< 1){
-            value = "0";
-        }
-
-        if(Save.gd.isFireBall2Equiped() | Save.gd.isFireBallEquiped()){
-            if(pickedGameplay == 2){
-                font2.drawMultiLine(sb,
-                        value ,
-                        MyGdxGame.V_WIDTH/1.733f,
-                        (MyGdxGame.V_HEIGHT/7.5f) - 11f*offsetY/PPM,
-                        MyGdxGame.V_WIDTH/10f,
-                        BitmapFont.HAlignment.CENTER);
-            }
-
-            if(pickedGameplay == 1){
-                font2.drawMultiLine(sb,
-                        value ,
-                        MyGdxGame.V_WIDTH/2.205f,
-                        (MyGdxGame.V_HEIGHT/7.5f) - 11f*offsetY/PPM,
-                        MyGdxGame.V_WIDTH/10f,
-                        BitmapFont.HAlignment.CENTER);
-            }
-        }
 
 
-        sb.end();
+//        sb.begin();
+//
+//        font2.setColor(Color.WHITE);
+//
+//        String value = String.valueOf(player.getFireBallCount());
+//
+//        if(Save.gd.isFireBallEquiped()){
+//            value = String.valueOf((int)Math.round((float)player.getFireBallCount()/3f));
+//        }
+//
+//        if(player.getFireBallCount()< 1){
+//            value = "0";
+//        }
+//
+//        if(Save.gd.isFireBall2Equiped() | Save.gd.isFireBallEquiped()){
+//            if(pickedGameplay == 2){
+//                font2.drawMultiLine(sb,
+//                        value ,
+//                        MyGdxGame.V_WIDTH/1.733f,
+//                        (MyGdxGame.V_HEIGHT/7.5f) - 11f*offsetY/PPM,
+//                        MyGdxGame.V_WIDTH/10f,
+//                        BitmapFont.HAlignment.CENTER);
+//            }
+//
+//            if(pickedGameplay == 1){
+//                font2.drawMultiLine(sb,
+//                        value ,
+//                        MyGdxGame.V_WIDTH/2.205f,
+//                        (MyGdxGame.V_HEIGHT/7.5f) - 11f*offsetY/PPM,
+//                        MyGdxGame.V_WIDTH/10f,
+//                        BitmapFont.HAlignment.CENTER);
+//            }
+//        }
+//
+//
+//        sb.end();
 
 
         sb.setProjectionMatrix(hudCam.combined);
@@ -3433,34 +3445,79 @@ public class Play extends GameState {
 
     void equipmentBar(){
         if(!isTutorial|tuto_step0){
-            shapeRenderer.setColor(new Color());
+            shapeRenderer.setColor(new Color(11f/255f,8f/255f,8f/255f,1f));
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            shapeRenderer.rect(0,0,Gdx.graphics.getWidth(), Gdx.graphics.getHeight()/14f);
+            shapeRenderer.rect(0,0,Gdx.graphics.getWidth(), MyGdxGame.V_WIDTH/9.35f);
             shapeRenderer.end();
 
 
-        Animation coin = new Animation(new Sprite(MyGdxGame.atlas.findRegion("coin")).split(64, 64)[0], 1 / 5f);
-        coin.update(MyGdxGame.STEP);
+            Animation coin = new Animation(new Sprite(MyGdxGame.atlas.findRegion("coin")).split(64, 64)[0], 1 / 5f);
+            coin.update(MyGdxGame.STEP);
 
-        sb.begin();
-        float x = Gdx.graphics.getHeight()/60f;
-        float y = Gdx.graphics.getHeight()/250f;
-        float w = Gdx.graphics.getHeight()/16f;
-        float h = Gdx.graphics.getHeight()/16f;
+            Animation power = null;
+            if(Save.gd.isFireBallEquiped()){
+                power = new Animation(new Sprite(MyGdxGame.atlas.findRegion("ui_fireball")).split(64, 64)[0], 1 / 5f);
+            }
+            if(Save.gd.isFireBall2Equiped()){
+                power = new Animation(new Sprite(MyGdxGame.atlas.findRegion("ui_fireball2")).split(64, 64)[0], 1 / 5f);
+            }
+            if(power != null)
+                power.update(MyGdxGame.STEP);
 
-        sb.draw(coin.getFrame(), x , y, w, h);
+            sb.begin();
+            float x = Gdx.graphics.getHeight()/60f;
+            float y = Gdx.graphics.getWidth()/100f;
+            float w = MyGdxGame.V_WIDTH/13f;
+            float h = MyGdxGame.V_WIDTH/13f;
+            font2.getData().scaleX = 1.5f;
+            font2.getData().scaleY = 1.5f;
 
-        String value = "x"+String.valueOf(Save.gd.getMoney());
-        font2.getData().scaleX = 1.5f;
-        font2.getData().scaleY = 1.5f;
-        font2.drawMultiLine(sb,
-                value ,
-                x + w*1.1f,
-                h/1.15f,
-                font2.getBounds(value).width,
-                BitmapFont.HAlignment.CENTER);
+            sb.draw(coin.getFrame(), x , y, w, h);
+            x += w*1.1f;
 
-        sb.end();
+            String value = "x"+String.valueOf(Save.gd.getMoney());
+            font2.drawMultiLine(sb,
+                    value ,
+                    x ,
+                    h*1.0f,
+                    font2.getBounds(value).width,
+                    BitmapFont.HAlignment.CENTER);
+
+            x += font2.getBounds(value).width*1.1f;
+
+
+            if(Save.gd.isFireBallEquiped()|Save.gd.isFireBall2Equiped() && power.getFrames().length>0){
+                sb.draw(power.getFrame(), x, y, w, h);
+                x += w*1.1f;
+
+
+                value = String.valueOf(player.getFireBallCount());
+                if(Save.gd.isFireBallEquiped()){
+                    value = String.valueOf(Math.round((float)player.getFireBallCount()/3f));
+                }
+                if(player.getFireBallCount()< 1){
+                    value = "0";
+                }
+
+                if(value.equals("0"))
+                    setButtonColor(buttonFire,"yellow", "yellow");
+                else
+                    setButtonColor(buttonFire,"buttonActionUp","buttonActionDown");
+
+                value = "x"+value;
+                font2.drawMultiLine(sb,
+                        value ,
+                        x,
+                        h*1.0f,
+                        font2.getBounds(value).width,
+                        BitmapFont.HAlignment.LEFT);
+
+                x += font2.getBounds(value).width;
+            }
+
+
+
+            sb.end();
 
         }
     }
