@@ -220,13 +220,13 @@ public class Credits extends GameState {
         animationEnemy.update(dt);
         animationPrincess.update(dt);
 
-        if(MyGdxGame.isSoundEnable() == 2) {
-            MyGdxGame.res.getMusic("main").setVolume(0.4f);
-            if(!MyGdxGame.res.getMusic("main").isPlaying())
-                MyGdxGame.res.getMusic("main").play();
-        }
-
-        MyGdxGame.updateBGM();
+//        if(MyGdxGame.isSoundEnable() == 2) {
+//            //MyGdxGame.res.getMusic("main").setVolume(0.6f);
+//            if(!MyGdxGame.res.getMusic("main").isPlaying())
+//                MyGdxGame.res.getMusic("main").play();
+//        }
+//
+//        MyGdxGame.updateBGM();
         handleInput();
         MyGdxGame.background_cloud.update(dt);
         //MyGdxGame.background_skyDay.update(dt);
@@ -330,7 +330,7 @@ public class Credits extends GameState {
             }
 
 
-            if((Save.gd.isSoundEnable()==2) && !MyGdxGame.res.getMusic("main").isPlaying()) MyGdxGame.res.getMusic("main").setVolume(0.4f);
+            //if((Save.gd.isSoundEnable()==2) && !MyGdxGame.res.getMusic("main").isPlaying()) MyGdxGame.res.getMusic("main").setVolume(0.6f);
             sb.end();
 
 

@@ -65,7 +65,7 @@ public class GameOver extends GameState {
         stage0.addActor(intro);
         MyGdxGame.continueCount = 0;
         if(MyGdxGame.res.getMusic("main").isPlaying()) MyGdxGame.res.getMusic("main").stop();
-        if(MyGdxGame.res.getMusic("boss").isPlaying()) MyGdxGame.res.getMusic("boss").stop();
+        //if(MyGdxGame.res.getMusic("boss").isPlaying()) MyGdxGame.res.getMusic("boss").stop();
 
         animTitle = new Animation(new Sprite(MyGdxGame.atlas.findRegion("gameover")).split(59,47)[0], 1 / 5f);
 
@@ -238,7 +238,7 @@ public class GameOver extends GameState {
         buttonStylePlay.down = skinPlay.getDrawable("buttonExitDown");
         buttonExit = new Button(buttonStylePlay);
         buttonExit.setWidth(Gdx.graphics.getWidth() / 2.2f);
-        buttonExit.setHeight(Gdx.graphics.getHeight() / 4.8f);
+        buttonExit.setHeight(Gdx.graphics.getHeight() / 5f);
         buttonExit.setPosition(-400, Gdx.graphics.getHeight() / 200f);
 
         skinLeaderboard.addRegions(MyGdxGame.atlas);
@@ -247,12 +247,12 @@ public class GameOver extends GameState {
         buttonStyleLeaderboard.down = skinLeaderboard.getDrawable("buttonReplayDown");
         buttonReplay = new Button(buttonStyleLeaderboard);
         buttonReplay.setWidth(Gdx.graphics.getWidth() / 2.2f);
-        buttonReplay.setHeight(Gdx.graphics.getHeight() / 4.8f);
+        buttonReplay.setHeight(Gdx.graphics.getHeight() / 5f);
         buttonReplay.setPosition((Gdx.graphics.getWidth() / 1) + 20, Gdx.graphics.getHeight() / 200f);
 
         skinHeart.addRegions(MyGdxGame.atlas);
         buttonStyleHeart = new TextButtonStyle();
-        buttonStyleHeart.up = skinHeart.getDrawable("buttonGearFlipDown");
+        buttonStyleHeart.up = skinHeart.getDrawable("buttonGearFlipUp");
         buttonStyleHeart.down = skinHeart.getDrawable("buttonGearFlipDown");
         buttonHeart = new Button(buttonStyleHeart);
         buttonHeart.setWidth(Gdx.graphics.getWidth() / 5f);
@@ -261,8 +261,8 @@ public class GameOver extends GameState {
 
         skinStar.addRegions(MyGdxGame.atlas);
         buttonStyleStar = new TextButtonStyle();
-        buttonStyleStar.up = skinStar.getDrawable("buttonSecret");
-        buttonStyleStar.down = skinStar.getDrawable("buttonSecret");
+        buttonStyleStar.up = skinStar.getDrawable("buttonPromoteUp");
+        buttonStyleStar.down = skinStar.getDrawable("buttonPromoteDown");
         buttonStar = new Button(buttonStyleStar);
         buttonStar.setWidth(Gdx.graphics.getWidth() / 5f);
         buttonStar.setHeight(Gdx.graphics.getHeight() / 7.8f);
@@ -270,12 +270,12 @@ public class GameOver extends GameState {
 
         skinEnergie.addRegions(MyGdxGame.atlas);
         buttonStyleEnergie = new TextButtonStyle();
-        buttonStyleEnergie.up = skinEnergie.getDrawable("buttonSecret");
-        buttonStyleEnergie.down = skinEnergie.getDrawable("buttonSecret");
+        buttonStyleEnergie.up = skinEnergie.getDrawable("buttonPromoteUp");
+        buttonStyleEnergie.down = skinEnergie.getDrawable("buttonPromoteDown");
         buttonEnergie = new Button(buttonStyleEnergie);
         buttonEnergie.setWidth(Gdx.graphics.getWidth() / 5f);
         buttonEnergie.setHeight(Gdx.graphics.getHeight() / 7.8f);
-        buttonEnergie.setPosition(-400, buttonHeart.getY() - buttonHeart.getHeight());
+        buttonEnergie.setPosition(-400, Gdx.graphics.getHeight() / 3.5f);
 
         buttonStyleAds = new TextButtonStyle();
         skinAds.addRegions(MyGdxGame.atlas);
@@ -292,7 +292,7 @@ public class GameOver extends GameState {
         stage1.addActor(buttonHeart);
         buttonStar.setVisible(false);
         stage1.addActor(buttonStar);
-        buttonEnergie.setVisible(false);
+        //buttonEnergie.setVisible(false);
         stage1.addActor(buttonEnergie);
         stage1.addActor(buttonAds);
 
@@ -344,7 +344,7 @@ public class GameOver extends GameState {
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
                 if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("select").play();
-                gsm.setState(GameStateManager.SHOP);
+
                 return true;
             };
 
@@ -352,6 +352,7 @@ public class GameOver extends GameState {
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
                 //Gdx.net.openURI(MyGdxGame.AndroidPlayStoreGameUrl);
+                gsm.setState(GameStateManager.SHOP);
             };
         });
 
@@ -382,7 +383,8 @@ public class GameOver extends GameState {
             public void touchUp(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
-                MyGdxGame.actionResolver.purchaseFullBar();
+                //MyGdxGame.actionResolver.purchaseFullBar();
+                Gdx.net.openURI("http://ram52.com");
             };
         });
 

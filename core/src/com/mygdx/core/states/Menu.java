@@ -75,6 +75,8 @@ public class Menu extends GameState {
         MyGdxGame.initFade();
         Timer.instance().start();
 
+        //if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("newScreen").play();
+
         intro = new Image(MyGdxGame.atlas.findRegion("backgroundSky"));
         intro.setFillParent(true);
         stage0 = new Stage();
@@ -251,7 +253,7 @@ public class Menu extends GameState {
         style.down = skin.getDrawable("buttonPlayDown");
         buttonPlay = new Button(style);
         buttonPlay.setWidth(Gdx.graphics.getWidth() / 2.2f);
-        buttonPlay.setHeight(Gdx.graphics.getHeight() / 4.8f);
+        buttonPlay.setHeight(Gdx.graphics.getHeight() / 5f);
         //buttonExit.setPosition(-buttonExit.getWidth()/2.6f, (Gdx.graphics.getHeight() - buttonExit.getHeight()) / 1.6f);
 
         buttonPlay.setPosition(-400, Gdx.graphics.getHeight() / 2f);
@@ -262,7 +264,7 @@ public class Menu extends GameState {
         style.down = skin.getDrawable("buttonLeaderBoardDown");
         buttonLeaderBoard = new Button(style);
         buttonLeaderBoard.setWidth(Gdx.graphics.getWidth() / 2.2f);
-        buttonLeaderBoard.setHeight(Gdx.graphics.getHeight() / 4.8f);
+        buttonLeaderBoard.setHeight(Gdx.graphics.getHeight() / 5f);
         buttonLeaderBoard.setPosition((Gdx.graphics.getWidth() / 1f) - buttonLeaderBoard.getWidth() + 20, (Gdx.graphics.getHeight() - buttonPlay.getHeight()) / 1.6f);
         stage1.addActor(buttonLeaderBoard);
 
@@ -371,11 +373,11 @@ public class Menu extends GameState {
         buttonGear.setPosition(-400, Gdx.graphics.getHeight() / 100f);
         stage1.addActor(buttonGear);
 
-        if(MyGdxGame.isSoundEnable() == 2) {
-            MyGdxGame.res.getMusic("main").setVolume(0.4f);
-            if(!MyGdxGame.res.getMusic("main").isPlaying())
-                MyGdxGame.res.getMusic("main").play();
-        }
+//        if(MyGdxGame.isSoundEnable() == 2) {
+//            MyGdxGame.res.getMusic("main").setVolume(1f);
+//            if(!MyGdxGame.res.getMusic("main").isPlaying())
+//                MyGdxGame.res.getMusic("main").play();
+//        }
 
         buttonGear.addListener(new InputListener() {
             public boolean touchDown(
@@ -782,11 +784,11 @@ public class Menu extends GameState {
         }
 
 
-        if(MyGdxGame.isSoundEnable() == 2) {
-            MyGdxGame.res.getMusic("main").setVolume(0.4f);
-            if(!MyGdxGame.res.getMusic("main").isPlaying())
-                MyGdxGame.res.getMusic("main").play();
-        }
+//        if(MyGdxGame.isSoundEnable() == 2) {
+//            //MyGdxGame.res.getMusic("main").setVolume(0.6f);
+//            if(!MyGdxGame.res.getMusic("main").isPlaying())
+//                MyGdxGame.res.getMusic("main").play();
+//        }
 
 
         labelMoney.setText(Integer.toString(Save.gd.getMoney()));
@@ -803,7 +805,7 @@ public class Menu extends GameState {
             buttonPGreen.setScale(1);
         }
 
-        MyGdxGame.updateBGM();
+        //MyGdxGame.updateBGM();
         handleInput();
         //animationRain.update(dt);
         MyGdxGame.background_wood1.update(dt);

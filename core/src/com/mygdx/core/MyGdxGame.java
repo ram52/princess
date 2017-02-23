@@ -69,6 +69,7 @@ public class MyGdxGame implements ApplicationListener {
     public static float GROUND = 2.5621998f; //todo use box2d
     public static int MONEY_BY_ENEMY = 2;
     public static boolean DEBUG = false;
+    public static boolean TEST = false;
     public static Vector2 lastPlayerPosition = new Vector2(0,0);
     public static Vector2 lastBrickPosition = new Vector2(0,0);
     public static Vector2 lastPrincessPosition = new Vector2(0,0);
@@ -102,6 +103,10 @@ public class MyGdxGame implements ApplicationListener {
     public static String crushSoundPath = "data/sound/crush.ogg";
     public static String laughSoundPath = "data/sound/laugh.ogg";
     public static String slashSoundPath = "data/sound/slash.ogg";
+
+    public static String alarmSoundPath = "data/sound/alarm.ogg";
+    public static String interactionSoundPath = "data/sound/interaction.ogg";
+
     public static String selectSoundPath = "data/sound/select.ogg";
     public static String equipedSoundPath = "data/sound/equiped.ogg";
     public static String moveSoundPath = "data/sound/move.ogg";
@@ -111,6 +116,8 @@ public class MyGdxGame implements ApplicationListener {
     public static String epicMusicPath = "data/sound/epic.ogg";
     public static String reloadedSoundPath = "data/sound/reloaded.ogg";
     public static String fireballSoundPath = "data/sound/fireball.ogg";
+    public static String fireballSmallSoundPath = "data/sound/fireball_small.ogg";
+    public static String fireballBigSoundPath = "data/sound/fireball_big.ogg";
     public static String mainMusicPath = "data/sound/main.ogg";
     public static String gameOverMusicPath = "data/sound/gameover.ogg";
     public static String bossMusicPath = "data/sound/boss.ogg";
@@ -211,33 +218,40 @@ public class MyGdxGame implements ApplicationListener {
         res.loadSound(pointSoundPath, "point");
         res.loadSound(fallingSoundPath, "falling");
         res.loadSound(selectSoundPath, "select");
+
         res.loadSound(equipedSoundPath, "equiped");
         res.loadSound(boomSoundPath, "boom");
         res.loadMusic(laughSoundPath, "laugh");
         res.loadSound(fireballSoundPath, "fireball");
+        res.loadSound(fireballSmallSoundPath, "fireball_small");
+        res.loadSound(fireballBigSoundPath, "fireball_big");
         res.loadSound(moveSoundPath, "move");
         res.loadSound(enemyHitMusicdPath, "hit");
         res.loadMusic(crushSoundPath, "crush");
-        res.loadMusic(openingMusicPath, "opening");
+        //res.loadMusic(openingMusicPath, "opening");
         res.loadMusic(successMusicPath, "success");
         res.loadMusic(mainMusicPath, "main");
-        res.loadMusic(gameOverMusicPath, "gameOver");
-        res.loadMusic(bossMusicPath, "boss");
+        //res.loadMusic(gameOverMusicPath, "gameOver");
+        //res.loadMusic(bossMusicPath, "boss");
         res.loadMusic(secretBossSoundPath, "secretboss");
         res.loadSound(kamehamehaSoundPath, "kamehameha");
         res.loadSound(reloadedSoundPath, "reloaded");
-        res.loadMusic(epicMusicPath, "epic");
+        //res.loadMusic(epicMusicPath, "epic");
+        res.loadMusic(alarmSoundPath, "alarm");
+        res.loadSound(interactionSoundPath, "interaction");
         res.loadMusic(pointSoundPath, "secret");
         res.loadMusic(secretUnlockSoundPath, "secretUnlock");
         res.loadMusic(deathSoundPath, "death");
         res.loadMusic(bossDeathSoundPath, "bossDeath");
         res.loadMusic(slashSoundPath, "slash");
-        res.getMusic("epic").setLooping(true);
-        res.getMusic("opening").setLooping(true);
+        //res.getMusic("epic").setLooping(true);
+        //res.getMusic("opening").setLooping(true);
         res.getMusic("success").setLooping(false);
         res.getMusic("main").setLooping(true);
-        res.getMusic("gameOver").setLooping(true);
-        res.getMusic("boss").setLooping(true);
+        res.getMusic("alarm").setLooping(true);
+        //res.getMusic("interaction").setLooping(false);
+        //res.getMusic("gameOver").setLooping(true);
+        //res.getMusic("boss").setLooping(true);
         res.getMusic("crush").setLooping(false);
         res.getMusic("secret").setLooping(false);
         res.getMusic("secretUnlock").setLooping(false);
@@ -561,16 +575,15 @@ public class MyGdxGame implements ApplicationListener {
 
     public static void updateBGM() {
 
-        if(!isBoosTerritory) {
             if (soundEnable == 0 | soundEnable == 1) {
                 if (res.getMusic("main").isPlaying()) res.getMusic("main").pause();
             } else {
                 if (!MyGdxGame.pause) {
-                    MyGdxGame.res.getMusic("main").setVolume(0.4f);
+                    //MyGdxGame.res.getMusic("main").setVolume(0.6f);
                     if (!res.getMusic("main").isPlaying()) res.getMusic("main").play();
                 }
             }
-        }
+
     }
 
 
@@ -681,8 +694,10 @@ public class MyGdxGame implements ApplicationListener {
             if (p) {
                 res.getMusic("main").setVolume(0f);
                 if (res.getMusic("main").isPlaying()) res.getMusic("main").pause();
+
+                if (res.getMusic("alarm").isPlaying()) res.getMusic("alarm").pause();
             } else {
-                res.getMusic("main").setVolume(0.4f);
+                res.getMusic("main").setVolume(1f);
                 if (soundEnable == 2) res.getMusic("main").play();
             }
 

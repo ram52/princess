@@ -579,7 +579,7 @@ public class Shop extends GameState {
                             System.out.println(obj);
                             if(obj.toString().equals("true") && Save.gd.getMoney() >= cost){
                                 if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
-                                    MyGdxGame.res.getSound("fireball").play();
+                                    MyGdxGame.res.getSound("fireball_small").play();
                                 }
                                 Save.gd.setFireBallPurchased(true);
                                 Save.gd.setFireBallEquiped(true);
@@ -624,7 +624,7 @@ public class Shop extends GameState {
                             System.out.println(obj);
                             if(obj.toString().equals("true")){
                                 if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
-                                    MyGdxGame.res.getSound("fireball").play();
+                                    MyGdxGame.res.getSound("fireball_small").play();
                                 }
                                 Save.gd.setFireBallEquiped(true);
                                 //Save.gd.setExcaliburEquiped(false);
@@ -632,7 +632,7 @@ public class Shop extends GameState {
                                 Save.gd.setLightningEquiped(false);
                                 Save.gd.setFireBall2Equiped(false);
                                 if (Save.gd.isFireBallEquiped() && (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
-                                    MyGdxGame.res.getSound("fireball").play();
+                                    MyGdxGame.res.getSound("fireball_small").play();
                                 }
                             }
                             if(obj.toString().equals("false")){
@@ -681,7 +681,7 @@ public class Shop extends GameState {
                             System.out.println(obj);
                             if(obj.toString().equals("true") && Save.gd.getMoney() >= cost){
                                 if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
-                                    MyGdxGame.res.getSound("fireball").play();
+                                    MyGdxGame.res.getSound("fireball_big").play();
                                 }
                                 Save.gd.setFireBall2Purchased(true);
                                 Save.gd.setFireBall2Equiped(true);
@@ -728,7 +728,7 @@ public class Shop extends GameState {
                             System.out.println(obj);
                             if(obj.toString().equals("true")){
                                 if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
-                                    MyGdxGame.res.getSound("fireball").play();
+                                    MyGdxGame.res.getSound("fireball_big").play();
                                 }
                                 Save.gd.setFireBall2Equiped(true);
                                 //Save.gd.setExcaliburEquiped(false);
@@ -736,7 +736,7 @@ public class Shop extends GameState {
                                 Save.gd.setLightningEquiped(false);
                                 Save.gd.setFireBallEquiped(false);
                                 if (Save.gd.isFireBallEquiped() && (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
-                                    MyGdxGame.res.getSound("fireball").play();
+                                    MyGdxGame.res.getSound("fireball_big").play();
                                 }
                             }
                             if(obj.toString().equals("false")){
@@ -1420,13 +1420,13 @@ public class Shop extends GameState {
         updateItem(Save.gd.isBrick2Equiped(), "buttonBrick2", buttonBrick2);
         updateItem(Save.gd.getAdsRemoverPurchased(), "buttonAds", buttonAds);
 
-        if(MyGdxGame.isSoundEnable() == 2) {
-            MyGdxGame.res.getMusic("main").setVolume(0.4f);
-            if(!MyGdxGame.res.getMusic("main").isPlaying())
-                MyGdxGame.res.getMusic("main").play();
-        }
+//        if(MyGdxGame.isSoundEnable() == 2) {
+//            //MyGdxGame.res.getMusic("main").setVolume(0.6f);
+//            if(!MyGdxGame.res.getMusic("main").isPlaying())
+//                MyGdxGame.res.getMusic("main").play();
+//        }
 
-        MyGdxGame.updateBGM();
+        //MyGdxGame.updateBGM();
         handleInput();
         MyGdxGame.background_cloud.update(dt);
         MyGdxGame.background_wood1.update(dt);
@@ -1493,7 +1493,7 @@ public class Shop extends GameState {
                 cpt_translate_animation1++;
             }
 
-            if((Save.gd.isSoundEnable() == 2) && !MyGdxGame.res.getMusic("main").isPlaying()) MyGdxGame.res.getMusic("main").setVolume(0.4f);
+            //if((Save.gd.isSoundEnable() == 2) && !MyGdxGame.res.getMusic("main").isPlaying()) MyGdxGame.res.getMusic("main").setVolume(0.6f);
             sb.end();
 
             sb.begin();

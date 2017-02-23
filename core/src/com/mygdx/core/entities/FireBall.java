@@ -31,7 +31,7 @@ public class FireBall extends B2DSprite{
             health = 1;
         }
 
-        setAnimation(sprites, 1 / 15f);
+        setAnimation(sprites, 1 / 6f);
         left = false;
         right = false;
         dead = false;
@@ -48,7 +48,7 @@ public class FireBall extends B2DSprite{
             tex = new Sprite(MyGdxGame.atlas.findRegion("fireball"));
             sprites = tex.split( 64, 64)[0];
         }
-        setAnimation(sprites, 1 / 15f);
+        setAnimation(sprites, 1 / 6f);
         left = false;
         right = true;
     }
@@ -65,7 +65,7 @@ public class FireBall extends B2DSprite{
         }
         for(int i=0;i<sprites.length;i++)
             sprites[i].flip(true,false);
-        setAnimation(sprites, 1 / 15f);
+        setAnimation(sprites, 1 / 6f);
         left = true;
         right = false;
     }
