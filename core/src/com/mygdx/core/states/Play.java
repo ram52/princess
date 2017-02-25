@@ -73,7 +73,6 @@ import static com.mygdx.core.MyGdxGame.lastBrickPosition;
 import static com.mygdx.core.MyGdxGame.lastPlayerPosition;
 import static com.mygdx.core.MyGdxGame.lastPrincessPosition;
 import static com.mygdx.core.MyGdxGame.pickedGameplay;
-import static com.mygdx.core.MyGdxGame.updateBGM;
 import static com.mygdx.core.entities.Player.MAXFIREBALLCOUNT;
 import static com.mygdx.core.entities.Player.PLAYER_VELOCITY;
 import static com.mygdx.core.entities.Player.PLAYER_VELOCITYBOOST;
@@ -206,6 +205,12 @@ public class Play extends GameState {
         Gdx.app.debug(LOG_TAG,"TUTORIAL--> "+isTutorial);
         if(isTutorial){
             pickedGameplay = -1;
+        }else{
+            if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)
+                if(!MyGdxGame.res.getMusic("main").isPlaying()){
+                    MyGdxGame.res.getMusic("main").setVolume(1f);
+                    MyGdxGame.res.getMusic("main").play();
+                }
         }
 
         sbKyaa = new SpriteBatch();
@@ -215,7 +220,7 @@ public class Play extends GameState {
         screenShake = new ScreenShake(50000.0f,20.0f);
 
         if(!isTutorial)
-            MyGdxGame.setPause(false, true);
+            MyGdxGame.setPause(false);
 
         viewport = new Rectangle();
 
@@ -834,6 +839,7 @@ public class Play extends GameState {
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
                 Play.this.isTutorial = false;
+                MyGdxGame.lastPlayerPosition = new Vector2(0,0);
                 Timer.instance().clear();
                 if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("select").play();
                 return true;
@@ -1013,7 +1019,7 @@ public class Play extends GameState {
                 if(!gameOver){
                     Gdx.app.debug(LOG_TAG,"clicked pause!");
                     if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("newScreen").play();
-                    MyGdxGame.setPause(!MyGdxGame.pause, false);
+                    MyGdxGame.setPause(!MyGdxGame.pause);
                 }
             }
         });
@@ -1031,6 +1037,7 @@ public class Play extends GameState {
                     float y, int pointer, int button) {
                 Gdx.app.debug(LOG_TAG,"clicked play!");
                 gsm.setState(GameStateManager.MENU);
+                MyGdxGame.lastPlayerPosition = new Vector2(0,0);
                 if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("newScreen").play();
             }
         });
@@ -2646,7 +2653,12 @@ public class Play extends GameState {
                 @Override
                 public void run() {
                     isMalicious = false;
-                    updateBGM();
+                    if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) {
+                        if(!MyGdxGame.res.getMusic("main").isPlaying()){
+                            MyGdxGame.res.getMusic("main").setVolume(1f);
+                            MyGdxGame.res.getMusic("main").play();
+                        }
+                    }
                     enemies.add(createEnemy(1/PPM , MyGdxGame.GROUND, true));
                     enemies.add(createEnemy(MyGdxGame.V_WIDTH*1.0f/PPM , MyGdxGame.GROUND, false));
                 }
@@ -2655,9 +2667,6 @@ public class Play extends GameState {
         }
 
         if(!tuto_step8 && player.getNumCoins() == 2){
-
-
-
             Timer.schedule(new Timer.Task(){
                 @Override
                 public void run() {
@@ -2665,7 +2674,6 @@ public class Play extends GameState {
                     if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("interaction").play();
                 }
             }, 2);
-
 
             Timer.schedule(new Timer.Task(){
                 @Override
@@ -2687,8 +2695,6 @@ public class Play extends GameState {
 
             tuto_step8 = true;
         }
-
-
     }
 
     private void tutoGamePlay2(){
@@ -2752,7 +2758,12 @@ public class Play extends GameState {
                 @Override
                 public void run() {
                     isMalicious = false;
-                    updateBGM();
+                    if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) {
+                        if(!MyGdxGame.res.getMusic("main").isPlaying()){
+                            MyGdxGame.res.getMusic("main").setVolume(1f);
+                            MyGdxGame.res.getMusic("main").play();
+                        }
+                    }
                     enemies.add(createEnemy(1/PPM , MyGdxGame.GROUND, true));
                     enemies.add(createEnemy(MyGdxGame.V_WIDTH*1.0f/PPM , MyGdxGame.GROUND, false));
                 }
@@ -2791,8 +2802,6 @@ public class Play extends GameState {
     }
 
     public void update(float dt) {
-
-
         if(pointer != null ) {
             if(!pointer.getPlaying() && MyGdxGame.pickedGameplay == 2)pointer.normalAnimation();
             //if(MyGdxGame.pickedGameplay == 2 | (MyGdxGame.pickedGameplay == 1 && (tuto_step5|tuto_step6)))
@@ -2800,7 +2809,13 @@ public class Play extends GameState {
         }
 
         if(Play.this.isTutorial){
-            updateTutorial();
+            try{
+                updateTutorial();
+            }catch (NullPointerException e){
+                Gdx.app.error(LOG_TAG,"error in tutorial objects",e);
+                createHand(-99,-99);
+            }
+
         }else{
             if(MyGdxGame.pickedGameplay == 2){
                 buttonLeft.setVisible(true);
@@ -3013,11 +3028,6 @@ public class Play extends GameState {
         sb.begin();
         stage1.getActors().items[2].draw(sb, 1f);
         sb.end();
-
-        if(!isTutorial){
-            MyGdxGame.updateBGM();
-        }
-
 
         MyGdxGame.background_wood1.update(dt);
 

@@ -59,7 +59,12 @@ public class GameOver extends GameState {
 
         super(gsm);
 
+        if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)
+            if(MyGdxGame.res.getMusic("main").isPlaying())
+                MyGdxGame.res.getMusic("main").stop();
+
         //game.actionResolver.hideBannerAd();
+        MyGdxGame.lastPlayerPosition = new Vector2(0,0);
         intro = new Image(MyGdxGame.atlas.findRegion("backgroundSky"));
         intro.setFillParent(true);
         stage0 = new Stage();

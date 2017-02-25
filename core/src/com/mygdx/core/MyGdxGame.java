@@ -520,22 +520,22 @@ public class MyGdxGame implements ApplicationListener {
 
     }
 
-    public static void updateBGM() {
-
-            if (soundEnable == 0 | soundEnable == 1) {
-                if (res.getMusic("main").isPlaying()) {
-                    res.getMusic("main").stop();
-                }
-            } else {
-                if (!MyGdxGame.pause) {
-                    //MyGdxGame.res.getMusic("main").setVolume(0.6f);
-                    if (!res.getMusic("main").isPlaying()) {
-                        res.getMusic("main").play();
-                    }
-                }
-            }
-
-    }
+//    public static void updateBGM() {
+//
+//            if (soundEnable == 0 | soundEnable == 1) {
+//                if (res.getMusic("main").isPlaying()) {
+//                    res.getMusic("main").stop();
+//                }
+//            } else {
+//                if (!MyGdxGame.pause) {
+//                    //MyGdxGame.res.getMusic("main").setVolume(0.6f);
+//                    if (!res.getMusic("main").isPlaying()) {
+//                        res.getMusic("main").play();
+//                    }
+//                }
+//            }
+//
+//    }
 
 
     public static void setSoundEnable(int soundEnable) {
@@ -636,8 +636,7 @@ public class MyGdxGame implements ApplicationListener {
         pause = true;
     }
 
-    public static void setPause(boolean p, boolean boot) {
-        if(!boot) {
+    public static void setPause(boolean p) {
             if (p) {
                 res.getMusic("main").setVolume(0f);
                 if (res.getMusic("main").isPlaying()) res.getMusic("main").pause();
@@ -648,11 +647,6 @@ public class MyGdxGame implements ApplicationListener {
                 if (soundEnable == 2) res.getMusic("main").play();
                 if (soundEnable == 2 | soundEnable == 1) res.getMusic("pause_out").play();
             }
-        }else{
-            res.getMusic("main").setVolume(1f);
-            if (res.getMusic("main").isPlaying()) res.getMusic("main").stop();
-            if (res.getMusic("alarm").isPlaying()) res.getMusic("alarm").stop();
-        }
 
         pause = p;
     }

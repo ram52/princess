@@ -58,8 +58,8 @@ public class Shop extends GameState {
     private float offsetY = 0;
 
     public Shop(GameStateManager gsm) {
-
         super(gsm);
+        MyGdxGame.lastPlayerPosition = new Vector2(0,0);
         intro = new Image(MyGdxGame.atlas.findRegion("backgroundSky"));
         intro.setFillParent(true);
         stage0 = new Stage();

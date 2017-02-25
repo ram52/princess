@@ -31,6 +31,8 @@ import com.mygdx.core.handlers.Save;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.mygdx.core.MyGdxGame.lastPlayerPosition;
+
 public class Menu extends GameState {
 
     private static String LOG_TAG = Menu.class.getSimpleName();
@@ -74,10 +76,15 @@ public class Menu extends GameState {
 
         super(gsm);
 
+        if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)
+            if(MyGdxGame.res.getMusic("main").isPlaying())
+                MyGdxGame.res.getMusic("main").stop();
+
+        lastPlayerPosition = new Vector2(0,0);
         MyGdxGame.initFade();
         Timer.instance().start();
 
-        //if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("newScreen").play();
+        if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("main").stop();
 
         intro = new Image(MyGdxGame.atlas.findRegion("backgroundSky"));
         intro.setFillParent(true);
