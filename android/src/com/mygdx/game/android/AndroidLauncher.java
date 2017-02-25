@@ -1157,7 +1157,7 @@ public class AndroidLauncher extends AndroidApplication implements
                     } catch (final Exception ex) {
                     }
                     bp.consumePurchase(getResources().getString(R.string.hundred_coins));
-                    if (MyGdxGame.isSoundEnable() != 0) MyGdxGame.res.getSound("point").play();
+                    if (MyGdxGame.isSoundEnable() != 0) MyGdxGame.res.getMusic("point").play();
                 }
             }
 
@@ -1179,7 +1179,7 @@ public class AndroidLauncher extends AndroidApplication implements
                     } catch (final Exception ex) {
                     }
                     bp.consumePurchase(getResources().getString(R.string.thousand_coins));
-                    if (MyGdxGame.isSoundEnable() != 0) MyGdxGame.res.getSound("point").play();
+                    if (MyGdxGame.isSoundEnable() != 0) MyGdxGame.res.getMusic("point").play();
                 }
             }
 
@@ -1203,7 +1203,7 @@ public class AndroidLauncher extends AndroidApplication implements
                     } catch (final Exception ex) {
                     }
                     bp.consumePurchase(getResources().getString(R.string.extra_coins));
-                    if (MyGdxGame.isSoundEnable() != 0) MyGdxGame.res.getSound("point").play();
+                    if (MyGdxGame.isSoundEnable() != 0) MyGdxGame.res.getMusic("point").play();
                 }
             }
 

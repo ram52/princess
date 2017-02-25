@@ -3,7 +3,9 @@ package com.mygdx.core.handlers;
 import java.util.EmptyStackException;
 import java.util.Stack;
 
+import com.badlogic.gdx.Gdx;
 import com.mygdx.core.MyGdxGame;
+import com.mygdx.core.entities.Princess;
 import com.mygdx.core.states.Credits;
 import com.mygdx.core.states.GameOver;
 import com.mygdx.core.states.GameState;
@@ -15,6 +17,8 @@ import com.mygdx.core.states.Opening;
 import com.mygdx.core.states.Tutorial;
 
 public class GameStateManager {
+
+	private static String LOG_TAG = GameStateManager.class.getSimpleName();
 
 	private MyGdxGame game;
 	private Stack<GameState> gameStates;
@@ -51,7 +55,7 @@ public class GameStateManager {
 		try{
 			gameStates.peek().update(dt);
 		}catch(EmptyStackException e){
-			System.out.println(e.getMessage());
+			Gdx.app.error(LOG_TAG,"error while updating game state stack",e);
 		}
 
 	}

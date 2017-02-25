@@ -16,6 +16,8 @@ import com.mygdx.core.handlers.Save;
 
 public class Opening extends GameState {
 
+    private static String LOG_TAG = Opening.class.getSimpleName();
+
     private Stage stage1;
     private Image imageOpening1;
     private Rectangle viewport;

@@ -1,8 +1,11 @@
 package com.mygdx.core.handlers;
 
+import com.badlogic.gdx.Gdx;
+
 import java.io.Serializable;
 
 public class GameData implements Serializable {
+	private static String LOG_TAG = GameData.class.getSimpleName();
 	
 	private static final long serialVersionUID = 1;
 	private int wings;
@@ -136,9 +139,9 @@ public class GameData implements Serializable {
 	public void setSound(int s) {sound = s;}
 
 	public long[] getHighScores() {
-        System.out.println("***HIGHT SCORES***");
+        Gdx.app.debug(LOG_TAG,"***HIGHT SCORES***");
         for(int i=0;i<highScores.length;i++)
-            System.out.println(highScores[i]);
+            Gdx.app.debug(LOG_TAG,"highscore:"+highScores[i]);
         return highScores;
     }
 
@@ -148,7 +151,7 @@ public class GameData implements Serializable {
 
 	public void setTenativeScore(int i) {
         tentativeScore = i;
-        System.out.println("TENTATIVE SCORE: "+ tentativeScore);
+        Gdx.app.debug(LOG_TAG,"TENTATIVE SCORE: "+ tentativeScore);
     }
 
 	public long getWingState() { return wings; }
@@ -157,7 +160,7 @@ public class GameData implements Serializable {
 
 	public void setNewHighScore(boolean a) {
         newHighScore = a;
-        System.out.println("IS HIGH SCORE: "+a);
+        Gdx.app.debug(LOG_TAG,"IS HIGH SCORE: "+a);
     }
 
 	public boolean isFireBallEquiped() {

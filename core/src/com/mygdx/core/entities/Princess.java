@@ -1,5 +1,6 @@
 package com.mygdx.core.entities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -10,6 +11,8 @@ import com.mygdx.core.MyGdxGame;
 
 public class Princess extends B2DSprite
 {
+    private static String LOG_TAG = Princess.class.getSimpleName();
+
     private int health = 20;
     private Sprite tex;
     private boolean normalRight = false;
@@ -192,7 +195,7 @@ public class Princess extends B2DSprite
     }
 
     public void fadeOutAnimation_rev(){
-        System.out.println("fadeOutAnimation_rev");
+        Gdx.app.debug(LOG_TAG,"fadeOutAnimation_rev");
         tex = new Sprite(MyGdxGame.atlas.findRegion("enemyEscapeFadeOut"));
         TextureRegion[] sprites = tex.split( 64, 64)[0];
         for(int i=0;i<sprites.length;i++)

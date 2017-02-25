@@ -33,6 +33,8 @@ import java.util.List;
 
 public class Menu extends GameState {
 
+    private static String LOG_TAG = Menu.class.getSimpleName();
+
     private Animation animPlayerIdle, animPlayerIdleFliped, animPlayerSlash, animPrincessIdle, animPrincessIdleFliped, animTitle, animHelpMe;
     private boolean click_on_play, click_on_leaderboard, click_on_tuto;
     private int isfadeOutStarted = 0;
@@ -75,7 +77,7 @@ public class Menu extends GameState {
         MyGdxGame.initFade();
         Timer.instance().start();
 
-        //if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("newScreen").play();
+        //if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("newScreen").play();
 
         intro = new Image(MyGdxGame.atlas.findRegion("backgroundSky"));
         intro.setFillParent(true);
@@ -91,7 +93,7 @@ public class Menu extends GameState {
         if (!Save.gd.getAdsRemoverPurchased()) {
             String network = game.actionResolver.getNetworkClass();
             if(network == null) network = "ABSENT";
-            System.out.println("NETWORK: "+network);
+            Gdx.app.debug(LOG_TAG,"NETWORK: "+network);
             if(network.equals("4G")|network.equals("3G")|network.equals("WIFI"))
                 game.actionResolver.showOrLoadBanner();
         }
@@ -125,7 +127,7 @@ public class Menu extends GameState {
 
         animTitle = new Animation(new Sprite(MyGdxGame.atlas.findRegion("princess!")).split(111, 44)[0], 1 / 5f);
 
-        System.out.println("LANG-->"+java.util.Locale.getDefault().toString());
+        Gdx.app.debug(LOG_TAG,"LANG-->"+java.util.Locale.getDefault().toString());
         if(java.util.Locale.getDefault().toString().equals("ja_JP")){
             jp = true;
         }else{
@@ -383,8 +385,8 @@ public class Menu extends GameState {
             public boolean touchDown(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
-                if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("select").play();
-                System.out.println("bt gear pressed!");
+                if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("select").play();
+                Gdx.app.debug(LOG_TAG,"bt gear pressed!");
 
                 return true;
             }
@@ -395,7 +397,7 @@ public class Menu extends GameState {
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
 
-                System.out.println("bt gear pressed!");
+                Gdx.app.debug(LOG_TAG,"bt gear pressed!");
                 click_on_shop = true;
 //                stageUiOption.addAction(Actions.sequence(Actions.alpha(0.5f), Actions.fadeIn(0.1f)));
 //                showOptionUi = true;
@@ -413,8 +415,8 @@ public class Menu extends GameState {
             public boolean touchDown(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
-                if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("select").play();
-                System.out.println("bt sound pressed!");
+                if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("select").play();
+                Gdx.app.debug(LOG_TAG,"bt sound pressed!");
                 if(MyGdxGame.isSoundEnable() == 2){
                     MyGdxGame.setSoundEnable(0);
                 }else{
@@ -430,7 +432,7 @@ public class Menu extends GameState {
                 }
 
                 if (MyGdxGame.isSoundEnable() == 1) {
-                    MyGdxGame.res.getSound("select").play();
+                    MyGdxGame.res.getMusic("select").play();
                     ButtonStyle style = new ButtonStyle();
                     style.up = skin.getDrawable("buttonSound2Fx");
                     style.down = skin.getDrawable("buttonSound2Fx");
@@ -462,8 +464,8 @@ public class Menu extends GameState {
             public boolean touchDown(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
-                //System.out.println("bt pressed!");
-//                if(MyGdxGame.isSoundEnable() && buttonCredits.getScaleX()>0) MyGdxGame.res.getSound("select").play();
+                //Gdx.app.debug(LOG_TAG,"bt pressed!");
+//                if(MyGdxGame.isSoundEnable() && buttonCredits.getScaleX()>0) MyGdxGame.res.getMusic("select").play();
 //                click_on_credits = false;
 //                click_on_play = false;
 //                buttonPlay.setVisible(true);
@@ -481,8 +483,8 @@ public class Menu extends GameState {
                     float y, int pointer, int button) {
 //                click_on_credits = false;
 //                click_on_play = false;
-//                System.out.println("SHOW CREDITS: " + click_on_credits);
-//                System.out.println("CLICK ON PLAY: " + click_on_play);
+//                Gdx.app.debug(LOG_TAG,"SHOW CREDITS: " + click_on_credits);
+//                Gdx.app.debug(LOG_TAG,"CLICK ON PLAY: " + click_on_play);
             };
         });
 
@@ -490,7 +492,7 @@ public class Menu extends GameState {
             public boolean touchDown(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
-                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("select").play();
+                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("select").play();
                 return true;
             };
 
@@ -507,7 +509,7 @@ public class Menu extends GameState {
             public boolean touchDown(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
-                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("select").play();
+                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("select").play();
 
                 return true;
             };
@@ -523,8 +525,8 @@ public class Menu extends GameState {
             public boolean touchDown(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
-                System.out.println("bt tuto pressed!");
-                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("select").play();
+                Gdx.app.debug(LOG_TAG,"bt tuto pressed!");
+                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("select").play();
                 return true;
             };
 
@@ -539,8 +541,8 @@ public class Menu extends GameState {
             public boolean touchDown(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
-                System.out.println("bt copyright pressed!");
-                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("select").play();
+                Gdx.app.debug(LOG_TAG,"bt copyright pressed!");
+                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("select").play();
 //                click_on_credits =! click_on_credits;
 //                if(click_on_credits) {
 //                    /*buttonPBlue.setScale(0);
@@ -580,9 +582,9 @@ public class Menu extends GameState {
             public boolean touchDown(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
-                System.out.println("bt back pressed!");
-                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("select").play();
-                System.out.println("bt backimage pressed!");
+                Gdx.app.debug(LOG_TAG,"bt back pressed!");
+                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("select").play();
+                Gdx.app.debug(LOG_TAG,"bt backimage pressed!");
 
 
                 ButtonStyle style = new ButtonStyle();
@@ -603,7 +605,7 @@ public class Menu extends GameState {
             public boolean touchDown(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
-                System.out.println("bt facebook pressed!");
+                Gdx.app.debug(LOG_TAG,"bt facebook pressed!");
                 return true;
             }
             ;
@@ -619,7 +621,7 @@ public class Menu extends GameState {
             public boolean touchDown(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
-                System.out.println("bt twitter pressed!");
+                Gdx.app.debug(LOG_TAG,"bt twitter pressed!");
                 return true;
             }
             ;
@@ -635,7 +637,7 @@ public class Menu extends GameState {
             public boolean touchDown(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
-                System.out.println("bt store pressed!");
+                Gdx.app.debug(LOG_TAG,"bt store pressed!");
                 return true;
             }
 
@@ -653,7 +655,7 @@ public class Menu extends GameState {
                     MyGdxGame.actionResolver.purchaseExtraCoins();
                     labelMoney.setText(Integer.toString(Save.gd.getMoney()));
                 }else{
-                    if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("error").play();
+                    if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("error").play();
 
                 }
             };
@@ -664,8 +666,8 @@ public class Menu extends GameState {
             public boolean touchDown(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
-                System.out.println("bt achievement pressed!");
-                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("select").play();
+                Gdx.app.debug(LOG_TAG,"bt achievement pressed!");
+                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("select").play();
                 return true;
             }
 
@@ -685,8 +687,8 @@ public class Menu extends GameState {
             public boolean touchDown(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
-                System.out.println("bt close pressed!");
-                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("select").play();
+                Gdx.app.debug(LOG_TAG,"bt close pressed!");
+                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("select").play();
                 return true;
             }
 
@@ -719,7 +721,7 @@ public class Menu extends GameState {
         if(PYellow) Save.gd.setSelector("yellow");
         if(playerIsTouched) Save.gd.setSelector("green");
         if(!PBlue && !PRed && !PYellow && !playerIsTouched) Save.gd.setSelector("random");
-        System.out.println("*SELECTOR* "+"PBlue:"+ PBlue +" PRed:"+ PRed +" PYellow:"+ PYellow +" playerIsTouched:"+ playerIsTouched);
+        Gdx.app.debug(LOG_TAG,"*SELECTOR* "+"PBlue:"+ PBlue +" PRed:"+ PRed +" PYellow:"+ PYellow +" playerIsTouched:"+ playerIsTouched);
         Save.save();
     }
 
@@ -730,7 +732,7 @@ public class Menu extends GameState {
 
         if (click_on_play) {
             if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) {
-                //MyGdxGame.res.getSound("newScreen").play();
+                //MyGdxGame.res.getMusic("newScreen").play();
             }
 
 
@@ -746,19 +748,19 @@ public class Menu extends GameState {
         if (click_on_tuto) {
             click_on_tuto = false;
             gsm.setState(GameStateManager.TUTO);
-            if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)MyGdxGame.res.getSound("newScreen").play();
+            if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)MyGdxGame.res.getMusic("newScreen").play();
         }
 
         if(click_on_credits){
             click_on_credits = false;
             gsm.setState(GameStateManager.CREDITS);
-            if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)MyGdxGame.res.getSound("newScreen").play();
+            if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)MyGdxGame.res.getMusic("newScreen").play();
         }
 
         if(click_on_shop){
             click_on_shop = false;
             gsm.setState(GameStateManager.SHOP);
-            if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)MyGdxGame.res.getSound("newScreen").play();
+            if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)MyGdxGame.res.getMusic("newScreen").play();
         }
     }
 

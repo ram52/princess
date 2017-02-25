@@ -1,5 +1,6 @@
 package com.mygdx.core.entities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -10,6 +11,8 @@ import com.mygdx.core.MyGdxGame;
  */
 
 public class Hand extends B2DSprite{
+
+    private static String LOG_TAG = Hand.class.getSimpleName();
 
     private Sprite tex;
     private Boolean playing = false;
@@ -40,7 +43,7 @@ public class Hand extends B2DSprite{
         rotate45f = false;
         rotate90 = false;
         rotate90f = false;
-        System.out.println("normalAnimation");
+        Gdx.app.debug(LOG_TAG,"normalAnimation");
     }
 
     public void rotateAnimation45(){
@@ -55,7 +58,7 @@ public class Hand extends B2DSprite{
         rotate45f = false;
         rotate90 = false;
         rotate90f = false;
-        System.out.println("rotateAnimation45");
+        Gdx.app.debug(LOG_TAG,"rotateAnimation45");
     }
 
     public void rotateAnimation45_rev(){
@@ -73,7 +76,7 @@ public class Hand extends B2DSprite{
         rotate45f = true;
         rotate90 = false;
         rotate90f = false;
-        System.out.println("rotateAnimation45_rev");
+        Gdx.app.debug(LOG_TAG,"rotateAnimation45_rev");
     }
 
 
@@ -89,7 +92,7 @@ public class Hand extends B2DSprite{
         rotate45f = false;
         rotate90 = true;
         rotate90f = false;
-        System.out.println("rotateAnimation90");
+        Gdx.app.debug(LOG_TAG,"rotateAnimation90");
     }
 
     public void rotateAnimation90_rev(){
@@ -107,7 +110,7 @@ public class Hand extends B2DSprite{
         rotate45f = false;
         rotate90 = false;
         rotate90f = true;
-        System.out.println("rotateAnimation90_rev");
+        Gdx.app.debug(LOG_TAG,"rotateAnimation90_rev");
     }
 
     public void flipedAnimation(){

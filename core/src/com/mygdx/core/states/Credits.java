@@ -23,6 +23,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Credits extends GameState {
+
+    private static String LOG_TAG = Credits.class.getSimpleName();
+
     private boolean click_on_play;
     private Stage stage1, stage2;
     private AlphaAction fade1, fade2, fade3;
@@ -57,7 +60,7 @@ public class Credits extends GameState {
             System.out.print("NETWORK: "+network);
             if(network.equals("4G")|network.equals("3G")|network.equals("WIFI"))
                 game.actionResolver.showOrLoadInterstital();
-            System.out.println(network);
+            Gdx.app.debug(LOG_TAG,network);
         }
 
         Sprite tex = null;
@@ -142,7 +145,7 @@ public class Credits extends GameState {
             public boolean touchDown(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
-                if (Save.gd.isSoundEnable() == 1 | Save.gd.isSoundEnable() == 2) MyGdxGame.res.getSound("select").play();
+                if (Save.gd.isSoundEnable() == 1 | Save.gd.isSoundEnable() == 2) MyGdxGame.res.getMusic("select").play();
                 return true;
             }
 
@@ -186,7 +189,7 @@ public class Credits extends GameState {
                     float y, int pointer, int button) {
 
                 cpt_secret1++;
-                System.out.println("CLICK SECRET 1: " + cpt_secret1);
+                Gdx.app.debug(LOG_TAG,"CLICK SECRET 1: " + cpt_secret1);
                 //if (Save.gd.isSoundEnable() == 1 | Save.gd.isSoundEnable() == 2) MyGdxGame.res.getMusic("secretboss").play();
 
                 return true;
@@ -210,7 +213,7 @@ public class Credits extends GameState {
         if (click_on_play) {
             click_on_play = false;
             gsm.setState(GameStateManager.MENU);
-            if (Save.gd.isSoundEnable() == 1 | Save.gd.isSoundEnable() == 2) MyGdxGame.res.getSound("newScreen").play();
+            if (Save.gd.isSoundEnable() == 1 | Save.gd.isSoundEnable() == 2) MyGdxGame.res.getMusic("newScreen").play();
         }
     }
 
@@ -240,7 +243,7 @@ public class Credits extends GameState {
 //            cpt_secret1 = 0;
 //            game.actionResolver.unlockAchievementGPGS(MyGdxGame.achievementSecretBossShortcut);
 //
-//            System.out.println("BOSS SHORTCUT DISCOVERED");
+//            Gdx.app.debug(LOG_TAG,"BOSS SHORTCUT DISCOVERED");
 //            MyGdxGame.setShortcutDiscovered(true);
 //            gsm.setState(GameStateManager.PLAY);
 //

@@ -9,14 +9,15 @@ import java.io.ObjectOutputStream;
 import com.badlogic.gdx.Gdx;
 
 public class Save {
+
+	private static String LOG_TAG = Save.class.getSimpleName();
 	
 	public static GameData gd;
 	public static String path = Gdx.files.getLocalStoragePath()+ "data.sav";
 	
 	public static void save() {
-
 		try {
-            System.out.println("SAVE FILE: "+path);
+            Gdx.app.debug(LOG_TAG,"SAVE FILE: "+path);
 			ObjectOutputStream out = new ObjectOutputStream(
 				new FileOutputStream(path)
 			);
@@ -24,8 +25,7 @@ public class Save {
 			out.close();
 		}
 		catch(Exception e) {
-			e.printStackTrace();
-			//Gdx.app.exit();
+			Gdx.app.error(LOG_TAG,"error while saving file",e);
 		}
 	}
 	
@@ -33,18 +33,18 @@ public class Save {
 
 		try {
 			if(!saveFileExists()) {
-                System.out.println("DATA FILE DO NOT EXIST: "+path);
+                Gdx.app.debug(LOG_TAG,"DATA FILE DO NOT EXIST: "+path);
 				init();
 				return;
 			}else {
-                System.out.println("FILE EXIST LOAD... "+path);
+                Gdx.app.debug(LOG_TAG,"FILE EXIST LOAD... "+path);
                 ObjectInputStream in = new ObjectInputStream(new FileInputStream(path));
                 gd = (GameData) in.readObject();
                 in.close();
             }
 		}
 		catch(Exception e) {
-			e.printStackTrace();
+			Gdx.app.error(LOG_TAG,"error while loading file",e);
 			Gdx.app.exit();
 		}
 	}
@@ -55,7 +55,7 @@ public class Save {
 	}
 	
 	public static void init() {
-        System.out.println("INIT GAME DATA...");
+        Gdx.app.debug(LOG_TAG,"INIT GAME DATA...");
 		gd = new GameData();
 		gd.init();
 		save();

@@ -1,32 +1,36 @@
 package com.mygdx.core.handlers;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.input.GestureDetector;
 
 public class SimpleDirectionGestureDetector extends GestureDetector {
-public interface DirectionListener {
-    void onLeft();
 
-    void onRight();
+    private static String LOG_TAG = SimpleDirectionGestureDetector.class.getSimpleName();
 
-    void onUp();
+    public interface DirectionListener {
+        void onLeft();
 
-    void onDown();
-}
+        void onRight();
 
-public SimpleDirectionGestureDetector(DirectionListener directionListener) {
-    super(new DirectionGestureListener(directionListener));
-}
+        void onUp();
 
-private static class DirectionGestureListener extends GestureAdapter{
-    DirectionListener directionListener;
-
-    public DirectionGestureListener(DirectionListener directionListener){
-        this.directionListener = directionListener;
+        void onDown();
     }
 
-    @Override
-    public boolean fling(float velocityX, float velocityY, int button) {
-        System.out.println(velocityX+" "+velocityY);
+    public SimpleDirectionGestureDetector(DirectionListener directionListener) {
+        super(new DirectionGestureListener(directionListener));
+    }
+
+    private static class DirectionGestureListener extends GestureAdapter{
+        DirectionListener directionListener;
+
+        public DirectionGestureListener(DirectionListener directionListener){
+            this.directionListener = directionListener;
+        }
+
+        @Override
+        public boolean fling(float velocityX, float velocityY, int button) {
+            Gdx.app.debug(LOG_TAG,velocityX+" "+velocityY);
 
 
             if(Math.abs(velocityX)>Math.abs(velocityY)){
@@ -44,9 +48,9 @@ private static class DirectionGestureListener extends GestureAdapter{
             }
 
 
-        return super.fling(velocityX, velocityY, button);
-    }
+            return super.fling(velocityX, velocityY, button);
+        }
 
-}
+    }
 
 }

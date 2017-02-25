@@ -30,7 +30,7 @@ public class ShopDialog extends Dialog{
 
 //        Dialog dialog = new Dialog("", new Skin(Gdx.files.internal("uiskin.json")), "dialog") {
 //            public void result(Object obj) {
-//                System.out.println("result "+obj);
+//                Gdx.app.debug(LOG_TAG,"result "+obj);
 //            }
 //        };
 

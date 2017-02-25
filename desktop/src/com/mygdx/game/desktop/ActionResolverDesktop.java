@@ -1,9 +1,12 @@
 package com.mygdx.game.desktop;
 
+import com.badlogic.gdx.Gdx;
 import com.mygdx.core.MyGdxGame.ConfirmInterface;
 import com.mygdx.core.entities.ActionResolver;
+import com.mygdx.core.handlers.SimpleDirectionGestureDetector;
 
-public class ActionResolverDesktop implements ActionResolver {	
+public class ActionResolverDesktop implements ActionResolver {
+	private static String LOG_TAG = ActionResolverDesktop.class.getSimpleName();
 	boolean signedInStateGPGS = false;
 
 	@Override
@@ -13,93 +16,93 @@ public class ActionResolverDesktop implements ActionResolver {
 
 	@Override
 	public void loginGPGS() {
-		System.out.println("loginGPGS");
+		Gdx.app.debug(LOG_TAG,"loginGPGS");
 		signedInStateGPGS = true;
 	}
 
 	@Override
 	public void submitScoreGPGS(int score) {
-		System.out.println("submitScoreGPGS " + score);
+		Gdx.app.debug(LOG_TAG,"submitScoreGPGS " + score);
 	}
 
 	@Override
 	public void unlockAchievementGPGS(String achievementId) {
-		System.out.println("unlockAchievement " + achievementId);
+		Gdx.app.debug(LOG_TAG,"unlockAchievement " + achievementId);
 	}
 
 	@Override
 	public void getLeaderboardGPGS() {
-		System.out.println("getLeaderboardGPGS");
+		Gdx.app.debug(LOG_TAG,"getLeaderboardGPGS");
 	}
 
 	@Override
 	public void getAchievementsGPGS() {
-		System.out.println("getAchievementsGPGS");
+		Gdx.app.debug(LOG_TAG,"getAchievementsGPGS");
 	}
 
 	@Override
 	public void purchaseFullBar() {
-		System.out.println("purchaseFullBar");
+		Gdx.app.debug(LOG_TAG,"purchaseFullBar");
 	}
 
 	@Override
 	public void purchaseExtraCoins() {
-		System.out.println("purchaseExtraCoins");
+		Gdx.app.debug(LOG_TAG,"purchaseExtraCoins");
 	}
 
 	@Override
 	public void purchaseAdsRemover() {
-		System.out.println("purchaseAdsRemover");
+		Gdx.app.debug(LOG_TAG,"purchaseAdsRemover");
 	}
 
 	@Override
 	public void purchaseExcalibur() {
-		System.out.println("purchaseExcalibur");
+		Gdx.app.debug(LOG_TAG,"purchaseExcalibur");
 	}
 
 	@Override
 	public void purchaseKamebeam() {
-		System.out.println("purchaseExcalibur");
+		Gdx.app.debug(LOG_TAG,"purchaseExcalibur");
 	}
 
 	@Override
 	public void purchaseBoots() {
-		System.out.println("purchaseBoots");
+		Gdx.app.debug(LOG_TAG,"purchaseBoots");
 	}
 
 	@Override
 	public void purchaseHadouBall() {
-		System.out.println("purchaseHadouBall");
+		Gdx.app.debug(LOG_TAG,"purchaseHadouBall");
 	}
 
 	@Override
 	public void purchaseMegaJump() {
-		System.out.println("purchaseMegaJump");
+		Gdx.app.debug(LOG_TAG,"purchaseMegaJump");
 	}
 
 	@Override
 	public void purchaseLightning() {
-		System.out.println("purchaseLightning");
+		Gdx.app.debug(LOG_TAG,"purchaseLightning");
 	}
 
 	@Override
 	public void purchaseSuperBrick() {
-		System.out.println("purchaseSuperBrick");
+		Gdx.app.debug(LOG_TAG,"purchaseSuperBrick");
 	}
 
 	@Override
 	public void purchaseHundredCoins() {
-		System.out.println("purchaseHundredCoins");
+		Gdx.app.debug(LOG_TAG,"purchaseHundredCoins");
 	}
 
 	@Override
 	public void purchaseThousandCoins() {
-		System.out.println("purchaseThousandCoins");
+		Gdx.app.debug(LOG_TAG,"purchaseThousandCoins");
 	}
 
 	@Override
 	public void showOrLoadInterstitalVideo() {
-		System.out.println("showOrLoadInterstitalVideo");
+		Gdx.app.debug(LOG_TAG,"showOrLoadInterstitalVideo");
 	}
 
 	@Override
@@ -114,12 +117,12 @@ public class ActionResolverDesktop implements ActionResolver {
 
 	@Override
 	  public void showOrLoadInterstital() {
-	    System.out.println("showOrLoadInterstital...");
+	    Gdx.app.debug(LOG_TAG,"showOrLoadInterstital...");
 	  }
 
 	@Override
 	public void shareOnFacebook() {
-		System.out.println("shareOnFacebook");
+		Gdx.app.debug(LOG_TAG,"shareOnFacebook");
 	}
 
 	@Override

@@ -80,7 +80,7 @@ public class MyContactListener implements ContactListener {
 		if (f.getUserData() != null && f.getUserData().equals("enemy")) {
 			touch_enemy = true;
 			enemiesToRemove.add(f.getBody());
-			//System.out.println("TOUCH ENEMY!");
+			//Gdx.app.debug(LOG_TAG,"TOUCH ENEMY!");
 
 		}
 
@@ -90,7 +90,7 @@ public class MyContactListener implements ContactListener {
 		}
 
 		/*if (f.getUserData() != null && f.getUserData().equals("enemy")) {
-			System.out.println("TOUCH BOSS HEAD");
+			Gdx.app.debug(LOG_TAG,"TOUCH BOSS HEAD");
             boosHit = true;
 		}*/
 	}
@@ -127,7 +127,7 @@ public class MyContactListener implements ContactListener {
 
         if (fb.getUserData() != null && fb.getUserData().equals("enemy")) {
 			touch_enemy = false;
-			//System.out.println("DO NOT TOUCH ENEMY!");
+			//Gdx.app.debug(LOG_TAG,"DO NOT TOUCH ENEMY!");
         }
 
 	}

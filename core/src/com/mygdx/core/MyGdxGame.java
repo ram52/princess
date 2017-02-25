@@ -1,5 +1,6 @@
 package com.mygdx.core;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -32,7 +33,7 @@ import com.mygdx.core.handlers.MyInputProcessor;
 import com.mygdx.core.handlers.Save;
 
 public class MyGdxGame implements ApplicationListener {
-    private static final String TAG = MyGdxGame.class.getSimpleName();
+    private static final String LOG_TAG = MyGdxGame.class.getSimpleName();
     private Stage stage0;
     private Image intro;
     private FPSLogger fps;
@@ -88,8 +89,7 @@ public class MyGdxGame implements ApplicationListener {
     background_title, background_tuto, background_shop;
     public static String spritesPackPath = "data/sprite/atlas.pack";
     public static String errorSoundPath = "data/sound/error.ogg";
-    public static String reviveSoundPath = "data/sound/revive.ogg";
-    public static String yaSoundPath = "data/sound/yaa!.ogg";
+    public static String kameBeamSoundPath = "data/sound/kame.ogg";
     public static String jump1SoundPath = "data/sound/jump1.ogg";
     public static String jump2SoundPath = "data/sound/jump2.ogg";
     public static String deathSoundPath = "data/sound/death.ogg";
@@ -103,10 +103,10 @@ public class MyGdxGame implements ApplicationListener {
     public static String crushSoundPath = "data/sound/crush.ogg";
     public static String laughSoundPath = "data/sound/laugh.ogg";
     public static String slashSoundPath = "data/sound/slash.ogg";
-
+    public static String pauseInSoundPath = "data/sound/pause1_in.ogg";
+    public static String pauseOutSoundPath = "data/sound/pause1_out.ogg";
     public static String alarmSoundPath = "data/sound/alarm.ogg";
     public static String interactionSoundPath = "data/sound/interaction.ogg";
-
     public static String selectSoundPath = "data/sound/select.ogg";
     public static String equipedSoundPath = "data/sound/equiped.ogg";
     public static String moveSoundPath = "data/sound/move.ogg";
@@ -114,7 +114,6 @@ public class MyGdxGame implements ApplicationListener {
     public static String enemyHitMusicdPath = "data/sound/hit.ogg";
     public static String kamehamehaSoundPath = "data/sound/kamehameha.ogg";
     public static String epicMusicPath = "data/sound/epic.ogg";
-    public static String reloadedSoundPath = "data/sound/reloaded.ogg";
     public static String fireballSoundPath = "data/sound/fireball.ogg";
     public static String fireballSmallSoundPath = "data/sound/fireball_small.ogg";
     public static String fireballBigSoundPath = "data/sound/fireball_big.ogg";
@@ -194,6 +193,7 @@ public class MyGdxGame implements ApplicationListener {
     }
 
     public void create() {
+        Gdx.app.setLogLevel(Application.LOG_DEBUG);
         //loading  = GifDecoder.loadGIFAnimation(com.badlogic.gdx.graphics.g2d.Animation.PlayMode.LOOP, Gdx.files.internal("data/sprite/loading.gif").readBytes());
         //font = new BitmapFont();
         fps = new FPSLogger();
@@ -209,24 +209,24 @@ public class MyGdxGame implements ApplicationListener {
 
         res = new Content();
         res.loadMusic(onSoundPath, "on");
-        res.loadSound(errorSoundPath, "error");
-        res.loadSound(reviveSoundPath, "revive");
-        res.loadSound(yaSoundPath, "ya");
-        res.loadSound(jump1SoundPath, "jump1");
-        res.loadSound(jump2SoundPath, "jump2");
-        res.loadSound(newScreenSoundPath, "newScreen");
-        res.loadSound(pointSoundPath, "point");
-        res.loadSound(fallingSoundPath, "falling");
-        res.loadSound(selectSoundPath, "select");
-
-        res.loadSound(equipedSoundPath, "equiped");
-        res.loadSound(boomSoundPath, "boom");
+        res.loadMusic(errorSoundPath, "error");
+        res.loadMusic(kameBeamSoundPath, "kame");
+        res.loadMusic(jump1SoundPath, "jump1");
+        res.loadMusic(jump2SoundPath, "jump2");
+        res.loadMusic(newScreenSoundPath, "newScreen");
+        res.loadMusic(pointSoundPath, "point");
+        res.loadMusic(fallingSoundPath, "falling");
+        res.loadMusic(selectSoundPath, "select");
+        res.loadMusic(pauseInSoundPath, "pause_in");
+        res.loadMusic(pauseOutSoundPath, "pause_out");
+        res.loadMusic(equipedSoundPath, "equiped");
+        res.loadMusic(boomSoundPath, "boom");
         res.loadMusic(laughSoundPath, "laugh");
-        res.loadSound(fireballSoundPath, "fireball");
-        res.loadSound(fireballSmallSoundPath, "fireball_small");
-        res.loadSound(fireballBigSoundPath, "fireball_big");
-        res.loadSound(moveSoundPath, "move");
-        res.loadSound(enemyHitMusicdPath, "hit");
+        res.loadMusic(fireballSoundPath, "fireball");
+        res.loadMusic(fireballSmallSoundPath, "fireball_small");
+        res.loadMusic(fireballBigSoundPath, "fireball_big");
+        res.loadMusic(moveSoundPath, "move");
+        res.loadMusic(enemyHitMusicdPath, "hit");
         res.loadMusic(crushSoundPath, "crush");
         //res.loadMusic(openingMusicPath, "opening");
         res.loadMusic(successMusicPath, "success");
@@ -234,11 +234,10 @@ public class MyGdxGame implements ApplicationListener {
         //res.loadMusic(gameOverMusicPath, "gameOver");
         //res.loadMusic(bossMusicPath, "boss");
         res.loadMusic(secretBossSoundPath, "secretboss");
-        res.loadSound(kamehamehaSoundPath, "kamehameha");
-        res.loadSound(reloadedSoundPath, "reloaded");
+        res.loadMusic(kamehamehaSoundPath, "kamehameha");
         //res.loadMusic(epicMusicPath, "epic");
         res.loadMusic(alarmSoundPath, "alarm");
-        res.loadSound(interactionSoundPath, "interaction");
+        res.loadMusic(interactionSoundPath, "interaction");
         res.loadMusic(pointSoundPath, "secret");
         res.loadMusic(secretUnlockSoundPath, "secretUnlock");
         res.loadMusic(deathSoundPath, "death");
@@ -270,7 +269,7 @@ public class MyGdxGame implements ApplicationListener {
         hudCam = new OrthographicCamera();
         hudCam.setToOrtho(false, V_WIDTH, V_HEIGHT);
         size(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        System.out.println(TAG+"-->"+ "SCREEN SIZE: " + Gdx.graphics.getWidth() + "X" + Gdx.graphics.getHeight());
+        Gdx.app.debug(LOG_TAG,"-->"+ "SCREEN SIZE: " + Gdx.graphics.getWidth() + "X" + Gdx.graphics.getHeight());
         Save.load();
 
         Save.gd.setFireBallPurchased(true);
@@ -315,7 +314,7 @@ public class MyGdxGame implements ApplicationListener {
                         res.getMusic("on").play();
                 }
 
-                System.out.println(TAG+"-->"+"LOADING...  " + progress+"%");
+                Gdx.app.debug(LOG_TAG,progress+"%");
 
                 Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
                 sb.setProjectionMatrix(cam.combined);
@@ -379,7 +378,7 @@ public class MyGdxGame implements ApplicationListener {
             resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
             Gdx.gl.glViewport((int) viewport.x, (int) viewport.y, (int) viewport.width, (int) viewport.height);
             progress = 100 * (assets.getLoadedAssets() / numberOfAssets);
-            System.out.println(TAG+"-->"+"LOADING...  " + progress +"%");
+            Gdx.app.debug(LOG_TAG, progress +"%");
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
             sb.setProjectionMatrix(cam.combined);
             stage0.act();
@@ -417,61 +416,9 @@ public class MyGdxGame implements ApplicationListener {
         try {
             Thread.sleep(50);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Gdx.app.error(LOG_TAG,"error in thread sleep",e);
         }
     }
-
-//    public void displayLoadingBar(int r, int g, int b, float posY, boolean border) {
-//
-//        int numberOfRec = 10;
-//        float recSize = 40f;
-//        float space = 5f;
-//        float barWidth = numberOfRec * recSize + space * (recSize - 1);
-//        float barPosY = posY;
-//        float first = (V_WIDTH - barWidth) / 0.5f;
-//
-//        Gdx.gl.glEnable(GL20.GL_BLEND);
-//        shapeRenderer.setProjectionMatrix(cam.combined);
-//        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-//        shapeRenderer.setColor(r / 255f, g / 255f, b / 255f, 0.1f);
-//        if (progress > 0) shapeRenderer.rect(first, barPosY, recSize, recSize);
-//        shapeRenderer.setColor(r / 255f, g / 255f, b / 255f, 0.15f);
-//        if (progress > 10)
-//            shapeRenderer.rect(first + (space + recSize) * 1, barPosY, recSize, recSize);
-//        shapeRenderer.setColor(r / 255f, g / 255f, b / 255f, 0.2f);
-//        if (progress > 20)
-//            shapeRenderer.rect(first + (space + recSize) * 2, barPosY, recSize, recSize);
-//        shapeRenderer.setColor(r / 255f, g / 255f, b / 255f, 0.25f);
-//        if (progress > 30)
-//            shapeRenderer.rect(first + (space + recSize) * 3, barPosY, recSize, recSize);
-//        shapeRenderer.setColor(r / 255f, g / 255f, b / 255f, 0.3f);
-//        if (progress > 40)
-//            shapeRenderer.rect(first + (space + recSize) * 4, barPosY, recSize, recSize);
-//        shapeRenderer.setColor(r / 255f, g / 255f, b / 255f, 0.4f);
-//        if (progress > 50)
-//            shapeRenderer.rect(first + (space + recSize) * 5, barPosY, recSize, recSize);
-//        shapeRenderer.setColor(r / 255f, g / 255f, b / 255f, 0.55f);
-//        if (progress > 60)
-//            shapeRenderer.rect(first + (space + recSize) * 6, barPosY, recSize, recSize);
-//        shapeRenderer.setColor(r / 255f, g / 255f, b / 255f, 0.75f);
-//        if (progress > 70)
-//            shapeRenderer.rect(first + (space + recSize) * 7, barPosY, recSize, recSize);
-//        shapeRenderer.setColor(r / 255f, g / 255f, b / 255f, 0.85f);
-//        if (progress > 80)
-//            shapeRenderer.rect(first + (space + recSize) * 8, barPosY, recSize, recSize);
-//        shapeRenderer.setColor(r / 255f, g / 255f, b / 255f, 1f);
-//        if (progress > 90)
-//            shapeRenderer.rect(first + (space + recSize) * 9, barPosY, recSize, recSize);
-//        shapeRenderer.end();
-//        Gdx.gl.glDisable(GL20.GL_BLEND);
-//
-//        if (border) {
-//            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-//            Gdx.gl20.glLineWidth(2.4f);
-//            shapeRenderer.rect(first - recSize / 2, barPosY - recSize / 2, barWidth + recSize, recSize * 2);
-//            shapeRenderer.end();
-//        }
-//    }
 
     public static void computeStarBlinking() {
         if (cptBlinkingStarSlow > 1 | cptBlinkingStarSlow < 0) isAscendingSlow = !isAscendingSlow;
@@ -576,11 +523,15 @@ public class MyGdxGame implements ApplicationListener {
     public static void updateBGM() {
 
             if (soundEnable == 0 | soundEnable == 1) {
-                if (res.getMusic("main").isPlaying()) res.getMusic("main").pause();
+                if (res.getMusic("main").isPlaying()) {
+                    res.getMusic("main").stop();
+                }
             } else {
                 if (!MyGdxGame.pause) {
                     //MyGdxGame.res.getMusic("main").setVolume(0.6f);
-                    if (!res.getMusic("main").isPlaying()) res.getMusic("main").play();
+                    if (!res.getMusic("main").isPlaying()) {
+                        res.getMusic("main").play();
+                    }
                 }
             }
 
@@ -597,7 +548,7 @@ public class MyGdxGame implements ApplicationListener {
         Save.gd.setSound(soundEnable);
         Save.save();
         soundEnable = Save.gd.isSoundEnable();
-        System.out.println(TAG+"-->"+"SOUND: " + soundEnable);
+        Gdx.app.debug(LOG_TAG,"-->"+"SOUND: " + soundEnable);
     }
 
     public void size(int width, int height) {
@@ -621,10 +572,6 @@ public class MyGdxGame implements ApplicationListener {
         offsetx = crop.x;
         offsety = crop.y;
 
-    }
-
-    public static void playContinueSound() {
-        if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("revive").play();
     }
 
     public static int isSoundEnable() {
@@ -689,19 +636,24 @@ public class MyGdxGame implements ApplicationListener {
         pause = true;
     }
 
-    public static void setPause(boolean p) {
-        if(!isBoosTerritory) {
+    public static void setPause(boolean p, boolean boot) {
+        if(!boot) {
             if (p) {
                 res.getMusic("main").setVolume(0f);
                 if (res.getMusic("main").isPlaying()) res.getMusic("main").pause();
-
                 if (res.getMusic("alarm").isPlaying()) res.getMusic("alarm").pause();
+                if (soundEnable == 2 | soundEnable == 1) res.getMusic("pause_in").play();
             } else {
                 res.getMusic("main").setVolume(1f);
                 if (soundEnable == 2) res.getMusic("main").play();
+                if (soundEnable == 2 | soundEnable == 1) res.getMusic("pause_out").play();
             }
-
+        }else{
+            res.getMusic("main").setVolume(1f);
+            if (res.getMusic("main").isPlaying()) res.getMusic("main").stop();
+            if (res.getMusic("alarm").isPlaying()) res.getMusic("alarm").stop();
         }
+
         pause = p;
     }
 
