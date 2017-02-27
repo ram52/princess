@@ -60,8 +60,11 @@ public class GameOver extends GameState {
         super(gsm);
 
         if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)
-            if(MyGdxGame.res.getMusic("main").isPlaying())
-                MyGdxGame.res.getMusic("main").stop();
+            if(MyGdxGame.res.getMusic("level1").isPlaying())
+                MyGdxGame.res.getMusic("level1").stop();
+
+
+
 
         //game.actionResolver.hideBannerAd();
         MyGdxGame.lastPlayerPosition = new Vector2(0,0);
@@ -70,10 +73,10 @@ public class GameOver extends GameState {
         stage0 = new Stage();
         stage0.addActor(intro);
         MyGdxGame.continueCount = 0;
-        if(MyGdxGame.res.getMusic("main").isPlaying()) MyGdxGame.res.getMusic("main").stop();
+        if(MyGdxGame.res.getMusic("level1").isPlaying()) MyGdxGame.res.getMusic("level1").stop();
         //if(MyGdxGame.res.getMusic("boss").isPlaying()) MyGdxGame.res.getMusic("boss").stop();
 
-        animTitle = new Animation(new Sprite(MyGdxGame.atlas.findRegion("gameover")).split(59,47)[0], 1 / 5f);
+        animTitle = new Animation(new Sprite(MyGdxGame.atlas.findRegion("game_over")).split(59,47)[0], 1 / 5f);
 
         MyGdxGame.lastPlayerPosition = new Vector2(0,0);
         MyGdxGame.lastBrickPosition = new Vector2(0,0);
@@ -141,7 +144,7 @@ public class GameOver extends GameState {
                 if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) {
                     MyGdxGame.res.getMusic("death").play();
                     MyGdxGame.res.getMusic("death").setVolume(1);
-                    //MyGdxGame.res.getMusic("gameOver").play();
+                    //MyGdxGame.res.getMusic("game_over").play();
                 }
             }
         }
@@ -311,7 +314,7 @@ public class GameOver extends GameState {
             public boolean touchDown(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
-                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("select").play();
+                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("select").play();
                 if(MyGdxGame.res.getMusic("death").isPlaying()) MyGdxGame.res.getMusic("death").stop();
                 return true;
             };
@@ -328,7 +331,7 @@ public class GameOver extends GameState {
             public boolean touchDown(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
-                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("select").play();
+                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("select").play();
                 //if (MyGdxGame.isSoundEnable()) MyGdxGame.res.getMusic("main").setVolume(0.15f);
                 return true;
             }
@@ -349,7 +352,7 @@ public class GameOver extends GameState {
             public boolean touchDown(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
-                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("select").play();
+                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("select").play();
 
                 return true;
             };
@@ -366,7 +369,7 @@ public class GameOver extends GameState {
             public boolean touchDown(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
-                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("select").play();
+                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("select").play();
                 MyGdxGame.actionResolver.shareOnFacebook();
                 return true;
             }
@@ -382,7 +385,7 @@ public class GameOver extends GameState {
             public boolean touchDown(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
-                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("select").play();
+                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("select").play();
                 return true;
             };
 
@@ -398,7 +401,7 @@ public class GameOver extends GameState {
             public boolean touchDown(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
-                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("select").play();
+                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("select").play();
 
                 return true;
             };
@@ -423,7 +426,7 @@ public class GameOver extends GameState {
             gsm.setState(GameStateManager.MENU);
             MyGdxGame.setStartCameraMotion(true);
             if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("newScreen").play();
-            //if(MyGdxGame.res.getMusic("gameOver").isPlaying()) MyGdxGame.res.getMusic("gameOver").stop();
+            //if(MyGdxGame.res.getMusic("game_over").isPlaying()) MyGdxGame.res.getMusic("game_over").stop();
             if(MyGdxGame.res.getMusic("success").isPlaying()) MyGdxGame.res.getMusic("success").stop();
             //Gdx.gl.glClearColor(0, 0, 0, 1);
         }
@@ -433,7 +436,7 @@ public class GameOver extends GameState {
             gsm.setState(GameStateManager.PLAY);
             MyGdxGame.setStartCameraMotion(false);
             if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("newScreen").play();
-            //if(MyGdxGame.res.getMusic("gameOver").isPlaying()) MyGdxGame.res.getMusic("gameOver").stop();
+            //if(MyGdxGame.res.getMusic("game_over").isPlaying()) MyGdxGame.res.getMusic("game_over").stop();
             if(MyGdxGame.res.getMusic("success").isPlaying()) MyGdxGame.res.getMusic("success").stop();
             if(MyGdxGame.res.getMusic("death").isPlaying()) MyGdxGame.res.getMusic("death").stop();
             /*if (MyGdxGame.actionResolver.getSignedInGPGS())
@@ -445,6 +448,15 @@ public class GameOver extends GameState {
     }
 
     public void update(float dt) {
+
+
+        if(MyGdxGame.isSoundEnable() == 2){
+            if(!MyGdxGame.res.getMusic("game_over").isPlaying() && !MyGdxGame.res.getMusic("death").isPlaying() ){
+                MyGdxGame.res.getMusic("game_over").setVolume(1.0f);
+                MyGdxGame.res.getMusic("game_over").play();
+            }
+        }
+
         //MyGdxGame.updateBGM();
         handleInput();
         MyGdxGame.background_wood1.update(dt);
@@ -601,6 +613,7 @@ public class GameOver extends GameState {
 
     public void dispose() {
         //sb.dispose();
+        if (MyGdxGame.res.getMusic("game_over").isPlaying()) MyGdxGame.res.getMusic("game_over").stop();
     }
 
 }

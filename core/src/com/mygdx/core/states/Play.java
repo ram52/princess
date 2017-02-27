@@ -206,10 +206,10 @@ public class Play extends GameState {
         if(isTutorial){
             pickedGameplay = -1;
         }else{
-            if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)
-                if(!MyGdxGame.res.getMusic("main").isPlaying()){
-                    MyGdxGame.res.getMusic("main").setVolume(1f);
-                    MyGdxGame.res.getMusic("main").play();
+            if(MyGdxGame.isSoundEnable() == 2)
+                if(!MyGdxGame.res.getMusic("level1").isPlaying()){
+                    MyGdxGame.res.getMusic("level1").setVolume(1f);
+                    MyGdxGame.res.getMusic("level1").play();
                 }
         }
 
@@ -497,7 +497,7 @@ public class Play extends GameState {
                     fire = true;
                     if((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)&& reloadKamehameha == 0 && beamWidth == 0){
                         if((pickedGameplay == 1 && tuto_step5) | (pickedGameplay == 2 && tuto_step3) | !isTutorial){
-                            MyGdxGame.res.getMusic("kame").play();
+                            MyGdxGame.res.getSound("kame").play();
                         }
 
                     }
@@ -505,7 +505,7 @@ public class Play extends GameState {
                     fire = true;
                     if((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)&& reloadLightning == 0 && beamWidth == 0 ){
                         if((pickedGameplay == 1 && tuto_step5) | (pickedGameplay == 2 && tuto_step3) | !isTutorial){
-                            MyGdxGame.res.getMusic("kame").play();
+                            MyGdxGame.res.getSound("kame").play();
                         }
                     }
                 } else{
@@ -755,8 +755,8 @@ public class Play extends GameState {
         Skin skinButtonGamePlay1 = new Skin();
         skinButtonGamePlay1.addRegions(MyGdxGame.atlas);
         Button.ButtonStyle buttonStyleGp1 = new Button.ButtonStyle();
-        buttonStyleGp1.up = skinButtonGamePlay1.getDrawable("gameplay1Up");
-        buttonStyleGp1.down = skinButtonGamePlay1.getDrawable("gameplay1Down");
+        buttonStyleGp1.up = skinButtonGamePlay1.getDrawable("gameplay2Up");
+        buttonStyleGp1.down = skinButtonGamePlay1.getDrawable("gameplay2Down");
         buttonGp1 = new Button(buttonStyleGp1);
         buttonGp1.setWidth(Gdx.graphics.getWidth() / 3f);
         buttonGp1.setHeight(Gdx.graphics.getWidth() / 3f);
@@ -768,8 +768,8 @@ public class Play extends GameState {
         Skin skinButtonGamePlay2 = new Skin();
         skinButtonGamePlay2.addRegions(MyGdxGame.atlas);
         Button.ButtonStyle buttonStyleGp2 = new Button.ButtonStyle();
-        buttonStyleGp2.up = skinButtonGamePlay2.getDrawable("gameplay2Up");
-        buttonStyleGp2.down = skinButtonGamePlay2.getDrawable("gameplay2Down");
+        buttonStyleGp2.up = skinButtonGamePlay2.getDrawable("gameplay1Up");
+        buttonStyleGp2.down = skinButtonGamePlay2.getDrawable("gameplay1Down");
         buttonGp2 = new Button(buttonStyleGp2);
         buttonGp2.setWidth(buttonGp1.getWidth());
         buttonGp2.setHeight(buttonGp1.getWidth());
@@ -783,28 +783,7 @@ public class Play extends GameState {
             public boolean touchDown(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
-                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("interaction").play();
-                return true;
-            }
-            public void touchUp(
-                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
-                    float y, int pointer, int button) {
-                MyGdxGame.pickedGameplay = 1;
-                Save.load();
-                Save.gd.setPickedGamePlay(1);
-                Save.save();
-                tuto_step0 = true;
-                updateButtonPosition();
-                createHand(MyGdxGame.V_WIDTH/PPM , MyGdxGame.GROUND/1.15f);
-                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("newScreen").play();
-            }
-        });
-
-        buttonGp2.addListener(new InputListener() {
-            public boolean touchDown(
-                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
-                    float y, int pointer, int button) {
-                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("interaction").play();
+                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("interaction").play();
                 return true;
             }
             public void touchUp(
@@ -817,6 +796,28 @@ public class Play extends GameState {
                 tuto_step0 = true;
                 updateButtonPosition();
                 createHand(MyGdxGame.V_WIDTH/8f/PPM , MyGdxGame.GROUND/1.15f);
+
+                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("newScreen").play();
+            }
+        });
+
+        buttonGp2.addListener(new InputListener() {
+            public boolean touchDown(
+                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
+                    float y, int pointer, int button) {
+                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("interaction").play();
+                return true;
+            }
+            public void touchUp(
+                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
+                    float y, int pointer, int button) {
+                MyGdxGame.pickedGameplay = 1;
+                Save.load();
+                Save.gd.setPickedGamePlay(1);
+                Save.save();
+                tuto_step0 = true;
+                updateButtonPosition();
+                createHand(MyGdxGame.V_WIDTH/PPM , MyGdxGame.GROUND/1.15f);
                 if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("newScreen").play();
             }
         });
@@ -841,7 +842,7 @@ public class Play extends GameState {
                 Play.this.isTutorial = false;
                 MyGdxGame.lastPlayerPosition = new Vector2(0,0);
                 Timer.instance().clear();
-                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("select").play();
+                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("select").play();
                 return true;
             }
             public void touchUp(
@@ -923,7 +924,7 @@ public class Play extends GameState {
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
                 Gdx.app.debug(LOG_TAG,"clicked no!");
-                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("select").play();
+                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("select").play();
                 Gdx.app.debug(LOG_TAG,"GAME OVER");
                 MyGdxGame.setContinue(false);
                 submit = true;
@@ -966,7 +967,7 @@ public class Play extends GameState {
                     }
                     MyGdxGame.pause = false;
                 }else{
-                    if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("error").play();
+                    if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("error").play();
                     labelMoney.setColor(Color.RED);
                     Timer.schedule(new Timer.Task() {
                         @Override
@@ -994,7 +995,7 @@ public class Play extends GameState {
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
                 Gdx.app.debug(LOG_TAG,"clicked camera!");
-                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("select").play();
+                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("select").play();
                 //MyGdxGame.actionResolver.showOrLoadInterstitalVideo();
                 String network = MyGdxGame.actionResolver.getNetworkClass();
                 if(network == null) network = "ABSENT";
@@ -1029,7 +1030,7 @@ public class Play extends GameState {
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
                 Play.this.isTutorial = false;
-                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("select").play();
+                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("select").play();
                 return true;
             }
             public void touchUp(
@@ -1060,7 +1061,9 @@ public class Play extends GameState {
                 }
 
                 if(MyGdxGame.isSoundEnable() == 0) {
-                    MyGdxGame.res.getMusic("select").play();
+                    MyGdxGame.res.getSound("select").play();
+                    if (MyGdxGame.res.getMusic("level1").isPlaying()) MyGdxGame.res.getMusic("level1").stop();
+                    if (MyGdxGame.res.getMusic("alarm").isPlaying()) MyGdxGame.res.getMusic("alarm").stop();
                     Button.ButtonStyle soundButtonStyle = new Button.ButtonStyle();
                     soundButtonStyle.up = skin.getDrawable("buttonSound1Mute");
                     soundButtonStyle.down = skin.getDrawable("buttonSound1Mute");
@@ -1068,7 +1071,8 @@ public class Play extends GameState {
                 }
 
                 if(MyGdxGame.isSoundEnable() == 1) {
-                    MyGdxGame.res.getMusic("select").play();
+                    MyGdxGame.res.getSound("select").play();
+                    if (MyGdxGame.res.getMusic("level1").isPlaying()) MyGdxGame.res.getMusic("level1").stop();
                     Button.ButtonStyle soundButtonStyle = new Button.ButtonStyle();
                     soundButtonStyle.up = skin.getDrawable("buttonSound1Fx");
                     soundButtonStyle.down = skin.getDrawable("buttonSound1Fx");
@@ -1076,9 +1080,8 @@ public class Play extends GameState {
                 }
 
                 if(MyGdxGame.isSoundEnable() == 2) {
-                    MyGdxGame.res.getMusic("select").play();
-                    if (MyGdxGame.res.getMusic("main").isPlaying())
-                        MyGdxGame.res.getMusic("main").pause();
+                    MyGdxGame.res.getSound("select").play();
+                    if (!MyGdxGame.res.getMusic("level1").isPlaying()) MyGdxGame.res.getMusic("level1").play();
                     Button.ButtonStyle soundButtonStyle = new Button.ButtonStyle();
                     soundButtonStyle.up = skin.getDrawable("buttonSound1Full");
                     soundButtonStyle.down = skin.getDrawable("buttonSound1Full");
@@ -1369,7 +1372,7 @@ public class Play extends GameState {
         if(Save.gd.isLightningEquiped() && fire && !lightningRunning){
             fire = false;
             //todo sound
-            if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("fireball").play();
+            if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("fireball").play();
             lightning = createLightning(player.getPosition().x, 0,4);
             lightningRunning = true;
 
@@ -1381,8 +1384,10 @@ public class Play extends GameState {
             if(!TEST)
                 player.setFireBallCount(player.getFireBallCount()-4);
             //}
-            //todo sound
-            if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("fireball_small").play();
+            if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) {
+
+                MyGdxGame.res.getSound("fireball_small").play();
+            }
             float gap = 10.0f/PPM;
             if(player.isRight()){
                 FireBall fireball = createFireBall(player.getPosition().x + gap, player.getPosition().y,2);
@@ -1401,8 +1406,11 @@ public class Play extends GameState {
             if(!TEST)
                 player.setFireBallCount(player.getFireBallCount()-1);
             //}
-            //todo sound
-            if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("fireball_big").play();
+
+            if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) {
+                MyGdxGame.res.getSound("fireball_big").play();
+            }
+
             float gap = 10.0f/PPM;
             if(player.isRight()){
                 FireBall fireball = createFireBall(player.getPosition().x + gap, player.getPosition().y,2.5f);
@@ -1489,8 +1497,6 @@ public class Play extends GameState {
                 }else{
                     enemy.setHealth(enemy.getHealth()-1);
                 }
-
-
 
                 if(!MyGdxGame.pause){
                     if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2){
@@ -1970,6 +1976,9 @@ public class Play extends GameState {
                     );
 
                     brick.brokeAnimation();
+                    if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) {
+                        MyGdxGame.res.getSound("broken").play();
+                    }
                     brick.setDead(true);
                     brick.getBody().setGravityScale(0);
                     makeBrickSensor(brick, true);
@@ -2119,7 +2128,7 @@ public class Play extends GameState {
 
                     if(!enemy.isDead()){
                         player.collectCoin();
-                        if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("boom").play();
+                        if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("boom").play();
                         if(Save.gd.isFireBallEquiped() && enemiesKilled >= 4 && player.getFireBallCount()< MAXFIREBALLCOUNT){
                             fire = false;
                             player.setFireBallCount(player.getFireBallCount()+4);
@@ -2167,7 +2176,7 @@ public class Play extends GameState {
                             if(enemy.isTouched()){
                                 if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2){
                                     if(cpt_sound_hit % 2 == 0){
-                                        MyGdxGame.res.getMusic("hit").play();
+                                        MyGdxGame.res.getSound("hit").play();
                                     }
                                     if(cpt_sound_hit < 9999){
                                         cpt_sound_hit+=0.5;
@@ -2372,7 +2381,11 @@ public class Play extends GameState {
                 }
             }
 
-
+            if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2){
+                if(MyGdxGame.res.getMusic("level1").isPlaying()){
+                    MyGdxGame.res.getMusic("level1").stop();
+                }
+            }
 
             //TODO go to game over
             if(!gameOver){
@@ -2520,7 +2533,7 @@ public class Play extends GameState {
 
         if(left && !tuto_step2 && player.getPosition().x <= 64/PPM ){
 
-            if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("interaction").play();
+            if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("interaction").play();
             cpt_tuto = 0;
             hidePointer = true;
             tuto_step1 = true;
@@ -2551,7 +2564,7 @@ public class Play extends GameState {
 
             if(player.getPosition().x > MyGdxGame.V_WIDTH/1.8f/PPM ){
                 if(!tuto_step3)
-                    if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("interaction").play();
+                    if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("interaction").play();
                 tuto_step3 = true;
             }
 
@@ -2570,7 +2583,7 @@ public class Play extends GameState {
             if(!pointer.getRotate90f()) pointer.rotateAnimation90_rev();
 
             if(hidePointer)
-                //if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("interaction").play();
+                //if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("interaction").play();
 
             hidePointer = false;
 
@@ -2598,7 +2611,7 @@ public class Play extends GameState {
         if(!tuto_step4 && tuto_step3 && !right && !left){
             hidePointer = true;
             tuto_step4 = true;
-            if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("interaction").play();
+            if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("interaction").play();
             pointer.getBody().setTransform( pointer.getPosition().x, MyGdxGame.V_WIDTH/1.1f/PPM - pointer.getHeight()/PPM, pointer.getBody().getAngle());
         }
 
@@ -2625,7 +2638,7 @@ public class Play extends GameState {
                 @Override
                 public void run() {
                     tuto_step5 = true;
-                    if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("interaction").play();
+                    if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("interaction").play();
                     if(!pointer.getPlaying())
                         pointer.normalAnimation();
 
@@ -2642,7 +2655,7 @@ public class Play extends GameState {
         }
 
         if(brick != null && !tuto_step7){
-            if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("interaction").play();
+            if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("interaction").play();
             hidePointer = true;
             tuto_step7 = true;
             //bodyToDestroy.add(pointer);
@@ -2654,9 +2667,9 @@ public class Play extends GameState {
                 public void run() {
                     isMalicious = false;
                     if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) {
-                        if(!MyGdxGame.res.getMusic("main").isPlaying()){
-                            MyGdxGame.res.getMusic("main").setVolume(1f);
-                            MyGdxGame.res.getMusic("main").play();
+                        if(!MyGdxGame.res.getMusic("level1").isPlaying()){
+                            MyGdxGame.res.getMusic("level1").setVolume(1f);
+                            MyGdxGame.res.getMusic("level1").play();
                         }
                     }
                     enemies.add(createEnemy(1/PPM , MyGdxGame.GROUND, true));
@@ -2671,7 +2684,7 @@ public class Play extends GameState {
                 @Override
                 public void run() {
                     createPrincess(MyGdxGame.V_WIDTH/2/PPM, 2*MyGdxGame.GROUND);
-                    if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("interaction").play();
+                    if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("interaction").play();
                 }
             }, 2);
 
@@ -2708,7 +2721,7 @@ public class Play extends GameState {
         if(!tuto_step1 && player.getPosition().x*PPM < 70){
             left = false;
             tuto_step1 = true;
-            if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("interaction").play();
+            if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("interaction").play();
             pointer.getBody().setTransform(MyGdxGame.V_WIDTH/2.8f/PPM, pointer.getPosition().y, pointer.getBody().getAngle());
         }
 
@@ -2717,7 +2730,7 @@ public class Play extends GameState {
         if(!tuto_step2 && tuto_step1 && player.getPosition().x*PPM > 300 ){
             right = false;
             tuto_step2 = true;
-            if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("interaction").play();
+            if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("interaction").play();
             pointer.getBody().setTransform(MyGdxGame.V_WIDTH/1.15f/PPM, pointer.getPosition().y, pointer.getBody().getAngle());
         }
 
@@ -2728,7 +2741,7 @@ public class Play extends GameState {
                 public void run() {
                     pointer.getBody().setTransform(MyGdxGame.V_WIDTH/1.7f/PPM, pointer.getPosition().y, pointer.getBody().getAngle());
                     tuto_step3 = true;
-                    if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("interaction").play();
+                    if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("interaction").play();
                 }
             }, 1);
         }
@@ -2742,14 +2755,14 @@ public class Play extends GameState {
                 public void run() {
                     if(pointer != null)
                         pointer.getBody().setTransform(MyGdxGame.V_WIDTH/2.9f/PPM, pointer.getPosition().y*3f, pointer.getBody().getAngle());
-                    if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("interaction").play();
+                    if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("interaction").play();
                 }
             }, 1);
         }
 
         if(brick != null && !tuto_step5){
             tuto_step5 = true;
-            if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("interaction").play();
+            if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("interaction").play();
             //bodyToDestroy.add(pointer);
             pointer = null;
 
@@ -2758,10 +2771,10 @@ public class Play extends GameState {
                 @Override
                 public void run() {
                     isMalicious = false;
-                    if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) {
-                        if(!MyGdxGame.res.getMusic("main").isPlaying()){
-                            MyGdxGame.res.getMusic("main").setVolume(1f);
-                            MyGdxGame.res.getMusic("main").play();
+                    if(MyGdxGame.isSoundEnable() == 2) {
+                        if(!MyGdxGame.res.getMusic("level1").isPlaying()){
+                            MyGdxGame.res.getMusic("level1").setVolume(1f);
+                            MyGdxGame.res.getMusic("level1").play();
                         }
                     }
                     enemies.add(createEnemy(1/PPM , MyGdxGame.GROUND, true));
@@ -2776,7 +2789,7 @@ public class Play extends GameState {
                 @Override
                 public void run() {
                     createPrincess(MyGdxGame.V_WIDTH/2/PPM, 2*MyGdxGame.GROUND);
-                    if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("interaction").play();
+                    if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("interaction").play();
                 }
             }, 2);
 
@@ -2944,7 +2957,7 @@ public class Play extends GameState {
                 brick.getBody().setType(BodyType.DynamicBody);
             }
 
-            if(!brick.isFalling()){
+            if(brick != null && !brick.isFalling()){
                 brick.getBody().setLinearVelocity(0,0);
             }
         }
@@ -2997,7 +3010,7 @@ public class Play extends GameState {
 
         if( (cl.isPlayerOnGround() |cl.isPlayerOnBrick() ) && jump && !player.isJumpRight() && !player.isJumpRight() /*&& (player.getPosition().y*PPM) < 625*/ ){
             jump = false;
-            if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("jump1").play();
+            if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("jump1").play();
             player.getBody().setLinearVelocity(new Vector2(player.getBody().getLinearVelocity().x,0));
             player.getBody().setAngularVelocity(0);
             //player.getBody().applyForceToCenter(new Vector2(0,180),false);
@@ -3084,7 +3097,7 @@ public class Play extends GameState {
         labelScore.setText(Integer.toString(player.getNumCoins()));
 
         if(player.getNumCoins() >= 100){
-            enemyIsNextLevel = true;
+            enemyIsNextLevel = getRandomBoolean();
         }
 
         if(player.getBody().getPosition().y < -0.3f){
@@ -3235,7 +3248,7 @@ public class Play extends GameState {
                     else{
                         Gdx.app.debug(LOG_TAG,"kamehameha reloaded!");
                         if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
-                            MyGdxGame.res.getMusic("equiped").play();
+                            MyGdxGame.res.getSound("equiped").play();
                         }
                         blockKamehameha = false;
                         reloadKamehameha = 0;
@@ -3266,7 +3279,7 @@ public class Play extends GameState {
                         Gdx.app.debug(LOG_TAG,"lightning reloaded!");
 
                         if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
-                            MyGdxGame.res.getMusic("equiped").play();
+                            MyGdxGame.res.getSound("equiped").play();
                         }
                         blockLightning = false;
                         reloadLightning = 0;
@@ -3952,6 +3965,7 @@ public class Play extends GameState {
     public void dispose() {
         spriteBatch.dispose();
         spriteBatchLightning.dispose();
+        if (MyGdxGame.res.getMusic("alarm").isPlaying()) MyGdxGame.res.getMusic("alarm").stop();
     }
 
 }

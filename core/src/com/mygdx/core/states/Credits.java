@@ -53,6 +53,13 @@ public class Credits extends GameState {
         stage0.addActor(intro);
         viewport = new Rectangle();
 
+        if(MyGdxGame.isSoundEnable() == 2){
+            if(!MyGdxGame.res.getMusic("shop").isPlaying()){
+                MyGdxGame.res.getMusic("shop").setVolume(1.0f);
+                MyGdxGame.res.getMusic("shop").play();
+            }
+        }
+
         Save.load();
         if (!Save.gd.getAdsRemoverPurchased()) {
             String network = game.actionResolver.getNetworkClass();
@@ -145,7 +152,7 @@ public class Credits extends GameState {
             public boolean touchDown(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
-                if (Save.gd.isSoundEnable() == 1 | Save.gd.isSoundEnable() == 2) MyGdxGame.res.getMusic("select").play();
+                if (Save.gd.isSoundEnable() == 1 | Save.gd.isSoundEnable() == 2) MyGdxGame.res.getSound("select").play();
                 return true;
             }
 
@@ -355,6 +362,7 @@ public class Credits extends GameState {
     }
 
     public void dispose() {
+        if (MyGdxGame.res.getMusic("shop").isPlaying()) MyGdxGame.res.getMusic("shop").stop();
     }
 
 }
