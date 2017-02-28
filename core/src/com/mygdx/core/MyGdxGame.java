@@ -2,10 +2,12 @@ package com.mygdx.core;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
@@ -111,6 +113,7 @@ public class MyGdxGame implements ApplicationListener {
     public static String moveSoundPath = "data/sound/move.ogg";
     public static String boomSoundPath = "data/sound/boom.ogg";
     public static String enemyHitMusicdPath = "data/sound/hit.ogg";
+    public static String noAmmoSoundPath = "data/sound/no_ammo.ogg";
     public static String kamehamehaSoundPath = "data/sound/kamehameha.ogg";
     public static String fireballSmallSoundPath = "data/sound/fireball_small.ogg";
     public static String fireballBigSoundPath = "data/sound/fireball_big.ogg";
@@ -167,6 +170,7 @@ public class MyGdxGame implements ApplicationListener {
 
     public static int pickedGameplay = -1;
 
+
     public static boolean isContinue() {
         return Continue;
     }
@@ -191,6 +195,8 @@ public class MyGdxGame implements ApplicationListener {
         this.actionResolver = actionResolver;
         this.requestHandler = requestHandler;
     }
+
+
 
     public void create() {
         Gdx.app.setLogLevel(Application.LOG_DEBUG);
@@ -220,6 +226,7 @@ public class MyGdxGame implements ApplicationListener {
         res.loadSound(pauseOutSoundPath, "pause_out");
         res.loadSound(equipedSoundPath, "equiped");
         res.loadSound(boomSoundPath, "boom");
+        res.loadSound(noAmmoSoundPath, "no_ammo");
         res.loadMusic(laughSoundPath, "laugh");
         res.loadSound(fireballSmallSoundPath, "fireball_small");
         res.loadSound(fireballBigSoundPath, "fireball_big");
@@ -234,7 +241,7 @@ public class MyGdxGame implements ApplicationListener {
         res.loadSound(secretBossSoundPath, "secretboss");
         res.loadSound(kamehamehaSoundPath, "kamehameha");
         res.loadSound(brokenSoundPath, "broken");
-        res.loadMusic(alarmSoundPath, "alarm");
+        res.loadSound(alarmSoundPath, "alarm");
         res.loadSound(interactionSoundPath, "interaction");
         res.loadSound(pointSoundPath, "secret");
         res.loadSound(secretUnlockSoundPath, "secretUnlock");
@@ -244,8 +251,9 @@ public class MyGdxGame implements ApplicationListener {
         res.getMusic("success").setLooping(false);
         res.getMusic("title").setLooping(true);
         res.getMusic("level1").setLooping(true);
-        res.getMusic("alarm").setLooping(true);
+        //res.getMusic("alarm").setLooping(true);
         res.getMusic("shop").setLooping(true);
+
 
         assets = new AssetManager();
         assets.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
@@ -611,7 +619,7 @@ public class MyGdxGame implements ApplicationListener {
             if (p) {
                 res.getMusic("level1").setVolume(0f);
                 if (res.getMusic("level1").isPlaying()) res.getMusic("level1").pause();
-                if (res.getMusic("alarm").isPlaying()) res.getMusic("alarm").stop();
+                //if (res.getMusic("alarm").isPlaying()) res.getMusic("alarm").pause();
                 if (soundEnable == 2 | soundEnable == 1) res.getSound("pause_in").play();
             } else {
                 res.getMusic("level1").setVolume(1f);

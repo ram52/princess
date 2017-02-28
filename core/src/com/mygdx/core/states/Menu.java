@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -16,24 +15,18 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.core.MyGdxGame;
-import com.mygdx.core.entities.B2DSprite;
 import com.mygdx.core.handlers.Animation;
 import com.mygdx.core.handlers.GameStateManager;
 import com.mygdx.core.handlers.Save;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static com.mygdx.core.MyGdxGame.lastPlayerPosition;
-import static com.mygdx.core.MyGdxGame.offsety;
-import static com.mygdx.core.handlers.B2DVars.PPM;
 
 public class Menu extends GameState {
 
@@ -79,12 +72,11 @@ public class Menu extends GameState {
 
         super(gsm);
 
-        if(MyGdxGame.isSoundEnable() == 2)
-            if(MyGdxGame.res.getMusic("level1").isPlaying())
-                MyGdxGame.res.getMusic("level1").stop();
+
 
         if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) {
             if(MyGdxGame.res.getMusic("newScreen").isPlaying()){
+                MyGdxGame.res.getMusic("newScreen").pause();
                 MyGdxGame.res.getMusic("newScreen").stop();
             }
             MyGdxGame.res.getMusic("newScreen").play();
@@ -94,7 +86,7 @@ public class Menu extends GameState {
         MyGdxGame.initFade();
         Timer.instance().start();
 
-        if(MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("level1").stop();
+
 
         intro = new Image(MyGdxGame.atlas.findRegion("backgroundSky"));
         intro.setFillParent(true);
@@ -442,7 +434,7 @@ public class Menu extends GameState {
 
 
                 if (MyGdxGame.isSoundEnable() == 0) {
-                    if (MyGdxGame.res.getMusic("title").isPlaying()) MyGdxGame.res.getMusic("title").stop();
+                    if (MyGdxGame.res.getMusic("title").isPlaying()) MyGdxGame.res.getMusic("title").pause();
                     ButtonStyle style = new ButtonStyle();
                     style.up = skin.getDrawable("buttonSound2Mute");
                     style.down = skin.getDrawable("buttonSound2Mute");
@@ -450,7 +442,7 @@ public class Menu extends GameState {
                 }
 
                 if (MyGdxGame.isSoundEnable() == 1) {
-                    if (MyGdxGame.res.getMusic("title").isPlaying()) MyGdxGame.res.getMusic("title").stop();
+                    if (MyGdxGame.res.getMusic("title").isPlaying()) MyGdxGame.res.getMusic("title").pause();
                     MyGdxGame.res.getSound("select").play();
                     ButtonStyle style = new ButtonStyle();
                     style.up = skin.getDrawable("buttonSound2Fx");
@@ -732,6 +724,7 @@ public class Menu extends GameState {
 
         //Gdx.input.setInputProcessor(stageUiOption);
         MyGdxGame.setIsBoosTerritory(false);
+
     }
 
     public void updateSelector(){
@@ -786,11 +779,13 @@ public class Menu extends GameState {
     public void update(float dt) {
 
         if(MyGdxGame.isSoundEnable() == 2){
-            if(!MyGdxGame.res.getMusic("title").isPlaying() && !MyGdxGame.res.getMusic("newScreen").isPlaying()){
+            if(!MyGdxGame.res.getMusic("title").isPlaying() /*&& !MyGdxGame.res.getMusic("newScreen").isPlaying()*/){
                 MyGdxGame.res.getMusic("title").setVolume(1.0f);
                 MyGdxGame.res.getMusic("title").play();
             }
         }
+
+
 
         if (click_on_play){
             MyGdxGame.fadeOut.update(dt);
@@ -1089,10 +1084,16 @@ public class Menu extends GameState {
 
         if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)
             if(MyGdxGame.res.getMusic("title").isPlaying()){
+                MyGdxGame.res.getMusic("title").pause();
                 MyGdxGame.res.getMusic("title").stop();
             }
 
-        if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("newScreen").stop();
+        if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) {
+            if(MyGdxGame.res.getMusic("newScreen").isPlaying()){
+                MyGdxGame.res.getMusic("newScreen").pause();
+                MyGdxGame.res.getMusic("newScreen").stop();
+            }
+        }
     }
 
     public void showMainUi(){

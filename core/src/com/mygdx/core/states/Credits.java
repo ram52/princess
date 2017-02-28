@@ -1,9 +1,12 @@
 package com.mygdx.core.states;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -19,8 +22,16 @@ import com.mygdx.core.handlers.Animation;
 import com.mygdx.core.handlers.GameStateManager;
 import com.mygdx.core.handlers.Save;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.mygdx.core.MyGdxGame.font;
 
 public class Credits extends GameState {
 
@@ -43,10 +54,21 @@ public class Credits extends GameState {
     private Rectangle viewport;
     private Stage stage0;
     private Image intro;
+    private static String CREDIT;
+    private Vector2 credits_size = new Vector2(0,0);
+    private ShapeRenderer shapeRenderer;
+    private int numbOfLinesInCredits = 4;
 
     public Credits(GameStateManager gsm) {
 
         super(gsm);
+
+        font.setScale(1.2f);
+
+        CREDIT = getCreditFromFile();
+
+        shapeRenderer = new ShapeRenderer();
+
         intro = new Image(MyGdxGame.atlas.findRegion("backgroundSky"));
         intro.setFillParent(true);
         stage0 = new Stage();
@@ -156,28 +178,20 @@ public class Credits extends GameState {
                 return true;
             }
 
-            ;
-
             public void touchUp(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
                 click_on_play = true;
-                //Gdx.gl.glClearColor(0, 0, 0, 1);
             }
 
-            ;
         });
 
         buttonSecret2.addListener(new InputListener() {
             public boolean touchDown(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
-
-
                 return true;
             }
-
-            ;
 
             public void touchUp(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
@@ -186,8 +200,6 @@ public class Credits extends GameState {
                 buttonSecret2.setVisible(false);
                 //Gdx.gl.glClearColor(0, 0, 0, 1);
             }
-
-            ;
         });
 
         buttonSecret1.addListener(new InputListener() {
@@ -202,18 +214,38 @@ public class Credits extends GameState {
                 return true;
             }
 
-            ;
-
             public void touchUp(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
                 //Gdx.gl.glClearColor(0, 0, 0, 1);
             }
-
-            ;
         });
 
         MyGdxGame.setIsBoosTerritory(false);
+    }
+
+    private String getCreditFromFile(){
+        String credit = ":( Sorry could not load credits file.";
+        FileReader fileReader;
+        try {
+            fileReader = new FileReader(new File(String.valueOf(Gdx.files.internal("data/credits.txt"))));
+            BufferedReader br = new BufferedReader(fileReader);
+            String line;
+            credit = "";
+            while ((line = br.readLine()) != null) {
+                numbOfLinesInCredits++;
+                credit += line + "\n";
+                if(font.getBounds(line).width > credits_size.x){
+                    credits_size.x = font.getBounds(line).width;
+                    credits_size.y = font.getBounds(credit).height;
+                }
+            }
+        } catch (FileNotFoundException e) {
+            Gdx.app.error(LOG_TAG,"error file not found",e);
+        } catch (IOException e) {
+            Gdx.app.error(LOG_TAG,"error while accessing file",e);
+        }
+        return credit;
     }
 
     public void handleInput() {
@@ -321,17 +353,22 @@ public class Credits extends GameState {
             stage1.draw();
             sb.end();
 
+            float x = MyGdxGame.V_WIDTH/2 - credits_size.x/2;
+            float y = MyGdxGame.V_HEIGHT/1.1f;
+
+            Gdx.gl.glEnable(GL20.GL_BLEND);
+            shapeRenderer.setColor(new Color(0, 0, 0, 0.8f));
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            float h = credits_size.y*numbOfLinesInCredits;
+            float padding = 100;
+            shapeRenderer.rect(x-padding/2,y-h-padding/2, credits_size.x+padding, h+padding);
+            shapeRenderer.end();
+            Gdx.gl.glDisable(GL20.GL_BLEND);
+
+
             sb.begin();
-
-            float w = 95*3.5f;
-            float h = 24*3.5f;
-
-            //sb.draw(animTitle.getFrame(), MyGdxGame.V_WIDTH/2 - w/2, MyGdxGame.V_HEIGHT - h*1.4f , MyGdxGame.V_WIDTH/2, 670.0f -95/2 ,  w, h,1,1, 0);
-
-            w = 233*2.5f;
-            h = 120*2.5f;
-            sb.draw(animCredits.getFrame(), MyGdxGame.V_WIDTH/2 - w/2, (MyGdxGame.V_HEIGHT - h)/1.4f , MyGdxGame.V_WIDTH/2, 670.0f -233/2 ,  w, h,1,1, 0);
-
+            font.setColor(Color.WHITE);
+            font.drawMultiLine(sb, CREDIT, x , y, credits_size.x, BitmapFont.HAlignment.CENTER);
             //GEAR BUTTON
             float speed = 8f;
             if (stage1.getActors().items[0].getX() <= -5) {
@@ -339,10 +376,8 @@ public class Credits extends GameState {
                 cpt_translate_animation1++;
             }
 
-
             //if((Save.gd.isSoundEnable()==2) && !MyGdxGame.res.getMusic("main").isPlaying()) MyGdxGame.res.getMusic("main").setVolume(0.6f);
             sb.end();
-
 
             sb.begin();
             sb.draw(animationPBlue1.getFrame(), -80 + ((float) time * 1.7f), 202);
@@ -362,6 +397,7 @@ public class Credits extends GameState {
     }
 
     public void dispose() {
+        font.setScale(1);
         if (MyGdxGame.res.getMusic("shop").isPlaying()) MyGdxGame.res.getMusic("shop").stop();
     }
 

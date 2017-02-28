@@ -1,7 +1,0 @@
-Arstist(boss sprite):
-CodeMoose
-
-Music/sfx:
-Pizzamakesgames
-MoppySound
-redbuttonaudio.co.uk

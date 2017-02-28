@@ -110,6 +110,7 @@ public class Play extends GameState {
     private Array<FireBall> fireBalls;
     private ScheduledExecutorService executor;
     private int player_selector = 0;
+    private int cpt_alarm = 0;
     private Stage stage1, stageUiContinue;
     private Label labelScore, labelMoney;
     private Button.ButtonStyle pauseButtonStyle;
@@ -511,6 +512,13 @@ public class Play extends GameState {
                 } else{
                     fire = false;
                 }
+                if(player.getFireBallCount() <= 0){
+                    if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)
+                    {
+                        MyGdxGame.res.getSound("no_ammo").play();
+                    }
+                }
+
                 return true;
             }
 
@@ -842,7 +850,7 @@ public class Play extends GameState {
                 Play.this.isTutorial = false;
                 MyGdxGame.lastPlayerPosition = new Vector2(0,0);
                 Timer.instance().clear();
-                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("select").play();
+                //if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("select").play();
                 return true;
             }
             public void touchUp(
@@ -861,7 +869,7 @@ public class Play extends GameState {
                 Save.gd.setFirstPlay(false);
                 Save.save();
 
-                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("newScreen").play();
+                //if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("newScreen").play();
             }
         });
 
@@ -1063,7 +1071,7 @@ public class Play extends GameState {
                 if(MyGdxGame.isSoundEnable() == 0) {
                     MyGdxGame.res.getSound("select").play();
                     if (MyGdxGame.res.getMusic("level1").isPlaying()) MyGdxGame.res.getMusic("level1").stop();
-                    if (MyGdxGame.res.getMusic("alarm").isPlaying()) MyGdxGame.res.getMusic("alarm").stop();
+                    //if (MyGdxGame.res.getSound("alarm").isPlaying()) MyGdxGame.res.getSound("alarm").stop();
                     Button.ButtonStyle soundButtonStyle = new Button.ButtonStyle();
                     soundButtonStyle.up = skin.getDrawable("buttonSound1Mute");
                     soundButtonStyle.down = skin.getDrawable("buttonSound1Mute");
@@ -2346,7 +2354,7 @@ public class Play extends GameState {
         if(!enemy.isDead() && princess.getBoundingBox().intersects(enemy.getBoundingBox()) && enemy.getBody().getLinearVelocity().x != 0 ){
             princess.setTouched(true);
 
-            if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("alarm").stop();
+            if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("alarm").stop();
 
             if((enemy.getBody().getLinearVelocity().x < 0) && !enemy.isMockRight()){
                 enemy.mockAnimation();
@@ -2855,17 +2863,32 @@ public class Play extends GameState {
                         if(!enemy.isDead() && enemy.getPosition().y*PPM > 350){
                             princess.setCry(true);
                             if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) {
-                                if(!MyGdxGame.res.getMusic("alarm").isPlaying()){
-                                    MyGdxGame.res.getMusic("alarm").play();
+                                //if(!MyGdxGame.res.getSound("alarm").isPlaying()){
+
+
+                                if(cpt_alarm == 0){
+                                    MyGdxGame.res.getSound("alarm").play();
+                                    System.out.println("1");
                                 }
+                                if(cpt_alarm > 30){
+                                    cpt_alarm = 0;
+                                    MyGdxGame.res.getSound("alarm").play();
+                                }
+
+                                cpt_alarm++;
+
+                                //}
                             }
                             break;
                         }else{
                             princess.setCry(false);
+                            //cpt_alarm = 0;
                             if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) {
-                                if(MyGdxGame.res.getMusic("alarm").isPlaying()){
-                                    MyGdxGame.res.getMusic("alarm").pause();
-                                }
+                                //MyGdxGame.res.getSound("alarm").stop();
+                                //if(MyGdxGame.res.getSound("alarm").isPlaying()){
+                                    //MyGdxGame.res.getSound("alarm").pause();
+                                    //System.out.println("2");
+                                //}
                             }
                         }
                     }
@@ -3965,7 +3988,18 @@ public class Play extends GameState {
     public void dispose() {
         spriteBatch.dispose();
         spriteBatchLightning.dispose();
-        if (MyGdxGame.res.getMusic("alarm").isPlaying()) MyGdxGame.res.getMusic("alarm").stop();
+        //if (MyGdxGame.res.getSound("alarm").isPlaying()) MyGdxGame.res.getSound("alarm").pause();
+        if(MyGdxGame.isSoundEnable() == 2) {
+            if(lastPlayerPosition.x == 0){
+                if(MyGdxGame.res.getMusic("level1").isPlaying()){
+                    MyGdxGame.res.getMusic("level1").pause();
+                    MyGdxGame.res.getMusic("level1").stop();
+                }
+
+            }else{
+                MyGdxGame.res.getMusic("level1").pause();
+            }
+        }
     }
 
 }
