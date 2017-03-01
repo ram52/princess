@@ -1,7 +1,20 @@
-Arstist(boss sprite):
-CodeMoose
+PRINCESS!
+v1.0
 
-Music/sfx:
-Pizzamakesgames
-MoppySound
-redbuttonaudio.co.uk
+Programming:
+Axel
+
+Art:
+lansari rachid
+rachidlansari@gmail.com
+Axel
+
+Music:
+Yuu Hayashi
+propanmode
+HirokiYamamoto
+Satie
+
+Sfx:
+Juhani Junkala
+juhani.junkala@musician.org

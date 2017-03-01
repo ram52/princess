@@ -22,15 +22,6 @@ import com.mygdx.core.handlers.Animation;
 import com.mygdx.core.handlers.GameStateManager;
 import com.mygdx.core.handlers.Save;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import static com.mygdx.core.MyGdxGame.font;
 
 public class Credits extends GameState {
@@ -63,7 +54,7 @@ public class Credits extends GameState {
 
         super(gsm);
 
-        font.setScale(1.2f);
+        font.setScale(1.3f);
 
         CREDIT = getCreditFromFile();
 
@@ -226,13 +217,11 @@ public class Credits extends GameState {
 
     private String getCreditFromFile(){
         String credit = ":( Sorry could not load credits file.";
-        FileReader fileReader;
         try {
-            fileReader = new FileReader(new File(String.valueOf(Gdx.files.internal("data/credits.txt"))));
-            BufferedReader br = new BufferedReader(fileReader);
-            String line;
+            String credits = Gdx.files.internal("data/credits.txt").readString();
+            String[] data = credits.split("\n");
             credit = "";
-            while ((line = br.readLine()) != null) {
+            for (String line : data) {
                 numbOfLinesInCredits++;
                 credit += line + "\n";
                 if(font.getBounds(line).width > credits_size.x){
@@ -240,10 +229,10 @@ public class Credits extends GameState {
                     credits_size.y = font.getBounds(credit).height;
                 }
             }
-        } catch (FileNotFoundException e) {
-            Gdx.app.error(LOG_TAG,"error file not found",e);
-        } catch (IOException e) {
+        } catch (Exception e) {
             Gdx.app.error(LOG_TAG,"error while accessing file",e);
+            credits_size.x = font.getBounds(credit).width;
+            credits_size.y = font.getBounds(credit).height;
         }
         return credit;
     }
