@@ -123,12 +123,12 @@ public class GameOver extends GameState {
 
         if (Save.gd.getNewHighScore()) {
             tex_background = new Sprite(MyGdxGame.atlas.findRegion("backgroundTitle"));
-            if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("success").play();
+            //if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("success").play();
 
         } else {
 
             if(score == 100) {
-                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("success").play();
+                //if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("success").play();
             }else {
                 //tex_background = new Sprite(MyGdxGame.atlas.findRegion("background_game_over"));
                 tex_background = new Sprite(MyGdxGame.atlas.findRegion("backgroundTitle"));

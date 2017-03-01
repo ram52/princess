@@ -291,8 +291,8 @@ public class Menu extends GameState {
         stage1.addActor(buttonTuto);
 
         labelCopyright = new Label("(c) RAM52 Credits 2017", new LabelStyle(new BitmapFont( Gdx.files.internal(MyGdxGame.fontScorePath), false), Color.WHITE));
-        labelCopyright.setWidth(Gdx.graphics.getWidth() / 3f);
-        labelCopyright.setHeight(Gdx.graphics.getHeight() / 40);
+        labelCopyright.setWidth(Gdx.graphics.getWidth() / 2.8f);
+        labelCopyright.setHeight(Gdx.graphics.getHeight() / 20);
         labelCopyright.setFontScale(Gdx.graphics.getWidth() / 500f);
         labelCopyright.setAlignment(Align.center);
         labelCopyright.setPosition(0, -500);
