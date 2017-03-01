@@ -48,7 +48,7 @@ public class Credits extends GameState {
     private static String CREDIT;
     private Vector2 credits_size = new Vector2(0,0);
     private ShapeRenderer shapeRenderer;
-    private int numbOfLinesInCredits = 4;
+    private int numbOfLinesInCredits = 5;
 
     public Credits(GameStateManager gsm) {
 
@@ -246,6 +246,13 @@ public class Credits extends GameState {
     }
 
     public void update(float dt) {
+
+        if(MyGdxGame.isSoundEnable() == 2){
+            if(!MyGdxGame.res.getMusic("shop").isPlaying()){
+                MyGdxGame.res.getMusic("shop").setVolume(1.0f);
+                MyGdxGame.res.getMusic("shop").play();
+            }
+        }
 
         animationPBlue1.update(dt);
         animationEnemy.update(dt);

@@ -29,6 +29,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -39,6 +40,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.Timer;
@@ -56,6 +58,7 @@ import com.mygdx.core.handlers.B2DVars;
 import com.mygdx.core.handlers.BoundedCamera;
 import com.mygdx.core.handlers.GameStateManager;
 import com.mygdx.core.handlers.MyContactListener;
+import com.mygdx.core.handlers.MyInputProcessor;
 import com.mygdx.core.handlers.Save;
 import com.mygdx.core.handlers.ScreenShake;
 import com.mygdx.core.handlers.SimpleDirectionGestureDetector;
@@ -133,6 +136,8 @@ public class Play extends GameState {
     private Button buttonNo;
     private boolean left = false;
     private boolean right = false;
+    private boolean buttonLeft_isTouched = false;
+    private boolean buttonRight_isTouched = false;
     private boolean falling = false;
     private boolean addNewEnemy = false;
     private boolean addPowerUpOrBrick = false;
@@ -486,10 +491,22 @@ public class Play extends GameState {
 
         stageUiControl.addActor(buttonJump);
 
-        buttonFire.addListener(new InputListener() {
-            public boolean touchDown(
-                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
-                    float y, int pointer, int button) {
+        buttonFire.addListener(new ClickListener() {
+            public boolean isOver (Actor actor, float x, float y) {
+                Gdx.app.debug(LOG_TAG, "isOver");
+                return true;
+            }
+
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                Gdx.app.debug(LOG_TAG, "enter");
+            }
+
+            public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
+                Gdx.app.debug(LOG_TAG, "exit");
+            }
+
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                Gdx.app.debug(LOG_TAG, "touchDown");
                 buttonFire.setChecked(true);
                 if(Save.gd.isFireBallEquiped()|Save.gd.isFireBall2Equiped()){
                     Gdx.app.debug(LOG_TAG,"clicked fire!");
@@ -518,72 +535,217 @@ public class Play extends GameState {
                         MyGdxGame.res.getSound("no_ammo").play();
                     }
                 }
-
                 return true;
             }
 
-            public void touchUp(
-                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
-                    float y, int pointer, int button) {
+            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                Gdx.app.debug(LOG_TAG, "touchUp");
                 buttonFire.setChecked(false);
             }
+
         });
 
-        buttonJump.addListener(new InputListener() {
-            public boolean touchDown(
-                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
-                    float y, int pointer, int button) {
+//        buttonFire.addListener(new InputListener() {
+//            public boolean touchDown(
+//                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
+//                    float y, int pointer, int button) {
+//                buttonFire.setChecked(true);
+//                if(Save.gd.isFireBallEquiped()|Save.gd.isFireBall2Equiped()){
+//                    Gdx.app.debug(LOG_TAG,"clicked fire!");
+//                    fire = true;
+//                }else if(Save.gd.isKamehamehaEquiped() && !blockKamehameha){
+//                    fire = true;
+//                    if((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)&& reloadKamehameha == 0 && beamWidth == 0){
+//                        if((pickedGameplay == 1 && tuto_step5) | (pickedGameplay == 2 && tuto_step3) | !isTutorial){
+//                            MyGdxGame.res.getSound("kame").play();
+//                        }
+//
+//                    }
+//                }else if(Save.gd.isLightningEquiped() && !blockLightning){
+//                    fire = true;
+//                    if((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)&& reloadLightning == 0 && beamWidth == 0 ){
+//                        if((pickedGameplay == 1 && tuto_step5) | (pickedGameplay == 2 && tuto_step3) | !isTutorial){
+//                            MyGdxGame.res.getSound("kame").play();
+//                        }
+//                    }
+//                } else{
+//                    fire = false;
+//                }
+//                if(player.getFireBallCount() <= 0){
+//                    if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)
+//                    {
+//                        MyGdxGame.res.getSound("no_ammo").play();
+//                    }
+//                }
+//
+//                return true;
+//            }
+//
+//            public void touchUp(
+//                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
+//                    float y, int pointer, int button) {
+//                buttonFire.setChecked(false);
+//            }
+//        });
+
+//        buttonJump.addListener(new InputListener() {
+//            public boolean touchDown(
+//                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
+//                    float y, int pointer, int button) {
+//                jump = true;
+//                return true;
+//            }
+//
+//            public void touchUp(
+//                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
+//                    float y, int pointer, int button) {
+//                jump = false;
+//
+//            }
+//        });
+
+        buttonJump.addListener(new ClickListener() {
+            public boolean isOver (Actor actor, float x, float y) {
+                Gdx.app.debug(LOG_TAG, "isOver");
+                return true;
+            }
+
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                Gdx.app.debug(LOG_TAG, "enter");
+            }
+
+            public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
+                Gdx.app.debug(LOG_TAG, "exit");
+            }
+
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                Gdx.app.debug(LOG_TAG, "touchDown");
                 jump = true;
                 return true;
             }
 
-            public void touchUp(
-                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
-                    float y, int pointer, int button) {
+            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                Gdx.app.debug(LOG_TAG, "touchUp");
                 jump = false;
-
             }
+
         });
 
-        buttonLeft.addListener(new InputListener() {
-            public boolean touchDown(
-                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
-                    float y, int pointer, int button) {
+//        buttonLeft.addListener(new InputListener() {
+//            public boolean touchDown(
+//                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
+//                    float y, int pointer, int button) {
+//                left = true;
+//                //buttonLeft.setChecked(true);
+//                return true;
+//            }
+//            public void touchUp(
+//                    InputEvent event, float x,
+//                    float y, int pointer, int button) {
+//                //Gdx.app.debug(LOG_TAG,"clicked left!");
+//                left = false;
+//                //right = false;
+//                //buttonLeft.setChecked(false);
+//                //buttonRight.setChecked(false);
+//            }
+//
+//            public void touchDragged(InputEvent event, float x, float y, int pointer){
+//                Gdx.app.debug(LOG_TAG, "x="+x+" "+"y="+y);
+//            }
+//
+//        });
+
+        buttonLeft.addListener(new ClickListener() {
+            public boolean isOver (Actor actor, float x, float y) {
+                Gdx.app.debug(LOG_TAG, "buttonLeft isOver");
+                return true;
+            }
+
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                Gdx.app.debug(LOG_TAG, "buttonLeft enter");
                 left = true;
-                right = false;
-                buttonLeft.setChecked(true);
+            }
+
+            public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
+                Gdx.app.debug(LOG_TAG, "buttonLeft exit");
+                left = false;
+
+            }
+
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                Gdx.app.debug(LOG_TAG, "buttonLeft touchDown");
+                left = true;
                 return true;
             }
-            public void touchUp(
-                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
-                    float y, int pointer, int button) {
-                //Gdx.app.debug(LOG_TAG,"clicked left!");
-                left = false;
-                right = false;
-                buttonLeft.setChecked(false);
-                buttonRight.setChecked(false);
+
+            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                Gdx.app.debug(LOG_TAG, "buttonLeft ouchUp");
             }
+
         });
 
-        buttonRight.addListener(new InputListener() {
-            public boolean touchDown(
-                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
-                    float y, int pointer, int button) {
-                right = true;
-                left = false;
-                buttonRight.setChecked(true);
+        buttonRight.addListener(new ClickListener() {
+            public boolean isOver (Actor actor, float x, float y) {
+                Gdx.app.debug(LOG_TAG, "buttonRight isOver");
                 return true;
             }
-            public void touchUp(
-                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
-                    float y, int pointer, int button) {
-                //Gdx.app.debug(LOG_TAG,"clicked right!");
-                right = false;
-                left = false;
-                buttonLeft.setChecked(false);
-                buttonRight.setChecked(false);
+
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                Gdx.app.debug(LOG_TAG, "buttonRight enter");
+                right = true;
             }
+
+            public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
+                Gdx.app.debug(LOG_TAG, "buttonRight exit");
+                right = false;
+
+            }
+
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                Gdx.app.debug(LOG_TAG, "buttonRight touchDown");
+                right = true;
+                return true;
+            }
+
+            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                Gdx.app.debug(LOG_TAG, "buttonRight touchUp");
+            }
+
         });
+
+//        buttonRight.addListener(new InputListener() {
+//            public boolean touchDown(
+//                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
+//                    float y, int pointer, int button) {
+//                right = true;
+//                //buttonRight.setChecked(true);
+//                return false;
+//            }
+//            public void touchUp(
+//                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
+//                    float y, int pointer, int button) {
+//                //Gdx.app.debug(LOG_TAG,"clicked right!");
+//                right = false;
+//                //left = false;
+//                //buttonLeft.setChecked(false);
+//                //buttonRight.setChecked(false);
+//            }
+//
+////            public void touchDragged(InputEvent event, float x, float y, int pointer){
+////                Gdx.app.debug(LOG_TAG, "x="+x+" "+"y="+y+" "+
+////                        "buttonRightX="+buttonRight.getX()+" "+
+////                        "buttonRighWidth="+ buttonRight.getWidth() +" "+
+////                        "buttonRighY="+ buttonRight.getY()+" "+
+////                        "buttonRighHeight="+ buttonRight.getHeight());
+////
+////                if(x < buttonRight.getX() | x > buttonRight.getX()+buttonRight.getWidth() | y < buttonRight.getY() | y > buttonRight.getY()+buttonRight.getHeight()){
+////                    Gdx.app.debug(LOG_TAG, "YES");
+////                }else{
+////                    Gdx.app.debug(LOG_TAG, "NO");
+////                }
+////            }
+//
+//        });
 
         stage1 = new Stage();
         stage1.addAction(Actions.sequence(Actions.alpha(0), Actions.fadeIn(0.2f)));
@@ -915,6 +1077,7 @@ public class Play extends GameState {
                     @Override
                     public void onDown() {
                         if(MyGdxGame.pickedGameplay == 1){
+                            Gdx.app.debug(LOG_TAG,"onDown");
                             left = false;
                             right = false;
                         }
@@ -1106,9 +1269,11 @@ public class Play extends GameState {
             @Override
             public boolean keyUp(InputEvent event, int keycode) {
                 if (keycode == Input.Keys.LEFT) {
+                    Gdx.app.debug(LOG_TAG,"keyUp LEFT");
                     left = false;
                 }
                 if (keycode == Input.Keys.RIGHT) {
+                    Gdx.app.debug(LOG_TAG,"keyUp RIGHT");
                     right  = false;
                 }
 
@@ -1132,9 +1297,11 @@ public class Play extends GameState {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
                 if (keycode == Input.Keys.LEFT) {
+                    Gdx.app.debug(LOG_TAG,"keyUp LEFT");
                     left = true;
                 }
                 if (keycode == Input.Keys.RIGHT) {
+                    Gdx.app.debug(LOG_TAG,"keyUp RIGHT");
                     right = true;
                 }
                 if (keycode == Input.Keys.ENTER | keycode == Input.Keys.SPACE) {
@@ -1149,9 +1316,11 @@ public class Play extends GameState {
 
         InputMultiplexer im = new InputMultiplexer();
         im.addProcessor(gd);
+        im.addProcessor(new MyInputProcessor());
         im.addProcessor(stageUiContinue);
         im.addProcessor(stage1);
         im.addProcessor(stageUiControl);
+
         Gdx.input.setInputProcessor(im);
 
         MyGdxGame.setIsBoosTerritory(false);
@@ -1259,13 +1428,12 @@ public class Play extends GameState {
             }
 
 
-        if(!buttonRight.isOver() && buttonRight.isChecked()){
-            right = false;
-        }
-        if(!buttonLeft.isOver() && buttonLeft.isChecked()){
-            left = false;
-        }
-
+//        if(!buttonRight.isOver() && buttonRight.isChecked()){
+//            right = false;
+//        }
+//        if(!buttonLeft.isOver() && buttonLeft.isChecked()){
+//            left = false;
+//        }
 
 //        //reach screen extrem
 //        if(player.getPosition().x - player.getWidth()/2/PPM < 0 && left){
@@ -1362,6 +1530,7 @@ public class Play extends GameState {
             buttonLeft.fire(event2);
             left = true;
             right = false;
+            Gdx.app.debug(LOG_TAG,"keyUp LEFT");
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) ) {
@@ -1374,6 +1543,7 @@ public class Play extends GameState {
             buttonRight.fire(event2);
             right = true;
             left = false;
+            Gdx.app.debug(LOG_TAG,"keyUp RIGHT");
         }
 
         //LIGHTNING

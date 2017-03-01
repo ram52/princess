@@ -215,7 +215,7 @@ public class MyGdxGame implements ApplicationListener {
 
         res = new Content();
         res.loadMusic(onSoundPath, "on");
-        res.loadMusic(errorSoundPath, "error");
+        res.loadSound(errorSoundPath, "error");
         res.loadSound(kameBeamSoundPath, "kame");
         res.loadSound(jump1SoundPath, "jump1");
         res.loadMusic(newScreenSoundPath, "newScreen");

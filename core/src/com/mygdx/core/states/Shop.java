@@ -1409,6 +1409,13 @@ public class Shop extends GameState {
 
     public void update(float dt) {
 
+        if(MyGdxGame.isSoundEnable() == 2){
+            if(!MyGdxGame.res.getMusic("shop").isPlaying()){
+                MyGdxGame.res.getMusic("shop").setVolume(1.0f);
+                MyGdxGame.res.getMusic("shop").play();
+            }
+        }
+
         labelMoney.setText(Integer.toString(Save.gd.getMoney()));
 
         animationEnemy.update(dt);
