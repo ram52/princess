@@ -785,8 +785,6 @@ public class Menu extends GameState {
             }
         }
 
-
-
         if (click_on_play){
             MyGdxGame.fadeOut.update(dt);
             isfadeOutStarted++;

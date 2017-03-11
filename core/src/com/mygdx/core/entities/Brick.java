@@ -18,10 +18,30 @@ public class Brick extends B2DSprite{
     private Boolean normal;
     private Boolean dead;
     private Boolean hurt;
-    private int life = 400;
+
+    public int getMaxLife() {
+        return maxLife;
+    }
+
+    public void setMaxLife(int maxLife) {
+        this.maxLife = maxLife;
+    }
+
+    private int maxLife = 0;
+    private int life = 0;
     private float falling_cpt = 0;
     private boolean falling = false;
     private boolean summoned = false;
+
+    public boolean isTouchedGround() {
+        return touchedGround;
+    }
+
+    public void setTouchedGround(boolean touchedGround) {
+        this.touchedGround = touchedGround;
+    }
+
+    private boolean touchedGround = false;
     private float x = 0;
     private float y = 0;
     public Array<Enemy> enemies;
@@ -114,7 +134,7 @@ public class Brick extends B2DSprite{
         this.dead = dead;
     }
 
-    public Brick(Body body) {
+    public Brick(Body body,int life) {
         super(body);
         enemies = new Array<Enemy>();
         setLoop(false);
@@ -131,6 +151,8 @@ public class Brick extends B2DSprite{
         hurt = false;
         dead = false;
         normal = false;
+        maxLife = life;
+        this.life = life;
     }
 
     public void normalAnimation(){

@@ -102,6 +102,7 @@ public class MyGdxGame implements ApplicationListener {
     public static String fallingSoundPath = "data/sound/falling.ogg";
     public static String onSoundPath = "data/sound/on.ogg";
     public static String crushSoundPath = "data/sound/crush.ogg";
+    public static String lightningSoundPath = "data/sound/lightning.ogg";
     public static String laughSoundPath = "data/sound/laugh.ogg";
     public static String slashSoundPath = "data/sound/slash.ogg";
     public static String pauseInSoundPath = "data/sound/pause1_in.ogg";
@@ -228,6 +229,7 @@ public class MyGdxGame implements ApplicationListener {
         res.loadSound(boomSoundPath, "boom");
         res.loadSound(noAmmoSoundPath, "no_ammo");
         res.loadMusic(laughSoundPath, "laugh");
+        res.loadSound(lightningSoundPath,"lightning");
         res.loadSound(fireballSmallSoundPath, "fireball_small");
         res.loadSound(fireballBigSoundPath, "fireball_big");
         res.loadMusic(moveSoundPath, "move");
@@ -249,7 +251,7 @@ public class MyGdxGame implements ApplicationListener {
         res.loadSound(bossDeathSoundPath, "bossDeath");
         res.loadMusic(slashSoundPath, "slash");
         res.getMusic("success").setLooping(false);
-        res.getMusic("title").setLooping(true);
+        res.getMusic("title").setLooping(false);
         res.getMusic("level1").setLooping(true);
         //res.getMusic("alarm").setLooping(true);
         res.getMusic("shop").setLooping(true);

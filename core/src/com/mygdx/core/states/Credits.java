@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.mygdx.core.MyGdxGame;
 import com.mygdx.core.handlers.Animation;
 import com.mygdx.core.handlers.GameStateManager;
@@ -35,8 +36,8 @@ public class Credits extends GameState {
     private Button buttonPlay, buttonSecret1, buttonSecret2;
     private int cpt_secret1 = 0;
     private int cpt_translate_animation1 = 0;
-    private Animation animTitle;
-    private Animation animCredits;
+    //private Animation animTitle;
+    //private Animation animCredits;
     private Animation animationPBlue1;
     private Animation animationPrincess;
     private Animation animationEnemy;
@@ -106,9 +107,9 @@ public class Credits extends GameState {
 
         animationHya = new Animation(new Sprite(MyGdxGame.atlas.findRegion("hyaa")).split(168, 60)[0], 1 / 5f);
 
-        animTitle = new Animation(new Sprite(MyGdxGame.atlas.findRegion("credits")).split(95,24)[0], 1 / 5f);
+        //animTitle = new Animation(new Sprite(MyGdxGame.atlas.findRegion("secret")).split(95,24)[0], 1 / 5f);
 
-        animCredits = new Animation(new Sprite(MyGdxGame.atlas.findRegion("creditentials")).split(233,120)[0], 1 / 5f);
+        //animCredits = new Animation(new Sprite(MyGdxGame.atlas.findRegion("secret")).split(233,120)[0], 1 / 5f);
 
         MyGdxGame.background_cloud.setVector(+10, 0);
         //MyGdxGame.background_skyDay.setVector(0, 0);
@@ -229,7 +230,7 @@ public class Credits extends GameState {
                     credits_size.y = font.getBounds(credit).height;
                 }
             }
-        } catch (Exception e) {
+        } catch (GdxRuntimeException e) {
             Gdx.app.error(LOG_TAG,"error while accessing file",e);
             credits_size.x = font.getBounds(credit).width;
             credits_size.y = font.getBounds(credit).height;

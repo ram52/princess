@@ -45,6 +45,7 @@ public class Save {
 		}
 		catch(Exception e) {
 			Gdx.app.error(LOG_TAG,"error while loading file",e);
+
 			Gdx.app.exit();
 		}
 	}

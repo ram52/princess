@@ -33,7 +33,16 @@ import java.io.IOException;
 import java.net.URL;
 import java.text.NumberFormat;
 import java.util.Scanner;
-
+/**
+ * Copyright Axel MONTOUT
+ * started in 2016
+ *
+ *
+ *          PRINCESS!
+ *
+ *
+ * Protect your loved one.
+ * */
 public class Shop extends GameState {
     private static String LOG_TAG = Shop.class.getSimpleName();
     private boolean click_on_play;
@@ -1147,7 +1156,7 @@ public class Shop extends GameState {
 
                             if(obj.toString().equals("true") && Save.gd.getMoney() >= cost){
                                 if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
-                                    MyGdxGame.res.getMusic("newScreen").play();
+                                    MyGdxGame.res.getSound("lightning").play();
                                 }
 
                                 Save.gd.setLightningPurchased(true);
@@ -1197,7 +1206,7 @@ public class Shop extends GameState {
                                 Save.gd.setFireBall2Equiped(false);
                                 Save.gd.setKamehamehaEquiped(false);
                                 if (Save.gd.isBrick2Equiped() && (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
-                                    MyGdxGame.res.getMusic("newScreen").play();
+                                    MyGdxGame.res.getSound("lightning").play();
                                 }
                             }
                             if(obj.toString().equals("false")){
