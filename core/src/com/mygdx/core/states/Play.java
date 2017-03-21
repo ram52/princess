@@ -194,6 +194,7 @@ public class Play extends GameState {
     private Boolean tuto_step6 = false;
     private Boolean tuto_step7 = false;
     private Boolean tuto_step8 = false;
+    private Boolean displayBrickTip = false;
     private Boolean hidePointer = false;
     private Image gamePlaySelection;
     private SpriteBatch sbKyaa;
@@ -2186,7 +2187,7 @@ public class Play extends GameState {
             makeBrickSensor(brick, false);
         }
 
-        if(!MyGdxGame.pause && brick != null){
+        if(brick != null){
             brick.updateBoundingBox(brick,64,64);
             brick.update(MyGdxGame.STEP);
         }
@@ -2889,6 +2890,7 @@ public class Play extends GameState {
         if(!tuto_step5 && jump){
 
 
+
             Timer.schedule(new Timer.Task(){
                 @Override
                 public void run() {
@@ -2906,6 +2908,7 @@ public class Play extends GameState {
 
         if(fire && !tuto_step6 && tuto_step5){
             tuto_step6 = true;
+            displayBrickTip = true;
             pointer.getBody().setTransform(MyGdxGame.V_WIDTH/2.9f/PPM, pointer.getPosition().y*3.5f, pointer.getBody().getAngle());
         }
 
@@ -2915,6 +2918,7 @@ public class Play extends GameState {
             tuto_step7 = true;
             //bodyToDestroy.add(pointer);
             pointer = null;
+            displayBrickTip = false;
 
 
             Timer.schedule(new Timer.Task(){
@@ -3013,11 +3017,13 @@ public class Play extends GameState {
                     if(pointer != null)
                         pointer.getBody().setTransform(MyGdxGame.V_WIDTH/2.9f/PPM, pointer.getPosition().y*3f, pointer.getBody().getAngle());
                     if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("interaction").play();
+                    displayBrickTip = true;
                 }
             }, 1);
         }
 
         if(brick != null && !tuto_step5){
+            displayBrickTip = false;
             tuto_step5 = true;
             if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("interaction").play();
             //bodyToDestroy.add(pointer);
@@ -3798,6 +3804,19 @@ public class Play extends GameState {
     }
 
     void equipmentBar(){
+
+        if(brick == null && isTutorial && displayBrickTip){
+            sb.begin();
+            String label = "TAP IN THE SKY!";
+            font2.drawMultiLine(sb,
+                    label ,
+                    Gdx.graphics.getWidth()/2.5f,
+                    Gdx.graphics.getHeight()/1.35f,
+                    font2.getBounds(label).width,
+                    BitmapFont.HAlignment.LEFT);
+            sb.end();
+        }
+
         if(!isTutorial|tuto_step0){
             shapeRenderer.setColor(new Color(11f/255f,8f/255f,8f/255f,1f));
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);

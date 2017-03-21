@@ -122,12 +122,12 @@ public class Credits extends GameState {
         Skin skinButtonPlay = new Skin();
         skinButtonPlay.addRegions(MyGdxGame.atlas);
         ButtonStyle buttonStylePlay = new ButtonStyle();
-        buttonStylePlay.up = skinButtonPlay.getDrawable("buttonExit2Up");
-        buttonStylePlay.down = skinButtonPlay.getDrawable("buttonExit2Down");
+        buttonStylePlay.up = skinButtonPlay.getDrawable("buttonSecret");
+        buttonStylePlay.down = skinButtonPlay.getDrawable("buttonSecret");
         buttonPlay = new Button(buttonStylePlay);
-        buttonPlay.setWidth(Gdx.graphics.getWidth() / 5f);
-        buttonPlay.setHeight(Gdx.graphics.getHeight() / 7.8f);
-        buttonPlay.setPosition(-400, Gdx.graphics.getHeight()/100f);
+        buttonPlay.setWidth(Gdx.graphics.getWidth());
+        buttonPlay.setHeight(Gdx.graphics.getHeight());
+        buttonPlay.setPosition(0,0);
 
         stage1.addActor(buttonPlay);
 
@@ -167,13 +167,14 @@ public class Credits extends GameState {
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
                 if (Save.gd.isSoundEnable() == 1 | Save.gd.isSoundEnable() == 2) MyGdxGame.res.getSound("select").play();
+                click_on_play = true;
                 return true;
             }
 
             public void touchUp(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
-                click_on_play = true;
+
             }
 
         });
