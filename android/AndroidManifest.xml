@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.ram52.princess"
+    android:versionCode="2"
+    android:versionName="1.0"
+    android:authorities="${applicationId}.contentprovider">
+
+    <uses-sdk
+        android:minSdkVersion="15"
+        android:targetSdkVersion="23" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="com.android.vending.BILLING" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/GdxTheme" >
+        <meta-data
+            android:name="com.google.android.gms.games.APP_ID"
+            android:value="@string/app_id" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id"/>
+
+        <activity android:name="com.chartboost.sdk.CBImpressionActivity"
+            android:excludeFromRecents="true"
+            android:hardwareAccelerated="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+
+        <activity
+            android:name="com.mygdx.game.android.AndroidLauncher"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="com.google.android.gms.ads.AdActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+
+
+        <activity android:name="com.google.android.gms.ads.purchase.InAppPurchaseActivity"
+            android:theme="@style/Theme.IAPTheme"/>
+        <!--
+        <activity
+            android:name="com.mopub.mobileads.MoPubActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name="com.mopub.mobileads.MraidActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name="com.mopub.common.MoPubBrowser"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name="com.mopub.mobileads.MraidVideoPlayerActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+            -->
+
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="e6dcda21590af401d73a5799a5aec5cfe27cdf7c" />
+    </application>
+
+</manifest>
