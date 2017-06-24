@@ -22,6 +22,16 @@ public class Hand extends B2DSprite{
     private Boolean rotate90 = false;
     private Boolean rotate90f = true;
 
+    public Boolean getWithCircles() {
+        return withCircles;
+    }
+
+    public void setWithCircles(Boolean withCircles) {
+        this.withCircles = withCircles;
+    }
+
+    private Boolean withCircles = true;
+
     public Hand(Body body) {
         super(body);
         TextureRegion[] sprites;
@@ -29,6 +39,22 @@ public class Hand extends B2DSprite{
         sprites = tex.split( 85, 108)[0];
         setAnimation(sprites, 1 / 6f);
         //playing = true;
+    }
+
+    public void normalAnimation_with_circles(){
+        setLoop(true);
+        TextureRegion[] sprites;
+        tex = new Sprite(MyGdxGame.atlas.findRegion("hand_press_with_circles"));
+        sprites = tex.split( 85, 139)[0];
+        setAnimation(sprites, 1 / 6f);
+        playing = true;
+        fliped = false;
+        rotate45 = false;
+        rotate45f = false;
+        rotate90 = false;
+        rotate90f = false;
+        withCircles = true;
+        Gdx.app.debug(LOG_TAG,"normalAnimation with circles");
     }
 
     public void normalAnimation(){
@@ -43,6 +69,7 @@ public class Hand extends B2DSprite{
         rotate45f = false;
         rotate90 = false;
         rotate90f = false;
+        withCircles = false;
         Gdx.app.debug(LOG_TAG,"normalAnimation");
     }
 
@@ -58,6 +85,7 @@ public class Hand extends B2DSprite{
         rotate45f = false;
         rotate90 = false;
         rotate90f = false;
+        withCircles = false;
         Gdx.app.debug(LOG_TAG,"rotateAnimation45");
     }
 
@@ -76,6 +104,7 @@ public class Hand extends B2DSprite{
         rotate45f = true;
         rotate90 = false;
         rotate90f = false;
+        withCircles = false;
         Gdx.app.debug(LOG_TAG,"rotateAnimation45_rev");
     }
 
@@ -92,6 +121,7 @@ public class Hand extends B2DSprite{
         rotate45f = false;
         rotate90 = true;
         rotate90f = false;
+        withCircles = false;
         Gdx.app.debug(LOG_TAG,"rotateAnimation90");
     }
 
@@ -110,6 +140,7 @@ public class Hand extends B2DSprite{
         rotate45f = false;
         rotate90 = false;
         rotate90f = true;
+        withCircles = false;
         Gdx.app.debug(LOG_TAG,"rotateAnimation90_rev");
     }
 

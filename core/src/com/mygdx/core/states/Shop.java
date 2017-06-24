@@ -926,7 +926,7 @@ public class Shop extends GameState {
                                     "\n" +
                                     "Destroys everything.\n" +
                                     "\n" +
-                                    "Equip Kamehameha?", "buttonKamehamehaUp"){
+                                    "Equip Kame beam?", "buttonKamehamehaUp"){
                         public void result(Object obj) {
                             Gdx.app.debug(LOG_TAG,"result Equip Fire ball?"+obj);
 

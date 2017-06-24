@@ -2909,6 +2909,8 @@ public class Play extends GameState {
         if(fire && !tuto_step6 && tuto_step5){
             tuto_step6 = true;
             displayBrickTip = true;
+            if(!pointer.getWithCircles())
+                pointer.normalAnimation_with_circles();
             pointer.getBody().setTransform(MyGdxGame.V_WIDTH/2.9f/PPM, pointer.getPosition().y*3.5f, pointer.getBody().getAngle());
         }
 
@@ -2918,7 +2920,7 @@ public class Play extends GameState {
             tuto_step7 = true;
             //bodyToDestroy.add(pointer);
             pointer = null;
-            displayBrickTip = false;
+            //displayBrickTip = false;
 
 
             Timer.schedule(new Timer.Task(){
@@ -3014,8 +3016,14 @@ public class Play extends GameState {
             Timer.schedule(new Timer.Task(){
                 @Override
                 public void run() {
-                    if(pointer != null)
+                    if(pointer != null){
                         pointer.getBody().setTransform(MyGdxGame.V_WIDTH/2.9f/PPM, pointer.getPosition().y*3f, pointer.getBody().getAngle());
+
+                        if(!pointer.getWithCircles())
+                            pointer.normalAnimation_with_circles();
+                    }
+
+
                     if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("interaction").play();
                     displayBrickTip = true;
                 }
@@ -3805,7 +3813,7 @@ public class Play extends GameState {
 
     void equipmentBar(){
 
-        if(brick == null && isTutorial && displayBrickTip){
+        /*if(brick == null && isTutorial && displayBrickTip){
             sb.begin();
             String label = "TAP IN THE SKY!";
             font2.drawMultiLine(sb,
@@ -3815,7 +3823,7 @@ public class Play extends GameState {
                     font2.getBounds(label).width,
                     BitmapFont.HAlignment.LEFT);
             sb.end();
-        }
+        }*/
 
         if(!isTutorial|tuto_step0){
             shapeRenderer.setColor(new Color(11f/255f,8f/255f,8f/255f,1f));
