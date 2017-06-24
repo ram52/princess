@@ -8,10 +8,10 @@ dependencies {
 android {
     signingConfigs {
         config {
-            keyAlias 'ram52'
-            keyPassword '12345678952Ram52'
-            storeFile file('C:/Android/keystore/key.jks')
-            storePassword '12345678952Ram52'
+//            keyAlias 'ram52'
+//            keyPassword '12345678952Ram52'
+//            storeFile file('C:/Android/keystore/key.jks')
+//            storePassword '12345678952Ram52'
         }
     }
     buildToolsVersion "24.0.0"
