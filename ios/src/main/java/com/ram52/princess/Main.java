@@ -67,6 +67,7 @@ public class Main extends IOSApplication.Delegate implements ActionResolver {
 
     @Override
     public void applicationDidBecomeActive(UIApplication application) {
+        ((IOSGraphics)iosApplication.getGraphics()).resume();
         iosApplication.log(LOG_TAG,"applicationDidBecomeActive");
         productsStore = new ProductsStore("IAPHelperProductPurchasedNotification");
         productsStore.requestProductsWithCompletionHandler(new ProductsStore.RequestProductsCompletionHandler() {

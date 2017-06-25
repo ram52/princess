@@ -23,6 +23,7 @@
 		B07D6C871EFF508500C4BA2F /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B07D6C861EFF508500C4BA2F /* QuartzCore.framework */; };
 		B07D6C891EFF509400C4BA2F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B07D6C881EFF509400C4BA2F /* UIKit.framework */; };
 		B07D6C8B1EFF50C600C4BA2F /* MOE.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B07D6C8A1EFF50C600C4BA2F /* MOE.framework */; };
+		B0BAE80E1F00790200D095E0 /* loading_no_copyright.png in Resources */ = {isa = PBXBuildFile; fileRef = B0BAE80D1F00790200D095E0 /* loading_no_copyright.png */; };
 		B0D79C511EFF52ED00133789 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0D79C501EFF52ED00133789 /* StoreKit.framework */; };
 		B0D79C531EFF52F800133789 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0D79C521EFF52F800133789 /* GameKit.framework */; };
 		B0D79C551EFF610A00133789 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B0D79C541EFF610A00133789 /* libc++.tbd */; };
@@ -48,6 +49,7 @@
 		B07D6C861EFF508500C4BA2F /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		B07D6C881EFF509400C4BA2F /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		B07D6C8A1EFF50C600C4BA2F /* MOE.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MOE.framework; path = ../../../../../../../Applications/Intel/multi_os_engine/sdk/iphoneos/MOE.framework; sourceTree = "<group>"; };
+		B0BAE80D1F00790200D095E0 /* loading_no_copyright.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loading_no_copyright.png; sourceTree = "<group>"; };
 		B0D79C501EFF52ED00133789 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		B0D79C521EFF52F800133789 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		B0D79C541EFF610A00133789 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
@@ -144,6 +146,7 @@
 				B07D6C761EFF4F3400C4BA2F /* assets */,
 				58C6F5331DA66CB600309CB6 /* Assets.xcassets */,
 				58C6F5351DA66CB600309CB6 /* LaunchScreen.storyboard */,
+				B0BAE80D1F00790200D095E0 /* loading_no_copyright.png */,
 				58C6F5381DA66CB600309CB6 /* Info.plist */,
 				58C6F5271DA66CB600309CB6 /* Supporting Files */,
 			);
@@ -263,6 +266,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				58C6F5371DA66CB600309CB6 /* LaunchScreen.storyboard in Resources */,
+				B0BAE80E1F00790200D095E0 /* loading_no_copyright.png in Resources */,
 				B07D6C771EFF4F3400C4BA2F /* assets in Resources */,
 				58C6F5341DA66CB600309CB6 /* Assets.xcassets in Resources */,
 			);
