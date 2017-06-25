@@ -1,0 +1,153 @@
+//buildscript {
+//    repositories {
+//        jcenter()
+//        mavenLocal()
+//    }
+//    dependencies {
+//        // Multi-OS Engine plugin
+//        classpath group: 'org.multi-os-engine', name: 'moe-gradle', version: '1.3.+'
+//    }
+//}
+//
+//// Apply plugins
+//apply plugin: 'eclipse'
+//apply plugin: 'moe'
+//
+//// Set source and target to Java 8
+//sourceCompatibility = "1.8"
+//targetCompatibility = "1.8"
+//
+//// Set maven repository
+//repositories {
+//    jcenter()
+//}
+//
+//// Exclude all files from Gradle's test runner
+//test { exclude '**' }
+//
+//// Setup Multi-OS Engine
+//moe {
+//    xcode {
+//        project 'xcode/princess.xcodeproj'
+//        mainTarget 'princess'
+//        testTarget 'princess-Test'
+//
+//        // Uncomment and change these settings if you are working with a Xcode workspace
+//        // workspace 'xcode/princess.xcworkspace'
+//        // mainScheme 'princess'
+//        // testScheme 'princess-Test'
+//    }
+//}
+//
+//dependencies {
+//    // Compile with 'jar' files in the project's 'lib' directory
+//    compile fileTree(dir: 'lib', include: '*.jar')
+//}
+//
+//// Setup Eclipse
+//eclipse {
+//    // Set Multi-OS Engine nature
+//    project {
+//        natures 'org.multi-os-engine.project'
+//    }
+//}
+buildscript {
+    repositories {
+        jcenter()
+        mavenLocal()
+    }
+    dependencies {
+        // Multi-OS Engine plugin
+        classpath group: 'org.multi-os-engine', name: 'moe-gradle', version: '1.3.6'
+    }
+}
+
+// Apply plugins
+apply plugin: 'eclipse'
+apply plugin: 'moe'
+
+configurations { natives }
+
+// Extracts native libs (*.a) from the native-ios.jar and places them
+// under build/libs/ios/.
+task copyNatives << {
+    file("xcode/native/ios/").mkdirs();
+    def LD_FLAGS = "LIBGDX_NATIVES = "
+    configurations.natives.files.each { jar->
+        def outputDir = null
+        if (jar.name.endsWith("natives-ios.jar")) outputDir = file("xcode/native/ios")
+        if (outputDir != null) {
+            FileCollection fileCollection = zipTree(jar)
+            for (File libFile : fileCollection) {
+                if (libFile.getAbsolutePath().endsWith(".a") && !libFile.getAbsolutePath().contains("/tvos/")) {
+                    copy {
+                        from libFile.getAbsolutePath()
+                        into outputDir
+                    }
+                    LD_FLAGS += " -force_load \${SRCROOT}/native/ios/" + libFile.getName()
+                }
+            }
+        }
+    }
+    def outFlags = file("xcode/princess/custom.xcconfig");
+    outFlags.write LD_FLAGS
+
+    def proguard = file("proguard.append.cfg")
+    if (!proguard.exists()) {
+        proguard = new File("proguard.append.cfg")
+        proguard << "\n-keep class com.badlogic.** { *; }\n"
+        proguard << "-keep enum com.badlogic.** { *; }\n"
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'lib', include: '*.jar')
+
+    compile project(":core")
+
+    compile "com.badlogicgames.gdx:gdx-backend-moe:$gdxVersion"
+    natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-ios"
+    natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-ios"
+}
+
+// Set source and target to Java 8
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
+
+// Set maven repository
+repositories {
+    jcenter()
+}
+
+// Exclude all files from Gradle's test runner
+test { exclude '**' }
+
+// Setup Multi-OS Engine
+moe {
+    //proguardLevel 'all'
+    xcode {
+        project 'xcode/princess.xcodeproj'
+        mainTarget 'princess'
+        testTarget 'princess-Test'
+
+        // Uncomment and change these settings if you are working with a Xcode workspace
+        // workspace 'xcode/princess.xcworkspace'
+        // mainScheme 'princess'
+        // testScheme 'princess-Test'
+    }
+}
+
+
+
+// Setup Eclipse
+eclipse {
+    // Set Multi-OS Engine nature
+    project {
+        natures 'org.multi-os-engine.project'
+    }
+}
+
+moeMainReleaseIphoneosXcodeBuild.dependsOn copyNatives
+moeMainDebugIphoneosXcodeBuild.dependsOn copyNatives
+moeMainReleaseIphonesimulatorXcodeBuild.dependsOn copyNatives
+moeMainDebugIphonesimulatorXcodeBuild.dependsOn copyNatives

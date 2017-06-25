@@ -55,7 +55,7 @@ public class Credits extends GameState {
 
         super(gsm);
 
-        font.setScale(1.3f);
+        //font.setScale(1.3f);
 
         CREDIT = getCreditFromFile();
 
@@ -226,15 +226,15 @@ public class Credits extends GameState {
             for (String line : data) {
                 numbOfLinesInCredits++;
                 credit += line + "\n";
-                if(font.getBounds(line).width > credits_size.x){
-                    credits_size.x = font.getBounds(line).width;
-                    credits_size.y = font.getBounds(credit).height;
-                }
+//                if(font.getBounds(line).width > credits_size.x){
+//                    credits_size.x = font.getBounds(line).width;
+//                    credits_size.y = font.getBounds(credit).height;
+//                }
             }
         } catch (GdxRuntimeException e) {
             Gdx.app.error(LOG_TAG,"error while accessing file",e);
-            credits_size.x = font.getBounds(credit).width;
-            credits_size.y = font.getBounds(credit).height;
+//            credits_size.x = font.getBounds(credit).width;
+//            credits_size.y = font.getBounds(credit).height;
         }
         return credit;
     }
@@ -366,7 +366,7 @@ public class Credits extends GameState {
 
             sb.begin();
             font.setColor(Color.WHITE);
-            font.drawMultiLine(sb, CREDIT, x , y, credits_size.x, BitmapFont.HAlignment.CENTER);
+            //font.drawMultiLine(sb, CREDIT, x , y, credits_size.x, BitmapFont.HAlignment.CENTER);
             //GEAR BUTTON
             float speed = 8f;
             if (stage1.getActors().items[0].getX() <= -5) {
@@ -395,7 +395,7 @@ public class Credits extends GameState {
     }
 
     public void dispose() {
-        font.setScale(1);
+        //font.setScale(1);
         if (MyGdxGame.res.getMusic("shop").isPlaying()) MyGdxGame.res.getMusic("shop").stop();
     }
 

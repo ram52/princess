@@ -197,6 +197,9 @@ public class MyGdxGame implements ApplicationListener {
         this.requestHandler = requestHandler;
     }
 
+    public MyGdxGame(ActionResolver actionResolver) {
+        this.actionResolver = actionResolver;
+    }
 
 
     public void create() {
@@ -371,7 +374,7 @@ public class MyGdxGame implements ApplicationListener {
             if(DEBUG){
                 sb.begin();
                 font.setColor(Color.RED);
-                font.drawMultiLine(sb, debugString, MyGdxGame.V_WIDTH/15 , MyGdxGame.V_HEIGHT/1.1f, MyGdxGame.V_WIDTH, BitmapFont.HAlignment.LEFT);
+                //font.drawMultiLine(sb, debugString, MyGdxGame.V_WIDTH/15 , MyGdxGame.V_HEIGHT/1.1f, MyGdxGame.V_WIDTH, BitmapFont.HAlignment.LEFT);
                 sb.end();
             }
 

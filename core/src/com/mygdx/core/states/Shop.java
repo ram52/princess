@@ -20,7 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.badlogic.gdx.utils.Align;
 import com.mygdx.core.MyGdxGame;
 import com.mygdx.core.handlers.Animation;
 import com.mygdx.core.handlers.AnimeActor;
@@ -366,13 +366,13 @@ public class Shop extends GameState {
 
         animationCoin = new Animation(new Sprite(MyGdxGame.atlas.findRegion("coinsprite")).split(64,64)[0], 1 / 5f);
 
-        com.badlogic.gdx.graphics.g2d.Animation a = new com.badlogic.gdx.graphics.g2d.Animation(1/10f,animationCoin.getFrames());
+        //Animation a = new Animation(1/10f,animationCoin.getFrames());
 
-        AnimeActor anim = new AnimeActor(a);
-        anim.setHeight(labelMoney.getHeight());
-        anim.setWidth(labelMoney.getHeight());
-        anim.setPosition(100,labelMoney.getY());
-        stage1.addActor(anim);
+//        AnimeActor anim = new AnimeActor(animationCoin);
+//        anim.setHeight(labelMoney.getHeight());
+//        anim.setWidth(labelMoney.getHeight());
+//        anim.setPosition(100,labelMoney.getY());
+//        stage1.addActor(anim);
 
         InputMultiplexer im = new InputMultiplexer();
         im.addProcessor(gd);

@@ -39,8 +39,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.Timer;
@@ -3679,12 +3679,12 @@ public class Play extends GameState {
                     if(cl.intersect(enemy,lightning)){
                         spriteBatch.begin();
                         font.setColor(Color.BLUE);
-                        font.drawMultiLine(spriteBatch, "true", enemy.getBoundingBox().getMin(new Vector3()).x, enemy.getBoundingBox().getMin(new Vector3()).y, enemy.getBoundingBox().getWidth(), BitmapFont.HAlignment.LEFT);
+                        //font.drawMultiLine(spriteBatch, "true", enemy.getBoundingBox().getMin(new Vector3()).x, enemy.getBoundingBox().getMin(new Vector3()).y, enemy.getBoundingBox().getWidth(), BitmapFont.HAlignment.LEFT);
                         spriteBatch.end();
                     }else{
                         spriteBatch.begin();
                         font.setColor(Color.RED);
-                        font.drawMultiLine(spriteBatch, "false", enemy.getBoundingBox().getMin(new Vector3()).x, enemy.getBoundingBox().getMin(new Vector3()).y, enemy.getBoundingBox().getWidth(), BitmapFont.HAlignment.LEFT);
+                        //font.drawMultiLine(spriteBatch, "false", enemy.getBoundingBox().getMin(new Vector3()).x, enemy.getBoundingBox().getMin(new Vector3()).y, enemy.getBoundingBox().getWidth(), BitmapFont.HAlignment.LEFT);
                         spriteBatch.end();
                     }
 
@@ -3863,14 +3863,14 @@ public class Play extends GameState {
             x += w*1.1f;
 
             String value = "x"+String.valueOf(Save.gd.getMoney());
-            font2.drawMultiLine(sb,
-                    value ,
-                    x ,
-                    h*1.0f,
-                    font2.getBounds(value).width,
-                    BitmapFont.HAlignment.CENTER);
-
-            x += font2.getBounds(value).width*1.1f;
+//            font2.drawMultiLine(sb,
+//                    value ,
+//                    x ,
+//                    h*1.0f,
+//                    font2.getBounds(value).width,
+//                    BitmapFont.HAlignment.CENTER);
+//
+//            x += font2.getBounds(value).width*1.1f;
 
 
             if(Save.gd.isFireBallEquiped()|Save.gd.isFireBall2Equiped() && power.getFrames().length>0){
@@ -3892,14 +3892,14 @@ public class Play extends GameState {
                     setButtonColor(buttonFire,"buttonActionUp","buttonActionDown");
 
                 value = "x"+value;
-                font2.drawMultiLine(sb,
-                        value ,
-                        x,
-                        h*1.0f,
-                        font2.getBounds(value).width,
-                        BitmapFont.HAlignment.LEFT);
-
-                x += font2.getBounds(value).width*1.2f;
+//                font2.drawMultiLine(sb,
+//                        value ,
+//                        x,
+//                        h*1.0f,
+//                        font2.getBounds(value).width,
+//                        BitmapFont.HAlignment.LEFT);
+//
+//                x += font2.getBounds(value).width*1.2f;
 
             }
             if(this.brick != null && !this.brick.isFalling()){
@@ -3910,14 +3910,14 @@ public class Play extends GameState {
                 damage = (this.brick.getLife()/(float)this.brick.getMaxLife())*100.0f;
 
                 value = ""+String.valueOf((int)damage)+"%";
-                font2.drawMultiLine(sb,
-                        value ,
-                        x ,
-                        h*1.0f,
-                        font2.getBounds(value).width,
-                        BitmapFont.HAlignment.CENTER);
-
-                x += font2.getBounds(value).width*1.1f;
+//                font2.drawMultiLine(sb,
+//                        value ,
+//                        x ,
+//                        h*1.0f,
+//                        font2.getBounds(value).width,
+//                        BitmapFont.HAlignment.CENTER);
+//
+//                x += font2.getBounds(value).width*1.1f;
 
             }
 
