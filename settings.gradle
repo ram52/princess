@@ -1,3 +1,7 @@
 include 'desktop', 'android', 'html', 'core', ':BaseGameUtils'
 
 include ':ios'
+
+include ':framework', ':framework:framework-ios', ':framework:framework-android', ':framework:framework-common'
+
+include ':common'

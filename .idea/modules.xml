@@ -5,8 +5,13 @@
       <module fileurl="file://$PROJECT_DIR$/BaseGameUtils/BaseGameUtils.iml" filepath="$PROJECT_DIR$/BaseGameUtils/BaseGameUtils.iml" />
       <module fileurl="file://$PROJECT_DIR$/SetupGame.iml" filepath="$PROJECT_DIR$/SetupGame.iml" />
       <module fileurl="file://$PROJECT_DIR$/android/android.iml" filepath="$PROJECT_DIR$/android/android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/common/common.iml" filepath="$PROJECT_DIR$/common/common.iml" />
       <module fileurl="file://$PROJECT_DIR$/core/core.iml" filepath="$PROJECT_DIR$/core/core.iml" />
       <module fileurl="file://$PROJECT_DIR$/desktop/desktop.iml" filepath="$PROJECT_DIR$/desktop/desktop.iml" />
+      <module fileurl="file://$PROJECT_DIR$/framework/framework.iml" filepath="$PROJECT_DIR$/framework/framework.iml" />
+      <module fileurl="file://$PROJECT_DIR$/framework/framework-android/framework-android.iml" filepath="$PROJECT_DIR$/framework/framework-android/framework-android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/framework/framework-common/framework-common.iml" filepath="$PROJECT_DIR$/framework/framework-common/framework-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/framework/framework-ios/framework-ios.iml" filepath="$PROJECT_DIR$/framework/framework-ios/framework-ios.iml" />
       <module fileurl="file://$PROJECT_DIR$/html/html.iml" filepath="$PROJECT_DIR$/html/html.iml" />
       <module fileurl="file://$PROJECT_DIR$/ios/ios.iml" filepath="$PROJECT_DIR$/ios/ios.iml" />
     </modules>

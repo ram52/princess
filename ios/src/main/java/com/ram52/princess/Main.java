@@ -12,17 +12,22 @@ import apple.uikit.UIApplication;
 import apple.uikit.UIWindow;
 import apple.uikit.c.UIKit;
 
+import org.moe.inapppurchase.common.ProductsStore;
 import org.moe.natj.general.Pointer;
 import org.moe.natj.general.ann.RegisterOnStartup;
+import org.moe.natj.objc.ObjCRuntime;
 import org.moe.natj.objc.ann.ObjCClassName;
 import org.moe.natj.objc.ann.Selector;
 
+@org.moe.natj.general.ann.Runtime(ObjCRuntime.class)
 @ObjCClassName("Main")
+@RegisterOnStartup
 public class Main extends IOSApplication.Delegate implements ActionResolver {
 
     private static String LOG_TAG = Main.class.getSimpleName();
 
     private IOSApplication iosApplication;
+    ProductsStore productsStore = null;
     MyGdxGame game;
 
     public static void main(String[] args) {
@@ -63,6 +68,15 @@ public class Main extends IOSApplication.Delegate implements ActionResolver {
     @Override
     public void applicationDidBecomeActive(UIApplication application) {
         iosApplication.log(LOG_TAG,"applicationDidBecomeActive");
+        productsStore = new ProductsStore("IAPHelperProductPurchasedNotification");
+        productsStore.requestProductsWithCompletionHandler(new ProductsStore.RequestProductsCompletionHandler() {
+            @Override
+            public void callback(boolean status) {
+                iosApplication.log(LOG_TAG,"status");
+                if (status) {
+                }
+            }
+        });
     }
 
     @Override
