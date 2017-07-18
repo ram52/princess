@@ -59,9 +59,7 @@ public class Credits extends GameState {
 
         //font.setScale(1.3f);
 
-
-        if(CREDIT == null)
-            CREDIT = getCreditFromFile();
+        CREDIT = getCreditFromFile();
 
         shapeRenderer = new ShapeRenderer();
 
@@ -257,7 +255,9 @@ public class Credits extends GameState {
         }
 
 
+        font2.getData().setScale(0.85f);
         glyphLayout.setText(font2,credit,Color.WHITE,Gdx.graphics.getWidth(), Align.center,true);
+
 
         credits_size.y = glyphLayout.height;
 
@@ -376,7 +376,7 @@ public class Credits extends GameState {
             stage1.draw();
             sb.end();
 
-            drawCredits();
+
 
             //GEAR BUTTON
             float speed = 8f;
@@ -394,8 +394,10 @@ public class Credits extends GameState {
             sb.draw(animationHya.getFrame(), 0 + ((float) time * 1.7f), 250);
             sb.draw(animationEnemy.getFrame(), -250 + ((float) time * 1.7f), 202);
             sb.end();
-            time+=2;
 
+            drawCredits();
+
+            time+=2;
 
             if(time > 800){
                 time = -200;
