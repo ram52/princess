@@ -28,7 +28,7 @@ public class Animation {
     }
 	
 	public Animation() {}
-	
+
 	public Animation(TextureRegion[] frames) {
 		this(frames, 1 / 5f);
 	}

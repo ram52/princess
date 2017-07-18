@@ -34,7 +34,7 @@
 		1F17D96AF60A5EFBA0307AF6 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		5863B87B1DA682C800E46B6A /* princess-Test.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "princess-Test.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5863B88E1DA682C800E46B6A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		58C6F5241DA66CB600309CB6 /* princess.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = princess.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		58C6F5241DA66CB600309CB6 /* Princess.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Princess.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		58C6F5331DA66CB600309CB6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		58C6F5361DA66CB600309CB6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		58C6F5381DA66CB600309CB6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -134,7 +134,7 @@
 		58C6F5251DA66CB600309CB6 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				58C6F5241DA66CB600309CB6 /* princess.app */,
+				58C6F5241DA66CB600309CB6 /* Princess.app */,
 				5863B87B1DA682C800E46B6A /* princess-Test.app */,
 			);
 			name = Products;
@@ -205,7 +205,7 @@
 			);
 			name = princess;
 			productName = princess;
-			productReference = 58C6F5241DA66CB600309CB6 /* princess.app */;
+			productReference = 58C6F5241DA66CB600309CB6 /* Princess.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -531,7 +531,7 @@
 					"-ObjC",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.ram52.princess;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Princess;
 				PROVISIONING_PROFILE = "4bb67782-77f7-4010-ac87-32bdce81f2e8";
 				STRIP_STYLE = "non-global";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -576,7 +576,7 @@
 					"-ObjC",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.ram52.princess;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Princess;
 				PROVISIONING_PROFILE = "b3dfed57-5391-4157-b19f-d29960757aab";
 				STRIP_STYLE = "non-global";
 				TARGETED_DEVICE_FAMILY = 1;

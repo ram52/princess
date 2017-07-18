@@ -1,14 +1,12 @@
-PRINCESS!
-ram52studio@gmail.com
-v1.0
+PRINCESS! v1.0
+contact@ram52.com
 
 Programming:
-Axel
+Axel MONTOUT
 
 Art:
 lansari rachid
-rachidlansari@gmail.com
-Axel
+Axel MONTOUT
 Clint Bellanger (Shock Spell)
 https://creativecommons.org/
 licenses/by/3.0/
@@ -21,4 +19,6 @@ Satie
 
 Sfx:
 Juhani Junkala
-juhani.junkala@musician.org
+
+Special Thanks
+Reibu Jocelyn

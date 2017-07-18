@@ -366,13 +366,13 @@ public class Shop extends GameState {
 
         animationCoin = new Animation(new Sprite(MyGdxGame.atlas.findRegion("coinsprite")).split(64,64)[0], 1 / 5f);
 
-        //Animation a = new Animation(1/10f,animationCoin.getFrames());
+        com.badlogic.gdx.graphics.g2d.Animation a = new com.badlogic.gdx.graphics.g2d.Animation(1/10f,animationCoin.getFrames());
 
-//        AnimeActor anim = new AnimeActor(animationCoin);
-//        anim.setHeight(labelMoney.getHeight());
-//        anim.setWidth(labelMoney.getHeight());
-//        anim.setPosition(100,labelMoney.getY());
-//        stage1.addActor(anim);
+        AnimeActor anim = new AnimeActor(a);
+        anim.setHeight(labelMoney.getHeight());
+        anim.setWidth(labelMoney.getHeight());
+        anim.setPosition(100,labelMoney.getY());
+        stage1.addActor(anim);
 
         InputMultiplexer im = new InputMultiplexer();
         im.addProcessor(gd);

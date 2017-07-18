@@ -72,6 +72,7 @@ import static com.mygdx.core.MyGdxGame.DEBUG;
 import static com.mygdx.core.MyGdxGame.TEST;
 import static com.mygdx.core.MyGdxGame.font;
 import static com.mygdx.core.MyGdxGame.font2;
+import static com.mygdx.core.MyGdxGame.glyphLayout;
 import static com.mygdx.core.MyGdxGame.lastBrickPosition;
 import static com.mygdx.core.MyGdxGame.lastPlayerPosition;
 import static com.mygdx.core.MyGdxGame.lastPrincessPosition;
@@ -3754,42 +3755,46 @@ public class Play extends GameState {
 
 
 
-//        sb.begin();
-//
-//        font2.setColor(Color.WHITE);
-//
-//        String value = String.valueOf(player.getFireBallCount());
-//
-//        if(Save.gd.isFireBallEquiped()){
-//            value = String.valueOf((int)Math.round((float)player.getFireBallCount()/3f));
-//        }
-//
-//        if(player.getFireBallCount()< 1){
-//            value = "0";
-//        }
-//
-//        if(Save.gd.isFireBall2Equiped() | Save.gd.isFireBallEquiped()){
-//            if(pickedGameplay == 2){
+        sb.begin();
+
+        font2.setColor(Color.WHITE);
+
+        String value = String.valueOf(player.getFireBallCount());
+
+        if(Save.gd.isFireBallEquiped()){
+            value = String.valueOf((int)Math.round((float)player.getFireBallCount()/3f));
+        }
+
+        if(player.getFireBallCount()< 1){
+            value = "0";
+        }
+
+        if(Save.gd.isFireBall2Equiped() | Save.gd.isFireBallEquiped()){
+            if(pickedGameplay == 2){
+                //font2.setColor(Color.WHITE);
+
+
 //                font2.drawMultiLine(sb,
 //                        value ,
 //                        MyGdxGame.V_WIDTH/1.733f,
 //                        (MyGdxGame.V_HEIGHT/7.5f) - 11f*offsetY/PPM,
 //                        MyGdxGame.V_WIDTH/10f,
 //                        BitmapFont.HAlignment.CENTER);
-//            }
-//
-//            if(pickedGameplay == 1){
+            }
+
+            if(pickedGameplay == 1){
+
 //                font2.drawMultiLine(sb,
 //                        value ,
 //                        MyGdxGame.V_WIDTH/2.205f,
 //                        (MyGdxGame.V_HEIGHT/7.5f) - 11f*offsetY/PPM,
 //                        MyGdxGame.V_WIDTH/10f,
 //                        BitmapFont.HAlignment.CENTER);
-//            }
-//        }
-//
-//
-//        sb.end();
+            }
+        }
+
+
+        sb.end();
 
 
         sb.setProjectionMatrix(hudCam.combined);
@@ -3863,14 +3868,18 @@ public class Play extends GameState {
             x += w*1.1f;
 
             String value = "x"+String.valueOf(Save.gd.getMoney());
+
+            glyphLayout.setText(font2,value);
+            font2.draw(sb, glyphLayout, x , h*1.0f);
+
 //            font2.drawMultiLine(sb,
 //                    value ,
 //                    x ,
 //                    h*1.0f,
 //                    font2.getBounds(value).width,
 //                    BitmapFont.HAlignment.CENTER);
-//
-//            x += font2.getBounds(value).width*1.1f;
+
+            x += glyphLayout.width*1.1f;
 
 
             if(Save.gd.isFireBallEquiped()|Save.gd.isFireBall2Equiped() && power.getFrames().length>0){
@@ -3892,6 +3901,11 @@ public class Play extends GameState {
                     setButtonColor(buttonFire,"buttonActionUp","buttonActionDown");
 
                 value = "x"+value;
+
+                glyphLayout.setText(font2,value);
+                font2.draw(sb, glyphLayout, x , h*1.0f);
+                x += glyphLayout.width*1.2f;
+
 //                font2.drawMultiLine(sb,
 //                        value ,
 //                        x,
@@ -3900,6 +3914,7 @@ public class Play extends GameState {
 //                        BitmapFont.HAlignment.LEFT);
 //
 //                x += font2.getBounds(value).width*1.2f;
+
 
             }
             if(this.brick != null && !this.brick.isFalling()){
@@ -3910,6 +3925,9 @@ public class Play extends GameState {
                 damage = (this.brick.getLife()/(float)this.brick.getMaxLife())*100.0f;
 
                 value = ""+String.valueOf((int)damage)+"%";
+                glyphLayout.setText(font2,value);
+                font2.draw(sb, glyphLayout, x , h*1.0f);
+                x += glyphLayout.width*1.2f;
 //                font2.drawMultiLine(sb,
 //                        value ,
 //                        x ,

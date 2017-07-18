@@ -12,6 +12,9 @@
         <option name="BUILDABLE" value="true" />
       </configuration>
     </facet>
+    <facet type="ios" name="iOS">
+      <configuration />
+    </facet>
   </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_7" inherit-compiler-output="false">
     <output url="file://$MODULE_DIR$/build/classes/main" />
@@ -31,5 +34,9 @@
     <orderEntry type="library" exported="" name="moe-core" level="project" />
     <orderEntry type="library" exported="" name="moe-ios" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="moe-ios-junit" level="project" />
+    <orderEntry type="library" exported="" name="framework-ios.framework-ios-1.0" level="project" />
+    <orderEntry type="library" exported="" name="framework-ios.framework-ios-1.0" level="project" />
+    <orderEntry type="library" exported="" name="framework-ios.framework-ios-1.0" level="project" />
+    <orderEntry type="library" exported="" name="framework-ios.framework-ios-1.0" level="project" />
   </component>
 </module>

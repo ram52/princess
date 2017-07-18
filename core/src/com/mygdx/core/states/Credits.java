@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.mygdx.core.MyGdxGame;
 import com.mygdx.core.handlers.Animation;
@@ -24,6 +25,8 @@ import com.mygdx.core.handlers.GameStateManager;
 import com.mygdx.core.handlers.Save;
 
 import static com.mygdx.core.MyGdxGame.font;
+import static com.mygdx.core.MyGdxGame.font2;
+import static com.mygdx.core.MyGdxGame.glyphLayout;
 
 public class Credits extends GameState {
 
@@ -49,7 +52,6 @@ public class Credits extends GameState {
     private static String CREDIT;
     private Vector2 credits_size = new Vector2(0,0);
     private ShapeRenderer shapeRenderer;
-    private int numbOfLinesInCredits = 5;
 
     public Credits(GameStateManager gsm) {
 
@@ -57,7 +59,9 @@ public class Credits extends GameState {
 
         //font.setScale(1.3f);
 
-        CREDIT = getCreditFromFile();
+
+        if(CREDIT == null)
+            CREDIT = getCreditFromFile();
 
         shapeRenderer = new ShapeRenderer();
 
@@ -219,26 +223,47 @@ public class Credits extends GameState {
 
     private String getCreditFromFile(){
         String credit = ":( Sorry could not load credits file.";
+
+        float wLine = 0;
+        float hLine = 0;
+        float wCredit = 0;
+        float hCredit = 0;
         try {
             String credits = Gdx.files.internal("data/credits.txt").readString();
             String[] data = credits.split("\n");
             credit = "";
             for (String line : data) {
-                numbOfLinesInCredits++;
                 credit += line + "\n";
-//                if(font.getBounds(line).width > credits_size.x){
-//                    credits_size.x = font.getBounds(line).width;
-//                    credits_size.y = font.getBounds(credit).height;
-//                }
+
+                //glyphLayout.setText(font2,line);
+
+                wLine = glyphLayout.width;
+                hLine = glyphLayout.height;
+                credits_size.y += hLine;
+
+                glyphLayout.setText(font2,credit);
+                wCredit = glyphLayout.width;
+                hCredit = glyphLayout.height;
+
+                if(wLine > credits_size.x){
+                    credits_size.x = wLine;
+                }
             }
+            //credits_size.y += 4*hLine;
         } catch (GdxRuntimeException e) {
             Gdx.app.error(LOG_TAG,"error while accessing file",e);
-//            credits_size.x = font.getBounds(credit).width;
-//            credits_size.y = font.getBounds(credit).height;
+            credits_size.x = wCredit;
+            credits_size.y = hCredit;
         }
+
+
+        glyphLayout.setText(font2,credit,Color.WHITE,Gdx.graphics.getWidth(), Align.center,true);
+
+        credits_size.y = glyphLayout.height;
+
+
         return credit;
     }
-
     public void handleInput() {
         if (click_on_play) {
             click_on_play = false;
@@ -351,22 +376,8 @@ public class Credits extends GameState {
             stage1.draw();
             sb.end();
 
-            float x = MyGdxGame.V_WIDTH/2 - credits_size.x/2;
-            float y = MyGdxGame.V_HEIGHT/1.1f;
+            drawCredits();
 
-            Gdx.gl.glEnable(GL20.GL_BLEND);
-            shapeRenderer.setColor(new Color(0, 0, 0, 0.8f));
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            float h = credits_size.y*numbOfLinesInCredits;
-            float padding = 100;
-            shapeRenderer.rect(x-padding/2,y-h-padding/2, credits_size.x+padding, h+padding);
-            shapeRenderer.end();
-            Gdx.gl.glDisable(GL20.GL_BLEND);
-
-
-            sb.begin();
-            font.setColor(Color.WHITE);
-            //font.drawMultiLine(sb, CREDIT, x , y, credits_size.x, BitmapFont.HAlignment.CENTER);
             //GEAR BUTTON
             float speed = 8f;
             if (stage1.getActors().items[0].getX() <= -5) {
@@ -375,7 +386,7 @@ public class Credits extends GameState {
             }
 
             //if((Save.gd.isSoundEnable()==2) && !MyGdxGame.res.getMusic("main").isPlaying()) MyGdxGame.res.getMusic("main").setVolume(0.6f);
-            sb.end();
+
 
             sb.begin();
             sb.draw(animationPBlue1.getFrame(), -80 + ((float) time * 1.7f), 202);
@@ -393,6 +404,27 @@ public class Credits extends GameState {
 
         }
     }
+
+    public void drawCredits(){
+        float x = MyGdxGame.V_WIDTH/2 - credits_size.x/2;
+        float y = MyGdxGame.V_HEIGHT/1.1f;
+
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        shapeRenderer.setColor(new Color(0, 0, 0, 0.8f));
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        float h = credits_size.y;
+        float padding = 100;
+        shapeRenderer.rect(x-padding/2,y-h-padding/2, credits_size.x+padding, h+padding);
+        shapeRenderer.end();
+        Gdx.gl.glDisable(GL20.GL_BLEND);
+
+
+        sb.begin();
+        font2.setColor(Color.WHITE);
+        font2.draw(sb, glyphLayout, 0 , y);
+        sb.end();
+    }
+
 
     public void dispose() {
         //font.setScale(1);

@@ -12,6 +12,9 @@
         <option name="BUILDABLE" value="true" />
       </configuration>
     </facet>
+    <facet type="ios" name="iOS">
+      <configuration />
+    </facet>
   </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_7" inherit-compiler-output="false">
     <output url="file://$MODULE_DIR$/build/classes/main" />
@@ -23,9 +26,14 @@
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource" />
       <excludeFolder url="file://$MODULE_DIR$/.gradle" />
+      <excludeFolder url="file://$MODULE_DIR$/build" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="framework-common" exported="" />
+    <orderEntry type="library" exported="" name="common.common-1.0" level="project" />
+    <orderEntry type="library" exported="" name="common.common-1.0" level="project" />
+    <orderEntry type="library" exported="" name="common.common-1.0" level="project" />
+    <orderEntry type="library" exported="" name="common.common-1.0" level="project" />
   </component>
 </module>

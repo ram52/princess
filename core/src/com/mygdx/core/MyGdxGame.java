@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -77,6 +78,8 @@ public class MyGdxGame implements ApplicationListener {
     public static Vector2 lastBrickPosition = new Vector2(0,0);
     public static Vector2 lastPrincessPosition = new Vector2(0,0);
     public static int lastScoreInTutorial = 0;
+
+    public static GlyphLayout glyphLayout;
 
 
     public static void setIsBoosTerritory(boolean isBoosTerritory) {
@@ -209,6 +212,7 @@ public class MyGdxGame implements ApplicationListener {
         fps = new FPSLogger();
         font = new BitmapFont(Gdx.files.internal(MyGdxGame.fontTextPath), false);
         font2 = new BitmapFont(Gdx.files.internal(MyGdxGame.fontfsexPath), false);
+        glyphLayout = new GlyphLayout();
 
         viewport = new Rectangle();
         intro = new Image(new Texture(Gdx.files.internal("data/sprite/loading.png")));
