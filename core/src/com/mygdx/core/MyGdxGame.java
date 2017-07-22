@@ -28,6 +28,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.AlphaAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mygdx.core.entities.ActionResolver;
 import com.mygdx.core.entities.B2DSprite;
 import com.mygdx.core.handlers.Animation;
@@ -199,6 +201,44 @@ public class MyGdxGame implements ApplicationListener {
     public static String CREDIT;
     public static Vector2 credits_size = new Vector2(0,0);
     public static ShapeRenderer shapeRendererCredit;
+    ///////////////////////////////
+    
+    //////////MENU/////////////////
+    public static Animation animPlayerIdle, animPlayerIdleFliped, animPlayerSlash, animPrincessIdle, animPrincessIdleFliped, animTitle, animHelpMe;
+    public static boolean click_on_playMenu, click_on_leaderboardMenu, click_on_tutoMenu;
+    public static int isfadeOutStarted = 0;
+    public static Stage stage1Menu, stage2Menu, stage3Menu, stageUiOptionMenu;
+    public static Label labelCopyright;
+    public static Button buttonPlayMenu, buttonLeaderBoardMenu, buttonTutoMenu, buttonSoundMenu, buttonGearMenu, buttonCreditsMenu, buttonPBlueMenu, buttonPRedMenu,
+            buttonPYellow, buttonPGreen, buttonStore, buttonBackImage, buttonFacebook, buttonTwitter, buttonAchievement, buttonCloseUiOption, optionUiBackImage, imageCoinMenu;
+    public static Skin skinMenu;
+    public static Image loadingMenu;
+    public static Rectangle viewportMenu;
+    public static int cpt_blinkMenu = 0;
+    public static boolean blinkMenu = false;
+    public static float blinking_text_alphaMenu = 0;
+    public static SpriteBatch sb2Menu, sb3Menu;
+    public static boolean start2Menu = false;
+    public static int cpt_translate_animation1Menu = 0;
+    public static int cpt_translate_animation2Menu = 0;
+    public static boolean click_on_creditsMenu = false;
+    public static boolean click_on_shopMenu = false;
+    public static boolean PBlueMenu = false, PRedMenu = false, PYellowMenu = false, playerIsTouchedMenu = false;
+    public static int cptMenu = 0;
+    public static int cpt_translate_animationMenu = 0;
+    public static int cpt_translate_animation_titleMenu = 0;
+    public static Label labelMoneyMenu;
+    public static String code = "";
+    public static float posXMenu = (MyGdxGame.V_WIDTH / 2f);
+    public static float posX2Menu = (MyGdxGame.V_WIDTH / 2f);
+    public static boolean rightMenu = true;
+    public static boolean leftMenu = false;
+    public static boolean right2Menu = true;
+    public static boolean left2Menu = false;
+    public static boolean jp = false;
+    public static float yMenu = 670.0f;
+    public static Stage stage0Menu;
+    public static Image introMenu;
     ///////////////////////////////
 
 

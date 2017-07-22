@@ -551,7 +551,7 @@ public class Play extends GameState {
 //        buttonFire.addListener(new InputListener() {
 //            public boolean touchDown(
 //                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
-//                    float y, int pointer, int button) {
+//                    float yMenu, int pointer, int button) {
 //                buttonFire.setChecked(true);
 //                if(Save.gd.isFireBallEquiped()|Save.gd.isFireBall2Equiped()){
 //                    Gdx.app.debug(LOG_TAG,"clicked fire!");
@@ -586,7 +586,7 @@ public class Play extends GameState {
 //
 //            public void touchUp(
 //                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
-//                    float y, int pointer, int button) {
+//                    float yMenu, int pointer, int button) {
 //                buttonFire.setChecked(false);
 //            }
 //        });
@@ -594,14 +594,14 @@ public class Play extends GameState {
 //        buttonJump.addListener(new InputListener() {
 //            public boolean touchDown(
 //                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
-//                    float y, int pointer, int button) {
+//                    float yMenu, int pointer, int button) {
 //                jump = true;
 //                return true;
 //            }
 //
 //            public void touchUp(
 //                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
-//                    float y, int pointer, int button) {
+//                    float yMenu, int pointer, int button) {
 //                jump = false;
 //
 //            }
@@ -637,23 +637,23 @@ public class Play extends GameState {
 //        buttonLeft.addListener(new InputListener() {
 //            public boolean touchDown(
 //                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
-//                    float y, int pointer, int button) {
-//                left = true;
+//                    float yMenu, int pointer, int button) {
+//                leftMenu = true;
 //                //buttonLeft.setChecked(true);
 //                return true;
 //            }
 //            public void touchUp(
 //                    InputEvent event, float x,
-//                    float y, int pointer, int button) {
-//                //Gdx.app.debug(LOG_TAG,"clicked left!");
-//                left = false;
-//                //right = false;
+//                    float yMenu, int pointer, int button) {
+//                //Gdx.app.debug(LOG_TAG,"clicked leftMenu!");
+//                leftMenu = false;
+//                //rightMenu = false;
 //                //buttonLeft.setChecked(false);
 //                //buttonRight.setChecked(false);
 //            }
 //
-//            public void touchDragged(InputEvent event, float x, float y, int pointer){
-//                Gdx.app.debug(LOG_TAG, "x="+x+" "+"y="+y);
+//            public void touchDragged(InputEvent event, float x, float yMenu, int pointer){
+//                Gdx.app.debug(LOG_TAG, "x="+x+" "+"yMenu="+yMenu);
 //            }
 //
 //        });
@@ -719,29 +719,29 @@ public class Play extends GameState {
 //        buttonRight.addListener(new InputListener() {
 //            public boolean touchDown(
 //                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
-//                    float y, int pointer, int button) {
-//                right = true;
+//                    float yMenu, int pointer, int button) {
+//                rightMenu = true;
 //                //buttonRight.setChecked(true);
 //                return false;
 //            }
 //            public void touchUp(
 //                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
-//                    float y, int pointer, int button) {
-//                //Gdx.app.debug(LOG_TAG,"clicked right!");
-//                right = false;
-//                //left = false;
+//                    float yMenu, int pointer, int button) {
+//                //Gdx.app.debug(LOG_TAG,"clicked rightMenu!");
+//                rightMenu = false;
+//                //leftMenu = false;
 //                //buttonLeft.setChecked(false);
 //                //buttonRight.setChecked(false);
 //            }
 //
-////            public void touchDragged(InputEvent event, float x, float y, int pointer){
-////                Gdx.app.debug(LOG_TAG, "x="+x+" "+"y="+y+" "+
+////            public void touchDragged(InputEvent event, float x, float yMenu, int pointer){
+////                Gdx.app.debug(LOG_TAG, "x="+x+" "+"yMenu="+yMenu+" "+
 ////                        "buttonRightX="+buttonRight.getX()+" "+
 ////                        "buttonRighWidth="+ buttonRight.getWidth() +" "+
 ////                        "buttonRighY="+ buttonRight.getY()+" "+
 ////                        "buttonRighHeight="+ buttonRight.getHeight());
 ////
-////                if(x < buttonRight.getX() | x > buttonRight.getX()+buttonRight.getWidth() | y < buttonRight.getY() | y > buttonRight.getY()+buttonRight.getHeight()){
+////                if(x < buttonRight.getX() | x > buttonRight.getX()+buttonRight.getWidth() | yMenu < buttonRight.getY() | yMenu > buttonRight.getY()+buttonRight.getHeight()){
 ////                    Gdx.app.debug(LOG_TAG, "YES");
 ////                }else{
 ////                    Gdx.app.debug(LOG_TAG, "NO");
@@ -764,7 +764,7 @@ public class Play extends GameState {
         createTiles();
         createPlayer();
 
-        //createBrick(MyGdxGame.V_WIDTH/5/PPM, player.getPosition().y - player.getHeight()/2.8f/PPM);
+        //createBrick(MyGdxGame.V_WIDTH/5/PPM, player.getPosition().yMenu - player.getHeight()/2.8f/PPM);
 
         if(!Play.this.isTutorial){
             if(!MyGdxGame.TEST)
@@ -1496,22 +1496,22 @@ public class Play extends GameState {
 
 
 //        if(!buttonRight.isOver() && buttonRight.isChecked()){
-//            right = false;
+//            rightMenu = false;
 //        }
 //        if(!buttonLeft.isOver() && buttonLeft.isChecked()){
-//            left = false;
+//            leftMenu = false;
 //        }
 
 //        //reach screen extrem
-//        if(player.getPosition().x - player.getWidth()/2/PPM < 0 && left){
-//            player.getBody().setTransform(MyGdxGame.V_WIDTH/PPM + player.getWidth()/2/PPM , player.getPosition().y, player.getBody().getAngle());
-//            left = true;
-//            right = false;
+//        if(player.getPosition().x - player.getWidth()/2/PPM < 0 && leftMenu){
+//            player.getBody().setTransform(MyGdxGame.V_WIDTH/PPM + player.getWidth()/2/PPM , player.getPosition().yMenu, player.getBody().getAngle());
+//            leftMenu = true;
+//            rightMenu = false;
 //        }
-//        if(player.getPosition().x + player.getWidth()/2/PPM >  MyGdxGame.V_WIDTH/PPM && right){
-//            player.getBody().setTransform(-player.getWidth()/2/PPM, player.getPosition().y, player.getBody().getAngle());
-//            left = false;
-//            right = true;
+//        if(player.getPosition().x + player.getWidth()/2/PPM >  MyGdxGame.V_WIDTH/PPM && rightMenu){
+//            player.getBody().setTransform(-player.getWidth()/2/PPM, player.getPosition().yMenu, player.getBody().getAngle());
+//            leftMenu = false;
+//            rightMenu = true;
 //        }
 
         //bound player in screen
@@ -1556,7 +1556,7 @@ public class Play extends GameState {
                     !player.isJumpLeft() &&
                     !player.isJumpRight()
 //                    &&
-//                    (player.getPosition().y*PPM) < 325
+//                    (player.getPosition().yMenu*PPM) < 325
                     )
             {
                 player.getBody().setLinearVelocity(new Vector2(player.getBody().getLinearVelocity().x,0));
@@ -1678,7 +1678,7 @@ public class Play extends GameState {
             }
         }
 
-        //moves right
+        //moves rightMenu
         if (right && player.getBody().getLinearVelocity().x != PLAYER_VELOCITY) {
             //Gdx.app.debug(LOG_TAG,"RIGHT");
             if(Save.gd.isBootEquiped()) {
@@ -1755,8 +1755,8 @@ public class Play extends GameState {
                 }
 
                 enemy.setTouched(true);
-//                right = false;
-//                left = false;
+//                rightMenu = false;
+//                leftMenu = false;
                 isTouchingEnemy = true;
             }else{
                 enemy.setTouched(false);
@@ -2433,19 +2433,19 @@ public class Play extends GameState {
 
                                 }
 
-                                //nemy.getBody().setLinearVelocity(enemy.getBody().getLinearVelocity().x/2, enemy.getBody().getLinearVelocity().y);
+                                //nemy.getBody().setLinearVelocity(enemy.getBody().getLinearVelocity().x/2, enemy.getBody().getLinearVelocity().yMenu);
                                 if(enemy.isClimbing()){
 
                                     if(!enemy.isFromLeft()){
 
                                         if(!enemy.isHurtRight()){
-                                            //enemy.getBody().setTransform((MyGdxGame.V_WIDTH/PPM)-65/PPM, enemy.getPosition().y, enemy.getBody().getAngle());
+                                            //enemy.getBody().setTransform((MyGdxGame.V_WIDTH/PPM)-65/PPM, enemy.getPosition().yMenu, enemy.getBody().getAngle());
                                             enemy.hurtAnimation(true);
                                         }
                                     }
                                     if(enemy.isFromLeft()){
                                         if(!enemy.isHurtLeft()){
-                                            //enemy.getBody().setTransform(65/PPM, enemy.getPosition().y, enemy.getBody().getAngle());
+                                            //enemy.getBody().setTransform(65/PPM, enemy.getPosition().yMenu, enemy.getBody().getAngle());
                                             enemy.hurtAnimation_rev(true);
                                         }
                                     }
@@ -2767,14 +2767,14 @@ public class Play extends GameState {
     }
 
     private void tutoGamePlay1(){
-        //pointer.getBody().setTransform(MyGdxGame.V_WIDTH/2/PPM - pointer.getWidth()/6/PPM, pointer.getPosition().y, pointer.getBody().getAngle());
+        //pointer.getBody().setTransform(MyGdxGame.V_WIDTH/2/PPM - pointer.getWidth()/6/PPM, pointer.getPosition().yMenu, pointer.getBody().getAngle());
 
         if(!tuto_step2) right = false;
         if(!tuto_step4) jump = false;
         if(!tuto_step5) fire = false;
 
 
-        //move pointer from right to left
+        //move pointer from rightMenu to leftMenu
         if(!tuto_step1 && !tuto_step2){
 
             if(!pointer.getRotate45()) pointer.rotateAnimation45();
@@ -2798,7 +2798,7 @@ public class Play extends GameState {
             pointer.getBody().setTransform(pointer.getWidth()/PPM , MyGdxGame.V_HEIGHT/3/PPM, pointer.getBody().getAngle());
         }
 
-        //move pointer from left to right
+        //move pointer from leftMenu to rightMenu
         if(!left && tuto_step1 && tuto_step2 && !tuto_step3){
 
 
@@ -3296,7 +3296,7 @@ public class Play extends GameState {
 
 
 
-        if( (cl.isPlayerOnGround() |cl.isPlayerOnBrick() ) && jump && !player.isJumpRight() && !player.isJumpRight() /*&& (player.getPosition().y*PPM) < 625*/ ){
+        if( (cl.isPlayerOnGround() |cl.isPlayerOnBrick() ) && jump && !player.isJumpRight() && !player.isJumpRight() /*&& (player.getPosition().yMenu*PPM) < 625*/ ){
             jump = false;
             if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("jump1").play();
             player.getBody().setLinearVelocity(new Vector2(player.getBody().getLinearVelocity().x,0));
@@ -3663,7 +3663,7 @@ public class Play extends GameState {
             if(princess != null)
                 shapeRenderer.rect(princess.getBoundingBox().getMin(new Vector3()).x, princess.getBoundingBox().getMin(new Vector3()).y, princess.getBoundingBox().getWidth(), princess.getBoundingBox().getHeight());
             shapeRenderer.rect(boundingBoxKamehameha.getMin(new Vector3()).x, boundingBoxKamehameha.getMin(new Vector3()).y, boundingBoxKamehameha.getWidth(), boundingBoxKamehameha.getHeight());
-            //shapeRenderer.rect(boundingBoxCastle.getMin().x, boundingBoxCastle.getMin().y, boundingBoxCastle.getWidth(), boundingBoxCastle.getHeight());
+            //shapeRenderer.rect(boundingBoxCastle.getMin().x, boundingBoxCastle.getMin().yMenu, boundingBoxCastle.getWidth(), boundingBoxCastle.getHeight());
             if(lightning != null){
                 shapeRenderer.setColor(Color.RED);
                 shapeRenderer.rect(lightning.getBoundingBox().getMin(new Vector3()).x, lightning.getBoundingBox().getMin(new Vector3()).y, lightning.getBoundingBox().getWidth(), lightning.getBoundingBox().getHeight());
@@ -3680,12 +3680,12 @@ public class Play extends GameState {
                     if(cl.intersect(enemy,lightning)){
                         spriteBatch.begin();
                         font.setColor(Color.BLUE);
-                        //font.drawMultiLine(spriteBatch, "true", enemy.getBoundingBox().getMin(new Vector3()).x, enemy.getBoundingBox().getMin(new Vector3()).y, enemy.getBoundingBox().getWidth(), BitmapFont.HAlignment.LEFT);
+                        //font.drawMultiLine(spriteBatch, "true", enemy.getBoundingBox().getMin(new Vector3()).x, enemy.getBoundingBox().getMin(new Vector3()).yMenu, enemy.getBoundingBox().getWidth(), BitmapFont.HAlignment.LEFT);
                         spriteBatch.end();
                     }else{
                         spriteBatch.begin();
                         font.setColor(Color.RED);
-                        //font.drawMultiLine(spriteBatch, "false", enemy.getBoundingBox().getMin(new Vector3()).x, enemy.getBoundingBox().getMin(new Vector3()).y, enemy.getBoundingBox().getWidth(), BitmapFont.HAlignment.LEFT);
+                        //font.drawMultiLine(spriteBatch, "false", enemy.getBoundingBox().getMin(new Vector3()).x, enemy.getBoundingBox().getMin(new Vector3()).yMenu, enemy.getBoundingBox().getWidth(), BitmapFont.HAlignment.LEFT);
                         spriteBatch.end();
                     }
 
@@ -4125,7 +4125,7 @@ public class Play extends GameState {
             bdef.position.set(x, y);
         }
 
-        //bdef.position.set(x,y);
+        //bdef.position.set(x,yMenu);
 
         bdef.type = BodyType.DynamicBody;
         Body body = world.createBody(bdef);

@@ -126,12 +126,12 @@ public class Shop extends GameState {
 
                     @Override
                     public void onRight() {
-                        Gdx.app.debug(LOG_TAG,"right");
+                        Gdx.app.debug(LOG_TAG,"rightMenu");
                     }
 
                     @Override
                     public void onLeft() {
-                        Gdx.app.debug(LOG_TAG,"left");
+                        Gdx.app.debug(LOG_TAG,"leftMenu");
                     }
 
                     @Override
@@ -1504,7 +1504,7 @@ public class Shop extends GameState {
 
             stage1.act();
             sb.begin();
-            //drawStageBackground(Batch batch, float parentAlpha, float x, float y, float width, float height)
+            //drawStageBackground(Batch batch, float parentAlpha, float x, float yMenu, float width, float height)
             stage1.draw();
             sb.end();
 

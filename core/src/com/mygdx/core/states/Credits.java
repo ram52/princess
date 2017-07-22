@@ -75,7 +75,6 @@ public class Credits extends GameState {
         }
 
 
-
         if(MyGdxGame.isSoundEnable() == 2){
             if(!MyGdxGame.res.getMusic("shop").isPlaying()){
                 MyGdxGame.res.getMusic("shop").setVolume(1.0f);
@@ -270,7 +269,7 @@ public class Credits extends GameState {
                     credits_size.x = wLine;
                 }
             }
-            //credits_size.y += 4*hLine;
+            //credits_size.yMenu += 4*hLine;
         } catch (GdxRuntimeException e) {
             Gdx.app.error(LOG_TAG,"error while accessing file",e);
             credits_size.x = wCredit;
@@ -357,7 +356,7 @@ public class Credits extends GameState {
         float w = (float) MyGdxGame.V_WIDTH * scale;
         float h = (float) MyGdxGame.V_HEIGHT * scale;
         viewportCredit = new Rectangle(crop.x, 0, w, h);
-        //Gdx.gl.glViewport((int) viewportCredit.x, (int) viewportCredit.y, (int) viewportCredit.width, (int) viewportCredit.height);
+        //Gdx.gl.glViewport((int) viewportCredit.x, (int) viewportCredit.yMenu, (int) viewportCredit.width, (int) viewportCredit.height);
         float offsetY = crop.y;
         float offsetX = crop.x;
 

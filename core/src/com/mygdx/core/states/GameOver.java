@@ -477,7 +477,7 @@ public class GameOver extends GameState {
         float w = (float) MyGdxGame.V_WIDTH * scale;
         float h = (float) MyGdxGame.V_HEIGHT * scale;
         viewport = new Rectangle(crop.x, 0, w, h);
-        //Gdx.gl.glViewport((int) viewport.x, (int) viewport.y, (int) viewport.width, (int) viewport.height);
+        //Gdx.gl.glViewport((int) viewport.x, (int) viewport.yMenu, (int) viewport.width, (int) viewport.height);
         float offsetY = crop.y;
         float offsetX = crop.x;
         offset = offsetY;
