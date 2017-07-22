@@ -25,9 +25,12 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.AlphaAction;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.mygdx.core.entities.ActionResolver;
 import com.mygdx.core.entities.B2DSprite;
+import com.mygdx.core.handlers.Animation;
 import com.mygdx.core.handlers.Background;
 import com.mygdx.core.handlers.BoundedCamera;
 import com.mygdx.core.handlers.Content;
@@ -173,6 +176,30 @@ public class MyGdxGame implements ApplicationListener {
     public static int continueCount = 0;
 
     public static int pickedGameplay = -1;
+
+
+    public static Color creditColor = new Color(0, 0, 0, 0.8f);
+
+    ///////////CREDIT//////////////
+    public static boolean click_on_playCredit;
+    public static Stage stage1Credit, stage2Credit;
+    public static AlphaAction fade1Credit, fade2Credit, fade3Credit;
+    public static AlphaAction fadeCredit;
+    public static Button buttonPlayCredit, buttonSecret1Credit, buttonSecret2Credit;
+    public static int cpt_secret1 = 0;
+    public static int cpt_translate_animation1Credit = 0;
+    public static Animation animationPBlue1Credit;
+    public static Animation animationPrincessCredit;
+    public static Animation animationEnemyCredit;
+    public static Animation animationHyaCredit;
+    public static int timeCredit = 0;
+    public static Rectangle viewportCredit;
+    public static Stage stage0Credit;
+    public static Image introCredit;
+    public static String CREDIT;
+    public static Vector2 credits_size = new Vector2(0,0);
+    public static ShapeRenderer shapeRendererCredit;
+    ///////////////////////////////
 
 
     public static boolean isContinue() {

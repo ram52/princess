@@ -3,7 +3,6 @@ package com.mygdx.core.states;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -24,34 +23,38 @@ import com.mygdx.core.handlers.Animation;
 import com.mygdx.core.handlers.GameStateManager;
 import com.mygdx.core.handlers.Save;
 
-import static com.mygdx.core.MyGdxGame.font;
+import static com.mygdx.core.MyGdxGame.creditColor;
 import static com.mygdx.core.MyGdxGame.font2;
 import static com.mygdx.core.MyGdxGame.glyphLayout;
+import static com.mygdx.core.MyGdxGame.animationEnemyCredit;
+import static com.mygdx.core.MyGdxGame.animationHyaCredit;
+import static com.mygdx.core.MyGdxGame.animationPBlue1Credit;
+import static com.mygdx.core.MyGdxGame.animationPrincessCredit;
+import static com.mygdx.core.MyGdxGame.buttonPlayCredit;
+import static com.mygdx.core.MyGdxGame.buttonSecret1Credit;
+import static com.mygdx.core.MyGdxGame.buttonSecret2Credit;
+import static com.mygdx.core.MyGdxGame.click_on_playCredit;
+import static com.mygdx.core.MyGdxGame.cpt_secret1;
+import static com.mygdx.core.MyGdxGame.cpt_translate_animation1Credit;
+import static com.mygdx.core.MyGdxGame.credits_size;
+import static com.mygdx.core.MyGdxGame.fade1Credit;
+import static com.mygdx.core.MyGdxGame.fade2Credit;
+import static com.mygdx.core.MyGdxGame.fade3Credit;
+import static com.mygdx.core.MyGdxGame.fadeCredit;
+import static com.mygdx.core.MyGdxGame.introCredit;
+import static com.mygdx.core.MyGdxGame.shapeRendererCredit;
+import static com.mygdx.core.MyGdxGame.stage0Credit;
+import static com.mygdx.core.MyGdxGame.stage1Credit;
+import static com.mygdx.core.MyGdxGame.stage2Credit;
+import static com.mygdx.core.MyGdxGame.timeCredit;
+import static com.mygdx.core.MyGdxGame.viewportCredit;
+import static com.mygdx.core.MyGdxGame.CREDIT;
+
 
 public class Credits extends GameState {
 
     private static String LOG_TAG = Credits.class.getSimpleName();
 
-    private boolean click_on_play;
-    private Stage stage1, stage2;
-    private AlphaAction fade1, fade2, fade3;
-    private AlphaAction fade;
-    private Button buttonPlay, buttonSecret1, buttonSecret2;
-    private int cpt_secret1 = 0;
-    private int cpt_translate_animation1 = 0;
-    //private Animation animTitle;
-    //private Animation animCredits;
-    private Animation animationPBlue1;
-    private Animation animationPrincess;
-    private Animation animationEnemy;
-    private Animation animationHya;
-    private int time = 0;
-    private Rectangle viewport;
-    private Stage stage0;
-    private Image intro;
-    private static String CREDIT;
-    private Vector2 credits_size = new Vector2(0,0);
-    private ShapeRenderer shapeRenderer;
 
     public Credits(GameStateManager gsm) {
 
@@ -59,15 +62,19 @@ public class Credits extends GameState {
 
         //font.setScale(1.3f);
 
-        CREDIT = getCreditFromFile();
+        if(CREDIT == null)
+            CREDIT = getCreditFromFile();
 
-        shapeRenderer = new ShapeRenderer();
+        if(shapeRendererCredit == null){
+            shapeRendererCredit = new ShapeRenderer();
+            introCredit = new Image(MyGdxGame.atlas.findRegion("backgroundSky"));
+            introCredit.setFillParent(true);
+            stage0Credit = new Stage();
+            stage0Credit.addActor(introCredit);
+            viewportCredit = new Rectangle();
+        }
 
-        intro = new Image(MyGdxGame.atlas.findRegion("backgroundSky"));
-        intro.setFillParent(true);
-        stage0 = new Stage();
-        stage0.addActor(intro);
-        viewport = new Rectangle();
+
 
         if(MyGdxGame.isSoundEnable() == 2){
             if(!MyGdxGame.res.getMusic("shop").isPlaying()){
@@ -86,28 +93,33 @@ public class Credits extends GameState {
             Gdx.app.debug(LOG_TAG,network);
         }
 
-        Sprite tex = null;
-        if(Save.gd.isExcaliburEquiped()){
-            tex = new Sprite(MyGdxGame.atlas.findRegion("walkEx"));
-        }else{
-            tex = new Sprite(MyGdxGame.atlas.findRegion("walk"));
+
+        if(animationPBlue1Credit == null){
+            Sprite tex = null;
+            if(Save.gd.isExcaliburEquiped()){
+                tex = new Sprite(MyGdxGame.atlas.findRegion("walkEx"));
+            }else{
+                tex = new Sprite(MyGdxGame.atlas.findRegion("walk"));
+            }
+
+            TextureRegion[] sprites = tex.split(64, 64)[0];
+            animationPBlue1Credit = new Animation(sprites, 1 / 5f);
+
+            tex = new Sprite(MyGdxGame.atlas.findRegion("princesscry"));
+            sprites = tex.split(64, 64)[0];
+            for(int i=0;i<sprites.length;i++)
+                sprites[i].flip(true,false);
+            animationPrincessCredit = new Animation(sprites, 1 / 5f);
+
+            tex = new Sprite(MyGdxGame.atlas.findRegion("enemy"));
+            sprites = tex.split(64, 64)[0];
+            for(int i=0;i<sprites.length;i++)
+                sprites[i].flip(true,false);
+            animationEnemyCredit = new Animation(sprites, 1 / 5f);
+
+            animationHyaCredit = new Animation(new Sprite(MyGdxGame.atlas.findRegion("hyaa")).split(168, 60)[0], 1 / 5f);
         }
-        TextureRegion[] sprites = tex.split(64, 64)[0];
-        animationPBlue1 = new Animation(sprites, 1 / 5f);
 
-        tex = new Sprite(MyGdxGame.atlas.findRegion("princesscry"));
-        sprites = tex.split(64, 64)[0];
-        for(int i=0;i<sprites.length;i++)
-            sprites[i].flip(true,false);
-        animationPrincess = new Animation(sprites, 1 / 5f);
-
-        tex = new Sprite(MyGdxGame.atlas.findRegion("enemy"));
-        sprites = tex.split(64, 64)[0];
-        for(int i=0;i<sprites.length;i++)
-            sprites[i].flip(true,false);
-        animationEnemy = new Animation(sprites, 1 / 5f);
-
-        animationHya = new Animation(new Sprite(MyGdxGame.atlas.findRegion("hyaa")).split(168, 60)[0], 1 / 5f);
 
         //animTitle = new Animation(new Sprite(MyGdxGame.atlas.findRegion("secret")).split(95,24)[0], 1 / 5f);
 
@@ -118,58 +130,71 @@ public class Credits extends GameState {
         MyGdxGame.background_wood1.setVector(-3, 0);
 
         cam.setToOrtho(false, MyGdxGame.V_WIDTH, MyGdxGame.V_HEIGHT);
-        click_on_play = false;
-        stage1 = new Stage();
-        stage2 = new Stage();
-        Skin skinButtonPlay = new Skin();
-        skinButtonPlay.addRegions(MyGdxGame.atlas);
-        ButtonStyle buttonStylePlay = new ButtonStyle();
-        buttonStylePlay.up = skinButtonPlay.getDrawable("buttonSecret");
-        buttonStylePlay.down = skinButtonPlay.getDrawable("buttonSecret");
-        buttonPlay = new Button(buttonStylePlay);
-        buttonPlay.setWidth(Gdx.graphics.getWidth());
-        buttonPlay.setHeight(Gdx.graphics.getHeight());
-        buttonPlay.setPosition(0,0);
-
-        stage1.addActor(buttonPlay);
-
-        Skin skinButtonSecret = new Skin();
-        skinButtonSecret.addRegions(MyGdxGame.atlas);
-        ButtonStyle buttonStyleSecret = new ButtonStyle();
-        buttonStyleSecret.up = skinButtonSecret.getDrawable("buttonSecret");
-        buttonStyleSecret.down = skinButtonSecret.getDrawable("buttonSecret");
-        buttonSecret1 = new Button(buttonStyleSecret);
-        buttonSecret1.setWidth(Gdx.graphics.getWidth() / 8f);
-        buttonSecret1.setHeight(Gdx.graphics.getWidth() / 8f);
-        buttonSecret1.setPosition((Gdx.graphics.getWidth() - buttonSecret1.getWidth())/ 2.05f, (Gdx.graphics.getHeight() - buttonSecret1.getWidth())/4.3f );
-        stage1.addActor(buttonSecret1);
-
-        buttonSecret2 = new Button(buttonStyleSecret);
-        buttonSecret2.setWidth(Gdx.graphics.getWidth() / 8f);
-        buttonSecret2.setHeight(Gdx.graphics.getWidth() / 8f);
-        buttonSecret2.setPosition((Gdx.graphics.getWidth() - buttonSecret1.getWidth())/ 1.12f, (Gdx.graphics.getHeight() - buttonSecret1.getWidth())/21f );
-        stage1.addActor(buttonSecret2);
+        click_on_playCredit = false;
 
 
-        Gdx.input.setInputProcessor(stage1);
-        fade = new AlphaAction();
-        fade.setDuration(0f);
-        //scoreLabel.setText(Float.toString(offset));
-        fade1 = new AlphaAction();
-        fade1.setDuration(0f);
-        fade2 = new AlphaAction();
-        fade2.setDuration(0f);
-        stage2.addAction(fade2);
-        fade3 = new AlphaAction();
-        fade3.setDuration(0f);
-        stage1.addAction(Actions.sequence(Actions.alpha(1), Actions.fadeIn(0f)));
+        if(stage1Credit == null){
+            stage1Credit = new Stage();
+            stage2Credit = new Stage();
+            Skin skinButtonPlay = new Skin();
+            skinButtonPlay.addRegions(MyGdxGame.atlas);
+            ButtonStyle buttonStylePlay = new ButtonStyle();
+            buttonStylePlay.up = skinButtonPlay.getDrawable("buttonSecret");
+            buttonStylePlay.down = skinButtonPlay.getDrawable("buttonSecret");
+            buttonPlayCredit = new Button(buttonStylePlay);
+            buttonPlayCredit.setWidth(Gdx.graphics.getWidth());
+            buttonPlayCredit.setHeight(Gdx.graphics.getHeight());
+            buttonPlayCredit.setPosition(0,0);
 
-        buttonPlay.addListener(new InputListener() {
+            stage1Credit.addActor(buttonPlayCredit);
+
+            Skin skinButtonSecret = new Skin();
+            skinButtonSecret.addRegions(MyGdxGame.atlas);
+            ButtonStyle buttonStyleSecret = new ButtonStyle();
+            buttonStyleSecret.up = skinButtonSecret.getDrawable("buttonSecret");
+            buttonStyleSecret.down = skinButtonSecret.getDrawable("buttonSecret");
+            buttonSecret1Credit = new Button(buttonStyleSecret);
+            buttonSecret1Credit.setWidth(Gdx.graphics.getWidth() / 8f);
+            buttonSecret1Credit.setHeight(Gdx.graphics.getWidth() / 8f);
+            buttonSecret1Credit.setPosition((Gdx.graphics.getWidth() - buttonSecret1Credit.getWidth())/ 2.05f, (Gdx.graphics.getHeight() - buttonSecret1Credit.getWidth())/4.3f );
+            stage1Credit.addActor(buttonSecret1Credit);
+
+            buttonSecret2Credit = new Button(buttonStyleSecret);
+            buttonSecret2Credit.setWidth(Gdx.graphics.getWidth() / 8f);
+            buttonSecret2Credit.setHeight(Gdx.graphics.getWidth() / 8f);
+            buttonSecret2Credit.setPosition((Gdx.graphics.getWidth() - buttonSecret1Credit.getWidth())/ 1.12f, (Gdx.graphics.getHeight() - buttonSecret1Credit.getWidth())/21f );
+            stage1Credit.addActor(buttonSecret2Credit);
+        }
+
+        Gdx.input.setInputProcessor(stage1Credit);
+
+        if(fadeCredit == null){
+            fadeCredit = new AlphaAction();
+            fadeCredit.setDuration(0f);
+            //scoreLabel.setText(Float.toString(offset));
+            fade1Credit = new AlphaAction();
+            fade1Credit.setDuration(0f);
+            fade2Credit = new AlphaAction();
+            fade2Credit.setDuration(0f);
+            stage2Credit.addAction(fade2Credit);
+            fade3Credit = new AlphaAction();
+            fade3Credit.setDuration(0f);
+            stage1Credit.addAction(Actions.sequence(Actions.alpha(1), Actions.fadeIn(0f)));
+            setupButtonsInUi();
+        }
+
+
+        MyGdxGame.setIsBoosTerritory(false);
+    }
+
+    private void setupButtonsInUi(){
+        buttonPlayCredit.addListener(new InputListener() {
             public boolean touchDown(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
                 if (Save.gd.isSoundEnable() == 1 | Save.gd.isSoundEnable() == 2) MyGdxGame.res.getSound("select").play();
-                click_on_play = true;
+                click_on_playCredit = true;
+                Gdx.app.debug(LOG_TAG,"click_on_playCredit: " + click_on_playCredit);
                 return true;
             }
 
@@ -181,7 +206,7 @@ public class Credits extends GameState {
 
         });
 
-        buttonSecret2.addListener(new InputListener() {
+        buttonSecret2Credit.addListener(new InputListener() {
             public boolean touchDown(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
@@ -191,13 +216,13 @@ public class Credits extends GameState {
             public void touchUp(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
-                buttonSecret2.setDisabled(true);
-                buttonSecret2.setVisible(false);
+                buttonSecret2Credit.setDisabled(true);
+                buttonSecret2Credit.setVisible(false);
                 //Gdx.gl.glClearColor(0, 0, 0, 1);
             }
         });
 
-        buttonSecret1.addListener(new InputListener() {
+        buttonSecret1Credit.addListener(new InputListener() {
             public boolean touchDown(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
@@ -215,8 +240,6 @@ public class Credits extends GameState {
                 //Gdx.gl.glClearColor(0, 0, 0, 1);
             }
         });
-
-        MyGdxGame.setIsBoosTerritory(false);
     }
 
     private String getCreditFromFile(){
@@ -265,8 +288,8 @@ public class Credits extends GameState {
         return credit;
     }
     public void handleInput() {
-        if (click_on_play) {
-            click_on_play = false;
+        if (click_on_playCredit) {
+            click_on_playCredit = false;
             gsm.setState(GameStateManager.MENU);
             if (Save.gd.isSoundEnable() == 1 | Save.gd.isSoundEnable() == 2) MyGdxGame.res.getMusic("newScreen").play();
         }
@@ -281,9 +304,9 @@ public class Credits extends GameState {
             }
         }
 
-        animationPBlue1.update(dt);
-        animationEnemy.update(dt);
-        animationPrincess.update(dt);
+        animationPBlue1Credit.update(dt);
+        animationEnemyCredit.update(dt);
+        animationPrincessCredit.update(dt);
 
 //        if(MyGdxGame.isSoundEnable() == 2) {
 //            //MyGdxGame.res.getMusic("main").setVolume(0.6f);
@@ -299,7 +322,7 @@ public class Credits extends GameState {
         //MyGdxGame.background_secret1.update(dt);
         MyGdxGame.background_wood1.update(dt);
 
-        if (fade1.getTime() > fade1.getDuration()) click_on_play = true;
+        if (fade1Credit.getTime() > fade1Credit.getDuration()) click_on_playCredit = true;
 
 //        if(cpt_secret1 == MyGdxGame.getTapnumbSecret()){
 //            cpt_secret1 = 0;
@@ -317,7 +340,7 @@ public class Credits extends GameState {
 
     public void resize(int width, int height) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        // calculate new viewport
+        // calculate new viewportCredit
         float aspectRatio = (float) width / (float) height;
         float scale = 1f;
         Vector2 crop = new Vector2(0f, 0f);
@@ -333,37 +356,37 @@ public class Credits extends GameState {
         }
         float w = (float) MyGdxGame.V_WIDTH * scale;
         float h = (float) MyGdxGame.V_HEIGHT * scale;
-        viewport = new Rectangle(crop.x, 0, w, h);
-        //Gdx.gl.glViewport((int) viewport.x, (int) viewport.y, (int) viewport.width, (int) viewport.height);
+        viewportCredit = new Rectangle(crop.x, 0, w, h);
+        //Gdx.gl.glViewport((int) viewportCredit.x, (int) viewportCredit.y, (int) viewportCredit.width, (int) viewportCredit.height);
         float offsetY = crop.y;
         float offsetX = crop.x;
 
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        Gdx.gl.glViewport(0,0, (int)viewport.width+ (int)offsetX, Gdx.graphics.getHeight());
-        stage0.act();
+        Gdx.gl.glViewport(0,0, (int) viewportCredit.width+ (int)offsetX, Gdx.graphics.getHeight());
+        stage0Credit.act();
         sb.begin();
-        stage0.draw();
+        stage0Credit.draw();
         sb.end();
-        Gdx.gl.glViewport((int) viewport.x, (int) viewport.y, (int) viewport.width - (int)offsetX, (int) viewport.height - (int)offsetY);
+        Gdx.gl.glViewport((int) viewportCredit.x, (int) viewportCredit.y, (int) viewportCredit.width - (int)offsetX, (int) viewportCredit.height - (int)offsetY);
 
-        stage1.getViewport().update((int) (width - offsetX), (int) (height - offsetY), true);
-        stage2.getViewport().update((int) (width - offsetX), (int) (height - offsetY), true);
+        stage1Credit.getViewport().update((int) (width - offsetX), (int) (height - offsetY), true);
+        stage2Credit.getViewport().update((int) (width - offsetX), (int) (height - offsetY), true);
     }
 
     public void render() {
 
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        if (fade2.getTime() < fade2.getDuration()) {
-            stage2.act();
+        if (fade2Credit.getTime() < fade2Credit.getDuration()) {
+            stage2Credit.act();
             sb.begin();
-            stage2.draw();
+            stage2Credit.draw();
             sb.end();
         }
         else {
 
             sb.setProjectionMatrix(cam.combined);
-            shapeRenderer.setProjectionMatrix(cam.combined);
+            shapeRendererCredit.setProjectionMatrix(cam.combined);
 
             //MyGdxGame.background_skyDay.render(sb);
 
@@ -371,36 +394,36 @@ public class Credits extends GameState {
             //bg1.render(sb);
             MyGdxGame.background_title.render(sb);
 
-            stage1.act();
+            stage1Credit.act();
             sb.begin();
-            stage1.draw();
+            stage1Credit.draw();
             sb.end();
 
 
 
             //GEAR BUTTON
             float speed = 8f;
-            if (stage1.getActors().items[0].getX() <= -5) {
-                stage1.getActors().items[0].setPosition(-stage1.getActors().items[0].getWidth() + cpt_translate_animation1 * speed, stage1.getActors().items[0].getY());
-                cpt_translate_animation1++;
+            if (stage1Credit.getActors().items[0].getX() <= -5) {
+                stage1Credit.getActors().items[0].setPosition(-stage1Credit.getActors().items[0].getWidth() + cpt_translate_animation1Credit * speed, stage1Credit.getActors().items[0].getY());
+                cpt_translate_animation1Credit++;
             }
 
             //if((Save.gd.isSoundEnable()==2) && !MyGdxGame.res.getMusic("main").isPlaying()) MyGdxGame.res.getMusic("main").setVolume(0.6f);
 
 
             sb.begin();
-            sb.draw(animationPBlue1.getFrame(), -80 + ((float) time * 1.7f), 202);
-            sb.draw(animationPrincess.getFrame(), 0 + ((float) time * 1.7f), 202);
-            sb.draw(animationHya.getFrame(), 0 + ((float) time * 1.7f), 250);
-            sb.draw(animationEnemy.getFrame(), -250 + ((float) time * 1.7f), 202);
+            sb.draw(animationPBlue1Credit.getFrame(), -80 + ((float) timeCredit * 1.7f), 202);
+            sb.draw(animationPrincessCredit.getFrame(), 0 + ((float) timeCredit * 1.7f), 202);
+            sb.draw(animationHyaCredit.getFrame(), 0 + ((float) timeCredit * 1.7f), 250);
+            sb.draw(animationEnemyCredit.getFrame(), -250 + ((float) timeCredit * 1.7f), 202);
             sb.end();
 
             drawCredits();
 
-            time+=2;
+            timeCredit +=2;
 
-            if(time > 800){
-                time = -200;
+            if(timeCredit > 800){
+                timeCredit = -200;
             }
 
 
@@ -412,12 +435,12 @@ public class Credits extends GameState {
         float y = MyGdxGame.V_HEIGHT/1.1f;
 
         Gdx.gl.glEnable(GL20.GL_BLEND);
-        shapeRenderer.setColor(new Color(0, 0, 0, 0.8f));
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRendererCredit.setColor(creditColor);
+        shapeRendererCredit.begin(ShapeRenderer.ShapeType.Filled);
         float h = credits_size.y;
         float padding = 100;
-        shapeRenderer.rect(x-padding/2,y-h-padding/2, credits_size.x+padding, h+padding);
-        shapeRenderer.end();
+        shapeRendererCredit.rect(x-padding/2,y-h-padding/2, credits_size.x+padding, h+padding);
+        shapeRendererCredit.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
 
 
@@ -431,6 +454,10 @@ public class Credits extends GameState {
     public void dispose() {
         //font.setScale(1);
         if (MyGdxGame.res.getMusic("shop").isPlaying()) MyGdxGame.res.getMusic("shop").stop();
+        cpt_secret1 = 0;
+        cpt_translate_animation1Credit = 0;
+        timeCredit = 0;
+        click_on_playCredit = false;
     }
 
 }
