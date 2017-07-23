@@ -61,6 +61,7 @@ import static com.mygdx.core.MyGdxGame.cpt_blinkMenu;
 import static com.mygdx.core.MyGdxGame.cpt_translate_animation1Menu;
 import static com.mygdx.core.MyGdxGame.cpt_translate_animation2Menu;
 import static com.mygdx.core.MyGdxGame.cpt_translate_animationMenu;
+import static com.mygdx.core.MyGdxGame.im;
 import static com.mygdx.core.MyGdxGame.imageCoinMenu;
 import static com.mygdx.core.MyGdxGame.introMenu;
 import static com.mygdx.core.MyGdxGame.isfadeOutStarted;
@@ -107,16 +108,24 @@ public class Menu extends GameState {
             MyGdxGame.res.getMusic("newScreen").play();
         }
 
-        lastPlayerPosition = new Vector2(0,0);
+        if(lastPlayerPosition == null){
+            lastPlayerPosition = new Vector2(0,0);
+        }else {
+            lastPlayerPosition.set(0,0);
+        }
+
         MyGdxGame.initFade();
         Timer.instance().start();
 
 
 
-        introMenu = new Image(MyGdxGame.atlas.findRegion("backgroundSky"));
-        introMenu.setFillParent(true);
-        stage0Menu = new Stage();
-        stage0Menu.addActor(introMenu);
+        if(introMenu == null){
+            introMenu = new Image(MyGdxGame.atlas.findRegion("backgroundSky"));
+            introMenu.setFillParent(true);
+            stage0Menu = new Stage();
+            stage0Menu.addActor(introMenu);
+        }
+
 
         Timer.instance().stop();
         Timer.instance().clear();
@@ -134,280 +143,300 @@ public class Menu extends GameState {
 
         click_on_playMenu = false;
         click_on_leaderboardMenu = false;
-        viewportMenu = new Rectangle();
-        sb2Menu = new SpriteBatch();
-        sb3Menu = new SpriteBatch();
+
+        if(viewportMenu == null){
+            viewportMenu = new Rectangle();
+            sb2Menu = new SpriteBatch();
+            sb3Menu = new SpriteBatch();
+        }
+
 
         MyGdxGame.background_cloud.setVector(+10, 0);
         //MyGdxGame.background_skyDay.setVector(0, 0);
         MyGdxGame.background_wood1.setVector(-3, 0);
 
-        Sprite tex = null;
-        if(Save.gd.isExcaliburEquiped()){
-            tex = new Sprite(MyGdxGame.atlas.findRegion("walkEx"));
-        }else{
-            tex = new Sprite(MyGdxGame.atlas.findRegion("walk"));
+
+        if(animPlayerIdle == null){
+            Sprite tex = null;
+            if(Save.gd.isExcaliburEquiped()){
+                tex = new Sprite(MyGdxGame.atlas.findRegion("walkEx"));
+            }else{
+                tex = new Sprite(MyGdxGame.atlas.findRegion("walk"));
+            }
+            TextureRegion[] sprites2 = tex.split(64, 64)[0];
+            animPlayerIdle = new Animation(sprites2, 1 / 5f);
+
+            TextureRegion[] sprites2Fliped = tex.split(64, 64)[0];
+            for (int i = 0; i < sprites2Fliped.length; i++)
+                sprites2Fliped[i].flip(true, false);
+            animPlayerIdleFliped = new Animation(sprites2Fliped, 1 / 5f);
+
+
+            animPrincessIdle = new Animation(new Sprite(MyGdxGame.atlas.findRegion("princesscry")).split(64, 64)[0], 1 / 5f);
+
+            animTitle = new Animation(new Sprite(MyGdxGame.atlas.findRegion("princess!")).split(111, 44)[0], 1 / 5f);
+
+            Gdx.app.debug(LOG_TAG,"LANG-->"+java.util.Locale.getDefault().toString());
+            if(java.util.Locale.getDefault().toString().equals("ja_JP")){
+                jp = true;
+            }else{
+                jp = false;
+            }
+
+            if(jp){
+                animTitle = new Animation(new Sprite(MyGdxGame.atlas.findRegion("princessjp")).split(153, 52)[0], 1 / 5f);
+            }
+
+
+            animHelpMe = new Animation(new Sprite(MyGdxGame.atlas.findRegion("protectme")).split(123, 75)[0], 1 / 5f);
+
+            TextureRegion[] princessFliped = new Sprite(MyGdxGame.atlas.findRegion("princesscry")).split(64, 64)[0];
+            for (int i = 0; i < princessFliped.length; i++)
+                princessFliped[i].flip(true, false);
+            animPrincessIdleFliped = new Animation(princessFliped, 1 / 5f);
+
+
+            tex = new Sprite(MyGdxGame.atlas.findRegion("slash"));
+            TextureRegion[] sprites6 = tex.split(96, 64)[0];
+            animPlayerSlash = new Animation(sprites6, 1 / 10f);
+
+            cam.setToOrtho(false, MyGdxGame.V_WIDTH, MyGdxGame.V_HEIGHT);
+
+            skinMenu = new Skin();
+            skinMenu.addRegions(MyGdxGame.atlas);
         }
-        TextureRegion[] sprites2 = tex.split(64, 64)[0];
-        animPlayerIdle = new Animation(sprites2, 1 / 5f);
-
-        TextureRegion[] sprites2Fliped = tex.split(64, 64)[0];
-        for (int i = 0; i < sprites2Fliped.length; i++)
-            sprites2Fliped[i].flip(true, false);
-        animPlayerIdleFliped = new Animation(sprites2Fliped, 1 / 5f);
 
 
-        animPrincessIdle = new Animation(new Sprite(MyGdxGame.atlas.findRegion("princesscry")).split(64, 64)[0], 1 / 5f);
+        if(stage1Menu == null){
+            stage1Menu = new Stage();
+            stage2Menu = new Stage();
+            stage3Menu = new Stage();
+            stageUiOptionMenu = new Stage();
 
-        animTitle = new Animation(new Sprite(MyGdxGame.atlas.findRegion("princess!")).split(111, 44)[0], 1 / 5f);
+            stage1Menu.addAction(Actions.sequence(Actions.alpha(0.5f), Actions.fadeIn(1.5f)));
+            stage2Menu.addAction(Actions.sequence(Actions.alpha(0.5f), Actions.fadeIn(1.5f)));
+            stage3Menu.addAction(Actions.sequence(Actions.alpha(0.5f), Actions.fadeIn(1.5f)));
+            stageUiOptionMenu.addAction(Actions.sequence(Actions.alpha(0.5f), Actions.fadeIn(0.1f)));
 
-        Gdx.app.debug(LOG_TAG,"LANG-->"+java.util.Locale.getDefault().toString());
-        if(java.util.Locale.getDefault().toString().equals("ja_JP")){
-            jp = true;
-        }else{
-            jp = false;
-        }
+            ButtonStyle style = new ButtonStyle();
+            style = new Button.ButtonStyle();
+            style.up = skinMenu.getDrawable("coin");
+            style.down = skinMenu.getDrawable("coin");
+            imageCoinMenu = new Button(style);
+            imageCoinMenu.setWidth(Gdx.graphics.getWidth() / 10f);
+            imageCoinMenu.setHeight(Gdx.graphics.getWidth() / 10f);
+            imageCoinMenu.setPosition(imageCoinMenu.getWidth() / 4, (Gdx.graphics.getHeight() - imageCoinMenu.getHeight() - 20));
+            stageUiOptionMenu.addActor(imageCoinMenu);
 
-        if(jp){
-            animTitle = new Animation(new Sprite(MyGdxGame.atlas.findRegion("princessjp")).split(153, 52)[0], 1 / 5f);
-        }
+            labelMoneyMenu = new Label("0", new LabelStyle(new BitmapFont(Gdx.files.internal(MyGdxGame.fontPointPath), false), Color.WHITE));
+            labelMoneyMenu.setFontScale(Gdx.graphics.getWidth() / 1200f);
+            labelMoneyMenu.setWidth(Gdx.graphics.getWidth() / 2);
+            labelMoneyMenu.setHeight(imageCoinMenu.getHeight());
+            labelMoneyMenu.setAlignment(Align.center | Align.left);
+            labelMoneyMenu.setPosition(imageCoinMenu.getRight() * 1.1f, imageCoinMenu.getY());
+            stageUiOptionMenu.addActor(labelMoneyMenu);
 
-
-        animHelpMe = new Animation(new Sprite(MyGdxGame.atlas.findRegion("protectme")).split(123, 75)[0], 1 / 5f);
-
-        TextureRegion[] princessFliped = new Sprite(MyGdxGame.atlas.findRegion("princesscry")).split(64, 64)[0];
-        for (int i = 0; i < princessFliped.length; i++)
-            princessFliped[i].flip(true, false);
-        animPrincessIdleFliped = new Animation(princessFliped, 1 / 5f);
-
-
-        tex = new Sprite(MyGdxGame.atlas.findRegion("slash"));
-        TextureRegion[] sprites6 = tex.split(96, 64)[0];
-        animPlayerSlash = new Animation(sprites6, 1 / 10f);
-
-        cam.setToOrtho(false, MyGdxGame.V_WIDTH, MyGdxGame.V_HEIGHT);
-
-        skinMenu = new Skin();
-        skinMenu.addRegions(MyGdxGame.atlas);
-
-
-        stage1Menu = new Stage();
-        stage2Menu = new Stage();
-        stage3Menu = new Stage();
-        stageUiOptionMenu = new Stage();
-
-        stage1Menu.addAction(Actions.sequence(Actions.alpha(0.5f), Actions.fadeIn(1.5f)));
-        stage2Menu.addAction(Actions.sequence(Actions.alpha(0.5f), Actions.fadeIn(1.5f)));
-        stage3Menu.addAction(Actions.sequence(Actions.alpha(0.5f), Actions.fadeIn(1.5f)));
-        stageUiOptionMenu.addAction(Actions.sequence(Actions.alpha(0.5f), Actions.fadeIn(0.1f)));
-
-        ButtonStyle style = new ButtonStyle();
-        style = new Button.ButtonStyle();
-        style.up = skinMenu.getDrawable("coin");
-        style.down = skinMenu.getDrawable("coin");
-        imageCoinMenu = new Button(style);
-        imageCoinMenu.setWidth(Gdx.graphics.getWidth() / 10f);
-        imageCoinMenu.setHeight(Gdx.graphics.getWidth() / 10f);
-        imageCoinMenu.setPosition(imageCoinMenu.getWidth() / 4, (Gdx.graphics.getHeight() - imageCoinMenu.getHeight() - 20));
-        stageUiOptionMenu.addActor(imageCoinMenu);
-
-        labelMoneyMenu = new Label("0", new LabelStyle(new BitmapFont(Gdx.files.internal(MyGdxGame.fontPointPath), false), Color.WHITE));
-        labelMoneyMenu.setFontScale(Gdx.graphics.getWidth() / 1200f);
-        labelMoneyMenu.setWidth(Gdx.graphics.getWidth() / 2);
-        labelMoneyMenu.setHeight(imageCoinMenu.getHeight());
-        labelMoneyMenu.setAlignment(Align.center | Align.left);
-        labelMoneyMenu.setPosition(imageCoinMenu.getRight() * 1.1f, imageCoinMenu.getY());
-        stageUiOptionMenu.addActor(labelMoneyMenu);
-
-        style = new ButtonStyle();
-        style.up = skinMenu.getDrawable("coin");
-        style.down = skinMenu.getDrawable("coin");
-        optionUiBackImage = new Button(style);
-        optionUiBackImage.setWidth(Gdx.graphics.getWidth() / 1.05f);
-        optionUiBackImage.setHeight(Gdx.graphics.getHeight() / 1.25f);
-        optionUiBackImage.setPosition((Gdx.graphics.getWidth() - optionUiBackImage.getWidth()) / 2, (Gdx.graphics.getHeight() - optionUiBackImage.getHeight()) / 2f);
-        stageUiOptionMenu.addActor(optionUiBackImage);
-
-
-        style = new ButtonStyle();
-        style.up = skinMenu.getDrawable("coin");
-        style.down = skinMenu.getDrawable("coin");
-        buttonBackImage = new Button(style);
-        buttonBackImage.setWidth(Gdx.graphics.getHeight() / 7f);
-        buttonBackImage.setHeight(Gdx.graphics.getHeight() / 7f);
-        buttonBackImage.setPosition((Gdx.graphics.getWidth() - buttonBackImage.getWidth()) / 2, (Gdx.graphics.getHeight() - buttonBackImage.getHeight()) / 1.28f);
-        stageUiOptionMenu.addActor(buttonBackImage);
-
-        style = new ButtonStyle();
-        style.up = skinMenu.getDrawable("buttonUiOptionFacebookUp");
-        style.down = skinMenu.getDrawable("buttonUiOptionFacebookDown");
-        buttonFacebook = new Button(style);
-        buttonFacebook.setWidth(buttonBackImage.getWidth());
-        buttonFacebook.setHeight(buttonBackImage.getHeight());
-        buttonFacebook.setPosition((buttonBackImage.getX() - buttonFacebook.getWidth() - buttonBackImage.getWidth()/20f ) , (Gdx.graphics.getHeight() - buttonFacebook.getHeight()) / 1.28f);
-        stageUiOptionMenu.addActor(buttonFacebook);
-
-        style = new ButtonStyle();
-        style.up = skinMenu.getDrawable("buttonUiOptionTwitterUp");
-        style.down = skinMenu.getDrawable("buttonUiOptionTwitterDown");
-        buttonTwitter = new Button(style);
-        buttonTwitter.setWidth(buttonBackImage.getWidth());
-        buttonTwitter.setHeight(buttonBackImage.getHeight());
-        buttonTwitter.setPosition((buttonBackImage.getRight() + buttonBackImage.getWidth()/20f ) , (Gdx.graphics.getHeight() - buttonTwitter.getHeight()) / 1.28f);
-        stageUiOptionMenu.addActor(buttonTwitter);
-
-
-        style = new ButtonStyle();
-        style.up = skinMenu.getDrawable("coin");
-        style.down = skinMenu.getDrawable("coin");
-        buttonStore = new Button(style);
-        buttonStore.setWidth(Gdx.graphics.getWidth() / 1.26f);
-        buttonStore.setHeight(Gdx.graphics.getHeight() / 7f);
-        buttonStore.setPosition((Gdx.graphics.getWidth() - buttonStore.getWidth())/2f , buttonBackImage.getY() - buttonBackImage.getHeight() * 1.69f);
-        stageUiOptionMenu.addActor(buttonStore);
-
-        style = new ButtonStyle();
-        style.up = skinMenu.getDrawable("buttonUiOptionAchievementUp");
-        style.down = skinMenu.getDrawable("buttonUiOptionAchievementDown");
-        buttonAchievement = new Button(style);
-        buttonAchievement.setWidth(buttonStore.getWidth());
-        buttonAchievement.setHeight(buttonStore.getHeight());
-        buttonAchievement.setPosition(buttonStore.getX(), buttonStore.getY() - buttonStore.getHeight() * 1.69f);
-        stageUiOptionMenu.addActor(buttonAchievement);
-
-        style = new ButtonStyle();
-        style.up = skinMenu.getDrawable("buttonPlayUp");
-        style.down = skinMenu.getDrawable("buttonPlayUp");
-        buttonCloseUiOption = new Button(style);
-        buttonCloseUiOption.setWidth(Gdx.graphics.getWidth() / 6f);
-        buttonCloseUiOption.setHeight(Gdx.graphics.getWidth() / 6f);
-        buttonCloseUiOption.setPosition((Gdx.graphics.getWidth() - buttonCloseUiOption.getWidth()) / 1.01f, (Gdx.graphics.getHeight() - buttonCloseUiOption.getHeight()) / 1.1f);
-        stageUiOptionMenu.addActor(buttonCloseUiOption);
-
-        style = new ButtonStyle();
-        style.up = skinMenu.getDrawable("buttonPlayUp");
-        style.down = skinMenu.getDrawable("buttonPlayDown");
-        buttonPlayMenu = new Button(style);
-        buttonPlayMenu.setWidth(Gdx.graphics.getWidth() / 2.2f);
-        buttonPlayMenu.setHeight(Gdx.graphics.getHeight() / 5f);
-        //buttonExit.setPosition(-buttonExit.getWidth()/2.6f, (Gdx.graphics.getHeight() - buttonExit.getHeight()) / 1.6f);
-
-        buttonPlayMenu.setPosition(-400, Gdx.graphics.getHeight() / 2f);
-        stage1Menu.addActor(buttonPlayMenu);
-
-        style = new ButtonStyle();
-        style.up = skinMenu.getDrawable("buttonLeaderBoardUp");
-        style.down = skinMenu.getDrawable("buttonLeaderBoardDown");
-        buttonLeaderBoardMenu = new Button(style);
-        buttonLeaderBoardMenu.setWidth(Gdx.graphics.getWidth() / 2.2f);
-        buttonLeaderBoardMenu.setHeight(Gdx.graphics.getHeight() / 5f);
-        buttonLeaderBoardMenu.setPosition((Gdx.graphics.getWidth() / 1f) - buttonLeaderBoardMenu.getWidth() + 20, (Gdx.graphics.getHeight() - buttonPlayMenu.getHeight()) / 1.6f);
-        stage1Menu.addActor(buttonLeaderBoardMenu);
-
-
-        style = new ButtonStyle();
-        style.up = skinMenu.getDrawable("buttonTutoUp");
-        style.down = skinMenu.getDrawable("buttonTutoDown");
-        buttonTutoMenu = new Button(style);
-        buttonTutoMenu.setVisible(true);
-        buttonTutoMenu.setWidth(Gdx.graphics.getWidth() / 1.7f);
-        buttonTutoMenu.setHeight(Gdx.graphics.getHeight() / 13f);
-        buttonTutoMenu.setPosition((Gdx.graphics.getWidth() / 2) - buttonTutoMenu.getWidth() / 1.26f, 0);
-        stage1Menu.addActor(buttonTutoMenu);
-
-        labelCopyright = new Label("(c) RAM52 Credits 2017", new LabelStyle(new BitmapFont( Gdx.files.internal(MyGdxGame.fontScorePath), false), Color.WHITE));
-        labelCopyright.setWidth(Gdx.graphics.getWidth() / 2.8f);
-        labelCopyright.setHeight(Gdx.graphics.getHeight() / 20);
-        labelCopyright.setFontScale(Gdx.graphics.getWidth() / 500f);
-        labelCopyright.setAlignment(Align.center);
-        labelCopyright.setPosition(0, -500);
-        stage1Menu.addActor(labelCopyright);
-
-
-        style = new ButtonStyle();
-        style.up = skinMenu.getDrawable("buttonSound2Full");
-        style.down = skinMenu.getDrawable("buttonSound2Full");
-        buttonSoundMenu = new Button(style);
-        buttonSoundMenu.setWidth(Gdx.graphics.getWidth() / 5f);
-        buttonSoundMenu.setHeight(Gdx.graphics.getHeight() / 7.8f);
-        buttonSoundMenu.setPosition((Gdx.graphics.getWidth() / 1f) - buttonSoundMenu.getWidth() + 20, Gdx.graphics.getHeight() / 100f);
-
-        if(MyGdxGame.isSoundEnable() == 0){
             style = new ButtonStyle();
-            style.up = skinMenu.getDrawable("buttonSound2Mute");
-            style.down = skinMenu.getDrawable("buttonSound2Mute");
-            buttonSoundMenu.setStyle(style);
-        }
-        if(MyGdxGame.isSoundEnable() == 1){
+            style.up = skinMenu.getDrawable("coin");
+            style.down = skinMenu.getDrawable("coin");
+            optionUiBackImage = new Button(style);
+            optionUiBackImage.setWidth(Gdx.graphics.getWidth() / 1.05f);
+            optionUiBackImage.setHeight(Gdx.graphics.getHeight() / 1.25f);
+            optionUiBackImage.setPosition((Gdx.graphics.getWidth() - optionUiBackImage.getWidth()) / 2, (Gdx.graphics.getHeight() - optionUiBackImage.getHeight()) / 2f);
+            stageUiOptionMenu.addActor(optionUiBackImage);
+
+
             style = new ButtonStyle();
-            style.up = skinMenu.getDrawable("buttonSound2Fx");
-            style.down = skinMenu.getDrawable("buttonSound2Fx");
-            buttonSoundMenu.setStyle(style);
-        }
-        if(MyGdxGame.isSoundEnable() == 2){
+            style.up = skinMenu.getDrawable("coin");
+            style.down = skinMenu.getDrawable("coin");
+            buttonBackImage = new Button(style);
+            buttonBackImage.setWidth(Gdx.graphics.getHeight() / 7f);
+            buttonBackImage.setHeight(Gdx.graphics.getHeight() / 7f);
+            buttonBackImage.setPosition((Gdx.graphics.getWidth() - buttonBackImage.getWidth()) / 2, (Gdx.graphics.getHeight() - buttonBackImage.getHeight()) / 1.28f);
+            stageUiOptionMenu.addActor(buttonBackImage);
+
+            style = new ButtonStyle();
+            style.up = skinMenu.getDrawable("buttonUiOptionFacebookUp");
+            style.down = skinMenu.getDrawable("buttonUiOptionFacebookDown");
+            buttonFacebook = new Button(style);
+            buttonFacebook.setWidth(buttonBackImage.getWidth());
+            buttonFacebook.setHeight(buttonBackImage.getHeight());
+            buttonFacebook.setPosition((buttonBackImage.getX() - buttonFacebook.getWidth() - buttonBackImage.getWidth()/20f ) , (Gdx.graphics.getHeight() - buttonFacebook.getHeight()) / 1.28f);
+            stageUiOptionMenu.addActor(buttonFacebook);
+
+            style = new ButtonStyle();
+            style.up = skinMenu.getDrawable("buttonUiOptionTwitterUp");
+            style.down = skinMenu.getDrawable("buttonUiOptionTwitterDown");
+            buttonTwitter = new Button(style);
+            buttonTwitter.setWidth(buttonBackImage.getWidth());
+            buttonTwitter.setHeight(buttonBackImage.getHeight());
+            buttonTwitter.setPosition((buttonBackImage.getRight() + buttonBackImage.getWidth()/20f ) , (Gdx.graphics.getHeight() - buttonTwitter.getHeight()) / 1.28f);
+            stageUiOptionMenu.addActor(buttonTwitter);
+
+
+            style = new ButtonStyle();
+            style.up = skinMenu.getDrawable("coin");
+            style.down = skinMenu.getDrawable("coin");
+            buttonStore = new Button(style);
+            buttonStore.setWidth(Gdx.graphics.getWidth() / 1.26f);
+            buttonStore.setHeight(Gdx.graphics.getHeight() / 7f);
+            buttonStore.setPosition((Gdx.graphics.getWidth() - buttonStore.getWidth())/2f , buttonBackImage.getY() - buttonBackImage.getHeight() * 1.69f);
+            stageUiOptionMenu.addActor(buttonStore);
+
+            style = new ButtonStyle();
+            style.up = skinMenu.getDrawable("buttonUiOptionAchievementUp");
+            style.down = skinMenu.getDrawable("buttonUiOptionAchievementDown");
+            buttonAchievement = new Button(style);
+            buttonAchievement.setWidth(buttonStore.getWidth());
+            buttonAchievement.setHeight(buttonStore.getHeight());
+            buttonAchievement.setPosition(buttonStore.getX(), buttonStore.getY() - buttonStore.getHeight() * 1.69f);
+            stageUiOptionMenu.addActor(buttonAchievement);
+
+            style = new ButtonStyle();
+            style.up = skinMenu.getDrawable("buttonPlayUp");
+            style.down = skinMenu.getDrawable("buttonPlayUp");
+            buttonCloseUiOption = new Button(style);
+            buttonCloseUiOption.setWidth(Gdx.graphics.getWidth() / 6f);
+            buttonCloseUiOption.setHeight(Gdx.graphics.getWidth() / 6f);
+            buttonCloseUiOption.setPosition((Gdx.graphics.getWidth() - buttonCloseUiOption.getWidth()) / 1.01f, (Gdx.graphics.getHeight() - buttonCloseUiOption.getHeight()) / 1.1f);
+            stageUiOptionMenu.addActor(buttonCloseUiOption);
+
+            style = new ButtonStyle();
+            style.up = skinMenu.getDrawable("buttonPlayUp");
+            style.down = skinMenu.getDrawable("buttonPlayDown");
+            buttonPlayMenu = new Button(style);
+            buttonPlayMenu.setWidth(Gdx.graphics.getWidth() / 2.2f);
+            buttonPlayMenu.setHeight(Gdx.graphics.getHeight() / 5f);
+            //buttonExit.setPosition(-buttonExit.getWidth()/2.6f, (Gdx.graphics.getHeight() - buttonExit.getHeight()) / 1.6f);
+
+            buttonPlayMenu.setPosition(-400, Gdx.graphics.getHeight() / 2f);
+            stage1Menu.addActor(buttonPlayMenu);
+
+            style = new ButtonStyle();
+            style.up = skinMenu.getDrawable("buttonLeaderBoardUp");
+            style.down = skinMenu.getDrawable("buttonLeaderBoardDown");
+            buttonLeaderBoardMenu = new Button(style);
+            buttonLeaderBoardMenu.setWidth(Gdx.graphics.getWidth() / 2.2f);
+            buttonLeaderBoardMenu.setHeight(Gdx.graphics.getHeight() / 5f);
+            buttonLeaderBoardMenu.setPosition((Gdx.graphics.getWidth() / 1f) - buttonLeaderBoardMenu.getWidth() + 20, (Gdx.graphics.getHeight() - buttonPlayMenu.getHeight()) / 1.6f);
+            stage1Menu.addActor(buttonLeaderBoardMenu);
+
+
+            style = new ButtonStyle();
+            style.up = skinMenu.getDrawable("buttonTutoUp");
+            style.down = skinMenu.getDrawable("buttonTutoDown");
+            buttonTutoMenu = new Button(style);
+            buttonTutoMenu.setVisible(true);
+            buttonTutoMenu.setWidth(Gdx.graphics.getWidth() / 1.7f);
+            buttonTutoMenu.setHeight(Gdx.graphics.getHeight() / 13f);
+            buttonTutoMenu.setPosition((Gdx.graphics.getWidth() / 2) - buttonTutoMenu.getWidth() / 1.26f, 0);
+            stage1Menu.addActor(buttonTutoMenu);
+
+            labelCopyright = new Label("(c) RAM52 Credits 2017", new LabelStyle(new BitmapFont( Gdx.files.internal(MyGdxGame.fontScorePath), false), Color.WHITE));
+            labelCopyright.setWidth(Gdx.graphics.getWidth() / 2.8f);
+            labelCopyright.setHeight(Gdx.graphics.getHeight() / 20);
+            labelCopyright.setFontScale(Gdx.graphics.getWidth() / 500f);
+            labelCopyright.setAlignment(Align.center);
+            labelCopyright.setPosition(0, -500);
+            stage1Menu.addActor(labelCopyright);
+
+
             style = new ButtonStyle();
             style.up = skinMenu.getDrawable("buttonSound2Full");
             style.down = skinMenu.getDrawable("buttonSound2Full");
-            buttonSoundMenu.setStyle(style);
+            buttonSoundMenu = new Button(style);
+            buttonSoundMenu.setWidth(Gdx.graphics.getWidth() / 5f);
+            buttonSoundMenu.setHeight(Gdx.graphics.getHeight() / 7.8f);
+            buttonSoundMenu.setPosition((Gdx.graphics.getWidth() / 1f) - buttonSoundMenu.getWidth() + 20, Gdx.graphics.getHeight() / 100f);
+
+            if(MyGdxGame.isSoundEnable() == 0){
+                style = new ButtonStyle();
+                style.up = skinMenu.getDrawable("buttonSound2Mute");
+                style.down = skinMenu.getDrawable("buttonSound2Mute");
+                buttonSoundMenu.setStyle(style);
+            }
+            if(MyGdxGame.isSoundEnable() == 1){
+                style = new ButtonStyle();
+                style.up = skinMenu.getDrawable("buttonSound2Fx");
+                style.down = skinMenu.getDrawable("buttonSound2Fx");
+                buttonSoundMenu.setStyle(style);
+            }
+            if(MyGdxGame.isSoundEnable() == 2){
+                style = new ButtonStyle();
+                style.up = skinMenu.getDrawable("buttonSound2Full");
+                style.down = skinMenu.getDrawable("buttonSound2Full");
+                buttonSoundMenu.setStyle(style);
+            }
+            stage1Menu.addActor(buttonSoundMenu);
+
+
+            style = new ButtonStyle();
+            style.up = skinMenu.getDrawable("buttonPlayUp");
+            style.down = skinMenu.getDrawable("buttonPlayUp");
+            buttonCreditsMenu = new Button(style);
+            buttonCreditsMenu.setWidth(0);
+            buttonCreditsMenu.setHeight(0);
+            buttonCreditsMenu.setPosition(Gdx.graphics.getWidth() / 2 - buttonCreditsMenu.getWidth() / 2, Gdx.graphics.getHeight() / 2 - buttonCreditsMenu.getHeight() / 2);
+            buttonCreditsMenu.setVisible(false);
+            stage1Menu.addActor(buttonCreditsMenu);
+
+            loadingMenu = new Image(MyGdxGame.atlas.findRegion("buttonSecret"));
+            loadingMenu.setWidth(Gdx.graphics.getWidth());
+            loadingMenu.setHeight(Gdx.graphics.getHeight() / 12f);
+            loadingMenu.setPosition(0, (Gdx.graphics.getHeight() - loadingMenu.getHeight()) / 2f);
+            //loadingMenu.setVisible(true);
+            loadingMenu.setScale(0);
+            stage1Menu.addActor(loadingMenu);
+
+
+            style = new ButtonStyle();
+            style.up = skinMenu.getDrawable("buttonSound2Full");
+            style.down = skinMenu.getDrawable("buttonSound2Full");
+            buttonPBlueMenu = new Button(style);
+            buttonPBlueMenu.setWidth(Gdx.graphics.getWidth() / 8f);
+            buttonPBlueMenu.setHeight(Gdx.graphics.getWidth() / 4f);
+            buttonPBlueMenu.setPosition((Gdx.graphics.getWidth() - buttonPBlueMenu.getWidth()) / 4f, (Gdx.graphics.getHeight() - buttonPBlueMenu.getWidth()) / 4.3f);
+
+            buttonPRedMenu = new Button(style);
+            buttonPRedMenu.setWidth(Gdx.graphics.getWidth() / 8f);
+            buttonPRedMenu.setHeight(Gdx.graphics.getWidth() / 4f);
+            buttonPRedMenu.setPosition((Gdx.graphics.getWidth() - buttonPBlueMenu.getWidth()) / 2.1f, (Gdx.graphics.getHeight() - buttonPBlueMenu.getWidth()) / 4.3f);
+
+            buttonPYellow = new Button(style);
+            buttonPYellow.setWidth(Gdx.graphics.getWidth() / 8f);
+            buttonPYellow.setHeight(Gdx.graphics.getWidth() / 4f);
+            buttonPYellow.setPosition((Gdx.graphics.getWidth() - buttonPBlueMenu.getWidth()) / 1.7f, (Gdx.graphics.getHeight() - buttonPBlueMenu.getWidth()) / 4.3f);
+
+            buttonPGreen = new Button(style);
+            buttonPGreen.setWidth(Gdx.graphics.getWidth() / 8f);
+            buttonPGreen.setHeight(Gdx.graphics.getWidth() / 4f);
+            buttonPGreen.setPosition((Gdx.graphics.getWidth() - buttonPBlueMenu.getWidth()) / 1.4f, (Gdx.graphics.getHeight() - buttonPBlueMenu.getWidth()) / 4.3f);
+
+            stage1Menu.addActor(buttonPBlueMenu);
+            stage1Menu.addActor(buttonPRedMenu);
+            stage1Menu.addActor(buttonPYellow);
+            stage1Menu.addActor(buttonPGreen);
+
+            style = new ButtonStyle();
+            style.up = skinMenu.getDrawable("buttonGearUp");
+            style.down = skinMenu.getDrawable("buttonGearDown");
+            buttonGearMenu = new Button(style);
+            buttonGearMenu.setWidth(Gdx.graphics.getWidth() / 5f);
+            buttonGearMenu.setHeight(Gdx.graphics.getHeight() / 7.8f);
+            buttonGearMenu.setPosition(-400, Gdx.graphics.getHeight() / 100f);
+            stage1Menu.addActor(buttonGearMenu);
+
+            setupButtonMenu();
         }
-        stage1Menu.addActor(buttonSoundMenu);
 
 
-        style = new ButtonStyle();
-        style.up = skinMenu.getDrawable("buttonPlayUp");
-        style.down = skinMenu.getDrawable("buttonPlayUp");
-        buttonCreditsMenu = new Button(style);
-        buttonCreditsMenu.setWidth(0);
-        buttonCreditsMenu.setHeight(0);
-        buttonCreditsMenu.setPosition(Gdx.graphics.getWidth() / 2 - buttonCreditsMenu.getWidth() / 2, Gdx.graphics.getHeight() / 2 - buttonCreditsMenu.getHeight() / 2);
-        buttonCreditsMenu.setVisible(false);
-        stage1Menu.addActor(buttonCreditsMenu);
-
-        loadingMenu = new Image(MyGdxGame.atlas.findRegion("buttonSecret"));
-        loadingMenu.setWidth(Gdx.graphics.getWidth());
-        loadingMenu.setHeight(Gdx.graphics.getHeight() / 12f);
-        loadingMenu.setPosition(0, (Gdx.graphics.getHeight() - loadingMenu.getHeight()) / 2f);
-        //loadingMenu.setVisible(true);
-        loadingMenu.setScale(0);
-        stage1Menu.addActor(loadingMenu);
 
 
-        style = new ButtonStyle();
-        style.up = skinMenu.getDrawable("buttonSound2Full");
-        style.down = skinMenu.getDrawable("buttonSound2Full");
-        buttonPBlueMenu = new Button(style);
-        buttonPBlueMenu.setWidth(Gdx.graphics.getWidth() / 8f);
-        buttonPBlueMenu.setHeight(Gdx.graphics.getWidth() / 4f);
-        buttonPBlueMenu.setPosition((Gdx.graphics.getWidth() - buttonPBlueMenu.getWidth()) / 4f, (Gdx.graphics.getHeight() - buttonPBlueMenu.getWidth()) / 4.3f);
 
-        buttonPRedMenu = new Button(style);
-        buttonPRedMenu.setWidth(Gdx.graphics.getWidth() / 8f);
-        buttonPRedMenu.setHeight(Gdx.graphics.getWidth() / 4f);
-        buttonPRedMenu.setPosition((Gdx.graphics.getWidth() - buttonPBlueMenu.getWidth()) / 2.1f, (Gdx.graphics.getHeight() - buttonPBlueMenu.getWidth()) / 4.3f);
 
-        buttonPYellow = new Button(style);
-        buttonPYellow.setWidth(Gdx.graphics.getWidth() / 8f);
-        buttonPYellow.setHeight(Gdx.graphics.getWidth() / 4f);
-        buttonPYellow.setPosition((Gdx.graphics.getWidth() - buttonPBlueMenu.getWidth()) / 1.7f, (Gdx.graphics.getHeight() - buttonPBlueMenu.getWidth()) / 4.3f);
 
-        buttonPGreen = new Button(style);
-        buttonPGreen.setWidth(Gdx.graphics.getWidth() / 8f);
-        buttonPGreen.setHeight(Gdx.graphics.getWidth() / 4f);
-        buttonPGreen.setPosition((Gdx.graphics.getWidth() - buttonPBlueMenu.getWidth()) / 1.4f, (Gdx.graphics.getHeight() - buttonPBlueMenu.getWidth()) / 4.3f);
 
-        stage1Menu.addActor(buttonPBlueMenu);
-        stage1Menu.addActor(buttonPRedMenu);
-        stage1Menu.addActor(buttonPYellow);
-        stage1Menu.addActor(buttonPGreen);
 
-        style = new ButtonStyle();
-        style.up = skinMenu.getDrawable("buttonGearUp");
-        style.down = skinMenu.getDrawable("buttonGearDown");
-        buttonGearMenu = new Button(style);
-        buttonGearMenu.setWidth(Gdx.graphics.getWidth() / 5f);
-        buttonGearMenu.setHeight(Gdx.graphics.getHeight() / 7.8f);
-        buttonGearMenu.setPosition(-400, Gdx.graphics.getHeight() / 100f);
-        stage1Menu.addActor(buttonGearMenu);
 
 //        if(MyGdxGame.isSoundEnable() == 2) {
 //            MyGdxGame.res.getMusic("main").setVolume(1f);
@@ -415,6 +444,19 @@ public class Menu extends GameState {
 //                MyGdxGame.res.getMusic("main").play();
 //        }
 
+
+        im.addProcessor(stageUiOptionMenu);
+        im.addProcessor(stage1Menu);
+        Gdx.input.setInputProcessor(im);
+
+        //MyGdxGame.resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(),stages);
+
+        //Gdx.input.setInputProcessor(stageUiOptionMenu);
+        MyGdxGame.setIsBoosTerritory(false);
+
+    }
+
+    public void setupButtonMenu(){
         buttonGearMenu.addListener(new InputListener() {
             public boolean touchDown(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
@@ -738,18 +780,6 @@ public class Menu extends GameState {
 
             ;
         });
-
-
-        InputMultiplexer im = new InputMultiplexer();
-        im.addProcessor(stageUiOptionMenu);
-        im.addProcessor(stage1Menu);
-        Gdx.input.setInputProcessor(im);
-
-        //MyGdxGame.resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(),stages);
-
-        //Gdx.input.setInputProcessor(stageUiOptionMenu);
-        MyGdxGame.setIsBoosTerritory(false);
-
     }
 
     public void updateSelector(){
@@ -941,6 +971,7 @@ public class Menu extends GameState {
             float speed = 8f;
 
             if (stage1Menu.getActors().items[4].getRight() >= Gdx.graphics.getWidth() + 5) {
+                System.out.println("cpt_translate_animationMenu="+cpt_translate_animationMenu);
                 stage1Menu.getActors().items[4].setPosition((Gdx.graphics.getWidth() / 1f) - (cpt_translate_animationMenu * speed), stage1Menu.getActors().items[4].getY());
                 cpt_translate_animationMenu++;
             }
@@ -1113,22 +1144,22 @@ public class Menu extends GameState {
         blinkMenu = false;
         blinking_text_alphaMenu = 0;
         start2Menu = false;
-        cpt_translate_animation1Menu = 0;
-        cpt_translate_animation2Menu = 0;
+//        cpt_translate_animation1Menu = 0;
+//        cpt_translate_animation2Menu = 0;
         click_on_creditsMenu = false;
         click_on_shopMenu = false;
-        PBlueMenu = false;
-        PRedMenu = false;
-        PYellowMenu = false;
-        playerIsTouchedMenu = false;
-        cptMenu = 0;
-        cpt_translate_animationMenu = 0;
-        rightMenu = true;
-        leftMenu = false;
-        right2Menu = true;
-        left2Menu = false;
-        jp = false;
-        yMenu = 670.0f;
+//        PBlueMenu = false;
+//        PRedMenu = false;
+//        PYellowMenu = false;
+//        playerIsTouchedMenu = false;
+//        cptMenu = 0;
+//        cpt_translate_animationMenu = 0;
+//        rightMenu = true;
+//        leftMenu = false;
+//        right2Menu = true;
+//        left2Menu = false;
+//        jp = false;
+//        yMenu = 670.0f;
 
         if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)
             if(MyGdxGame.res.getMusic("title").isPlaying()){

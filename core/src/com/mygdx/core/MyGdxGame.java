@@ -2,12 +2,11 @@ package com.mygdx.core;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
@@ -30,6 +29,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.mygdx.core.entities.ActionResolver;
 import com.mygdx.core.entities.B2DSprite;
 import com.mygdx.core.handlers.Animation;
@@ -73,7 +74,7 @@ public class MyGdxGame implements ApplicationListener {
     private static boolean android = true;
     public static B2DSprite fadeIn, fadeOut;
     public static float FADE_DELAY = 1/50f;
-    public static BitmapFont font, font2;
+    public static BitmapFont font, font2, font2Credit;
     public static String debugString = "";
     public static float GROUND = 2.5621998f; //todo use box2d
     public static int MONEY_BY_ENEMY = 2;
@@ -84,7 +85,7 @@ public class MyGdxGame implements ApplicationListener {
     public static Vector2 lastPrincessPosition = new Vector2(0,0);
     public static int lastScoreInTutorial = 0;
 
-    public static GlyphLayout glyphLayout;
+    public static GlyphLayout glyphLayoutCredit;
 
 
     public static void setIsBoosTerritory(boolean isBoosTerritory) {
@@ -198,7 +199,7 @@ public class MyGdxGame implements ApplicationListener {
     public static Rectangle viewportCredit;
     public static Stage stage0Credit;
     public static Image introCredit;
-    public static String CREDIT;
+    public static String CREDIT = "";
     public static Vector2 credits_size = new Vector2(0,0);
     public static ShapeRenderer shapeRendererCredit;
     ///////////////////////////////
@@ -207,7 +208,7 @@ public class MyGdxGame implements ApplicationListener {
     public static Animation animPlayerIdle, animPlayerIdleFliped, animPlayerSlash, animPrincessIdle, animPrincessIdleFliped, animTitle, animHelpMe;
     public static boolean click_on_playMenu, click_on_leaderboardMenu, click_on_tutoMenu;
     public static int isfadeOutStarted = 0;
-    public static Stage stage1Menu, stage2Menu, stage3Menu, stageUiOptionMenu;
+    public static Stage stage1Menu , stage2Menu, stage3Menu, stageUiOptionMenu;
     public static Label labelCopyright;
     public static Button buttonPlayMenu, buttonLeaderBoardMenu, buttonTutoMenu, buttonSoundMenu, buttonGearMenu, buttonCreditsMenu, buttonPBlueMenu, buttonPRedMenu,
             buttonPYellow, buttonPGreen, buttonStore, buttonBackImage, buttonFacebook, buttonTwitter, buttonAchievement, buttonCloseUiOption, optionUiBackImage, imageCoinMenu;
@@ -239,6 +240,7 @@ public class MyGdxGame implements ApplicationListener {
     public static float yMenu = 670.0f;
     public static Stage stage0Menu;
     public static Image introMenu;
+    public static InputMultiplexer im = new InputMultiplexer();
     ///////////////////////////////
 
 
@@ -271,15 +273,63 @@ public class MyGdxGame implements ApplicationListener {
         this.actionResolver = actionResolver;
     }
 
+    public static void getCreditFromFile(){
+        String credit = ":( Sorry could not load credits file.";
+
+        float wLine = 0;
+        float hLine = 0;
+        float wCredit = 0;
+        float hCredit = 0;
+
+        try {
+            String credits = Gdx.files.internal("data/credits.txt").readString();
+            String[] data = credits.split("\n");
+            credit = "";
+            for (String line : data) {
+                credit += line + "\n";
+
+                //glyphLayoutCredit.setText(font2Credit,line);
+
+                wLine = glyphLayoutCredit.width;
+                hLine = glyphLayoutCredit.height;
+                credits_size.y += hLine;
+
+                glyphLayoutCredit.setText(font2Credit,credit);
+                wCredit = glyphLayoutCredit.width;
+                hCredit = glyphLayoutCredit.height;
+
+                if(wLine > credits_size.x){
+                    credits_size.x = wLine;
+                }
+            }
+            //credits_size.yMenu += 4*hLine;
+        } catch (GdxRuntimeException e) {
+            Gdx.app.error(LOG_TAG,"error while accessing file",e);
+            credits_size.x = wCredit;
+            credits_size.y = hCredit;
+        }
+
+
+        font2Credit.getData().setScale(0.85f);
+
+        credits_size.y = glyphLayoutCredit.height;
+
+        Gdx.app.error(LOG_TAG,"credits_size="+credits_size);
+    }
 
     public void create() {
         Gdx.app.setLogLevel(Application.LOG_DEBUG);
+
+
+
         //loading  = GifDecoder.loadGIFAnimation(com.badlogic.gdx.graphics.g2d.Animation.PlayMode.LOOP, Gdx.files.internal("data/sprite/loading.gif").readBytes());
         //font = new BitmapFont();
         fps = new FPSLogger();
         font = new BitmapFont(Gdx.files.internal(MyGdxGame.fontTextPath), false);
         font2 = new BitmapFont(Gdx.files.internal(MyGdxGame.fontfsexPath), false);
-        glyphLayout = new GlyphLayout();
+        font2Credit = new BitmapFont(Gdx.files.internal(MyGdxGame.fontfsexPath), false);
+        glyphLayoutCredit = new GlyphLayout();
+
 
         viewport = new Rectangle();
         intro = new Image(new Texture(Gdx.files.internal("data/sprite/loading.png")));
@@ -729,9 +779,7 @@ public class MyGdxGame implements ApplicationListener {
         actionResolver = null;
         shapeRenderer = null;
         gsm = null;
-        ;
         res = null;
-        ;
         atlas = null;
         tileMap = null;
     }

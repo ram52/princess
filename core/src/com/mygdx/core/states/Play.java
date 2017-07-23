@@ -42,7 +42,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.core.MyGdxGame;
 import com.mygdx.core.entities.B2DSprite;
@@ -72,7 +71,7 @@ import static com.mygdx.core.MyGdxGame.DEBUG;
 import static com.mygdx.core.MyGdxGame.TEST;
 import static com.mygdx.core.MyGdxGame.font;
 import static com.mygdx.core.MyGdxGame.font2;
-import static com.mygdx.core.MyGdxGame.glyphLayout;
+import static com.mygdx.core.MyGdxGame.glyphLayoutCredit;
 import static com.mygdx.core.MyGdxGame.lastBrickPosition;
 import static com.mygdx.core.MyGdxGame.lastPlayerPosition;
 import static com.mygdx.core.MyGdxGame.lastPrincessPosition;
@@ -3771,10 +3770,10 @@ public class Play extends GameState {
 
         if(Save.gd.isFireBall2Equiped() | Save.gd.isFireBallEquiped()){
             if(pickedGameplay == 2){
-                //font2.setColor(Color.WHITE);
+                //font2Credit.setColor(Color.WHITE);
 
 
-//                font2.drawMultiLine(sb,
+//                font2Credit.drawMultiLine(sb,
 //                        value ,
 //                        MyGdxGame.V_WIDTH/1.733f,
 //                        (MyGdxGame.V_HEIGHT/7.5f) - 11f*offsetY/PPM,
@@ -3784,7 +3783,7 @@ public class Play extends GameState {
 
             if(pickedGameplay == 1){
 
-//                font2.drawMultiLine(sb,
+//                font2Credit.drawMultiLine(sb,
 //                        value ,
 //                        MyGdxGame.V_WIDTH/2.205f,
 //                        (MyGdxGame.V_HEIGHT/7.5f) - 11f*offsetY/PPM,
@@ -3821,11 +3820,11 @@ public class Play extends GameState {
         /*if(brick == null && isTutorial && displayBrickTip){
             sb.begin();
             String label = "TAP IN THE SKY!";
-            font2.drawMultiLine(sb,
+            font2Credit.drawMultiLine(sb,
                     label ,
                     Gdx.graphics.getWidth()/2.5f,
                     Gdx.graphics.getHeight()/1.35f,
-                    font2.getBounds(label).width,
+                    font2Credit.getBounds(label).width,
                     BitmapFont.HAlignment.LEFT);
             sb.end();
         }*/
@@ -3869,17 +3868,17 @@ public class Play extends GameState {
 
             String value = "x"+String.valueOf(Save.gd.getMoney());
 
-            glyphLayout.setText(font2,value);
-            font2.draw(sb, glyphLayout, x , h*1.0f);
+            glyphLayoutCredit.setText(font2,value);
+            font2.draw(sb, glyphLayoutCredit, x , h*1.0f);
 
-//            font2.drawMultiLine(sb,
+//            font2Credit.drawMultiLine(sb,
 //                    value ,
 //                    x ,
 //                    h*1.0f,
-//                    font2.getBounds(value).width,
+//                    font2Credit.getBounds(value).width,
 //                    BitmapFont.HAlignment.CENTER);
 
-            x += glyphLayout.width*1.1f;
+            x += glyphLayoutCredit.width*1.1f;
 
 
             if(Save.gd.isFireBallEquiped()|Save.gd.isFireBall2Equiped() && power.getFrames().length>0){
@@ -3902,18 +3901,18 @@ public class Play extends GameState {
 
                 value = "x"+value;
 
-                glyphLayout.setText(font2,value);
-                font2.draw(sb, glyphLayout, x , h*1.0f);
-                x += glyphLayout.width*1.2f;
+                glyphLayoutCredit.setText(font2,value);
+                font2.draw(sb, glyphLayoutCredit, x , h*1.0f);
+                x += glyphLayoutCredit.width*1.2f;
 
-//                font2.drawMultiLine(sb,
+//                font2Credit.drawMultiLine(sb,
 //                        value ,
 //                        x,
 //                        h*1.0f,
-//                        font2.getBounds(value).width,
+//                        font2Credit.getBounds(value).width,
 //                        BitmapFont.HAlignment.LEFT);
 //
-//                x += font2.getBounds(value).width*1.2f;
+//                x += font2Credit.getBounds(value).width*1.2f;
 
 
             }
@@ -3925,17 +3924,17 @@ public class Play extends GameState {
                 damage = (this.brick.getLife()/(float)this.brick.getMaxLife())*100.0f;
 
                 value = ""+String.valueOf((int)damage)+"%";
-                glyphLayout.setText(font2,value);
-                font2.draw(sb, glyphLayout, x , h*1.0f);
-                x += glyphLayout.width*1.2f;
-//                font2.drawMultiLine(sb,
+                glyphLayoutCredit.setText(font2,value);
+                font2.draw(sb, glyphLayoutCredit, x , h*1.0f);
+                x += glyphLayoutCredit.width*1.2f;
+//                font2Credit.drawMultiLine(sb,
 //                        value ,
 //                        x ,
 //                        h*1.0f,
-//                        font2.getBounds(value).width,
+//                        font2Credit.getBounds(value).width,
 //                        BitmapFont.HAlignment.CENTER);
 //
-//                x += font2.getBounds(value).width*1.1f;
+//                x += font2Credit.getBounds(value).width*1.1f;
 
             }
 
@@ -4307,6 +4306,8 @@ public class Play extends GameState {
     }
 
     public void dispose() {
+        font2.getData().scaleX = 1f;
+        font2.getData().scaleY = 1f;
         spriteBatch.dispose();
         spriteBatchLightning.dispose();
         //if (MyGdxGame.res.getSound("alarm").isPlaying()) MyGdxGame.res.getSound("alarm").pause();

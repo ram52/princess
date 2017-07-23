@@ -3,6 +3,7 @@ package com.mygdx.core.states;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -17,15 +18,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.mygdx.core.MyGdxGame;
 import com.mygdx.core.handlers.Animation;
 import com.mygdx.core.handlers.GameStateManager;
 import com.mygdx.core.handlers.Save;
 
 import static com.mygdx.core.MyGdxGame.creditColor;
-import static com.mygdx.core.MyGdxGame.font2;
-import static com.mygdx.core.MyGdxGame.glyphLayout;
+import static com.mygdx.core.MyGdxGame.font2Credit;
+import static com.mygdx.core.MyGdxGame.getCreditFromFile;
+import static com.mygdx.core.MyGdxGame.glyphLayoutCredit;
 import static com.mygdx.core.MyGdxGame.animationEnemyCredit;
 import static com.mygdx.core.MyGdxGame.animationHyaCredit;
 import static com.mygdx.core.MyGdxGame.animationPBlue1Credit;
@@ -55,15 +56,17 @@ public class Credits extends GameState {
 
     private static String LOG_TAG = Credits.class.getSimpleName();
 
-
     public Credits(GameStateManager gsm) {
 
         super(gsm);
 
         //font.setScale(1.3f);
+        if(credits_size.y == 0)
+            getCreditFromFile();
 
-        if(CREDIT == null)
-            CREDIT = getCreditFromFile();
+        glyphLayoutCredit.setText(font2Credit,Gdx.files.internal("data/credits.txt").readString(),Color.WHITE,Gdx.graphics.getWidth(), Align.center,true);
+
+        System.out.println("CREDIT="+CREDIT);
 
         if(shapeRendererCredit == null){
             shapeRendererCredit = new ShapeRenderer();
@@ -241,51 +244,8 @@ public class Credits extends GameState {
         });
     }
 
-    private String getCreditFromFile(){
-        String credit = ":( Sorry could not load credits file.";
-
-        float wLine = 0;
-        float hLine = 0;
-        float wCredit = 0;
-        float hCredit = 0;
-        try {
-            String credits = Gdx.files.internal("data/credits.txt").readString();
-            String[] data = credits.split("\n");
-            credit = "";
-            for (String line : data) {
-                credit += line + "\n";
-
-                //glyphLayout.setText(font2,line);
-
-                wLine = glyphLayout.width;
-                hLine = glyphLayout.height;
-                credits_size.y += hLine;
-
-                glyphLayout.setText(font2,credit);
-                wCredit = glyphLayout.width;
-                hCredit = glyphLayout.height;
-
-                if(wLine > credits_size.x){
-                    credits_size.x = wLine;
-                }
-            }
-            //credits_size.yMenu += 4*hLine;
-        } catch (GdxRuntimeException e) {
-            Gdx.app.error(LOG_TAG,"error while accessing file",e);
-            credits_size.x = wCredit;
-            credits_size.y = hCredit;
-        }
 
 
-        font2.getData().setScale(0.85f);
-        glyphLayout.setText(font2,credit,Color.WHITE,Gdx.graphics.getWidth(), Align.center,true);
-
-
-        credits_size.y = glyphLayout.height;
-
-
-        return credit;
-    }
     public void handleInput() {
         if (click_on_playCredit) {
             click_on_playCredit = false;
@@ -444,8 +404,8 @@ public class Credits extends GameState {
 
 
         sb.begin();
-        font2.setColor(Color.WHITE);
-        font2.draw(sb, glyphLayout, 0 , y);
+        font2Credit.setColor(Color.WHITE);
+        font2Credit.draw(sb, glyphLayoutCredit, 0 , y);
         sb.end();
     }
 
@@ -457,6 +417,7 @@ public class Credits extends GameState {
         cpt_translate_animation1Credit = 0;
         timeCredit = 0;
         click_on_playCredit = false;
+        glyphLayoutCredit.reset();
     }
 
 }
