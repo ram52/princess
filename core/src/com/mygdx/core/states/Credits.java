@@ -66,7 +66,6 @@ public class Credits extends GameState {
 
         glyphLayoutCredit.setText(font2Credit,Gdx.files.internal("data/credits.txt").readString(),Color.WHITE,Gdx.graphics.getWidth(), Align.center,true);
 
-        System.out.println("CREDIT="+CREDIT);
 
         if(shapeRendererCredit == null){
             shapeRendererCredit = new ShapeRenderer();
@@ -394,12 +393,12 @@ public class Credits extends GameState {
         float y = MyGdxGame.V_HEIGHT/1.1f;
 
         Gdx.gl.glEnable(GL20.GL_BLEND);
-        shapeRendererCredit.setColor(creditColor);
-        shapeRendererCredit.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(new Color(0, 0, 0, 0.8f));
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         float h = credits_size.y;
         float padding = 100;
-        shapeRendererCredit.rect(x-padding/2,y-h-padding/2, credits_size.x+padding, h+padding);
-        shapeRendererCredit.end();
+        shapeRenderer.rect(x-padding/2,y-h-padding/2, credits_size.x+padding, h+padding);
+        shapeRenderer.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
 
 

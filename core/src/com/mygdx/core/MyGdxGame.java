@@ -274,47 +274,23 @@ public class MyGdxGame implements ApplicationListener {
     }
 
     public static void getCreditFromFile(){
-        String credit = ":( Sorry could not load credits file.";
-
-        float wLine = 0;
-        float hLine = 0;
-        float wCredit = 0;
-        float hCredit = 0;
+        String credits = ":( Sorry could not load credits file.";
 
         try {
-            String credits = Gdx.files.internal("data/credits.txt").readString();
-            String[] data = credits.split("\n");
-            credit = "";
-            for (String line : data) {
-                credit += line + "\n";
-
-                //glyphLayoutCredit.setText(font2Credit,line);
-
-                wLine = glyphLayoutCredit.width;
-                hLine = glyphLayoutCredit.height;
-                credits_size.y += hLine;
-
-                glyphLayoutCredit.setText(font2Credit,credit);
-                wCredit = glyphLayoutCredit.width;
-                hCredit = glyphLayoutCredit.height;
-
-                if(wLine > credits_size.x){
-                    credits_size.x = wLine;
-                }
-            }
-            //credits_size.yMenu += 4*hLine;
+            credits = Gdx.files.internal("data/credits.txt").readString();
         } catch (GdxRuntimeException e) {
             Gdx.app.error(LOG_TAG,"error while accessing file",e);
-            credits_size.x = wCredit;
-            credits_size.y = hCredit;
         }
 
+        Gdx.app.error(LOG_TAG,"credit="+credits);
 
         font2Credit.getData().setScale(0.85f);
+        glyphLayoutCredit.setText(font2Credit,credits);
+        credits_size.set(glyphLayoutCredit.width,glyphLayoutCredit.height);
 
         credits_size.y = glyphLayoutCredit.height;
 
-        Gdx.app.error(LOG_TAG,"credits_size="+credits_size);
+
     }
 
     public void create() {
