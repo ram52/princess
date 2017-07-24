@@ -23,6 +23,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.AlphaAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -30,6 +31,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.mygdx.core.entities.ActionResolver;
 import com.mygdx.core.entities.B2DSprite;
@@ -40,6 +42,9 @@ import com.mygdx.core.handlers.Content;
 import com.mygdx.core.handlers.GameStateManager;
 import com.mygdx.core.handlers.MyInputProcessor;
 import com.mygdx.core.handlers.Save;
+import com.mygdx.core.handlers.ShopDialog;
+import com.mygdx.core.handlers.SimpleDirectionGestureDetector;
+import com.mygdx.core.states.Shop;
 
 public class MyGdxGame implements ApplicationListener {
     private static final String LOG_TAG = MyGdxGame.class.getSimpleName();
@@ -241,6 +246,33 @@ public class MyGdxGame implements ApplicationListener {
     public static Stage stage0Menu;
     public static Image introMenu;
     public static InputMultiplexer im = new InputMultiplexer();
+    ///////////////////////////////
+    
+    ////////SHOP///////////////////
+    public static boolean click_on_playShop;
+    public static Stage stage1Shop, stage2Shop;
+    public static AlphaAction fade1Shop, fade2Shop, fade3Shop;
+    public static Rectangle viewportShop;
+    public static AlphaAction fadeShop;
+    public static Button buttonPlayShop, buttonSecret1Shop, buttonSecret2Shop, imageCoinShop;
+    public static Button buttonFireBall, buttonExcalibur, buttonKamehameha, buttonBoot;
+    public static Button buttonFireBall2, buttonMegaJump, buttonLightning, buttonBrick2;
+    public static Button buttonAds, buttonCoin1, buttonCoin2,buttonCoin3;
+    public static int cpt_secret1Shop = 0;
+    public static int cpt_translate_animation1Shop = 0;
+    public static Label labelMoneyShop;
+    public static Skin skinShop;
+    public static Vector2 crop;
+    public static Animation animationCoinShop;
+    public static Animation animationEnemyShop, animationEnemyMockShop;
+    public static float timeShop = 0.0f;
+    public static Stage stage0Shop;
+    public static Image introShop;
+    public static float offsetYShop = 0;
+    public static SimpleDirectionGestureDetector gdShop;
+    public static ShopDialog dialogAdsRemover;
+    public static ShopDialog dialogFireBall, dialogFireBall2;
+    public static Array<EventListener> dialogFireBallListener;
     ///////////////////////////////
 
 

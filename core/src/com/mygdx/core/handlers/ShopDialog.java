@@ -38,7 +38,7 @@ public class ShopDialog extends Dialog{
         padTop(-Gdx.graphics.getHeight()/40f);
         //dialog.padBottom(Gdx.graphics.getHeight()/60);
         BitmapFont font = new BitmapFont( Gdx.files.internal(MyGdxGame.fontCreditsPath));
-        setStyle(new Window.WindowStyle(font, Color.BLACK, shop.skin.getDrawable("black")));
+        setStyle(new Window.WindowStyle(font, Color.BLACK, MyGdxGame.skinShop.getDrawable("black")));
 
         Label label = new Label(description, new Label.LabelStyle(new BitmapFont(Gdx.files.internal(MyGdxGame.fontTextPath), false), Color.WHITE));
         label.setFontScaleY(Gdx.graphics.getWidth() / 600f);
@@ -57,15 +57,15 @@ public class ShopDialog extends Dialog{
         //dialog.text("\nFIRE BALL\n\nFire ball can destroy 1 enemy in 1 hit.\nCOST: 1000 coins.\n\nEquip Fire ball?");
 
         Button.ButtonStyle style = new Button.ButtonStyle();
-        style.up = shop.skin.getDrawable("buttonYesUp");
-        style.down = shop.skin.getDrawable("buttonYesDown");
+        style.up = MyGdxGame.skinShop.getDrawable("buttonYesUp");
+        style.down = MyGdxGame.skinShop.getDrawable("buttonYesDown");
         Button buttonYes = new Button(style);
         buttonYes.setWidth(Gdx.graphics.getWidth()/5);
         buttonYes.setHeight(Gdx.graphics.getWidth()/5);
         button(buttonYes, true); //sends "true" as the result
         style = new Button.ButtonStyle();
-        style.up = shop.skin.getDrawable("buttonNoUp");
-        style.down = shop.skin.getDrawable("buttonNoDown");
+        style.up = MyGdxGame.skinShop.getDrawable("buttonNoUp");
+        style.down = MyGdxGame.skinShop.getDrawable("buttonNoDown");
         Button buttonNo = new Button(style);
         buttonYes.setWidth(Gdx.graphics.getWidth()/5);
         buttonYes.setHeight(Gdx.graphics.getWidth()/5);
@@ -85,7 +85,7 @@ public class ShopDialog extends Dialog{
         getButtonTable().getCells().get(1).padLeft(Gdx.graphics.getWidth()/10);
 
         key(Input.Keys.ENTER, true); //sends "true" when the ENTER key is pressed
-        Image image = new Image(shop.skin.getDrawable(drawable));
+        Image image = new Image(MyGdxGame.skinShop.getDrawable(drawable));
         image.setSize(Gdx.graphics.getWidth()/4, Gdx.graphics.getWidth()/4);
         setHeight(image.getHeight()*2.2f);
         setWidth(Gdx.graphics.getWidth());

@@ -8,9 +8,14 @@ import com.mygdx.core.entities.ActionResolver;
 
 import apple.NSObject;
 import apple.foundation.NSDictionary;
+import apple.foundation.NSFileManager;
+import apple.foundation.NSURL;
+import apple.foundation.enums.NSSearchPathDirectory;
+import apple.foundation.enums.NSSearchPathDomainMask;
 import apple.uikit.UIApplication;
 import apple.uikit.UIWindow;
 import apple.uikit.c.UIKit;
+import dalvik.system.VMDebug;
 
 import org.moe.inapppurchase.common.ProductsStore;
 import org.moe.natj.general.Pointer;
@@ -18,6 +23,9 @@ import org.moe.natj.general.ann.RegisterOnStartup;
 import org.moe.natj.objc.ObjCRuntime;
 import org.moe.natj.objc.ann.ObjCClassName;
 import org.moe.natj.objc.ann.Selector;
+
+import java.io.IOException;
+import java.util.List;
 
 @org.moe.natj.general.ann.Runtime(ObjCRuntime.class)
 @ObjCClassName("Main")
@@ -40,6 +48,23 @@ public class Main extends IOSApplication.Delegate implements ActionResolver {
         game = new MyGdxGame(this);
         iosApplication = new IOSApplication(game, config);
         return iosApplication;
+    }
+
+    @Override
+    public void applicationDidReceiveMemoryWarning(UIApplication application) {
+        iosApplication.log(LOG_TAG,"applicationDidReceiveMemoryWarning");
+        Runtime.getRuntime().gc();
+        List<NSURL> l = (List<NSURL>) NSFileManager.defaultManager().
+                URLsForDirectoryInDomains(
+                        NSSearchPathDirectory.DocumentDirectory,
+                        NSSearchPathDomainMask.UserDomainMask);
+        NSURL docDirURL = l.get(0); // Error handling is for cowards :)
+        String fsPath = docDirURL.fileSystemRepresentation();
+        try {
+            VMDebug.dumpHprofData(fsPath + "/MOE-Dump.hprof");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Selector("alloc")
