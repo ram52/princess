@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
@@ -24,6 +25,14 @@ public class ShopDialog extends Dialog{
         super(title, skin);
     }
 
+
+    @Override
+    public void hide (Action action) {
+    }
+
+    @Override
+    public void hide () {
+    }
 
     public ShopDialog(Shop shop, String description, String drawable){
         super("", new Skin(Gdx.files.internal("uiskin.json")), "dialog");

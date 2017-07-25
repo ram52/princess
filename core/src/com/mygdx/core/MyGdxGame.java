@@ -271,8 +271,19 @@ public class MyGdxGame implements ApplicationListener {
     public static float offsetYShop = 0;
     public static SimpleDirectionGestureDetector gdShop;
     public static ShopDialog dialogAdsRemover;
-    public static ShopDialog dialogFireBall, dialogFireBall2;
-    public static Array<EventListener> dialogFireBallListener;
+    public static ShopDialog dialogFireBallNotPurchased, dialogFireBallPurchased;
+    public static ShopDialog dialogFireBall2NotPurchased, dialogFireBall2Purchased;
+    public static ShopDialog dialogExcaliburNotPurchased, dialogExcaliburPurchased;
+    public static ShopDialog dialogKamehamehaNotPurchased, dialogKamehamehaPurchased;
+    public static ShopDialog dialogBootNotPurchased, dialogBootPurchased;
+    public static ShopDialog dialogBrickNotPurchased, dialogBrickPurchased;
+    public static ShopDialog dialogLightningNotPurchased, dialogLightningPurchased;
+    public static ShopDialog dialogMegaJumpNotPurchased, dialogMegaJumpPurchased;
+    public static ShopDialog dialogCoin1NotPurchased, dialogCoin1Purchased;
+    public static ShopDialog dialogCoin2NotPurchased, dialogCoin2Purchased;
+    public static ShopDialog dialogCoin3NotPurchased, dialogCoin3Purchased;
+
+
     ///////////////////////////////
 
 

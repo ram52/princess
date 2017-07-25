@@ -9,11 +9,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -24,7 +22,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Array;
 import com.mygdx.core.MyGdxGame;
 import com.mygdx.core.handlers.Animation;
 import com.mygdx.core.handlers.AnimeActor;
@@ -62,9 +59,25 @@ import static com.mygdx.core.MyGdxGame.click_on_playShop;
 import static com.mygdx.core.MyGdxGame.cpt_secret1Shop;
 import static com.mygdx.core.MyGdxGame.cpt_translate_animation1Shop;
 import static com.mygdx.core.MyGdxGame.dialogAdsRemover;
-import static com.mygdx.core.MyGdxGame.dialogFireBall;
-import static com.mygdx.core.MyGdxGame.dialogFireBall2;
-import static com.mygdx.core.MyGdxGame.dialogFireBallListener;
+import static com.mygdx.core.MyGdxGame.dialogBootNotPurchased;
+import static com.mygdx.core.MyGdxGame.dialogBootPurchased;
+import static com.mygdx.core.MyGdxGame.dialogBrickNotPurchased;
+import static com.mygdx.core.MyGdxGame.dialogBrickPurchased;
+import static com.mygdx.core.MyGdxGame.dialogCoin1NotPurchased;
+import static com.mygdx.core.MyGdxGame.dialogCoin2NotPurchased;
+import static com.mygdx.core.MyGdxGame.dialogCoin3NotPurchased;
+import static com.mygdx.core.MyGdxGame.dialogExcaliburNotPurchased;
+import static com.mygdx.core.MyGdxGame.dialogExcaliburPurchased;
+import static com.mygdx.core.MyGdxGame.dialogFireBall2NotPurchased;
+import static com.mygdx.core.MyGdxGame.dialogFireBall2Purchased;
+import static com.mygdx.core.MyGdxGame.dialogFireBallNotPurchased;
+import static com.mygdx.core.MyGdxGame.dialogFireBallPurchased;
+import static com.mygdx.core.MyGdxGame.dialogKamehamehaNotPurchased;
+import static com.mygdx.core.MyGdxGame.dialogKamehamehaPurchased;
+import static com.mygdx.core.MyGdxGame.dialogLightningNotPurchased;
+import static com.mygdx.core.MyGdxGame.dialogLightningPurchased;
+import static com.mygdx.core.MyGdxGame.dialogMegaJumpNotPurchased;
+import static com.mygdx.core.MyGdxGame.dialogMegaJumpPurchased;
 import static com.mygdx.core.MyGdxGame.fade1Shop;
 import static com.mygdx.core.MyGdxGame.fade2Shop;
 import static com.mygdx.core.MyGdxGame.fade3Shop;
@@ -455,6 +468,7 @@ public class Shop extends GameState {
                                         "\n\n" +
                                         "Remove ads?", "buttonAdsUp"){
                             public void result(Object obj) {
+                                dialogAdsRemover.remove();
                                 Gdx.app.debug(LOG_TAG,"result Equip ads free?"+obj);
 
                                 if(obj.toString().equals("true")){
@@ -469,8 +483,9 @@ public class Shop extends GameState {
                                 Save.load();
                             }
                         };
-                        stage1Shop.addActor(dialogAdsRemover);
                     }
+                    dialogAdsRemover.clearActions();
+                    stage1Shop.addActor(dialogAdsRemover);
 
                 }
             }
@@ -491,29 +506,33 @@ public class Shop extends GameState {
                 NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
                 String cur = currencyFormatter.format(1).replaceAll("[0-9.,]","");
                 final int money = 100;
-                ShopDialog dialog = new ShopDialog(Shop.this,
-                        "\n\n" +
-                                money+" COINS\n" +
-                                "\n" +
-                                "Purchase "+money+" coins.\n" +
-                                "\n\n" +
-                                "Buy "+money+" coins.?", "buttonCoins1Up"){
-                    public void result(Object obj) {
-                        Gdx.app.debug(LOG_TAG,"result"+obj);
-                        if(obj.toString().equals("true")){
+                if(dialogCoin1NotPurchased == null){
+                    dialogCoin1NotPurchased = new ShopDialog(Shop.this,
+                            "\n\n" +
+                                    money+" COINS\n" +
+                                    "\n" +
+                                    "Purchase "+money+" coins.\n" +
+                                    "\n\n" +
+                                    "Buy "+money+" coins.?", "buttonCoins1Up"){
+                        public void result(Object obj) {
+                            dialogCoin1NotPurchased.remove();
+                            Gdx.app.debug(LOG_TAG,"result"+obj);
+                            if(obj.toString().equals("true")){
 //                                if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
 //                                    MyGdxGame.res.getSound("point").play();
 //                                }
 //                                Save.gd.setMoney(Save.gd.getMoney()+money);
 //                                Save.save();
 //                                labelMoneyShop.setText(Integer.toString(Save.gd.getMoney()));
-                            MyGdxGame.actionResolver.purchaseHundredCoins();
+                                MyGdxGame.actionResolver.purchaseHundredCoins();
+                            }
+                            Save.save();
+                            Save.load();
                         }
-                        Save.save();
-                        Save.load();
-                    }
-                };
-                stage1Shop.addActor(dialog);
+                    };
+                }
+                dialogCoin1NotPurchased.clearActions();
+                stage1Shop.addActor(dialogCoin1NotPurchased);
             }
         });
 
@@ -534,30 +553,34 @@ public class Shop extends GameState {
                 NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
                 String cur = currencyFormatter.format(1).replaceAll("[0-9.,]","");
                 final int money = 1000;
-                ShopDialog dialog = new ShopDialog(Shop.this,
-                        "\n\n" +
-                                money+" COINS\n" +
-                                "\n" +
-                                "Purchase "+money+" coins.\n" +
-                                "\n\n" +
-                                "Buy "+money+" coins.?", "buttonCoins2Up"){
-                    public void result(Object obj) {
-                        Gdx.app.debug(LOG_TAG,"result"+obj);
+                if(dialogCoin2NotPurchased == null){
+                    dialogCoin2NotPurchased = new ShopDialog(Shop.this,
+                            "\n\n" +
+                                    money+" COINS\n" +
+                                    "\n" +
+                                    "Purchase "+money+" coins.\n" +
+                                    "\n\n" +
+                                    "Buy "+money+" coins.?", "buttonCoins2Up"){
+                        public void result(Object obj) {
+                            dialogCoin2NotPurchased.remove();
+                            Gdx.app.debug(LOG_TAG,"result"+obj);
 
-                        if(obj.toString().equals("true")){
+                            if(obj.toString().equals("true")){
 //                            if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
 //                                MyGdxGame.res.getSound("point").play();
 //                            }
 //                            Save.gd.setMoney(Save.gd.getMoney()+money);
 //                            Save.save();
 //                            labelMoneyShop.setText(Integer.toString(Save.gd.getMoney()));
-                            MyGdxGame.actionResolver.purchaseThousandCoins();
+                                MyGdxGame.actionResolver.purchaseThousandCoins();
+                            }
+                            Save.save();
+                            Save.load();
                         }
-                        Save.save();
-                        Save.load();
-                    }
-                };
-                stage1Shop.addActor(dialog);
+                    };
+                }
+                dialogCoin2NotPurchased.clearActions();
+                stage1Shop.addActor(dialogCoin2NotPurchased);
             }
         });
 
@@ -577,36 +600,40 @@ public class Shop extends GameState {
                 NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
                 String cur = currencyFormatter.format(1).replaceAll("[0-9.,]","");;
                 int value = 40;
-                ShopDialog dialog = new ShopDialog(Shop.this,
-                        "\n\n" +
-                                value+" FREE COINS\n" +
-                                "\n" +
-                                "Watch a video for "+value+" coins FREE.\n" +
-                                "\n\n" +
-                                "Watch video ?", "buttonCoins3Up"){
-                    public void result(Object obj) {
-                        Gdx.app.debug(LOG_TAG,"result"+obj);
+                if(dialogCoin3NotPurchased == null){
+                    dialogCoin3NotPurchased = new ShopDialog(Shop.this,
+                            "\n\n" +
+                                    value+" FREE COINS\n" +
+                                    "\n" +
+                                    "Watch a video for "+value+" coins FREE.\n" +
+                                    "\n\n" +
+                                    "Watch video ?", "buttonCoins3Up"){
+                        public void result(Object obj) {
+                            dialogCoin3NotPurchased.remove();
+                            Gdx.app.debug(LOG_TAG,"result"+obj);
 
-                        if(obj.toString().equals("true")){
-                            String network = MyGdxGame.actionResolver.getNetworkClass();
-                            if(network == null) network = "ABSENT";
-                            Gdx.app.debug(LOG_TAG,"NETWORK: " + network);
-                            if(network.equals("4G")|network.equals("3G")|network.equals("WIFI")) {
-                                MyGdxGame.actionResolver.showRewardedVideoChartBoost();
-                                //game.actionResolver.showRewardedVideoChartBoost();
-                            }
+                            if(obj.toString().equals("true")){
+                                String network = MyGdxGame.actionResolver.getNetworkClass();
+                                if(network == null) network = "ABSENT";
+                                Gdx.app.debug(LOG_TAG,"NETWORK: " + network);
+                                if(network.equals("4G")|network.equals("3G")|network.equals("WIFI")) {
+                                    MyGdxGame.actionResolver.showRewardedVideoChartBoost();
+                                    //game.actionResolver.showRewardedVideoChartBoost();
+                                }
 //                            if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
 //                                MyGdxGame.res.getSound("point").play();
 //                            }
 //                            Save.gd.setMoney(Save.gd.getMoney()+20);
 //                            Save.save();
 //                            labelMoneyShop.setText(Integer.toString(Save.gd.getMoney()));
+                            }
+                            Save.save();
+                            Save.load();
                         }
-                        Save.save();
-                        Save.load();
-                    }
-                };
-                stage1Shop.addActor(dialog);
+                    };
+                }
+                dialogCoin3NotPurchased.clearActions();
+                stage1Shop.addActor(dialogCoin3NotPurchased);
             }
         });
 
@@ -627,8 +654,8 @@ public class Shop extends GameState {
                 final int cost = 1000;
                 if(!Save.gd.isFireBallPurchased()){
 
-                    if(dialogFireBall == null){
-                        dialogFireBall = new ShopDialog(Shop.this,
+                    if(dialogFireBallNotPurchased == null){
+                        dialogFireBallNotPurchased = new ShopDialog(Shop.this,
                                 "\n\n" +
                                         "FIRE BALL\n" +
                                         "\n" +
@@ -638,6 +665,7 @@ public class Shop extends GameState {
                                         "Buy Fire ball?", "buttonFireBallUp"){
                             public void result(Object obj) {
                                 Gdx.app.debug(LOG_TAG,"result Buy Fire ball?"+obj);
+                                dialogFireBallPurchased.remove();
 
                                 if(obj.toString().equals("true") && Save.gd.getMoney() >= cost){
                                     if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
@@ -669,16 +697,26 @@ public class Shop extends GameState {
 
                                 }
                             }
+
+                            @Override
+                            public void hide (Action action) {
+                            }
+
+                            @Override
+                            public void hide () {
+                            }
                         };
-                        stage1Shop.addActor(dialogFireBall);
+
+                        dialogFireBallNotPurchased.clearActions();
+                        stage1Shop.addActor(dialogFireBallNotPurchased);
                     }
 
 
 
                 }else{
 
-                    if(dialogFireBall2 == null){
-                        dialogFireBall2 = new ShopDialog(Shop.this,
+                    if(dialogFireBallPurchased == null){
+                        dialogFireBallPurchased = new ShopDialog(Shop.this,
                                 "\n\n" +
                                         "FIRE BALL\n" +
                                         "\n" +
@@ -688,7 +726,7 @@ public class Shop extends GameState {
                             public void result(Object obj) {
                                 Gdx.app.debug(LOG_TAG,"result Equip Fire ball?"+obj);
 
-                                dialogFireBall2.remove();
+                                dialogFireBallPurchased.remove();
 
                                 if(obj.toString().equals("true")){
                                     if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
@@ -702,7 +740,7 @@ public class Shop extends GameState {
                                     if (Save.gd.isFireBallEquiped() && (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
                                         MyGdxGame.res.getSound("fireball_small").play();
                                     }
-                                    //stage1Shop.getActors().get(stage1Shop.getActors().indexOf(dialogFireBall2,true)).remove();
+                                    //stage1Shop.getActors().get(stage1Shop.getActors().indexOf(dialogFireBallPurchased,true)).remove();
                                 }
                                 if(obj.toString().equals("false")){
                                     Save.gd.setFireBallEquiped(false);
@@ -724,8 +762,8 @@ public class Shop extends GameState {
                     }
 
 
-                    dialogFireBall2.clearActions();
-                    stage1Shop.addActor(dialogFireBall2);
+                    dialogFireBallPurchased.clearActions();
+                    stage1Shop.addActor(dialogFireBallPurchased);
 
                 }
             }
@@ -747,86 +785,111 @@ public class Shop extends GameState {
                 Save.load();
                 final int cost = 800;
                 if(!Save.gd.isFireBall2Purchased()){
-                    ShopDialog dialog = new ShopDialog(Shop.this,
-                            "\n\n" +
-                                    "HADOU BALL\n" +
-                                    "\n" +
-                                    "Can kill multiple enemies.\n"+
-                                    "Reloads by killing enemies.\n" +
-                                    "COST: "+cost+" coins.\n" +
-                                    "\n\n" +
-                                    "Buy Hadou ball?", "buttonFireBall2Up"){
-                        public void result(Object obj) {
-                            Gdx.app.debug(LOG_TAG,"result Equip Fire ball2?"+obj);
+                    if(dialogFireBall2NotPurchased == null){
+                        dialogFireBall2NotPurchased = new ShopDialog(Shop.this,
+                                "\n\n" +
+                                        "HADOU BALL\n" +
+                                        "\n" +
+                                        "Can kill multiple enemies.\n"+
+                                        "Reloads by killing enemies.\n" +
+                                        "COST: "+cost+" coins.\n" +
+                                        "\n\n" +
+                                        "Buy Hadou ball?", "buttonFireBall2Up"){
+                            public void result(Object obj) {
+                                dialogFireBall2NotPurchased.remove();
+                                Gdx.app.debug(LOG_TAG,"result Equip Fire ball2?"+obj);
 
-                            if(obj.toString().equals("true") && Save.gd.getMoney() >= cost){
-                                if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
-                                    MyGdxGame.res.getSound("fireball_big").play();
+                                if(obj.toString().equals("true") && Save.gd.getMoney() >= cost){
+                                    if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
+                                        MyGdxGame.res.getSound("fireball_big").play();
+                                    }
+                                    Save.gd.setFireBall2Purchased(true);
+                                    Save.gd.setFireBall2Equiped(true);
+                                    //Save.gd.setExcaliburEquiped(false);
+                                    Save.gd.setKamehamehaEquiped(false);
+                                    Save.gd.setLightningEquiped(false);
+                                    Save.gd.setFireBallEquiped(false);
+                                    Save.gd.setMoney(Save.gd.getMoney() - cost);
+                                    Save.save();
+                                    labelMoneyShop.setText(Integer.toString(Save.gd.getMoney()));
+                                    //MyGdxGame.actionResolver.purchaseHadouBall();
+                                }else{
+                                    if(obj.toString().equals("true")){
+                                        if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("error").play();
+                                        labelMoneyShop.setColor(Color.RED);
+
+                                        new java.util.Timer().schedule(
+                                                new java.util.TimerTask() {
+                                                    @Override
+                                                    public void run() {
+                                                        // your code here
+                                                        labelMoneyShop.setColor(Color.WHITE);
+                                                    }
+                                                }, 500);
+                                    }
+
                                 }
-                                Save.gd.setFireBall2Purchased(true);
-                                Save.gd.setFireBall2Equiped(true);
-                                //Save.gd.setExcaliburEquiped(false);
-                                Save.gd.setKamehamehaEquiped(false);
-                                Save.gd.setLightningEquiped(false);
-                                Save.gd.setFireBallEquiped(false);
-                                Save.gd.setMoney(Save.gd.getMoney() - cost);
-                                Save.save();
-                                labelMoneyShop.setText(Integer.toString(Save.gd.getMoney()));
-                                //MyGdxGame.actionResolver.purchaseHadouBall();
-                            }else{
-                                if(obj.toString().equals("true")){
-                                    if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("error").play();
-                                    labelMoneyShop.setColor(Color.RED);
-
-                                    new java.util.Timer().schedule(
-                                            new java.util.TimerTask() {
-                                                @Override
-                                                public void run() {
-                                                    // your code here
-                                                    labelMoneyShop.setColor(Color.WHITE);
-                                                }
-                                            }, 500);
-                                }
-
                             }
-                        }
-                    };
-                    stage1Shop.addActor(dialog);
+                            @Override
+                            public void hide (Action action) {
+                            }
+
+                            @Override
+                            public void hide () {
+                            }
+                        };
+                    }
+
+                    dialogFireBall2NotPurchased.clearActions();
+                    stage1Shop.addActor(dialogFireBall2NotPurchased);
                 }else{
 
 
-                    ShopDialog dialog = new ShopDialog(Shop.this,
-                            "\n\n" +
-                                    "HADOU BALL\n" +
-                                    "\n" +
-                                    "Can kill multiple enemies.\n"+
-                                    "Reloads every 4 enemies killed.\n" +
-                                    "\n" +
-                                    "Equip Hadou ball?", "buttonFireBall2Up"){
-                        public void result(Object obj) {
-                            Gdx.app.debug(LOG_TAG,"result Equip Fire ball?"+obj);
+                    if(dialogFireBall2Purchased == null){
+                        dialogFireBall2Purchased = new ShopDialog(Shop.this,
+                                "\n\n" +
+                                        "HADOU BALL\n" +
+                                        "\n" +
+                                        "Can kill multiple enemies.\n"+
+                                        "Reloads every 4 enemies killed.\n" +
+                                        "\n" +
+                                        "Equip Hadou ball?", "buttonFireBall2Up"){
+                            public void result(Object obj) {
 
-                            if(obj.toString().equals("true")){
-                                if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
-                                    MyGdxGame.res.getSound("fireball_big").play();
+                                dialogFireBall2Purchased.remove();
+                                Gdx.app.debug(LOG_TAG,"result Equip Fire ball?"+obj);
+
+                                if(obj.toString().equals("true")){
+                                    if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
+                                        MyGdxGame.res.getSound("fireball_big").play();
+                                    }
+                                    Save.gd.setFireBall2Equiped(true);
+                                    //Save.gd.setExcaliburEquiped(false);
+                                    Save.gd.setKamehamehaEquiped(false);
+                                    Save.gd.setLightningEquiped(false);
+                                    Save.gd.setFireBallEquiped(false);
+                                    if (Save.gd.isFireBallEquiped() && (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
+                                        MyGdxGame.res.getSound("fireball_big").play();
+                                    }
                                 }
-                                Save.gd.setFireBall2Equiped(true);
-                                //Save.gd.setExcaliburEquiped(false);
-                                Save.gd.setKamehamehaEquiped(false);
-                                Save.gd.setLightningEquiped(false);
-                                Save.gd.setFireBallEquiped(false);
-                                if (Save.gd.isFireBallEquiped() && (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
-                                    MyGdxGame.res.getSound("fireball_big").play();
+                                if(obj.toString().equals("false")){
+                                    Save.gd.setFireBall2Equiped(false);
                                 }
+                                Save.save();
+                                Save.load();
                             }
-                            if(obj.toString().equals("false")){
-                                Save.gd.setFireBall2Equiped(false);
+                            @Override
+                            public void hide (Action action) {
                             }
-                            Save.save();
-                            Save.load();
-                        }
-                    };
-                    stage1Shop.addActor(dialog);
+
+                            @Override
+                            public void hide () {
+                            }
+                        };
+                    }
+
+                    dialogFireBall2Purchased.clearActions();
+                    stage1Shop.addActor(dialogFireBall2Purchased);
                 }
             }
         });
@@ -839,7 +902,7 @@ public class Shop extends GameState {
                 return true;
             }
 
-            ;
+
 
             public void touchUp(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
@@ -848,75 +911,84 @@ public class Shop extends GameState {
                 Save.load();
                 final int cost = 1000;
                 if(!Save.gd.isExcaliburPurchased()){
-                    ShopDialog dialog = new ShopDialog(Shop.this,
-                            "\n\n" +
-                                    "EXCALIBUR\n" +
-                                    "\n" +
-                                    "Excalibur kill enemy in one swing.\n" +
-                                    "COST: "+cost+" coins.\n" +
-                                    "\n" +
-                                    "Buy Excalibur?", "buttonExcaliburUp"){
-                        public void result(Object obj) {
-                            Gdx.app.debug(LOG_TAG,"result Equip Excalibur?"+obj);
+                    if(dialogExcaliburNotPurchased == null){
+                        dialogExcaliburNotPurchased = new ShopDialog(Shop.this,
+                                "\n\n" +
+                                        "EXCALIBUR\n" +
+                                        "\n" +
+                                        "Excalibur kill enemy in one swing.\n" +
+                                        "COST: "+cost+" coins.\n" +
+                                        "\n" +
+                                        "Buy Excalibur?", "buttonExcaliburUp"){
+                            public void result(Object obj) {
+                                Gdx.app.debug(LOG_TAG,"result Equip Excalibur?"+obj);
+                                dialogExcaliburNotPurchased.remove();
 
-                            if(obj.toString().equals("true") && Save.gd.getMoney() >= cost){
-                                if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
-                                    MyGdxGame.res.getMusic("slash").play();
+                                if(obj.toString().equals("true") && Save.gd.getMoney() >= cost){
+                                    if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
+                                        MyGdxGame.res.getMusic("slash").play();
+                                    }
+                                    Save.gd.setExcaliburPurchased(true);
+                                    Save.gd.setExcaliburEquiped(true);
+                                    Save.gd.setFireBallEquiped(false);
+                                    //Save.gd.setKamehamehaEquiped(false);
+                                    Save.gd.setMoney(Save.gd.getMoney() - cost);
+                                    Save.save();
+                                    labelMoneyShop.setText(Integer.toString(Save.gd.getMoney()));
+                                    //MyGdxGame.actionResolver.purchaseExcalibur();
+                                }else{
+                                    if(obj.toString().equals("true")){
+                                        if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("error").play();
+                                        labelMoneyShop.setColor(Color.RED);
+
+                                        new java.util.Timer().schedule(
+                                                new java.util.TimerTask() {
+                                                    @Override
+                                                    public void run() {
+                                                        // your code here
+                                                        labelMoneyShop.setColor(Color.WHITE);
+                                                    }
+                                                }, 500);
+                                    }
+
                                 }
-                                Save.gd.setExcaliburPurchased(true);
-                                Save.gd.setExcaliburEquiped(true);
-                                Save.gd.setFireBallEquiped(false);
-                                //Save.gd.setKamehamehaEquiped(false);
-                                Save.gd.setMoney(Save.gd.getMoney() - cost);
-                                Save.save();
-                                labelMoneyShop.setText(Integer.toString(Save.gd.getMoney()));
-                                //MyGdxGame.actionResolver.purchaseExcalibur();
-                            }else{
-                                if(obj.toString().equals("true")){
-                                    if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("error").play();
-                                    labelMoneyShop.setColor(Color.RED);
-
-                                    new java.util.Timer().schedule(
-                                            new java.util.TimerTask() {
-                                                @Override
-                                                public void run() {
-                                                    // your code here
-                                                    labelMoneyShop.setColor(Color.WHITE);
-                                                }
-                                            }, 500);
-                                }
-
                             }
-                        }
-                    };
-                    stage1Shop.addActor(dialog);
+                        };
+                    }
+                    dialogExcaliburNotPurchased.clearActions();
+                    stage1Shop.addActor(dialogExcaliburNotPurchased);
                 }else{
-                    ShopDialog dialog = new ShopDialog(Shop.this,
-                            "\n\n" +
-                                    "EXCALIBUR\n" +
-                                    "\n" +
-                                    "Excalibur kill enemy in one swing.\n" +
-                                    "\n" +
-                                    "Equip Excalibur?", "buttonExcaliburUp"){
-                        public void result(Object obj) {
-                            Gdx.app.debug(LOG_TAG,"result Equip Fire ball?"+obj);
 
-                            if(obj.toString().equals("true")){
-                                Save.gd.setExcaliburEquiped(true);
-                                //Save.gd.setFireBallEquiped(false);
-                                //Save.gd.setKamehamehaEquiped(false);
-                                if (Save.gd.isExcaliburEquiped() && (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
-                                    MyGdxGame.res.getMusic("slash").play();
+                    if(dialogExcaliburPurchased == null){
+                        dialogExcaliburPurchased = new ShopDialog(Shop.this,
+                                "\n\n" +
+                                        "EXCALIBUR\n" +
+                                        "\n" +
+                                        "Excalibur kill enemy in one swing.\n" +
+                                        "\n" +
+                                        "Equip Excalibur?", "buttonExcaliburUp"){
+                            public void result(Object obj) {
+                                dialogExcaliburPurchased.remove();
+                                Gdx.app.debug(LOG_TAG,"result Equip Fire ball?"+obj);
+
+                                if(obj.toString().equals("true")){
+                                    Save.gd.setExcaliburEquiped(true);
+                                    //Save.gd.setFireBallEquiped(false);
+                                    //Save.gd.setKamehamehaEquiped(false);
+                                    if (Save.gd.isExcaliburEquiped() && (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
+                                        MyGdxGame.res.getMusic("slash").play();
+                                    }
                                 }
+                                if(obj.toString().equals("false")){
+                                    Save.gd.setExcaliburEquiped(false);
+                                }
+                                Save.save();
+                                Save.load();
                             }
-                            if(obj.toString().equals("false")){
-                                Save.gd.setExcaliburEquiped(false);
-                            }
-                            Save.save();
-                            Save.load();
-                        }
-                    };
-                    stage1Shop.addActor(dialog);
+                        };
+                    }
+                    dialogExcaliburPurchased.clearActions();
+                    stage1Shop.addActor(dialogExcaliburPurchased);
                 }
             }
         });
@@ -936,80 +1008,87 @@ public class Shop extends GameState {
                 Save.load();
                 final int cost = 900;
                 if(!Save.gd.isKamehamehaPurchased()){
-                    ShopDialog dialog = new ShopDialog(Shop.this,
-                            "\n\n" +
-                                    "KAME BEAM\n" +
-                                    "\n" +
-                                    "Destroys everything.\n" +
-                                    "COST: "+cost+" coins.\n" +
-                                    "\n" +
-                                    "Buy Kame beam?", "buttonKamehamehaUp"){
-                        public void result(Object obj) {
-                            Gdx.app.debug(LOG_TAG,"result Buy Kamehameha?"+obj);
+                    if(dialogKamehamehaNotPurchased == null){
+                        dialogKamehamehaNotPurchased = new ShopDialog(Shop.this,
+                                "\n\n" +
+                                        "KAME BEAM\n" +
+                                        "\n" +
+                                        "Destroys everything.\n" +
+                                        "COST: "+cost+" coins.\n" +
+                                        "\n" +
+                                        "Buy Kame beam?", "buttonKamehamehaUp"){
+                            public void result(Object obj) {
+                                dialogKamehamehaNotPurchased.remove();
+                                Gdx.app.debug(LOG_TAG,"result Buy Kamehameha?"+obj);
 
+                                if(obj.toString().equals("true") && Save.gd.getMoney() >= cost){
+                                    if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
+                                        MyGdxGame.res.getMusic("kame").play();
+                                    }
+                                    Save.gd.setKamehamehaPurchased(true);
+                                    Save.gd.setKamehamehaEquiped(true);
+                                    Save.gd.setFireBallEquiped(false);
+                                    Save.gd.setFireBall2Equiped(false);
+                                    Save.gd.setLightningEquiped(false);
+                                    Save.gd.setMoney(Save.gd.getMoney() - cost);
+                                    Save.save();
+                                    labelMoneyShop.setText(Integer.toString(Save.gd.getMoney()));
+                                    //MyGdxGame.actionResolver.purchaseKamebeam();
+                                }else{
 
-                            if(obj.toString().equals("true") && Save.gd.getMoney() >= cost){
-                                if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
-                                    MyGdxGame.res.getMusic("kame").play();
+                                    if(obj.toString().equals("true")){
+                                        if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("error").play();
+                                        labelMoneyShop.setColor(Color.RED);
+
+                                        new java.util.Timer().schedule(
+                                                new java.util.TimerTask() {
+                                                    @Override
+                                                    public void run() {
+                                                        // your code here
+                                                        labelMoneyShop.setColor(Color.WHITE);
+                                                    }
+                                                }, 500);
+                                    }
+
                                 }
-                                Save.gd.setKamehamehaPurchased(true);
-                                Save.gd.setKamehamehaEquiped(true);
-                                Save.gd.setFireBallEquiped(false);
-                                Save.gd.setFireBall2Equiped(false);
-                                Save.gd.setLightningEquiped(false);
-                                Save.gd.setMoney(Save.gd.getMoney() - cost);
-                                Save.save();
-                                labelMoneyShop.setText(Integer.toString(Save.gd.getMoney()));
-                                //MyGdxGame.actionResolver.purchaseKamebeam();
-                            }else{
-
-                                if(obj.toString().equals("true")){
-                                    if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("error").play();
-                                    labelMoneyShop.setColor(Color.RED);
-
-                                    new java.util.Timer().schedule(
-                                            new java.util.TimerTask() {
-                                                @Override
-                                                public void run() {
-                                                    // your code here
-                                                    labelMoneyShop.setColor(Color.WHITE);
-                                                }
-                                            }, 500);
-                                }
-
                             }
-                        }
-                    };
-                    stage1Shop.addActor(dialog);
+                        };
+                    }
+                    dialogKamehamehaNotPurchased.clearActions();
+                    stage1Shop.addActor(dialogKamehamehaNotPurchased);
                 }else{
 
-                    ShopDialog dialog = new ShopDialog(Shop.this,
-                            "\n\n" +
-                                    "KAME BEAM\n" +
-                                    "\n" +
-                                    "Destroys everything.\n" +
-                                    "\n" +
-                                    "Equip Kame beam?", "buttonKamehamehaUp"){
-                        public void result(Object obj) {
-                            Gdx.app.debug(LOG_TAG,"result Equip Fire ball?"+obj);
+                    if(dialogKamehamehaPurchased == null){
+                        dialogKamehamehaPurchased = new ShopDialog(Shop.this,
+                                "\n\n" +
+                                        "KAME BEAM\n" +
+                                        "\n" +
+                                        "Destroys everything.\n" +
+                                        "\n" +
+                                        "Equip Kame beam?", "buttonKamehamehaUp"){
+                            public void result(Object obj) {
+                                dialogKamehamehaPurchased.remove();
+                                Gdx.app.debug(LOG_TAG,"result Equip Fire ball?"+obj);
 
-                            if(obj.toString().equals("true")){
-                                Save.gd.setKamehamehaEquiped(true);
-                                Save.gd.setFireBallEquiped(false);
-                                Save.gd.setFireBall2Equiped(false);
-                                Save.gd.setLightningEquiped(false);
-                                if (Save.gd.isKamehamehaEquiped() && (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
-                                    MyGdxGame.res.getSound("kame").play();
+                                if(obj.toString().equals("true")){
+                                    Save.gd.setKamehamehaEquiped(true);
+                                    Save.gd.setFireBallEquiped(false);
+                                    Save.gd.setFireBall2Equiped(false);
+                                    Save.gd.setLightningEquiped(false);
+                                    if (Save.gd.isKamehamehaEquiped() && (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
+                                        MyGdxGame.res.getSound("kame").play();
+                                    }
                                 }
+                                if(obj.toString().equals("false")){
+                                    Save.gd.setKamehamehaEquiped(false);
+                                }
+                                Save.save();
+                                Save.load();
                             }
-                            if(obj.toString().equals("false")){
-                                Save.gd.setKamehamehaEquiped(false);
-                            }
-                            Save.save();
-                            Save.load();
-                        }
-                    };
-                    stage1Shop.addActor(dialog);
+                        };
+                    }
+                    dialogKamehamehaPurchased.clearActions();
+                    stage1Shop.addActor(dialogKamehamehaPurchased);
                 }
 
 
@@ -1032,73 +1111,80 @@ public class Shop extends GameState {
                 Save.load();
                 final int cost = 300;
                 if(!Save.gd.isBootPurchased()){
-                    ShopDialog dialog = new ShopDialog(Shop.this,
-                            "\n\n" +
-                                    "BOOTS\n" +
-                                    "\n" +
-                                    "Make you faster.\n" +
-                                    "COST: "+cost+" coins.\n" +
-                                    "\n" +
-                                    "Buy Boots?", "buttonBootUp"){
-                        public void result(Object obj) {
-                            Gdx.app.debug(LOG_TAG,"result Buy boot?"+obj);
+                    if(dialogBootNotPurchased == null){
+                        dialogBootNotPurchased = new ShopDialog(Shop.this,
+                                "\n\n" +
+                                        "BOOTS\n" +
+                                        "\n" +
+                                        "Make you faster.\n" +
+                                        "COST: "+cost+" coins.\n" +
+                                        "\n" +
+                                        "Buy Boots?", "buttonBootUp"){
+                            public void result(Object obj) {
+                                dialogBootNotPurchased.remove();
+                                Gdx.app.debug(LOG_TAG,"result Buy boot?"+obj);
 
+                                if(obj.toString().equals("true") && Save.gd.getMoney() >= cost){
+                                    if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
+                                        MyGdxGame.res.getMusic("newScreen").play();
+                                    }
+                                    Save.gd.setBootPurchased(true);
+                                    Save.gd.setBootEquiped(true);
+                                    Save.gd.setMoney(Save.gd.getMoney() - cost);
+                                    Save.save();
+                                    labelMoneyShop.setText(Integer.toString(Save.gd.getMoney()));
+                                    //MyGdxGame.actionResolver.purchaseBoots();
+                                }else{
 
-                            if(obj.toString().equals("true") && Save.gd.getMoney() >= cost){
-                                if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
-                                    MyGdxGame.res.getMusic("newScreen").play();
+                                    if(obj.toString().equals("true")){
+                                        if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("error").play();
+                                        labelMoneyShop.setColor(Color.RED);
+
+                                        new java.util.Timer().schedule(
+                                                new java.util.TimerTask() {
+                                                    @Override
+                                                    public void run() {
+                                                        // your code here
+                                                        labelMoneyShop.setColor(Color.WHITE);
+                                                    }
+                                                }, 500);
+                                    }
+
                                 }
-                                Save.gd.setBootPurchased(true);
-                                Save.gd.setBootEquiped(true);
-                                Save.gd.setMoney(Save.gd.getMoney() - cost);
-                                Save.save();
-                                labelMoneyShop.setText(Integer.toString(Save.gd.getMoney()));
-                                //MyGdxGame.actionResolver.purchaseBoots();
-                            }else{
+                            }
+                        };
+                    }
+                    dialogBootNotPurchased.clearActions();
+                    stage1Shop.addActor(dialogBootNotPurchased);
+                }else{
+                    if(dialogBootPurchased == null){
+                        dialogBootPurchased = new ShopDialog(Shop.this,
+                                "\n\n" +
+                                        "BOOTS\n" +
+                                        "\n" +
+                                        "Make you faster.\n" +
+                                        "\n" +
+                                        "Equip Boots?", "buttonBootUp"){
+                            public void result(Object obj) {
+                                dialogBootPurchased.remove();
+                                Gdx.app.debug(LOG_TAG,"result Equip boots ball?"+obj);
 
                                 if(obj.toString().equals("true")){
-                                    if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("error").play();
-                                    labelMoneyShop.setColor(Color.RED);
-
-                                    new java.util.Timer().schedule(
-                                            new java.util.TimerTask() {
-                                                @Override
-                                                public void run() {
-                                                    // your code here
-                                                    labelMoneyShop.setColor(Color.WHITE);
-                                                }
-                                            }, 500);
+                                    Save.gd.setBootEquiped(true);
+                                    if (Save.gd.isBootEquiped() && (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
+                                        MyGdxGame.res.getMusic("newScreen").play();
+                                    }
                                 }
-
-                            }
-                        }
-                    };
-                    stage1Shop.addActor(dialog);
-                }else{
-                    ShopDialog dialog = new ShopDialog(Shop.this,
-                            "\n\n" +
-                                    "BOOTS\n" +
-                                    "\n" +
-                                    "Make you faster.\n" +
-                                    "\n" +
-                                    "Equip Boots?", "buttonBootUp"){
-                        public void result(Object obj) {
-                            Gdx.app.debug(LOG_TAG,"result Equip boots ball?"+obj);
-
-                            if(obj.toString().equals("true")){
-                                Save.gd.setBootEquiped(true);
-                                if (Save.gd.isBootEquiped() && (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
-                                    MyGdxGame.res.getMusic("newScreen").play();
+                                if(obj.toString().equals("false")){
+                                    Save.gd.setBootEquiped(false);
                                 }
+                                Save.save();
+                                Save.load();
                             }
-                            if(obj.toString().equals("false")){
-                                Save.gd.setBootEquiped(false);
-                            }
-                            Save.save();
-                            Save.load();
-                        }
-                    };
-                    stage1Shop.addActor(dialog);
+                        };
+                    }
+                    dialogBootPurchased.clearActions();
+                    stage1Shop.addActor(dialogBootPurchased);
                 }
             }
         });
@@ -1118,74 +1204,81 @@ public class Shop extends GameState {
                 Save.load();
                 final int cost = 800;
                 if(!Save.gd.isBrick2Purchased()){
-                    ShopDialog dialog = new ShopDialog(Shop.this,
-                            "\n\n" +
-                                    "SUPER BRICK SUMMON\n" +
-                                    "\n" +
-                                    "Stronger than regular brick.\n" +
-                                    "COST: "+cost+" coins.\n" +
-                                    "\n" +
-                                    "Buy Super brick summon?", "buttonBrick2Up"){
-                        public void result(Object obj) {
-                            Gdx.app.debug(LOG_TAG,"result Buy Brick?"+obj);
+                    if(dialogBrickNotPurchased == null){
+                        dialogBrickNotPurchased = new ShopDialog(Shop.this,
+                                "\n\n" +
+                                        "SUPER BRICK SUMMON\n" +
+                                        "\n" +
+                                        "Stronger than regular brick.\n" +
+                                        "COST: "+cost+" coins.\n" +
+                                        "\n" +
+                                        "Buy Super brick summon?", "buttonBrick2Up"){
+                            public void result(Object obj) {
+                                dialogBrickNotPurchased.remove();
+                                Gdx.app.debug(LOG_TAG,"result Buy Brick?"+obj);
 
+                                if(obj.toString().equals("true") && Save.gd.getMoney() >= cost){
+                                    if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
+                                        MyGdxGame.res.getMusic("newScreen").play();
+                                    }
+                                    Save.gd.setBrick2Purchased(true);
+                                    Save.gd.setBrick2Equiped(true);
+                                    Save.gd.setMoney(Save.gd.getMoney() - cost);
+                                    Save.save();
+                                    labelMoneyShop.setText(Integer.toString(Save.gd.getMoney()));
+                                    //MyGdxGame.actionResolver.purchaseSuperBrick();
+                                }else{
 
-                            if(obj.toString().equals("true") && Save.gd.getMoney() >= cost){
-                                if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
-                                    MyGdxGame.res.getMusic("newScreen").play();
+                                    if(obj.toString().equals("true")){
+                                        if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("error").play();
+                                        labelMoneyShop.setColor(Color.RED);
+
+                                        new java.util.Timer().schedule(
+                                                new java.util.TimerTask() {
+                                                    @Override
+                                                    public void run() {
+                                                        // your code here
+                                                        labelMoneyShop.setColor(Color.WHITE);
+                                                    }
+                                                }, 500);
+                                    }
+
                                 }
-                                Save.gd.setBrick2Purchased(true);
-                                Save.gd.setBrick2Equiped(true);
-                                Save.gd.setMoney(Save.gd.getMoney() - cost);
-                                Save.save();
-                                labelMoneyShop.setText(Integer.toString(Save.gd.getMoney()));
-                                //MyGdxGame.actionResolver.purchaseSuperBrick();
-                            }else{
+                            }
+                        };
+                    }
+                    dialogBrickNotPurchased.clearActions();
+                    stage1Shop.addActor(dialogBrickNotPurchased);
+                }else{
+                    if(dialogBrickPurchased == null){
+                        dialogBrickPurchased = new ShopDialog(Shop.this,
+                                "\n\n" +
+                                        "SUPER BRICK SUMMON\n" +
+                                        "\n" +
+                                        "Stronger than regular brick.\n" +
+                                        "\n" +
+                                        "Equip Super brick summon?", "buttonBrick2Up"){
+                            public void result(Object obj) {
+                                dialogBrickPurchased.remove();
+                                Gdx.app.debug(LOG_TAG,"result Equip Fire ball?"+obj);
 
                                 if(obj.toString().equals("true")){
-                                    if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("error").play();
-                                    labelMoneyShop.setColor(Color.RED);
-
-                                    new java.util.Timer().schedule(
-                                            new java.util.TimerTask() {
-                                                @Override
-                                                public void run() {
-                                                    // your code here
-                                                    labelMoneyShop.setColor(Color.WHITE);
-                                                }
-                                            }, 500);
+                                    Save.gd.setBrick2Equiped(true);
+                                    if (Save.gd.isBootEquiped() && (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
+                                        MyGdxGame.res.getMusic("newScreen").play();
+                                    }
+                                }
+                                if(obj.toString().equals("false")){
+                                    Save.gd.setBrick2Equiped(false);
                                 }
 
+                                Save.save();
+                                Save.load();
                             }
-                        }
-                    };
-                    stage1Shop.addActor(dialog);
-                }else{
-                    ShopDialog dialog = new ShopDialog(Shop.this,
-                            "\n\n" +
-                                    "SUPER BRICK SUMMON\n" +
-                                    "\n" +
-                                    "Stronger than regular brick.\n" +
-                                    "\n" +
-                                    "Equip Super brick summon?", "buttonBrick2Up"){
-                        public void result(Object obj) {
-                            Gdx.app.debug(LOG_TAG,"result Equip Fire ball?"+obj);
-
-                            if(obj.toString().equals("true")){
-                                Save.gd.setBrick2Equiped(true);
-                                if (Save.gd.isBootEquiped() && (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
-                                    MyGdxGame.res.getMusic("newScreen").play();
-                                }
-                            }
-                            if(obj.toString().equals("false")){
-                                Save.gd.setBrick2Equiped(false);
-                            }
-
-                            Save.save();
-                            Save.load();
-                        }
-                    };
-                    stage1Shop.addActor(dialog);
+                        };
+                    }
+                    dialogBrickPurchased.clearActions();
+                    stage1Shop.addActor(dialogBrickPurchased);
                 }
 
             }
@@ -1205,81 +1298,89 @@ public class Shop extends GameState {
                 Save.load();
                 final int cost = 2000;
                 if(!Save.gd.isLightningPurchased()){
-                    ShopDialog dialog = new ShopDialog(Shop.this,
-                            "\n\n" +
-                                    "LIGHTNING SUMMON\n" +
-                                    "\n" +
-                                    "Unleash mighty attack.\n" +
-                                    "COST: "+cost+" coins.\n" +
-                                    "\n" +
-                                    "Buy Lightning summon?", "buttonLightningUp"){
-                        public void result(Object obj) {
-                            Gdx.app.debug(LOG_TAG,"result Buy Brick?"+obj);
+                    if(dialogLightningNotPurchased == null){
+                        dialogLightningNotPurchased = new ShopDialog(Shop.this,
+                                "\n\n" +
+                                        "LIGHTNING SUMMON\n" +
+                                        "\n" +
+                                        "Unleash mighty attack.\n" +
+                                        "COST: "+cost+" coins.\n" +
+                                        "\n" +
+                                        "Buy Lightning summon?", "buttonLightningUp"){
+                            public void result(Object obj) {
+                                dialogLightningNotPurchased.remove();
+                                Gdx.app.debug(LOG_TAG,"result Buy Brick?"+obj);
 
 
-                            if(obj.toString().equals("true") && Save.gd.getMoney() >= cost){
-                                if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
-                                    MyGdxGame.res.getSound("lightning").play();
+                                if(obj.toString().equals("true") && Save.gd.getMoney() >= cost){
+                                    if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
+                                        MyGdxGame.res.getSound("lightning").play();
+                                    }
+
+                                    Save.gd.setLightningPurchased(true);
+                                    Save.gd.setLightningEquiped(true);
+                                    Save.gd.setFireBallEquiped(false);
+                                    Save.gd.setFireBall2Equiped(false);
+                                    Save.gd.setKamehamehaEquiped(false);
+                                    Save.gd.setMoney(Save.gd.getMoney() - cost);
+                                    Save.save();
+                                    labelMoneyShop.setText(Integer.toString(Save.gd.getMoney()));
+
+                                }else{
+
+                                    if(obj.toString().equals("true")){
+                                        if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("error").play();
+                                        labelMoneyShop.setColor(Color.RED);
+
+                                        new java.util.Timer().schedule(
+                                                new java.util.TimerTask() {
+                                                    @Override
+                                                    public void run() {
+                                                        // your code here
+                                                        labelMoneyShop.setColor(Color.WHITE);
+                                                    }
+                                                }, 500);
+                                    }
+
                                 }
-
-                                Save.gd.setLightningPurchased(true);
-                                Save.gd.setLightningEquiped(true);
-                                Save.gd.setFireBallEquiped(false);
-                                Save.gd.setFireBall2Equiped(false);
-                                Save.gd.setKamehamehaEquiped(false);
-                                Save.gd.setMoney(Save.gd.getMoney() - cost);
-                                Save.save();
-                                labelMoneyShop.setText(Integer.toString(Save.gd.getMoney()));
-
-                            }else{
-
-                                if(obj.toString().equals("true")){
-                                    if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("error").play();
-                                    labelMoneyShop.setColor(Color.RED);
-
-                                    new java.util.Timer().schedule(
-                                            new java.util.TimerTask() {
-                                                @Override
-                                                public void run() {
-                                                    // your code here
-                                                    labelMoneyShop.setColor(Color.WHITE);
-                                                }
-                                            }, 500);
-                                }
-
                             }
-                        }
-                    };
-                    stage1Shop.addActor(dialog);
+                        };
+                    }
+                    dialogLightningNotPurchased.clearActions();
+                    stage1Shop.addActor(dialogLightningNotPurchased);
                 }
                 else{
-                    ShopDialog dialog = new ShopDialog(Shop.this,
-                            "\n\n" +
-                                    "LIGHTNING SUMMON\n" +
-                                    "\n" +
-                                    "Unleash mighty attack.\n" +
-                                    "\n" +
-                                    "Equip Lightning summon?", "buttonLightningUp"){
-                        public void result(Object obj) {
-                            Gdx.app.debug(LOG_TAG,"result Equip buttonLightningUp"+obj);
+                    if(dialogLightningPurchased == null){
+                        dialogLightningPurchased = new ShopDialog(Shop.this,
+                                "\n\n" +
+                                        "LIGHTNING SUMMON\n" +
+                                        "\n" +
+                                        "Unleash mighty attack.\n" +
+                                        "\n" +
+                                        "Equip Lightning summon?", "buttonLightningUp"){
+                            public void result(Object obj) {
+                                dialogLightningPurchased.remove();
+                                Gdx.app.debug(LOG_TAG,"result Equip buttonLightningUp"+obj);
 
-                            if(obj.toString().equals("true")){
-                                Save.gd.setLightningEquiped(true);
-                                Save.gd.setFireBallEquiped(false);
-                                Save.gd.setFireBall2Equiped(false);
-                                Save.gd.setKamehamehaEquiped(false);
-                                if (Save.gd.isBrick2Equiped() && (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
-                                    MyGdxGame.res.getSound("lightning").play();
+                                if(obj.toString().equals("true")){
+                                    Save.gd.setLightningEquiped(true);
+                                    Save.gd.setFireBallEquiped(false);
+                                    Save.gd.setFireBall2Equiped(false);
+                                    Save.gd.setKamehamehaEquiped(false);
+                                    if (Save.gd.isBrick2Equiped() && (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
+                                        MyGdxGame.res.getSound("lightning").play();
+                                    }
                                 }
+                                if(obj.toString().equals("false")){
+                                    Save.gd.setLightningEquiped(false);
+                                }
+                                Save.save();
+                                Save.load();
                             }
-                            if(obj.toString().equals("false")){
-                                Save.gd.setLightningEquiped(false);
-                            }
-                            Save.save();
-                            Save.load();
-                        }
-                    };
-                    stage1Shop.addActor(dialog);
+                        };
+                    }
+                    dialogLightningPurchased.clearActions();
+                    stage1Shop.addActor(dialogLightningPurchased);
                 }
             }
         });
@@ -1298,74 +1399,81 @@ public class Shop extends GameState {
                 Save.load();
                 final int cost = 250;
                 if(!Save.gd.isMegaJumpPurchased()){
-                    ShopDialog dialog = new ShopDialog(Shop.this,
-                            "\n\n" +
-                                    "MEGA JUMP\n" +
-                                    "\n" +
-                                    "Jump higher.\n" +
-                                    "COST: "+cost+" coins.\n" +
-                                    "\n" +
-                                    "Buy Mega jump", "buttonMegaJumpUp"){
-                        public void result(Object obj) {
-                            Gdx.app.debug(LOG_TAG,"result Buy Mega jump?"+obj);
+                    if(dialogMegaJumpNotPurchased == null){
+                        dialogMegaJumpNotPurchased = new ShopDialog(Shop.this,
+                                "\n\n" +
+                                        "MEGA JUMP\n" +
+                                        "\n" +
+                                        "Jump higher.\n" +
+                                        "COST: "+cost+" coins.\n" +
+                                        "\n" +
+                                        "Buy Mega jump", "buttonMegaJumpUp"){
+                            public void result(Object obj) {
+                                dialogMegaJumpNotPurchased.remove();
+                                Gdx.app.debug(LOG_TAG,"result Buy Mega jump?"+obj);
 
+                                if(obj.toString().equals("true") && Save.gd.getMoney() >= cost){
+                                    if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
+                                        MyGdxGame.res.getMusic("newScreen").play();
+                                    }
 
-                            if(obj.toString().equals("true") && Save.gd.getMoney() >= cost){
-                                if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
-                                    MyGdxGame.res.getMusic("newScreen").play();
-                                }
+                                    Save.gd.setMegaJumpPurchased(true);
+                                    Save.gd.setMegaJumpEquiped(true);
+                                    Save.gd.setMoney(Save.gd.getMoney() - cost);
+                                    Save.save();
+                                    labelMoneyShop.setText(Integer.toString(Save.gd.getMoney()));
+                                }else{
 
-                                Save.gd.setMegaJumpPurchased(true);
-                                Save.gd.setMegaJumpEquiped(true);
-                                Save.gd.setMoney(Save.gd.getMoney() - cost);
-                                Save.save();
-                                labelMoneyShop.setText(Integer.toString(Save.gd.getMoney()));
-                            }else{
+                                    if(obj.toString().equals("true")){
+                                        if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("error").play();
+                                        labelMoneyShop.setColor(Color.RED);
 
-                                if(obj.toString().equals("true")){
-                                    if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("error").play();
-                                    labelMoneyShop.setColor(Color.RED);
-
-                                    new java.util.Timer().schedule(
-                                            new java.util.TimerTask() {
-                                                @Override
-                                                public void run() {
-                                                    // your code here
-                                                    labelMoneyShop.setColor(Color.WHITE);
-                                                }
-                                            }, 500);
+                                        new java.util.Timer().schedule(
+                                                new java.util.TimerTask() {
+                                                    @Override
+                                                    public void run() {
+                                                        // your code here
+                                                        labelMoneyShop.setColor(Color.WHITE);
+                                                    }
+                                                }, 500);
+                                    }
                                 }
                             }
-                        }
-                    };
-                    stage1Shop.addActor(dialog);
+                        };
+                    }
+                    dialogMegaJumpNotPurchased.clearActions();
+                    stage1Shop.addActor(dialogMegaJumpNotPurchased);
                 }
                 else{
 
-                    ShopDialog dialog = new ShopDialog(Shop.this,
-                            "\n\n" +
-                                    "MEGA JUMP\n" +
-                                    "\n" +
-                                    "Jump higher.\n" +
-                                    "\n" +
-                                    "Equip Mega jump", "buttonMegaJumpUp"){
-                        public void result(Object obj) {
-                            Gdx.app.debug(LOG_TAG,"result Equip Mega jump"+obj);
+                    if(dialogMegaJumpPurchased == null){
+                        dialogMegaJumpPurchased = new ShopDialog(Shop.this,
+                                "\n\n" +
+                                        "MEGA JUMP\n" +
+                                        "\n" +
+                                        "Jump higher.\n" +
+                                        "\n" +
+                                        "Equip Mega jump", "buttonMegaJumpUp"){
+                            public void result(Object obj) {
+                                dialogMegaJumpPurchased.remove();
+                                Gdx.app.debug(LOG_TAG,"result Equip Mega jump"+obj);
 
-                            if(obj.toString().equals("true")){
-                                Save.gd.setMegaJumpEquiped(true);
-                                if (Save.gd.isBrick2Equiped() && (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
-                                    MyGdxGame.res.getMusic("newScreen").play();
+                                if(obj.toString().equals("true")){
+                                    Save.gd.setMegaJumpEquiped(true);
+                                    if (Save.gd.isBrick2Equiped() && (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
+                                        MyGdxGame.res.getMusic("newScreen").play();
+                                    }
                                 }
+                                if(obj.toString().equals("false")){
+                                    Save.gd.setMegaJumpEquiped(false);
+                                }
+                                Save.save();
+                                Save.load();
                             }
-                            if(obj.toString().equals("false")){
-                                Save.gd.setMegaJumpEquiped(false);
-                            }
-                            Save.save();
-                            Save.load();
-                        }
-                    };
-                    stage1Shop.addActor(dialog);
+                        };
+                    }
+                    dialogMegaJumpPurchased.clearActions();
+                    stage1Shop.addActor(dialogMegaJumpPurchased);
                 }
             }
         });
