@@ -1,0 +1,2 @@
+-keep interface apple.gamekit.protocol.GKGameCenterControllerDelegate { *; }
+-keep interface apple.uikit.protocol.UIAlertViewDelegate { *; }
