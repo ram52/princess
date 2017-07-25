@@ -3,7 +3,7 @@ package com.moe.bindings.chartboost.protocol;
 import com.badlogic.gdx.Gdx;
 import com.moe.bindings.chartboost.CBLocation;
 import com.moe.bindings.chartboost.Chartboost;
-import com.ram52.runningbird.Main;
+import com.ram52.princess.Main;
 
 /**
  * Created by axelmontout on 12/06/17.
