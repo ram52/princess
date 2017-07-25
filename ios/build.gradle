@@ -100,6 +100,16 @@ task copyNatives << {
     }
 }
 
+task verifyProguard(type: Exec) {
+    workingDir './'
+
+    commandLine 'python', 'proguardVerify.py'
+}
+
+moeMainProGuard {
+    dependsOn verifyProguard
+}
+
 dependencies {
     compile fileTree(dir: 'lib', include: '*.jar')
 
@@ -126,7 +136,7 @@ test { exclude '**' }
 
 // Setup Multi-OS Engine
 moe {
-    //proguardLevel 'all'
+    proguardLevel 'all'
     xcode {
         project 'xcode/princess.xcodeproj'
         mainTarget 'princess'

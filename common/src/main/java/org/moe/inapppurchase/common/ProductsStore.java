@@ -39,10 +39,12 @@ public class ProductsStore {
     // TODO:  Change this to whatever you set on iTunes connect and on Google Play Developer Console
     private static final String prefix = "com.ram52.princess.inapppurchase.";
 
-    private static final String item1 = prefix + "removeads";
+    public static final String item_removeads = prefix + "removeads";
+    public static final String item2_100Coins = prefix + "100coins";
+    public static final String item3_1000Coins = prefix + "1000coins";
 
     public static final String[] productIds = {
-            item1
+            item_removeads,item2_100Coins,item3_1000Coins
     };
 
     private ArrayList<ProductDetails> products = new ArrayList<>();
@@ -113,7 +115,7 @@ public class ProductsStore {
                     products.clear();
                     for (int i = 0; i < productsArr.length; i++) {
                         if (productsArr[i] != null) {
-                            System.out.println("productsArr[i]="+productsArr[i].getProductID());
+                            //System.out.println("adding productsArr[i]="+productsArr[i].getProductID());
                             products.add(new ProductDetails(productsArr[i].getItemType(),
                                     productsArr[i].getProductID(), productsArr[i].getType(),
                                     productsArr[i].getPrice(), productsArr[i].getTitle(),
@@ -128,11 +130,13 @@ public class ProductsStore {
 
     public void purchaseProduct(ProductDetails product, final RequestPurchaseProductsHandler handler) {
         if (Store != null) {
+            System.out.println("purchaseProduct="+product.getProductID());
             Store.purchaseProduct(new CommonProductDetails(product.getItemType(),
                     product.getProductID(), product.getType(), product.getPrice(),
                     product.getTitle(), product.getDescription()), new IAPHelperInterface.RequestPurchaseProductsHandler() {
                 @Override
                 public void callback(boolean b) {
+                    System.out.println("callback");
                     handler.callback(b);
                 }
             });
@@ -146,9 +150,21 @@ public class ProductsStore {
         return false;
     }
 
-    public void restoreCompletedTransactions() {
+//    public void restoreCompletedTransactions() {
+//        if (Store != null) {
+//            Store.restoreCompletedTransactions();
+//        }
+//    }
+
+    public void restoreCompletedTransactions(final RequestRestoreProductsHandler handler) {
         if (Store != null) {
-            Store.restoreCompletedTransactions();
+            Store.restoreCompletedTransactions(new IAPHelperInterface.RequestRestoreProductsHandler() {
+                @Override
+                public void callback(String id) {
+                    System.out.println("callback");
+                    handler.callback(id);
+                }
+            });
         }
     }
 
@@ -157,6 +173,10 @@ public class ProductsStore {
             Store.handleActivityResult(requestCode, resultCode, data);
         }
         return false;
+    }
+
+    public interface RequestRestoreProductsHandler {
+        void callback(String id);
     }
 
     public interface RequestPurchaseProductsHandler {

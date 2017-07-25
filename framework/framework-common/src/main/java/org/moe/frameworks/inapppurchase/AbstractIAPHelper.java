@@ -37,6 +37,7 @@ public abstract class AbstractIAPHelper implements IAPHelperInterface {
     protected CustomVerifyPayloadHandler customVerifyPayloadHandler = null;
     protected RequestProductsCompletionHandler completionHandler = null;
     protected RequestPurchaseProductsHandler purchaseHandler = null;
+    protected RequestRestoreProductsHandler restoreProductsHandler = null;
     protected ErrorHandler errorHandler = null;
     protected DebugHandler debugHandler = null;
 

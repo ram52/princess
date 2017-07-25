@@ -92,6 +92,8 @@ public class MyGdxGame implements ApplicationListener {
 
     public static GlyphLayout glyphLayoutCredit;
 
+    public static boolean clickedOnLeaderboard = false;
+
 
     public static void setIsBoosTerritory(boolean isBoosTerritory) {
         MyGdxGame.isBoosTerritory = isBoosTerritory;

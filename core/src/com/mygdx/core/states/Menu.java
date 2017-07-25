@@ -29,6 +29,7 @@ import com.mygdx.core.handlers.Save;
 import static com.mygdx.core.MyGdxGame.PBlueMenu;
 import static com.mygdx.core.MyGdxGame.PRedMenu;
 import static com.mygdx.core.MyGdxGame.PYellowMenu;
+import static com.mygdx.core.MyGdxGame.actionResolver;
 import static com.mygdx.core.MyGdxGame.animPlayerIdle;
 import static com.mygdx.core.MyGdxGame.animPlayerIdleFliped;
 import static com.mygdx.core.MyGdxGame.animPrincessIdle;
@@ -757,7 +758,7 @@ public class Menu extends GameState {
                 if (MyGdxGame.actionResolver.getSignedInGPGS())
                     MyGdxGame.actionResolver.getAchievementsGPGS();
                 else
-                    MyGdxGame.actionResolver.loginGPGS();
+                    MyGdxGame.actionResolver.loginGPGS(false);
             };
         });
 
@@ -805,12 +806,15 @@ public class Menu extends GameState {
 
 
         }
-        if (click_on_leaderboardMenu) {
-            click_on_leaderboardMenu = false;
-            if (MyGdxGame.actionResolver.getSignedInGPGS())
-                MyGdxGame.actionResolver.getLeaderboardGPGS();
-            else
-                MyGdxGame.actionResolver.loginGPGS();
+        if(actionResolver != null){
+            if (click_on_leaderboardMenu) {
+                click_on_leaderboardMenu = false;
+                MyGdxGame.clickedOnLeaderboard = true;
+                if (actionResolver.getSignedInGPGS())
+                    actionResolver.getLeaderboardGPGS(false,0);
+                else
+                    actionResolver.loginGPGS(false);
+            }
         }
         if (click_on_tutoMenu) {
             click_on_tutoMenu = false;

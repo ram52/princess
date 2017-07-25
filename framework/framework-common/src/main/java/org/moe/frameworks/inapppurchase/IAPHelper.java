@@ -107,12 +107,12 @@ public class IAPHelper extends AbstractIAPHelper {
     /**
      * Restore transactions
      */
-    @Override
-    public void restoreCompletedTransactions() {
-        if (iapHelper != null) {
-            iapHelper.restoreCompletedTransactions();
-        }
-    }
+//    @Override
+//    public void restoreCompletedTransactions() {
+//        if (iapHelper != null) {
+//            iapHelper.restoreCompletedTransactions();
+//        }
+//    }
 
     /**
      * Close helper
@@ -210,6 +210,13 @@ public class IAPHelper extends AbstractIAPHelper {
     public void purchaseProduct(CommonProductDetails product, RequestPurchaseProductsHandler handler) {
         if (iapHelper != null) {
             iapHelper.purchaseProduct(product, handler);
+        }
+    }
+
+    @Override
+    public void restoreCompletedTransactions(RequestRestoreProductsHandler handler) {
+        if (iapHelper != null) {
+            iapHelper.restoreCompletedTransactions(handler);
         }
     }
 

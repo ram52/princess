@@ -4,10 +4,10 @@ import com.mygdx.core.MyGdxGame.ConfirmInterface;
 
 public interface ActionResolver {
 	public boolean getSignedInGPGS();
-	public void loginGPGS();
+	public void loginGPGS(boolean silent);
 	public void submitScoreGPGS(int score);
 	public void unlockAchievementGPGS(String achievementId);
-	public void getLeaderboardGPGS();
+	public void getLeaderboardGPGS(boolean silent, int score);
 	public void getAchievementsGPGS();
     public void purchaseFullBar();
 	public void purchaseExtraCoins();
@@ -29,5 +29,6 @@ public interface ActionResolver {
     public void showBannerAd();
     public void hideBannerAd();
 	public void showRewardedVideoChartBoost();
+	public void showOrLoadRewardedVideoChartboost();
 	void confirm(ConfirmInterface confirmInterface);
 }

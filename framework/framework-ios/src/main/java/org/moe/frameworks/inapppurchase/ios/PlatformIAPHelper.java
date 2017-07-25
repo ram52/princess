@@ -103,11 +103,6 @@ public class PlatformIAPHelper extends AbstractIAPHelper implements SKProductsRe
     }
 
     @Override
-    public void restoreCompletedTransactions() {
-        ((SKPaymentQueue) SKPaymentQueue.defaultQueue()).restoreCompletedTransactions();
-    }
-
-    @Override
     public void closeHelper() {
         // Remove forced strong Objective-C reference to this instance.
         ((SKPaymentQueue) SKPaymentQueue.defaultQueue()).removeTransactionObserver(this);
@@ -138,6 +133,15 @@ public class PlatformIAPHelper extends AbstractIAPHelper implements SKProductsRe
     }
 
     @Override
+    public void restoreCompletedTransactions(RequestRestoreProductsHandler handler) {
+        restoreProductsHandler = handler;
+        if (debugHandler != null) {
+            debugHandler.callback("ios/PlatformIAPHelper [restore]", "REstore" );
+        }
+        ((SKPaymentQueue) SKPaymentQueue.defaultQueue()).restoreCompletedTransactions();
+    }
+
+    @Override
     public void purchaseProduct(CommonProductDetails product, RequestPurchaseProductsHandler handler) {
         purchaseHandler = handler;
         if (debugHandler != null) {
@@ -162,6 +166,8 @@ public class PlatformIAPHelper extends AbstractIAPHelper implements SKProductsRe
             ((SKPaymentQueue) SKPaymentQueue.defaultQueue()).addPayment(payment);
         }
     }
+
+
 
     @Override
     public void productsRequestDidReceiveResponse(SKProductsRequest skProductsRequest, SKProductsResponse skProductsResponse) {
@@ -208,10 +214,13 @@ public class PlatformIAPHelper extends AbstractIAPHelper implements SKProductsRe
     private void clearRequest() {
         productsRequest = null;
         completionHandler = null;
+        purchaseHandler = null;
+        restoreProductsHandler = null;
     }
 
     @Override
     public void paymentQueueUpdatedTransactions(SKPaymentQueue skPaymentQueue, NSArray<? extends SKPaymentTransaction> nsArray) {
+        System.out.println("paymentQueueUpdatedTransactions");
         for (int i = 0; i < nsArray.size(); i++) {
             SKPaymentTransaction transaction = nsArray.get(i);
             if (transaction.transactionState() == SKPaymentTransactionState.Purchased) {
@@ -228,13 +237,28 @@ public class PlatformIAPHelper extends AbstractIAPHelper implements SKProductsRe
     private void completeTransaction(SKPaymentTransaction transaction) {
         provideContentForProductIdentifier(transaction.payment().productIdentifier());
         ((SKPaymentQueue) SKPaymentQueue.defaultQueue()).finishTransaction(transaction);
+        if (debugHandler != null) {
+            debugHandler.callback("ios/PlatformIAPHelper [purchaseProduct]", "bought " + transaction.payment().productIdentifier());
+        }
+        if (purchaseHandler != null)
+            purchaseHandler.callback(true);
+
+        clearRequest();
     }
 
-    private void restoreTransaction(SKPaymentTransaction transaction) {
+
+    public void restoreTransaction(SKPaymentTransaction transaction) {
+        System.out.println("restoreTransaction transaction="+transaction.payment().productIdentifier());
         String productIdentifier = transaction.originalTransaction().payment().productIdentifier();
         provideContentForProductIdentifier(productIdentifier);
         ((SKPaymentQueue) SKPaymentQueue.defaultQueue()).finishTransaction(transaction);
+        if (restoreProductsHandler != null)
+            restoreProductsHandler.callback(productIdentifier);
+
+        //clearRequest();
     }
+
+
 
     private void provideContentForProductIdentifier(String productIdentifier) {
         purchasedProductIdentifiers.add(productIdentifier);
@@ -255,5 +279,6 @@ public class PlatformIAPHelper extends AbstractIAPHelper implements SKProductsRe
             }
         }
         ((SKPaymentQueue) SKPaymentQueue.defaultQueue()).finishTransaction(transaction);
+
     }
 }

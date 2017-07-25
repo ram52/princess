@@ -34,7 +34,7 @@ public interface IAPHelperInterface {
     /**
      * Restore transactions
      */
-    void restoreCompletedTransactions();
+    //void restoreCompletedTransactions();
 
     /**
      * Close helper
@@ -71,6 +71,8 @@ public interface IAPHelperInterface {
      */
     void purchaseProduct(CommonProductDetails product, RequestPurchaseProductsHandler handler);
 
+    void restoreCompletedTransactions(RequestRestoreProductsHandler handler);
+
     /**
      * Purchase product
      * @param product - {@link CommonProductDetails}
@@ -106,6 +108,10 @@ public interface IAPHelperInterface {
      */
     interface RequestPurchaseProductsHandler {
         void callback(boolean status);
+    }
+
+    interface RequestRestoreProductsHandler {
+        void callback(String id);
     }
 
     /**
