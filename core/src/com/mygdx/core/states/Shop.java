@@ -54,6 +54,7 @@ import static com.mygdx.core.MyGdxGame.buttonKamehameha;
 import static com.mygdx.core.MyGdxGame.buttonLightning;
 import static com.mygdx.core.MyGdxGame.buttonMegaJump;
 import static com.mygdx.core.MyGdxGame.buttonPlayShop;
+import static com.mygdx.core.MyGdxGame.buttonRestore;
 import static com.mygdx.core.MyGdxGame.buttonSecret1Shop;
 import static com.mygdx.core.MyGdxGame.buttonSecret2Shop;
 import static com.mygdx.core.MyGdxGame.click_on_playShop;
@@ -403,6 +404,15 @@ public class Shop extends GameState {
             buttonCoin3.setPosition(buttonCoin2.getX() + buttonCoin3.getWidth()*1.2f , buttonCoin2.getY());
             stage1Shop.addActor(buttonCoin3);
 
+            style = new Button.ButtonStyle();
+            style.up = skinShop.getDrawable("buttonRestoreUp");
+            style.down = skinShop.getDrawable("buttonRestoreDown");
+            buttonRestore = new Button(style);
+            buttonRestore.setWidth(buttonAds.getWidth()*2);
+            buttonRestore.setHeight(buttonAds.getWidth()/1.5f);
+            buttonRestore.setPosition(Gdx.graphics.getWidth() - buttonRestore.getWidth()*1.15f, buttonRestore.getHeight()/3f);
+            stage1Shop.addActor(buttonRestore);
+
 
             labelMoneyShop = new Label("0", new Label.LabelStyle(new BitmapFont(Gdx.files.internal(MyGdxGame.fontScorePath), false), Color.WHITE));
             float fScale = Gdx.graphics.getWidth() / 400f;
@@ -444,6 +454,25 @@ public class Shop extends GameState {
         im.addProcessor(stage1Shop);
         Gdx.input.setInputProcessor(im);
 
+        buttonRestore.addListener(new InputListener() {
+            public boolean touchDown(
+                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
+                    float y, int pointer, int button) {
+                if (Save.gd.isSoundEnable() == 1 | Save.gd.isSoundEnable() == 2) MyGdxGame.res.getSound("select").play();
+                return true;
+            }
+            public void touchUp(
+                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
+                    float y, int pointer, int button) {
+                Gdx.app.debug(LOG_TAG,"buttonRestore clicked!");
+                if(actionResolver != null){
+                    if (actionResolver.getSignedInGPGS())
+                        actionResolver.getAchievementsGPGS();
+                    else
+                        actionResolver.loginGPGS(false);
+                }
+            }
+        });
 
         buttonAds.addListener(new InputListener() {
             public boolean touchDown(
@@ -618,7 +647,7 @@ public class Shop extends GameState {
                                 if(network == null) network = "ABSENT";
                                 Gdx.app.debug(LOG_TAG,"NETWORK: " + network);
                                 if(network.equals("4G")|network.equals("3G")|network.equals("WIFI")) {
-                                    MyGdxGame.actionResolver.showRewardedVideoChartBoost();
+                                    MyGdxGame.actionResolver.showOrLoadRewardedVideoChartboost();
                                     //game.actionResolver.showRewardedVideoChartBoost();
                                 }
 //                            if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {

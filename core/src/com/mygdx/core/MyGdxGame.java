@@ -259,7 +259,7 @@ public class MyGdxGame implements ApplicationListener {
     public static Button buttonPlayShop, buttonSecret1Shop, buttonSecret2Shop, imageCoinShop;
     public static Button buttonFireBall, buttonExcalibur, buttonKamehameha, buttonBoot;
     public static Button buttonFireBall2, buttonMegaJump, buttonLightning, buttonBrick2;
-    public static Button buttonAds, buttonCoin1, buttonCoin2,buttonCoin3;
+    public static Button buttonAds, buttonCoin1, buttonCoin2,buttonCoin3,buttonRestore;
     public static int cpt_secret1Shop = 0;
     public static int cpt_translate_animation1Shop = 0;
     public static Label labelMoneyShop;

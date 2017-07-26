@@ -331,8 +331,8 @@ public class Main extends IOSApplication.Delegate implements ActionResolver {
     @Override
     public void showOrLoadRewardedVideoChartboost() {
         UIAlertView alert = UIAlertView.alloc().init();
-        alert.setTitle("FREE CONTINUE");
-        alert.setMessage("Watch a video to continue.");
+        alert.setTitle("FREE COINS");
+        alert.setMessage("Watch a video to earn 40 coins.");
         alert.addButtonWithTitle("Cancel");
         alert.addButtonWithTitle("Ok");
         alert.show();
@@ -527,12 +527,23 @@ public class Main extends IOSApplication.Delegate implements ActionResolver {
 
     }
 
+    public int findProductId(String id){
+        int index = 0;
+        for (int i = 0;i<productsStore.getNumberOfProducts();i++){
+            if(id.equals(productsStore.getProductAt(i).getProductID())){
+                index = i;
+                break;
+            }
+        }
+        iosApplication.log(LOG_TAG,"findProductId id="+id+" index="+index);
+        return index;
+    }
 
-    public void displayBuy(int id){
+    public void displayBuy(String id){
         iosApplication.log(LOG_TAG,"displayBuy id="+id);
         ProductDetails product = null;
         if(productsStore != null){
-            product = productsStore.getProductAt(id);
+            product = productsStore.getProductAt(findProductId(id));
             iosApplication.log(LOG_TAG,"getNumberOfProducts="+productsStore.getNumberOfProducts());
         }else {
             iosApplication.log(LOG_TAG,"productsStore == null");
@@ -558,7 +569,7 @@ public class Main extends IOSApplication.Delegate implements ActionResolver {
                                       } else if (buttonIndex == 1) {
                                           // user clicked "Ok" button
                                           iosApplication.log(LOG_TAG,"user clicked \"Ok\" button");
-                                          purchaseProduct(id);
+                                          purchaseProduct(findProductId(id));
                                       }
                                   }
                                   @Override
@@ -693,7 +704,7 @@ public class Main extends IOSApplication.Delegate implements ActionResolver {
 
     @Override
     public void purchaseAdsRemover() {
-
+        displayBuy("com.ram52.princess.inapppurchase.removeads");
     }
 
     @Override
@@ -733,13 +744,13 @@ public class Main extends IOSApplication.Delegate implements ActionResolver {
 
     @Override
     public void purchaseHundredCoins() {
-        displayBuy(1);
+        displayBuy("com.ram52.princess.inapppurchase.100coins");
 
     }
 
     @Override
     public void purchaseThousandCoins() {
-
+        displayBuy("com.ram52.princess.inapppurchase.1000coins");
     }
 
     @Override
