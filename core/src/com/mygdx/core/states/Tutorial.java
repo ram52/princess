@@ -1,6 +1,9 @@
 package com.mygdx.core.states;
 
 import com.mygdx.core.handlers.GameStateManager;
+import com.mygdx.core.handlers.Save;
+
+import static com.mygdx.core.MyGdxGame.actionResolver;
 
 public class Tutorial extends GameState {
 
@@ -9,6 +12,7 @@ public class Tutorial extends GameState {
     public Tutorial(final GameStateManager gsm) {
         super(gsm);
         play = new Play(gsm, true);
+        actionResolver.hideBannerAd();
     }
 
     public void handleInput() {
@@ -26,6 +30,8 @@ public class Tutorial extends GameState {
 
     public void dispose() {
         play.dispose();
+        if(!Save.gd.getAdsRemoverPurchased())
+            actionResolver.showBannerAd();
     }
 
 }

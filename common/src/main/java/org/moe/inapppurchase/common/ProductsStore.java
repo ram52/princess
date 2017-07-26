@@ -115,7 +115,7 @@ public class ProductsStore {
                     products.clear();
                     for (int i = 0; i < productsArr.length; i++) {
                         if (productsArr[i] != null) {
-                            //System.out.println("adding productsArr[i]="+productsArr[i].getProductID());
+                            System.out.println("adding productsArr[i]="+productsArr[i].getProductID());
                             products.add(new ProductDetails(productsArr[i].getItemType(),
                                     productsArr[i].getProductID(), productsArr[i].getType(),
                                     productsArr[i].getPrice(), productsArr[i].getTitle(),

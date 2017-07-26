@@ -115,6 +115,8 @@ public class Menu extends GameState {
             lastPlayerPosition.set(0,0);
         }
 
+        game.actionResolver.hideBannerAd();
+
         MyGdxGame.initFade();
         Timer.instance().start();
 
@@ -134,13 +136,13 @@ public class Menu extends GameState {
         updateSelector();
 
         Save.load();
-        if (!Save.gd.getAdsRemoverPurchased()) {
-            String network = game.actionResolver.getNetworkClass();
-            if(network == null) network = "ABSENT";
-            Gdx.app.debug(LOG_TAG,"NETWORK: "+network);
-            if(network.equals("4G")|network.equals("3G")|network.equals("WIFI"))
-                game.actionResolver.showOrLoadBanner();
-        }
+//        if (!Save.gd.getAdsRemoverPurchased()) {
+//            String network = game.actionResolver.getNetworkClass();
+//            if(network == null) network = "ABSENT";
+//            Gdx.app.debug(LOG_TAG,"NETWORK: "+network);
+//            if(network.equals("4G")|network.equals("3G")|network.equals("WIFI"))
+//                game.actionResolver.showOrLoadBanner();
+//        }
 
         click_on_playMenu = false;
         click_on_leaderboardMenu = false;
@@ -725,18 +727,18 @@ public class Menu extends GameState {
             public void touchUp(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
-
-                Save.load();
-                if(Save.gd.getMoney()<MyGdxGame.getContinueMax()) {
-                    /*Save.gd.setMoney(Save.gd.getMoney() + MyGdxGame.getContinueStorePack());
-                    Save.save();
-                    Save.load();*/
-                    MyGdxGame.actionResolver.purchaseExtraCoins();
-                    labelMoneyMenu.setText(Integer.toString(Save.gd.getMoney()));
-                }else{
-                    if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("error").play();
-
-                }
+//
+//                Save.load();
+//                if(Save.gd.getMoney()<MyGdxGame.getContinueMax()) {
+//                    /*Save.gd.setMoney(Save.gd.getMoney() + MyGdxGame.getContinueStorePack());
+//                    Save.save();
+//                    Save.load();*/
+//                    MyGdxGame.actionResolver.purchaseExtraCoins();
+//                    labelMoneyMenu.setText(Integer.toString(Save.gd.getMoney()));
+//                }else{
+//                    if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("error").play();
+//
+//                }
             };
         });
 
@@ -1139,6 +1141,8 @@ public class Menu extends GameState {
     public void dispose() {
         //sb2Menu.dispose();
         //sb3Menu.dispose();
+        if(!Save.gd.getAdsRemoverPurchased())
+            actionResolver.showBannerAd();
 
         click_on_playMenu = false;
         click_on_leaderboardMenu = false;

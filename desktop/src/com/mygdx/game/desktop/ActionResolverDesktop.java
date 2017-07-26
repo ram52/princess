@@ -15,9 +15,8 @@ public class ActionResolverDesktop implements ActionResolver {
 	}
 
 	@Override
-	public void loginGPGS() {
-		Gdx.app.debug(LOG_TAG,"loginGPGS");
-		signedInStateGPGS = true;
+	public void loginGPGS(boolean silent) {
+
 	}
 
 	@Override
@@ -31,9 +30,10 @@ public class ActionResolverDesktop implements ActionResolver {
 	}
 
 	@Override
-	public void getLeaderboardGPGS() {
-		Gdx.app.debug(LOG_TAG,"getLeaderboardGPGS");
+	public void getLeaderboardGPGS(boolean silent, int score) {
+
 	}
+
 
 	@Override
 	public void getAchievementsGPGS() {
@@ -137,6 +137,11 @@ public class ActionResolverDesktop implements ActionResolver {
 
 	@Override
 	public void showRewardedVideoChartBoost() {
+
+	}
+
+	@Override
+	public void showOrLoadRewardedVideoChartboost() {
 
 	}
 

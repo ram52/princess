@@ -390,7 +390,7 @@ public class Credits extends GameState {
 
     public void drawCredits(){
         float x = MyGdxGame.V_WIDTH/2 - credits_size.x/2;
-        float y = MyGdxGame.V_HEIGHT/1.1f;
+        float y = MyGdxGame.V_HEIGHT/1.2f;
 
         Gdx.gl.glEnable(GL20.GL_BLEND);
         shapeRenderer.setColor(new Color(0, 0, 0, 0.8f));

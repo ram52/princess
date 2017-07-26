@@ -37,6 +37,7 @@ import java.util.Scanner;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
+import static com.mygdx.core.MyGdxGame.actionResolver;
 import static com.mygdx.core.MyGdxGame.animationCoinShop;
 import static com.mygdx.core.MyGdxGame.animationEnemyMockShop;
 import static com.mygdx.core.MyGdxGame.animationEnemyShop;
@@ -1731,6 +1732,9 @@ public class Shop extends GameState {
 //        stage2Shop.dispose();
 //        stage1Shop.dispose();
 //        stage0Shop.dispose();
+
+        if(!Save.gd.getAdsRemoverPurchased())
+            actionResolver.showBannerAd();
 
         cpt_secret1Shop = 0;
         cpt_translate_animation1Shop = 0;
