@@ -310,7 +310,7 @@ public class MyGdxGame implements ApplicationListener {
     public static int tileMapWidth, tileMapHeight;
     public static float tileSize;
     public static OrthogonalTiledMapRenderer tmr;
-    public static Player player;
+    //public static Player player;
     public static Princess princess;
     public static Array<Enemy> enemies;
     public static boolean enemyIsNextLevel = false;
@@ -401,6 +401,7 @@ public class MyGdxGame implements ApplicationListener {
     public static Boolean tuto_step6 = false;
     public static Boolean tuto_step7 = false;
     public static Boolean tuto_step8 = false;
+    public static Boolean createdPrincessInTuTo = false;
     public static Boolean displayBrickTip = false;
     public static Boolean hidePointer = false;
     public static Image gamePlaySelection;

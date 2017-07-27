@@ -29,7 +29,7 @@ public class Tutorial extends GameState {
 
 
     public void dispose() {
-        play.dispose();
+        //play.dispose();
         if(!Save.gd.getAdsRemoverPurchased())
             actionResolver.showBannerAd();
     }
