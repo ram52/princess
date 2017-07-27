@@ -663,11 +663,43 @@ public class Main extends IOSApplication.Delegate implements ActionResolver {
 
     }
 
-
-
     @Override
     public void submitScoreGPGS(int score) {
-
+        try {
+            Save.load();
+            int highScore = (int) Save.gd.getHighScores()[0];
+            iosApplication.log(LOG_TAG,"submitScoreGPGS...");
+            iosApplication.log(LOG_TAG,"score="+score+" highscore="+highScore);
+            if(score >= highScore){
+                score = highScore;
+                if( localPlayer.isAuthenticated() && leaderboard != null){
+                    GKScore gkScore = GKScore.alloc();
+                    gkScore = gkScore.initWithLeaderboardIdentifier(leaderboard.identifier());
+                    gkScore.setValue(score);
+                    NSArray<GKScore> nsArray = (NSArray<GKScore>) NSArray.arrayWithObject(gkScore);
+                    GKScore.reportScoresWithCompletionHandler(nsArray, new GKScore.Block_reportScoresWithCompletionHandler() {
+                        @Override
+                        public void call_reportScoresWithCompletionHandler(NSError nsError) {
+                            if (nsError != null) {
+                                Gdx.app.debug(LOG_TAG,"submitted score not successfully");
+                                displayError();
+                            } else {
+                                Gdx.app.debug(LOG_TAG,"submitted score successfully");
+                            }
+                        }
+                    });
+                }else{
+                    iosApplication.log(LOG_TAG,"leaderbord null");
+                    //displayError();
+                    getLeaderboardGPGS(true,score);
+                }
+            }else{
+                iosApplication.log(LOG_TAG,"no need to submit score="+score);
+            }
+        }catch (ClassCastException | ArrayIndexOutOfBoundsException e){
+            iosApplication.log(LOG_TAG,"could not cast score",e);
+            //score = Integer.MAX_VALUE;
+        }
     }
 
     @Override

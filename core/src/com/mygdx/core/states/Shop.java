@@ -409,8 +409,8 @@ public class Shop extends GameState {
             style.down = skinShop.getDrawable("buttonRestoreDown");
             buttonRestore = new Button(style);
             buttonRestore.setWidth(buttonAds.getWidth()*2);
-            buttonRestore.setHeight(buttonAds.getWidth()/1.5f);
-            buttonRestore.setPosition(Gdx.graphics.getWidth() - buttonRestore.getWidth()*1.15f, buttonRestore.getHeight()/3f);
+            buttonRestore.setHeight(buttonAds.getWidth()/1.3f);
+            buttonRestore.setPosition(Gdx.graphics.getWidth() - buttonRestore.getWidth()*1.15f, buttonRestore.getHeight()/2.45f);
             stage1Shop.addActor(buttonRestore);
 
 

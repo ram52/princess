@@ -27,6 +27,7 @@ import com.mygdx.core.handlers.Animation;
 import com.mygdx.core.handlers.GameStateManager;
 import com.mygdx.core.handlers.Save;
 
+
 public class GameOver extends GameState {
 
     Stage stage1;
@@ -109,8 +110,10 @@ public class GameOver extends GameState {
                 game.actionResolver.showOrLoadBanner();
         }*/
         highScores = Save.gd.getHighScores();
-        if (game.actionResolver.getSignedInGPGS()) {
-            game.actionResolver.submitScoreGPGS((int) highScores[0]);
+        if(MyGdxGame.actionResolver != null){
+            if (game.actionResolver.getSignedInGPGS()) {
+                game.actionResolver.getLeaderboardGPGS(true,(int) highScores[0]);
+            }
         }
         Save.gd.getNames();
         score = Save.gd.getTentativeScore();
