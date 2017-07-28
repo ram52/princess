@@ -59,6 +59,7 @@ import com.mygdx.core.handlers.ShopDialog;
 import com.mygdx.core.handlers.SimpleDirectionGestureDetector;
 import com.mygdx.core.states.Shop;
 
+import java.util.Random;
 import java.util.concurrent.ScheduledExecutorService;
 
 public class MyGdxGame implements ApplicationListener {
@@ -408,6 +409,9 @@ public class MyGdxGame implements ApplicationListener {
     public static SpriteBatch sbKyaa;
     public static int cpt_tuto = 0;
     public static float powerUpBar_MaxHeight = 0.0f;
+    public static Random random = new Random();
+    public static float space = 0;
+    public static BoundingBox boundingBoxCastle;
     ///////////////////////////////
 
 
@@ -462,7 +466,7 @@ public class MyGdxGame implements ApplicationListener {
 
     public void create() {
         Gdx.app.setLogLevel(Application.LOG_DEBUG);
-
+        actionResolver.loginGPGS(true);
 
 
         //loading  = GifDecoder.loadGIFAnimation(com.badlogic.gdx.graphics.g2d.Animation.PlayMode.LOOP, Gdx.files.internal("data/sprite/loading.gif").readBytes());
