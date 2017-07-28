@@ -47,7 +47,7 @@ public class Opening extends GameState {
         stage1.addActor(imageOpening1);
 
         //stage0.addAction(Actions.sequence(Actions.alpha(0.5f), Actions.fadeIn(1.5f)));
-        //stage1.addAction(Actions.sequence(Actions.alpha(0.5f), Actions.fadeIn(1.5f)));
+        //stage1GameOver.addAction(Actions.sequence(Actions.alpha(0.5f), Actions.fadeIn(1.5f)));
 
         Timer.schedule(new Timer.Task() {
             @Override
@@ -149,7 +149,7 @@ public class Opening extends GameState {
 
     public void resize(int width, int height) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        // calculate new viewport
+        // calculate new viewportGameOver
         float aspectRatio = (float) width / (float) height;
         float scale = 1f;
         Vector2 crop = new Vector2(0f, 0f);
@@ -166,7 +166,7 @@ public class Opening extends GameState {
         float w = (float) MyGdxGame.V_WIDTH * scale;
         float h = (float) MyGdxGame.V_HEIGHT * scale;
         viewport = new Rectangle(crop.x, 0, w, h);
-        //Gdx.gl.glViewport((int) viewport.x, (int) viewport.yMenu, (int) viewport.width, (int) viewport.height);
+        //Gdx.gl.glViewport((int) viewportGameOver.x, (int) viewportGameOver.yMenu, (int) viewportGameOver.width, (int) viewportGameOver.height);
         float offsetY = crop.y;
         float offsetX = crop.x;
 

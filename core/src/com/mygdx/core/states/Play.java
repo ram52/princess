@@ -1685,8 +1685,8 @@ public class Play extends GameState {
             Timer.instance().start();
             /*if(buttonSoundPlay.isVisible())
                 buttonSoundPlay.setVisible(false);
-            if(buttonExit.isVisible())
-                buttonExit.setVisible(false);*/
+            if(buttonExitGameOver.isVisible())
+                buttonExitGameOver.setVisible(false);*/
         }
 
         if(MyGdxGame.isSoundEnable() == 0){
@@ -2540,7 +2540,7 @@ public class Play extends GameState {
         {
             MyGdxGame.lastScoreInTutorial = Integer.valueOf(labelScorePlay.getText().toString());
         }catch (NumberFormatException e){
-            Gdx.app.error(LOG_TAG,"error while parsing score",e);
+            Gdx.app.error(LOG_TAG,"error while parsing scoreGameOver",e);
         }
 
 

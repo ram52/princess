@@ -69,7 +69,7 @@ public class Ending extends GameState {
 
     public void resize(int width, int height) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        // calculate new viewport
+        // calculate new viewportGameOver
         float aspectRatio = (float) width / (float) height;
         float scale = 1f;
         Vector2 crop = new Vector2(0f, 0f);

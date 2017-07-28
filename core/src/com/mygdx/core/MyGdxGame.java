@@ -263,6 +263,7 @@ public class MyGdxGame implements ApplicationListener {
     public static float yMenu = 670.0f;
     public static Stage stage0Menu;
     public static Image introMenu;
+    public static Sprite tex;
     public static InputMultiplexer im = new InputMultiplexer();
     ///////////////////////////////
     
@@ -412,6 +413,30 @@ public class MyGdxGame implements ApplicationListener {
     public static Random random = new Random();
     public static float space = 0;
     public static BoundingBox boundingBoxCastle;
+    ///////////////////////////////
+
+    ///////GAME OVER///////////////
+    public static Stage stage1GameOver;
+    public static Label labelScoreGameOver, labelBestScoreGameOver;
+    public static Button.ButtonStyle buttonStylePlayGameOver, buttonStyleLeaderboardGameOver, buttonStyleHeartGameOver, buttonStyleStarGameOver, buttonStyleEnergieGameOver, buttonStyleAdsGameOver;
+    public static Button buttonExitGameOver, buttonReplayGameOver, buttonShop, buttonStar, buttonEnergie, buttonAdsGameOver;
+    public static Skin skinPlayGameOver, skinLeaderboardGameOver, skinHeart, skinStar, skinEnergie, skinAds;
+    public static Image backgroundGameOver, trophy_empty, trophy_bronze, trophy_silver, trophy_gold, high_score;
+    public static AlphaAction fadeGameOver;
+    public static long[] highScores;
+    public static long scoreGameOver;
+    public static boolean click1GameOver, click2GameOver, timerIsOnGameOver;
+    public static Rectangle viewportGameOver;
+    public static int cpt_timerGameOver = 0;
+    public static int cpt_scoreGameOver = 0;
+    public static int score_offsetGameOver = 100;
+    public static float offsetGameOver = 0;
+    public static int cpt_translate_animationGameOver = 0;
+    public static int cpt_translate_animation2GameOver = 0;
+    public static int cpt_translate_animation3GameOver = 0;
+    public static Animation animTitleGameOver, animSadGameOver, animHappyGameOver;
+    public static Stage stage0GameOver;
+    public static Image introGameOver;
     ///////////////////////////////
 
 

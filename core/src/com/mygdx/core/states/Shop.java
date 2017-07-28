@@ -438,7 +438,7 @@ public class Shop extends GameState {
 
             fadeShop = new AlphaAction();
             fadeShop.setDuration(0f);
-            //scoreLabel.setText(Float.toString(offset));
+            //scoreLabel.setText(Float.toString(offsetGameOver));
             fade1Shop = new AlphaAction();
             fade1Shop.setDuration(0f);
             fade2Shop = new AlphaAction();
@@ -1743,7 +1743,7 @@ public class Shop extends GameState {
                     "java heap: "+ (int)(Gdx.app.getJavaHeap()/Math.pow(10, 6))+" Mb"+'\n'+
                     "native heap: "+ (int)(Gdx.app.getNativeHeap()/Math.pow(10, 6))+" Mb"+'\n'+
                     "offDisplay: "+ offsetYShop +'\n'+
-                    "offset: "+ offsetYShop /coef+'\n'+
+                    "offsetGameOver: "+ offsetYShop /coef+'\n'+
                     "secret: "+ cpt_secret1Shop +'\n'+
                     "sX: "+ animationEnemyShop.getFrame().getRegionX()+'\n'+
                     "sY: "+ buttonSecret1Shop.getY()+'\n'+

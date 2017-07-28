@@ -87,6 +87,7 @@ import static com.mygdx.core.MyGdxGame.stage2Menu;
 import static com.mygdx.core.MyGdxGame.stage3Menu;
 import static com.mygdx.core.MyGdxGame.stageUiOptionMenu;
 import static com.mygdx.core.MyGdxGame.start2Menu;
+import static com.mygdx.core.MyGdxGame.tex;
 import static com.mygdx.core.MyGdxGame.viewportMenu;
 import static com.mygdx.core.MyGdxGame.jp;
 import static com.mygdx.core.MyGdxGame.yMenu;
@@ -310,7 +311,7 @@ public class Menu extends GameState {
             buttonPlayMenu = new Button(style);
             buttonPlayMenu.setWidth(Gdx.graphics.getWidth() / 2.2f);
             buttonPlayMenu.setHeight(Gdx.graphics.getHeight() / 5f);
-            //buttonExit.setPosition(-buttonExit.getWidth()/2.6f, (Gdx.graphics.getHeight() - buttonExit.getHeight()) / 1.6f);
+            //buttonExitGameOver.setPosition(-buttonExitGameOver.getWidth()/2.6f, (Gdx.graphics.getHeight() - buttonExitGameOver.getHeight()) / 1.6f);
 
             buttonPlayMenu.setPosition(-400, Gdx.graphics.getHeight() / 2f);
             stage1Menu.addActor(buttonPlayMenu);
@@ -634,9 +635,9 @@ public class Menu extends GameState {
 //                    buttonPRedMenu.setVisible(false);
 //                    buttonPYellow.setVisible(false);
 //                    buttonPGreen.setVisible(false);
-//                    buttonExit.setVisible(false);*/
+//                    buttonExitGameOver.setVisible(false);*/
 //                    buttonLeaderBoardMenu.setVisible(false);
-//                    buttonExit.setDisabled(false);
+//                    buttonExitGameOver.setDisabled(false);
 //                    buttonLeaderBoardMenu.setDisabled(false);
 //                    loadingMenu.setScale(0);
 //                    buttonCreditsMenu.setWidth(Gdx.graphics.getWidth() / 1.1f);

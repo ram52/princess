@@ -172,7 +172,7 @@ public class Credits extends GameState {
         if(fadeCredit == null){
             fadeCredit = new AlphaAction();
             fadeCredit.setDuration(0f);
-            //scoreLabel.setText(Float.toString(offset));
+            //scoreLabel.setText(Float.toString(offsetGameOver));
             fade1Credit = new AlphaAction();
             fade1Credit.setDuration(0f);
             fade2Credit = new AlphaAction();
