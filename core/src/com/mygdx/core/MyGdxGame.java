@@ -29,6 +29,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.AlphaAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -323,7 +324,7 @@ public class MyGdxGame implements ApplicationListener {
     public static ScheduledExecutorService executor;
     public static int player_selector = 0;
     public static int cpt_alarm = 0;
-    public static Stage stage1Play, stageUiContinue;
+    public static Stage stage1Play;
     public static Label labelScorePlay, labelMoneyPlay;
     public static Button.ButtonStyle pauseButtonStyle;
     public static Rectangle viewportPlay;
@@ -341,9 +342,6 @@ public class MyGdxGame implements ApplicationListener {
     public static boolean gameOverPlay = false;
     public static boolean submitPlay = false;
     public static boolean firePlay = false;
-    public static Button buttonCamera;
-    public static Button buttonCoin;
-    public static Button buttonNo;
     public static boolean left = false;
     public static boolean right = false;
     public static boolean buttonLeft_isTouched = false;
@@ -413,6 +411,8 @@ public class MyGdxGame implements ApplicationListener {
     public static Random random = new Random();
     public static float space = 0;
     public static BoundingBox boundingBoxCastle;
+    public static SimpleDirectionGestureDetector gd;
+    public static Touchable originalTouchableTouchButton;
     ///////////////////////////////
 
     ///////GAME OVER///////////////

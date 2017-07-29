@@ -33,6 +33,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -206,175 +207,142 @@ public class Play extends GameState {
 
         // set up box2d
 
+
         world = new World(new Vector2(0, -9.81f), false);
+
+
         cl = new MyContactListener();
+
         world.setContactListener(cl);
 
-        b2dr = new Box2DDebugRenderer();
 
-        spriteBatch = new SpriteBatch();
-        spriteBatchLightning = new SpriteBatch();
+        if(b2dr == null)
+            b2dr = new Box2DDebugRenderer();
+
+        if(spriteBatch == null)
+            spriteBatch = new SpriteBatch();
+
+        if(spriteBatchLightning == null)
+            spriteBatchLightning = new SpriteBatch();
 
         cam.setToOrtho(false, MyGdxGame.V_WIDTH, MyGdxGame.V_HEIGHT);
 
-        b2dCam = new BoundedCamera();
+        if(b2dCam == null)
+            b2dCam = new BoundedCamera();
+
         b2dCam.setToOrtho(false, MyGdxGame.V_WIDTH / PPM, MyGdxGame.V_HEIGHT
                 / PPM);
         b2dCam.setBounds(0, (tileMapWidth * tileSize) / PPM, 0,
                 (tileMapHeight * tileSize) / PPM);
 
 
-        cam2 = new BoundedCamera();
+        if(cam2 == null)
+            cam2 = new BoundedCamera();
+
         cam2.setToOrtho(false, MyGdxGame.V_WIDTH, MyGdxGame.V_HEIGHT);
 
-        skinPlay = new Skin();
-        skinPlay.addRegions(MyGdxGame.atlas);
+        if(skinPlay == null){
+            skinPlay = new Skin();
+            skinPlay.addRegions(MyGdxGame.atlas);
+        }
 
         MyGdxGame.background_cloud.setVector(+10, 0);
         //MyGdxGame.background_skyDay.setVector(0, 0);
         MyGdxGame.background_wood1.setVector(+10, 0);
 
-        stageUiContinue = new Stage();
-        stageUiContinue.addAction(Actions.sequence(Actions.alpha(0.5f), Actions.fadeIn(0.2f)));
+        if(stageUiControl == null){
+            stageUiControl = new Stage();
+            //stageUiControl.addAction(Actions.sequence(Actions.alpha(0.5f), Actions.fadeIn(0.2f)));
+            Button.ButtonStyle leftButtonStyle = new Button.ButtonStyle();
+            leftButtonStyle.up = skinPlay.getDrawable("buttonUiBossLeftUp");
+            leftButtonStyle.down = skinPlay.getDrawable("buttonUiBossLeftDown");
+            buttonLeft = new Button(leftButtonStyle);
+            float size = (Gdx.graphics.getWidth() / 4.2f);
+            space = (Gdx.graphics.getWidth() - (size*4))/5;
+            buttonLeft.setWidth(size);
+            buttonLeft.setHeight(size/1.2f);
+            buttonLeft.setPosition(space, space*12f);
+            //buttonLeft.setBounds(0,0,Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight());
+            stageUiControl.addActor(buttonLeft);
+        }
 
-        Button.ButtonStyle style = new Button.ButtonStyle();
-        style.up = skinPlay.getDrawable("uiContinueBackground");
-        style.down = skinPlay.getDrawable("uiContinueBackground");
-        Button imageUiBackground = new Button(style);
-        imageUiBackground.setWidth(Gdx.graphics.getWidth());
-        imageUiBackground.setHeight(Gdx.graphics.getHeight() / 11f);
-        imageUiBackground.setPosition((Gdx.graphics.getWidth() - imageUiBackground.getWidth()) / 2, (Gdx.graphics.getHeight() - imageUiBackground.getHeight()) / 1.45f);
-        stageUiContinue.addActor(imageUiBackground);
+        if(buttonRight == null){
+            Button.ButtonStyle rightButtonStyle = new Button.ButtonStyle();
+            rightButtonStyle.up = skinPlay.getDrawable("buttonUiBossRightUp");
+            rightButtonStyle.down = skinPlay.getDrawable("buttonUiBossRightDown");
+            buttonRight = new Button(rightButtonStyle);
+            buttonRight.setWidth(buttonLeft.getWidth());
+            buttonRight.setHeight(buttonLeft.getHeight());
+            buttonRight.setPosition(buttonLeft.getRight()+space, buttonLeft.getY());
+            stageUiControl.addActor(buttonRight);
+        }
 
-        Label labelContinue = new Label("", new LabelStyle(new BitmapFont( Gdx.files.internal(MyGdxGame.fontScorePath), false), Color.WHITE));
-        labelContinue.setWidth(2 * (Gdx.graphics.getWidth()) / 3f);
-        labelContinue.setHeight(Gdx.graphics.getHeight() / 8);
-        labelContinue.setFontScaleY(Gdx.graphics.getWidth() / 210f);
-        labelContinue.setFontScaleX(Gdx.graphics.getWidth() / 180f);
-        labelContinue.setAlignment(Align.center);
-        labelContinue.setPosition(((Gdx.graphics.getWidth() - labelContinue.getWidth()) / 2) + Gdx.graphics.getWidth() / 40f,
-                ((Gdx.graphics.getHeight() - labelContinue.getHeight()) / 2) + labelContinue.getHeight() * 1.5f);
+        if(buttonFire == null){
+            Button.ButtonStyle fireButtonStyle = new Button.ButtonStyle();
+            fireButtonStyle.up = skinPlay.getDrawable("buttonActionUp");
+            fireButtonStyle.down = skinPlay.getDrawable("buttonActionDown");
+            buttonFire = new Button(fireButtonStyle);
+            buttonFire.setWidth(buttonLeft.getWidth());
+            buttonFire.setHeight(buttonLeft.getHeight());
+        }
 
-        Label labelContinueShadow = new Label("", new LabelStyle(new BitmapFont( Gdx.files.internal(MyGdxGame.fontScorePath), false), Color.BLACK));
-        labelContinueShadow.setWidth(labelContinue.getWidth());
-        labelContinueShadow.setHeight(labelContinue.getHeight());
-        labelContinueShadow.setFontScaleX(labelContinue.getFontScaleX());
-        labelContinueShadow.setFontScaleY(labelContinue.getFontScaleY());
-        labelContinueShadow.setAlignment(Align.center);
-        labelContinueShadow.setPosition(labelContinue.getX(), labelContinue.getY() - labelContinue.getHeight() / 14f);
-        stageUiContinue.addActor(labelContinueShadow);
-        stageUiContinue.addActor(labelContinue);
-
-        Button.ButtonStyle cameraButtonStyle = new Button.ButtonStyle();
-        cameraButtonStyle.up = skinPlay.getDrawable("coin");
-        cameraButtonStyle.down = skinPlay.getDrawable("coin");
-        buttonCamera = new Button(cameraButtonStyle);
-        buttonCamera.setWidth(Gdx.graphics.getWidth() / 3f);
-        buttonCamera.setHeight(Gdx.graphics.getHeight() / 6.5f);
-        buttonCamera.setPosition(((Gdx.graphics.getWidth() - buttonCamera.getWidth()) / 2), labelContinue.getY() - buttonCamera.getHeight() * 1.09f);
-        stageUiContinue.addActor(buttonCamera);
-
-        Button.ButtonStyle coinButtonStyle = new Button.ButtonStyle();
-        coinButtonStyle.up = skinPlay.getDrawable("coin");
-        coinButtonStyle.down = skinPlay.getDrawable("coin");
-        buttonCoin = new Button(coinButtonStyle);
-        buttonCoin.setWidth(buttonCamera.getWidth());
-        buttonCoin.setHeight(buttonCamera.getHeight());
-        buttonCoin.setPosition(buttonCamera.getX(), buttonCamera.getY() - buttonCamera.getHeight() * 1.0f);
-        stageUiContinue.addActor(buttonCoin);
-
-        Button.ButtonStyle noButtonStyle = new Button.ButtonStyle();
-        noButtonStyle.up = skinPlay.getDrawable("coin");
-        noButtonStyle.down = skinPlay.getDrawable("coin");
-        buttonNo = new Button(noButtonStyle);
-        buttonNo.setWidth(buttonCamera.getWidth());
-        buttonNo.setHeight(buttonCamera.getHeight());
-        buttonNo.setPosition(buttonCamera.getX(), buttonCoin.getY() - buttonNo.getHeight() * 1.0f);
-        stageUiContinue.addActor(buttonNo);
-
-        stageUiControl = new Stage();
-        //stageUiControl.addAction(Actions.sequence(Actions.alpha(0.5f), Actions.fadeIn(0.2f)));
-        Button.ButtonStyle leftButtonStyle = new Button.ButtonStyle();
-        leftButtonStyle.up = skinPlay.getDrawable("buttonUiBossLeftUp");
-        leftButtonStyle.down = skinPlay.getDrawable("buttonUiBossLeftDown");
-        buttonLeft = new Button(leftButtonStyle);
-        float size = (Gdx.graphics.getWidth() / 4.2f);
-        space = (Gdx.graphics.getWidth() - (size*4))/5;
-        buttonLeft.setWidth(size);
-        buttonLeft.setHeight(size/1.2f);
-        buttonLeft.setPosition(space, space*12f);
-        //buttonLeft.setBounds(0,0,Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight());
-        stageUiControl.addActor(buttonLeft);
-
-        Button.ButtonStyle rightButtonStyle = new Button.ButtonStyle();
-        rightButtonStyle.up = skinPlay.getDrawable("buttonUiBossRightUp");
-        rightButtonStyle.down = skinPlay.getDrawable("buttonUiBossRightDown");
-        buttonRight = new Button(rightButtonStyle);
-        buttonRight.setWidth(buttonLeft.getWidth());
-        buttonRight.setHeight(buttonLeft.getHeight());
-        buttonRight.setPosition(buttonLeft.getRight()+space, buttonLeft.getY());
-        stageUiControl.addActor(buttonRight);
-
-        Button.ButtonStyle fireButtonStyle = new Button.ButtonStyle();
-        fireButtonStyle.up = skinPlay.getDrawable("buttonActionUp");
-        fireButtonStyle.down = skinPlay.getDrawable("buttonActionDown");
-        buttonFire = new Button(fireButtonStyle);
-        buttonFire.setWidth(buttonLeft.getWidth());
-        buttonFire.setHeight(buttonLeft.getHeight());
         if(MyGdxGame.pickedGameplay == 2){
             buttonFire.setPosition(buttonRight.getRight()+space, buttonLeft.getY());
         }else{
             buttonFire.setPosition((Gdx.graphics.getWidth()-buttonFire.getWidth())/2, buttonLeft.getY());
         }
 
-        Button.ButtonStyle grayButtonStyle = new Button.ButtonStyle();
-        grayButtonStyle.up = skinPlay.getDrawable("buttonActionUp");
-        grayButtonStyle.down = skinPlay.getDrawable("buttonActionUp");
-        buttonGray = new Button(grayButtonStyle);
-        buttonGray.setWidth(buttonFire.getWidth());
-        buttonGray.setHeight(buttonFire.getHeight()/1.7f);
-        buttonGray.setPosition(buttonFire.getX(), buttonFire.getY()/2 + buttonGray.getHeight()/2);
-        //stageUiControl.addActor(buttonGray);
+        if(buttonGray == null){
+            Button.ButtonStyle grayButtonStyle = new Button.ButtonStyle();
+            grayButtonStyle.up = skinPlay.getDrawable("buttonActionUp");
+            grayButtonStyle.down = skinPlay.getDrawable("buttonActionUp");
+            buttonGray = new Button(grayButtonStyle);
+            buttonGray.setWidth(buttonFire.getWidth());
+            buttonGray.setHeight(buttonFire.getHeight()/1.7f);
+            buttonGray.setPosition(buttonFire.getX(), buttonFire.getY()/2 + buttonGray.getHeight()/2);
+            //stageUiControl.addActor(buttonGray);
+        }
 
-        Button.ButtonStyle redButtonStyle = new Button.ButtonStyle();
-        redButtonStyle.up = skinPlay.getDrawable("buttonActionUp");
-        redButtonStyle.down = skinPlay.getDrawable("buttonActionUp");
-        buttonRed = new Button(redButtonStyle);
-        buttonRed.setWidth(buttonFire.getWidth());
-
+        if(buttonRed == null){
+            Button.ButtonStyle redButtonStyle = new Button.ButtonStyle();
+            redButtonStyle.up = skinPlay.getDrawable("buttonActionUp");
+            redButtonStyle.down = skinPlay.getDrawable("buttonActionUp");
+            buttonRed = new Button(redButtonStyle);
+            buttonRed.setWidth(buttonFire.getWidth());
+        }
 
         powerUpBar_MaxHeight = buttonFire.getHeight()/1.46f - offsetYPlay;
         buttonRed.setHeight(powerUpBar_MaxHeight);
         buttonRed.setPosition(buttonFire.getX(), buttonFire.getY()+space);
         //stageUiControl.addActor(buttonRed);
 
-        stageUiControl.addActor(buttonFire);
+        if(buttonJump == null){
+            stageUiControl.addActor(buttonFire);
+            Button.ButtonStyle jumpButtonStyle = new Button.ButtonStyle();
+            jumpButtonStyle.up = skinPlay.getDrawable("buttonActionUp");
+            jumpButtonStyle.down = skinPlay.getDrawable("buttonActionDown");
+            buttonJump = new Button(jumpButtonStyle);
+            buttonJump.setDisabled(true);
+            buttonJump.setWidth(buttonFire.getWidth());
+            buttonJump.setHeight(buttonFire.getHeight());
+            buttonJump.setPosition(buttonFire.getRight()+space, buttonLeft.getY());
+            stageUiControl.addActor(buttonJump);
+        }
 
-        Button.ButtonStyle jumpButtonStyle = new Button.ButtonStyle();
-        jumpButtonStyle.up = skinPlay.getDrawable("buttonActionUp");
-        jumpButtonStyle.down = skinPlay.getDrawable("buttonActionDown");
-        buttonJump = new Button(jumpButtonStyle);
-        buttonJump.setDisabled(true);
-        buttonJump.setWidth(buttonFire.getWidth());
-        buttonJump.setHeight(buttonFire.getHeight());
-        buttonJump.setPosition(buttonFire.getRight()+space, buttonLeft.getY());
-
-
-        stageUiControl.addActor(buttonJump);
         setupButtonListenners();
 
+        if(stage1Play == null){
+            stage1Play = new Stage();
+            stage1Play.addAction(Actions.sequence(Actions.alpha(0), Actions.fadeIn(0.2f)));
 
-        stage1Play = new Stage();
-        stage1Play.addAction(Actions.sequence(Actions.alpha(0), Actions.fadeIn(0.2f)));
-
-        labelScorePlay = new Label("0", new LabelStyle(new BitmapFont(Gdx.files.internal(MyGdxGame.fontPointPath), false), Color.WHITE));
-        labelScorePlay.setFontScaleY(Gdx.graphics.getWidth() / 450f);
-        labelScorePlay.setFontScaleX(Gdx.graphics.getHeight() / 900f);
-        labelScorePlay.setPosition((Gdx.graphics.getWidth() - labelScorePlay.getWidth()) / 2,
-                Gdx.graphics.getHeight() / 1.27f);
-        labelScorePlay.setAlignment(Align.center);
-        stage1Play.addActor(labelScorePlay);
-
+            labelScorePlay = new Label("0", new LabelStyle(new BitmapFont(Gdx.files.internal(MyGdxGame.fontPointPath), false), Color.WHITE));
+            labelScorePlay.setFontScaleY(Gdx.graphics.getWidth() / 450f);
+            labelScorePlay.setFontScaleX(Gdx.graphics.getHeight() / 900f);
+            labelScorePlay.setPosition((Gdx.graphics.getWidth() - labelScorePlay.getWidth()) / 2,
+                    Gdx.graphics.getHeight() / 1.27f);
+            labelScorePlay.setAlignment(Align.center);
+            stage1Play.addActor(labelScorePlay);
+        }
 
         if(MyGdxGame.pickedGameplay == 2){
             buttonFire.setPosition(buttonRight.getRight()+space, buttonLeft.getY());
@@ -382,13 +350,10 @@ public class Play extends GameState {
             buttonFire.setPosition((Gdx.graphics.getWidth()-buttonFire.getWidth())/2, buttonLeft.getY());
         }
 
-
-
-
-
         //createBrick(MyGdxGame.V_WIDTH/5/PPM, player.getPosition().yMenu - player.getHeight()/2.8f/PPM);
         createTiles();
         createPlayer();
+
         if(!MyGdxGame.isTutorial){
             if(!MyGdxGame.TEST)
                 createPrincess(MyGdxGame.V_WIDTH/2/PPM, 2*MyGdxGame.GROUND);
@@ -408,52 +373,53 @@ public class Play extends GameState {
 
         executor = Executors.newScheduledThreadPool(1);
 
-        runnable = new Runnable() {
-            public void run() {
+        if(runnable == null)
+            runnable = new Runnable() {
+                public void run() {
 
-                if(!MyGdxGame.pause){
-                    if(!stopEnemies){
+                    if(!MyGdxGame.pause){
+                        if(!stopEnemies){
 
-                        addNewEnemy = true;
-                        //Gdx.app.debug(LOG_TAG,"addNewEnemy! "+"stopEnemies:"+stopEnemies+" MyGdxGame.pause:"+MyGdxGame.pause);
+                            addNewEnemy = true;
+                            //Gdx.app.debug(LOG_TAG,"addNewEnemy! "+"stopEnemies:"+stopEnemies+" MyGdxGame.pause:"+MyGdxGame.pause);
 
-                        toggle = !toggle;
+                            toggle = !toggle;
 
-                        isMalicious = getRandomBoolean();
+                            isMalicious = getRandomBoolean();
 
-                        //d = (d < 500)? 500:3000-player.getNumCoins()*100;
+                            //d = (d < 500)? 500:3000-player.getNumCoins()*100;
 
-                        if(player.getNumCoins() >= 5 && !step0){
-                            step0 = true;
-                            maxEnemiesOnScreen++;
-                            executor = Executors.newScheduledThreadPool(1);
-                            executor.scheduleAtFixedRate(runnable, 0, 2500, TimeUnit.MILLISECONDS);
-                        }
+                            if(player.getNumCoins() >= 5 && !step0){
+                                step0 = true;
+                                maxEnemiesOnScreen++;
+                                executor = Executors.newScheduledThreadPool(1);
+                                executor.scheduleAtFixedRate(runnable, 0, 2500, TimeUnit.MILLISECONDS);
+                            }
 
-                        if(player.getNumCoins() >= 10 && !step1){
-                            step1 = true;
-                            maxEnemiesOnScreen++;
-                            executor = Executors.newScheduledThreadPool(1);
-                            executor.scheduleAtFixedRate(runnable, 0, 2000, TimeUnit.MILLISECONDS);
-                        }
+                            if(player.getNumCoins() >= 10 && !step1){
+                                step1 = true;
+                                maxEnemiesOnScreen++;
+                                executor = Executors.newScheduledThreadPool(1);
+                                executor.scheduleAtFixedRate(runnable, 0, 2000, TimeUnit.MILLISECONDS);
+                            }
 
-                        if(player.getNumCoins() >= 20 && !step2){
-                            step2 = true;
-                            maxEnemiesOnScreen++;
-                            executor = Executors.newScheduledThreadPool(1);
-                            executor.scheduleAtFixedRate(runnable, 0, 1000, TimeUnit.MILLISECONDS);
-                        }
+                            if(player.getNumCoins() >= 20 && !step2){
+                                step2 = true;
+                                maxEnemiesOnScreen++;
+                                executor = Executors.newScheduledThreadPool(1);
+                                executor.scheduleAtFixedRate(runnable, 0, 1000, TimeUnit.MILLISECONDS);
+                            }
 
-                        if(player.getNumCoins() >= 50 && !step3){
-                            step3 = true;
-                            maxEnemiesOnScreen++;
-                            executor = Executors.newScheduledThreadPool(1);
-                            executor.scheduleAtFixedRate(runnable, 0, 900, TimeUnit.MILLISECONDS);
+                            if(player.getNumCoins() >= 50 && !step3){
+                                step3 = true;
+                                maxEnemiesOnScreen++;
+                                executor = Executors.newScheduledThreadPool(1);
+                                executor.scheduleAtFixedRate(runnable, 0, 900, TimeUnit.MILLISECONDS);
+                            }
                         }
                     }
                 }
-            }
-        };
+            };
 
 
         if(!MyGdxGame.isTutorial){
@@ -463,34 +429,41 @@ public class Play extends GameState {
 
         player.setNumCoins(0);
 
-        //if(pauseButtonStyle == null){
+        if(pauseButtonStyle == null){
             pauseButtonStyle = new Button.ButtonStyle();
             pauseButtonStyle.up = skinPlay.getDrawable("buttonPause");
             pauseButtonStyle.down = skinPlay.getDrawable("buttonPause");
             buttonPausePlay = new Button(pauseButtonStyle);
-        //}
             buttonPausePlay.setWidth(Gdx.graphics.getWidth() / 8f);
             buttonPausePlay.setHeight(Gdx.graphics.getWidth() / 8f);
             buttonPausePlay.setPosition((Gdx.graphics.getWidth() - buttonPausePlay.getWidth() - 20),
                     (Gdx.graphics.getHeight() - buttonPausePlay.getHeight() - Gdx.graphics.getHeight()/10f));
+                stage1Play.addActor(buttonPausePlay);
+        }
 
+        if(MyGdxGame.isTutorial){
+            buttonPausePlay.setVisible(false);
+        }else {
+            buttonPausePlay.setVisible(true);
+        }
 
+        if(originalTouchableTouchButton == null)
+            originalTouchableTouchButton = buttonPausePlay.getTouchable();
 
-        if(!MyGdxGame.isTutorial)
-            stage1Play.addActor(buttonPausePlay);
+        buttonPausePlay.setTouchable(originalTouchableTouchButton);
+
 
 
         if(imageCoinPlay == null){
-            coinButtonStyle = new Button.ButtonStyle();
+            Button.ButtonStyle coinButtonStyle = new Button.ButtonStyle();
             coinButtonStyle.up = skinPlay.getDrawable("coin");
             coinButtonStyle.down = skinPlay.getDrawable("coin");
             imageCoinPlay = new Button(coinButtonStyle);
             imageCoinPlay.setWidth(buttonPausePlay.getWidth());
             imageCoinPlay.setHeight(buttonPausePlay.getWidth());
             imageCoinPlay.setPosition(imageCoinPlay.getWidth() / 4, buttonPausePlay.getY());
+            stage1Play.addActor(imageCoinPlay);
         }
-
-        stage1Play.addActor(imageCoinPlay);
 
         if(labelMoneyPlay == null){
             labelMoneyPlay = new Label("0", new LabelStyle(new BitmapFont(Gdx.files.internal(MyGdxGame.fontPointPath), false), Color.WHITE));
@@ -499,55 +472,48 @@ public class Play extends GameState {
             labelMoneyPlay.setHeight(imageCoinPlay.getHeight());
             labelMoneyPlay.setAlignment(Align.center | Align.left);
             labelMoneyPlay.setPosition(imageCoinPlay.getRight() * 1.1f, imageCoinPlay.getY());
+            stage1Play.addActor(labelMoneyPlay);
         }
 
-        stage1Play.addActor(labelMoneyPlay);
 
-//        Label labelPause = new Label("PAUSE", new LabelStyle(new BitmapFont( Gdx.files.internal(MyGdxGame.fontCreditsPath), false), Color.WHITE));
-//
-//        labelPause.setWidth(Gdx.graphics.getWidth() / 2);
-//        labelPause.setHeight(Gdx.graphics.getHeight() / 8);
-//        labelPause.setFontScale(Gdx.graphics.getWidth() / 100f);
-//        labelPause.setAlignment(Align.center);
-//        labelPause.setPosition((Gdx.graphics.getWidth() - labelPause.getWidth()) / 2, (Gdx.graphics.getHeight() - labelPause.getHeight()) / 2);
-//        //stage1Play.addActor(labelPause);
-
-        float ymargin = 4.5f;
         //if(MyGdxGame.pickedGameplay == 2) ymargin = 24.5f;
-        //if(buttonPlayPlay == null){
+        if(buttonPlayPlay == null){
             Skin skinButtonPlay = new Skin();
             skinButtonPlay.addRegions(MyGdxGame.atlas);
             Button.ButtonStyle buttonStylePlay = new Button.ButtonStyle();
             buttonStylePlay.up = skinButtonPlay.getDrawable("buttonExit2Up");
             buttonStylePlay.down = skinButtonPlay.getDrawable("buttonExit2Down");
             buttonPlayPlay = new Button(buttonStylePlay);
-        //}
             buttonPlayPlay.setWidth(Gdx.graphics.getWidth() / 5f);
             buttonPlayPlay.setHeight(Gdx.graphics.getHeight() / 7.8f);
-            buttonPlayPlay.setPosition(-400, Gdx.graphics.getHeight() / ymargin);
+            buttonPlayPlay.setPosition(-400, Gdx.graphics.getHeight() / 4.5f);
+            stage1Play.addActor(buttonPlayPlay);
+        }
 
-
-        stage1Play.addActor(buttonPlayPlay);
-
-        //if(buttonSoundPlay == null){
+        if(buttonSoundPlay == null){
             Button.ButtonStyle soundButtonStyle = new Button.ButtonStyle();
             buttonSoundPlay = new Button(soundButtonStyle);
-        //}
             buttonSoundPlay.setWidth(Gdx.graphics.getWidth() / 5f);
             buttonSoundPlay.setHeight(Gdx.graphics.getHeight() / 7.8f);
-            buttonSoundPlay.setPosition((Gdx.graphics.getWidth() / 1f) + 400, Gdx.graphics.getHeight() / ymargin);
+            buttonSoundPlay.setPosition((Gdx.graphics.getWidth() / 1f) + 400, Gdx.graphics.getHeight() / 4.5f);
+            stage1Play.addActor(buttonSoundPlay);
+        }
 
-        stage1Play.addActor(buttonSoundPlay);
-
-        if(gamePlaySelection == null)
+        if(gamePlaySelection == null){
             gamePlaySelection = new Image(MyGdxGame.atlas.findRegion("gamePlaySelection"));
 
-        gamePlaySelection.setWidth(Gdx.graphics.getWidth());
-        gamePlaySelection.setHeight(Gdx.graphics.getHeight());
-        gamePlaySelection.setPosition(0,(Gdx.graphics.getHeight())/2 - gamePlaySelection.getHeight()/2);
-
-        if(MyGdxGame.isTutorial)
+            gamePlaySelection.setWidth(Gdx.graphics.getWidth());
+            gamePlaySelection.setHeight(Gdx.graphics.getHeight());
+            gamePlaySelection.setPosition(0,(Gdx.graphics.getHeight())/2 - gamePlaySelection.getHeight()/2);
             stage1Play.addActor(gamePlaySelection);
+        }
+
+        if(MyGdxGame.isTutorial){
+            gamePlaySelection.setVisible(true);
+        }else {
+            gamePlaySelection.setVisible(false);
+        }
+
 
         if(buttonGp1 == null){
             Skin skinButtonGamePlay1 = new Skin();
@@ -585,22 +551,163 @@ public class Play extends GameState {
             buttonGp2_label.setWidth(Gdx.graphics.getWidth() / 3f);
             buttonGp2_label.setHeight(Gdx.graphics.getWidth() / 7.8f);
             buttonGp2_label.setPosition(buttonGp1.getX()+buttonGp2_label.getWidth()*1.40f, buttonGp1.getTop());
-        }
 
-        if(MyGdxGame.isTutorial){
             stage1Play.addActor(buttonGp1);
             stage1Play.addActor(buttonGp1_label);
-        }
-
-
-
-        if(MyGdxGame.isTutorial){
             stage1Play.addActor(buttonGp2);
             stage1Play.addActor(buttonGp2_label);
         }
 
+        if(MyGdxGame.isTutorial){
+            buttonGp1.setVisible(true);
+            buttonGp1_label.setVisible(true);
+            buttonGp2.setVisible(true);
+            buttonGp2_label.setVisible(true);
+
+        }else {
+            buttonGp1.setVisible(false);
+            buttonGp1_label.setVisible(false);
+            buttonGp2.setVisible(false);
+            buttonGp2_label.setVisible(false);
+        }
 
 
+        if(buttonSkip == null){
+            Skin skinButtonSkip = new Skin();
+            skinButtonSkip.addRegions(MyGdxGame.atlas);
+            Button.ButtonStyle buttonStyleSkip = new Button.ButtonStyle();
+            buttonStyleSkip.up = skinButtonSkip.getDrawable("buttonSkipUp");
+            buttonStyleSkip.down = skinButtonSkip.getDrawable("buttonSkipDown");
+            buttonSkip = new Button(buttonStyleSkip);
+            buttonSkip.setWidth(Gdx.graphics.getWidth() / 5f);
+            buttonSkip.setHeight(Gdx.graphics.getHeight() / 13f);
+            buttonSkip.setPosition(Gdx.graphics.getWidth() - buttonSkip.getWidth()*1.1f, Gdx.graphics.getHeight() / 1.24f);
+            stage1Play.addActor(buttonSkip);
+        }
+
+        if(MyGdxGame.isTutorial){
+            buttonSkip.setVisible(true);
+        }else{
+            buttonSkip.setVisible(false);
+        }
+
+        if(gd == null){
+            setupButtonListenners2();
+            stage1Play.addListener(new InputListener() {
+                @Override
+                public boolean keyUp(InputEvent event, int keycode) {
+                    if (keycode == Input.Keys.LEFT) {
+                        Gdx.app.debug(LOG_TAG,"keyUp LEFT");
+                        left = false;
+                    }
+                    if (keycode == Input.Keys.RIGHT) {
+                        Gdx.app.debug(LOG_TAG,"keyUp RIGHT");
+                        right  = false;
+                    }
+
+                    if (keycode == Input.Keys.ENTER | keycode == Input.Keys.SPACE) {
+                        InputEvent event2 = new InputEvent();
+                        event2.setType(InputEvent.Type.touchUp);
+                        buttonFire.fire(event2);
+                    }
+                    return false;
+                }
+
+                @Override
+                public boolean keyDown(InputEvent event, int keycode) {
+                    if (keycode == Input.Keys.LEFT) {
+                        Gdx.app.debug(LOG_TAG,"keyUp LEFT");
+                        left = true;
+                    }
+                    if (keycode == Input.Keys.RIGHT) {
+                        Gdx.app.debug(LOG_TAG,"keyUp RIGHT");
+                        right = true;
+                    }
+                    if (keycode == Input.Keys.ENTER | keycode == Input.Keys.SPACE) {
+                        firePlay = false;
+                        InputEvent event1 = new InputEvent();
+                        event1.setType(InputEvent.Type.touchDown);
+                        buttonFire.fire(event1);
+                    }
+                    return false;
+                }
+            });
+
+            gd = new SimpleDirectionGestureDetector(
+                    new SimpleDirectionGestureDetector.DirectionListener() {
+
+                        @Override
+                        public void onUp() {
+                            if(MyGdxGame.pickedGameplay == 1){
+                                Gdx.app.debug(LOG_TAG,"onUp"+" "+Gdx.input.getY()+" "+MyGdxGame.PAD_ZONE);
+                                if(Gdx.input.getY() < MyGdxGame.PAD_ZONE){
+                                    if(!player.isPlayerDead() && !MyGdxGame.pause && !isGamePadTouched()) {
+                                        jump = true;
+                                        Gdx.app.debug(LOG_TAG,"up");
+                                    }
+                                }
+                            }
+
+                        }
+
+                        @Override
+                        public void onRight() {
+                            if(MyGdxGame.pickedGameplay == 1){
+                                Gdx.app.debug(LOG_TAG,"onRight"+" "+Gdx.input.getY()+" "+MyGdxGame.PAD_ZONE);
+                                if(Gdx.input.getY() < MyGdxGame.PAD_ZONE && !MyGdxGame.pause && !isGamePadTouched() ){
+                                    right = true;
+                                    left = false;
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onLeft() {
+                            if(MyGdxGame.pickedGameplay == 1){
+                                Gdx.app.debug(LOG_TAG,"onLeft"+" "+Gdx.input.getY()+" "+MyGdxGame.PAD_ZONE+" "+isGamePadTouched());
+                                if(Gdx.input.getY() < MyGdxGame.PAD_ZONE && !MyGdxGame.pause && !isGamePadTouched()){
+                                    left = true;
+                                    right = false;
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onDown() {
+                            if(MyGdxGame.pickedGameplay == 1){
+                                Gdx.app.debug(LOG_TAG,"onDown");
+                                left = false;
+                                right = false;
+                            }
+                        }
+                    });
+        }
+
+
+        InputMultiplexer im = new InputMultiplexer();
+        im.addProcessor(gd);
+        im.addProcessor(new MyInputProcessor());
+        im.addProcessor(stage1Play);
+        im.addProcessor(stageUiControl);
+
+        Gdx.input.setInputProcessor(im);
+
+
+        MyGdxGame.setIsBoosTerritory(false);
+
+        Gdx.app.debug(LOG_TAG,"init completed without errors.");
+
+
+        Timer.schedule(new Timer.Task(){
+            @Override
+            public void run() {
+                hideScream = true;
+            }
+        }, 1.5f);
+
+    }
+
+    private void setupButtonListenners2(){
         buttonGp1.addListener(new InputListener() {
             public boolean touchDown(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
@@ -687,19 +794,6 @@ public class Play extends GameState {
             }
         });
 
-        Skin skinButtonSkip = new Skin();
-        skinButtonSkip.addRegions(MyGdxGame.atlas);
-        Button.ButtonStyle buttonStyleSkip = new Button.ButtonStyle();
-        buttonStyleSkip.up = skinButtonSkip.getDrawable("buttonSkipUp");
-        buttonStyleSkip.down = skinButtonSkip.getDrawable("buttonSkipDown");
-        buttonSkip = new Button(buttonStyleSkip);
-        buttonSkip.setWidth(Gdx.graphics.getWidth() / 5f);
-        buttonSkip.setHeight(Gdx.graphics.getHeight() / 13f);
-        buttonSkip.setPosition(Gdx.graphics.getWidth() - buttonSkip.getWidth()*1.1f, Gdx.graphics.getHeight() / 1.24f);
-
-        if(MyGdxGame.isTutorial)
-            stage1Play.addActor(buttonSkip);
-
         buttonSkip.addListener(new InputListener() {
             public boolean touchDown(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
@@ -730,100 +824,6 @@ public class Play extends GameState {
             }
         });
 
-
-
-        buttonNo.addListener(new InputListener() {
-            public boolean touchDown(
-                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
-                    float y, int pointer, int button) {
-                labelMoneyPlay.setColor(Color.WHITE);
-                return true;
-            }
-            public void touchUp(
-                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
-                    float y, int pointer, int button) {
-                Gdx.app.debug(LOG_TAG,"clicked no!");
-                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("select").play();
-                Gdx.app.debug(LOG_TAG,"GAME OVER");
-                MyGdxGame.setContinue(false);
-                submitPlay = true;
-                gsm.setState(GameStateManager.GAME_OVER);
-            }
-        });
-
-        buttonCoin.addListener(new InputListener() {
-            public boolean touchDown(
-                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
-                    float y, int pointer, int button) {
-                return true;
-            }
-            public void touchUp(
-                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
-                    float y, int pointer, int button) {
-                Gdx.app.debug(LOG_TAG,"clicked coin!");
-                Save.load();
-                if(Save.gd.getMoney() >= MyGdxGame.getContinuePrice()){
-                    Save.gd.setMoney(Save.gd.getMoney() - MyGdxGame.getContinuePrice());
-                    Save.save();
-                    Save.load();
-                    submitPlay = false;
-                    stopEnemies = false;
-                    //player.setPlayerDead(false);
-                    MyGdxGame.setContinue(true);
-
-                    //TODO Remove all current enemies
-                    for (Enemy enemy:enemies) {
-                        enemy.setDead(true);
-                        enemy.setCptDieRunning(100);
-                        enemies.removeValue(enemy, true);
-                        //removeBodySafely(enemy.getBody());
-                        bodyToDestroy.add(enemy);
-                        //enemy.destroy();
-                    }
-                    if(princess != null){
-                        princess.setTouched(false);
-                        princess.setCry(false);
-                    }
-                    MyGdxGame.pause = false;
-                }else{
-                    if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("error").play();
-                    labelMoneyPlay.setColor(Color.RED);
-                    Timer.schedule(new Timer.Task() {
-                        @Override
-                        public void run() {
-                            labelMoneyPlay.setColor(Color.WHITE);
-                        }
-                    }, 0.2f);
-                    //BUY MORE
-                    MyGdxGame.actionResolver.purchaseExtraCoins();
-                    labelMoneyPlay.setText(Integer.toString(Save.gd.getMoney()));
-                    labelMoneyPlay.setColor(Color.WHITE);
-                }
-            }
-        });
-
-        buttonCamera.addListener(new InputListener() {
-            public boolean touchDown(
-                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
-                    float y, int pointer, int button) {
-                labelMoneyPlay.setColor(Color.WHITE);
-                return true;
-            }
-
-            public void touchUp(
-                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
-                    float y, int pointer, int button) {
-                Gdx.app.debug(LOG_TAG,"clicked camera!");
-                if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("select").play();
-                //MyGdxGame.actionResolver.showOrLoadInterstitalVideo();
-                String network = MyGdxGame.actionResolver.getNetworkClass();
-                if(network == null) network = "ABSENT";
-                Gdx.app.debug(LOG_TAG,"NETWORK: " + network);
-                if(network.equals("4G")|network.equals("3G")|network.equals("WIFI")) {
-                }
-            }
-        });
-
         buttonPausePlay.addListener(new InputListener() {
             public boolean touchDown(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
@@ -833,9 +833,6 @@ public class Play extends GameState {
             public void touchUp(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
-
-
-
                 if(!gameOverPlay){
                     Gdx.app.debug(LOG_TAG,"clicked pause!");
                     if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getMusic("newScreen").play();
@@ -909,130 +906,6 @@ public class Play extends GameState {
                 }
             }
         });
-
-        buttonNo.setVisible(false);
-        buttonCoin.setVisible(false);
-        buttonCamera.setVisible(false);
-
-        stage1Play.addListener(new InputListener() {
-            @Override
-            public boolean keyUp(InputEvent event, int keycode) {
-                if (keycode == Input.Keys.LEFT) {
-                    Gdx.app.debug(LOG_TAG,"keyUp LEFT");
-                    left = false;
-                }
-                if (keycode == Input.Keys.RIGHT) {
-                    Gdx.app.debug(LOG_TAG,"keyUp RIGHT");
-                    right  = false;
-                }
-
-                if (keycode == Input.Keys.ENTER | keycode == Input.Keys.SPACE) {
-//                    if(!blockKamehameha){
-//                        firePlay  = true;
-//                        Gdx.app.debug(LOG_TAG,"pressed enter!");
-//                    }else if(!blockLightning){
-//                        firePlay  = true;
-//                        Gdx.app.debug(LOG_TAG,"pressed enter!");
-//                    }else {
-//                        firePlay = false;
-//                    }
-                    InputEvent event2 = new InputEvent();
-                    event2.setType(InputEvent.Type.touchUp);
-                    buttonFire.fire(event2);
-                }
-                return false;
-            }
-
-            @Override
-            public boolean keyDown(InputEvent event, int keycode) {
-                if (keycode == Input.Keys.LEFT) {
-                    Gdx.app.debug(LOG_TAG,"keyUp LEFT");
-                    left = true;
-                }
-                if (keycode == Input.Keys.RIGHT) {
-                    Gdx.app.debug(LOG_TAG,"keyUp RIGHT");
-                    right = true;
-                }
-                if (keycode == Input.Keys.ENTER | keycode == Input.Keys.SPACE) {
-                    firePlay = false;
-                    InputEvent event1 = new InputEvent();
-                    event1.setType(InputEvent.Type.touchDown);
-                    buttonFire.fire(event1);
-                }
-                return false;
-            }
-        });
-
-        SimpleDirectionGestureDetector gd = new SimpleDirectionGestureDetector(
-                new SimpleDirectionGestureDetector.DirectionListener() {
-
-                    @Override
-                    public void onUp() {
-                        if(MyGdxGame.pickedGameplay == 1){
-                            Gdx.app.debug(LOG_TAG,"onUp"+" "+Gdx.input.getY()+" "+MyGdxGame.PAD_ZONE);
-                            if(Gdx.input.getY() < MyGdxGame.PAD_ZONE){
-                                if(!player.isPlayerDead() && !MyGdxGame.pause && !isGamePadTouched()) {
-                                    jump = true;
-                                    Gdx.app.debug(LOG_TAG,"up");
-                                }
-                            }
-                        }
-
-                    }
-
-                    @Override
-                    public void onRight() {
-                        if(MyGdxGame.pickedGameplay == 1){
-                            Gdx.app.debug(LOG_TAG,"onRight"+" "+Gdx.input.getY()+" "+MyGdxGame.PAD_ZONE);
-                            if(Gdx.input.getY() < MyGdxGame.PAD_ZONE && !MyGdxGame.pause && !isGamePadTouched() ){
-                                right = true;
-                                left = false;
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onLeft() {
-                        if(MyGdxGame.pickedGameplay == 1){
-                            Gdx.app.debug(LOG_TAG,"onLeft"+" "+Gdx.input.getY()+" "+MyGdxGame.PAD_ZONE+" "+isGamePadTouched());
-                            if(Gdx.input.getY() < MyGdxGame.PAD_ZONE && !MyGdxGame.pause && !isGamePadTouched()){
-                                left = true;
-                                right = false;
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onDown() {
-                        if(MyGdxGame.pickedGameplay == 1){
-                            Gdx.app.debug(LOG_TAG,"onDown");
-                            left = false;
-                            right = false;
-                        }
-                    }
-                });
-
-        InputMultiplexer im = new InputMultiplexer();
-        im.addProcessor(gd);
-        im.addProcessor(new MyInputProcessor());
-        im.addProcessor(stageUiContinue);
-        im.addProcessor(stage1Play);
-        im.addProcessor(stageUiControl);
-
-        Gdx.input.setInputProcessor(im);
-
-
-        MyGdxGame.setIsBoosTerritory(false);
-
-        Gdx.app.debug(LOG_TAG,"init completed without errors.");
-
-
-        Timer.schedule(new Timer.Task(){
-            @Override
-            public void run() {
-                hideScream = true;
-            }
-        }, 1.5f);
 
     }
 
@@ -3108,6 +2981,7 @@ public class Play extends GameState {
         if(MyGdxGame.pause) dt = 0;
 
         pauseUiAnimation();
+
         updatePlayerAnimation();
 
         sb.setProjectionMatrix(hudCam.combined);
@@ -3427,9 +3301,6 @@ public class Play extends GameState {
 
         labelScorePlay.setVisible(true);
         buttonPausePlay.setVisible(true);
-        buttonNo.setVisible(false);
-        buttonCoin.setVisible(false);
-        buttonCamera.setVisible(false);
 
         //}
 
@@ -4198,14 +4069,18 @@ public class Play extends GameState {
         }
         fireBalls.clear();
 
-
-
         lightning = null;
 
         MyGdxGame.setPause(false);
 
-
         executor.shutdown();
+
+        buttonPlayPlay.setPosition(-400, Gdx.graphics.getHeight() / 4.5f);
+        buttonSoundPlay.setPosition((Gdx.graphics.getWidth() / 1f) + 400, Gdx.graphics.getHeight() / 4.5f);
+        buttonPausePlay.setPosition((Gdx.graphics.getWidth() - buttonPausePlay.getWidth() - 20),
+                (Gdx.graphics.getHeight() - buttonPausePlay.getHeight() - Gdx.graphics.getHeight()/10f));
+        buttonPausePlay.setTouchable(originalTouchableTouchButton);
+        //buttonPausePlay = new Button(pauseButtonStyle);
         //enemies.clear();
         //brick.destroy();
 

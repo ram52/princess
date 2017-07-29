@@ -1,9 +1,12 @@
 package com.mygdx.core.states;
 
+import com.badlogic.gdx.Gdx;
 import com.mygdx.core.handlers.GameStateManager;
 import com.mygdx.core.handlers.Save;
 
 import static com.mygdx.core.MyGdxGame.actionResolver;
+import static com.mygdx.core.MyGdxGame.buttonPlayPlay;
+import static com.mygdx.core.MyGdxGame.buttonSoundPlay;
 
 public class Tutorial extends GameState {
 
