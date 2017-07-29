@@ -912,23 +912,23 @@ public class Play extends GameState {
     private void setupButtonListenners(){
         buttonFire.addListener(new ClickListener() {
             public boolean isOver (Actor actor, float x, float y) {
-                Gdx.app.debug(LOG_TAG, "isOver");
+                //Gdx.app.debug(LOG_TAG, "isOver");
                 return true;
             }
 
             public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                Gdx.app.debug(LOG_TAG, "enter");
+                //Gdx.app.debug(LOG_TAG, "enter");
             }
 
             public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
-                Gdx.app.debug(LOG_TAG, "exit");
+                //Gdx.app.debug(LOG_TAG, "exit");
             }
 
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.app.debug(LOG_TAG, "touchDown");
+                //Gdx.app.debug(LOG_TAG, "touchDown");
                 buttonFire.setChecked(true);
                 if(Save.gd.isFireBallEquiped()|Save.gd.isFireBall2Equiped()){
-                    Gdx.app.debug(LOG_TAG,"clicked firePlay!");
+                    //Gdx.app.debug(LOG_TAG,"clicked firePlay!");
                     firePlay = true;
                 }else if(Save.gd.isKamehamehaEquiped() && !blockKamehameha){
                     firePlay = true;
@@ -958,7 +958,7 @@ public class Play extends GameState {
             }
 
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.app.debug(LOG_TAG, "touchUp");
+                //Gdx.app.debug(LOG_TAG, "touchUp");
                 buttonFire.setChecked(false);
             }
 
@@ -966,26 +966,26 @@ public class Play extends GameState {
 
         buttonJump.addListener(new ClickListener() {
             public boolean isOver (Actor actor, float x, float y) {
-                Gdx.app.debug(LOG_TAG, "isOver");
+                //Gdx.app.debug(LOG_TAG, "isOver");
                 return true;
             }
 
             public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                Gdx.app.debug(LOG_TAG, "enter");
+                //Gdx.app.debug(LOG_TAG, "enter");
             }
 
             public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
-                Gdx.app.debug(LOG_TAG, "exit");
+                //Gdx.app.debug(LOG_TAG, "exit");
             }
 
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.app.debug(LOG_TAG, "touchDown");
+                //Gdx.app.debug(LOG_TAG, "touchDown");
                 jump = true;
                 return true;
             }
 
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.app.debug(LOG_TAG, "touchUp");
+                //Gdx.app.debug(LOG_TAG, "touchUp");
                 jump = false;
             }
 
@@ -993,58 +993,58 @@ public class Play extends GameState {
 
         buttonLeft.addListener(new ClickListener() {
             public boolean isOver (Actor actor, float x, float y) {
-                Gdx.app.debug(LOG_TAG, "buttonLeft isOver");
+                //Gdx.app.debug(LOG_TAG, "buttonLeft isOver");
                 return true;
             }
 
             public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                Gdx.app.debug(LOG_TAG, "buttonLeft enter");
+                //Gdx.app.debug(LOG_TAG, "buttonLeft enter");
                 left = true;
             }
 
             public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
-                Gdx.app.debug(LOG_TAG, "buttonLeft exit");
+                //Gdx.app.debug(LOG_TAG, "buttonLeft exit");
                 left = false;
 
             }
 
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.app.debug(LOG_TAG, "buttonLeft touchDown");
+                //Gdx.app.debug(LOG_TAG, "buttonLeft touchDown");
                 left = true;
                 return true;
             }
 
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.app.debug(LOG_TAG, "buttonLeft ouchUp");
+                //Gdx.app.debug(LOG_TAG, "buttonLeft ouchUp");
             }
 
         });
 
         buttonRight.addListener(new ClickListener() {
             public boolean isOver (Actor actor, float x, float y) {
-                Gdx.app.debug(LOG_TAG, "buttonRight isOver");
+                //Gdx.app.debug(LOG_TAG, "buttonRight isOver");
                 return true;
             }
 
             public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                Gdx.app.debug(LOG_TAG, "buttonRight enter");
+                //Gdx.app.debug(LOG_TAG, "buttonRight enter");
                 right = true;
             }
 
             public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
-                Gdx.app.debug(LOG_TAG, "buttonRight exit");
+                //Gdx.app.debug(LOG_TAG, "buttonRight exit");
                 right = false;
 
             }
 
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.app.debug(LOG_TAG, "buttonRight touchDown");
+                //Gdx.app.debug(LOG_TAG, "buttonRight touchDown");
                 right = true;
                 return true;
             }
 
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.app.debug(LOG_TAG, "buttonRight touchUp");
+                //Gdx.app.debug(LOG_TAG, "buttonRight touchUp");
             }
 
         });
@@ -2646,7 +2646,6 @@ public class Play extends GameState {
 
         if(tuto_step1 && !tuto_step2) {
             left = false;
-            System.out.println("tuto_step2="+tuto_step2+" tuto_step1="+tuto_step1);
         }
 
         if(!tuto_step2 && tuto_step1 && player.getPosition().x*PPM > 300 ){
@@ -4094,7 +4093,7 @@ public class Play extends GameState {
         //spriteBatch.dispose();
         //spriteBatchLightning.dispose();
         //if (MyGdxGame.res.getSound("alarm").isPlaying()) MyGdxGame.res.getSound("alarm").pause();
-        if(MyGdxGame.isSoundEnable() == 2) {
+        //if(MyGdxGame.isSoundEnable() == 2) {
             if(MyGdxGame.res.getMusic("shop").isPlaying()){
                 MyGdxGame.res.getMusic("shop").pause();
                 MyGdxGame.res.getMusic("shop").stop();
@@ -4107,7 +4106,7 @@ public class Play extends GameState {
             }else{
                 MyGdxGame.res.getMusic("level1").pause();
             }
-        }
+        //}
     }
 
 }

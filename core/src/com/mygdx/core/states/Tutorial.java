@@ -1,6 +1,7 @@
 package com.mygdx.core.states;
 
 import com.badlogic.gdx.Gdx;
+import com.mygdx.core.MyGdxGame;
 import com.mygdx.core.handlers.GameStateManager;
 import com.mygdx.core.handlers.Save;
 
@@ -35,6 +36,11 @@ public class Tutorial extends GameState {
         //play.dispose();
         if(!Save.gd.getAdsRemoverPurchased())
             actionResolver.showBannerAd();
+
+        if(MyGdxGame.res.getMusic("shop").isPlaying()){
+            MyGdxGame.res.getMusic("shop").pause();
+            MyGdxGame.res.getMusic("shop").stop();
+        }
     }
 
 }
