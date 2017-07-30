@@ -1,15 +1,18 @@
-PRINCESS! v1.0
-contact@ram52.com
+PRINCESS!
+ram52studio@gmail.com
+v1.0
 
 Programming:
-Axel MONTOUT
+Axel
 
 Art:
 lansari rachid
-Axel MONTOUT
+rachidlansari@gmail.com
+Axel
 Clint Bellanger (Shock Spell)
 https://creativecommons.org/
 licenses/by/3.0/
+Bongwater-bandit (projectiles)
 
 Music:
 Yuu Hayashi
@@ -19,6 +22,7 @@ Satie
 
 Sfx:
 Juhani Junkala
+juhani.junkala@musician.org
 
 Special Thanks
 Reibu Jocelyn

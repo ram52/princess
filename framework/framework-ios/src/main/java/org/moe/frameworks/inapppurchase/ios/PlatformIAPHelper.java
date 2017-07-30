@@ -255,7 +255,7 @@ public class PlatformIAPHelper extends AbstractIAPHelper implements SKProductsRe
         if (restoreProductsHandler != null)
             restoreProductsHandler.callback(productIdentifier);
 
-        //clearRequest();
+        clearRequest();
     }
 
 

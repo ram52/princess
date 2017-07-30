@@ -12,6 +12,7 @@ Axel
 Clint Bellanger (Shock Spell)
 https://creativecommons.org/
 licenses/by/3.0/
+Bongwater-bandit (projectiles)
 
 Music:
 Yuu Hayashi

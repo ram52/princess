@@ -1,6 +1,7 @@
 package com.ram52.princess;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Net;
 import com.badlogic.gdx.backends.iosmoe.IOSApplication;
 import com.badlogic.gdx.backends.iosmoe.IOSApplicationConfiguration;
 import com.badlogic.gdx.backends.iosmoe.IOSGraphics;
@@ -80,6 +81,26 @@ public class Main extends IOSApplication.Delegate implements ActionResolver {
     //private boolean isSignInGC = false;
     private GADBannerView adView;
     private GKLocalPlayer localPlayer;
+
+    private Net.HttpRequest httpRequest = new Net.HttpRequest("https://www.google.com");
+    private Net.HttpResponseListener httpResponseListener = new Net.HttpResponseListener() {
+        @Override
+        public void handleHttpResponse(Net.HttpResponse httpResponse) {
+            displayError(true);
+            iosApplication.log(LOG_TAG,"internet is available");
+        }
+
+        @Override
+        public void failed(Throwable t) {
+            iosApplication.log(LOG_TAG,"error while httpRequest",t);
+            displayError(false);
+        }
+
+        @Override
+        public void cancelled() {
+            displayError(true);
+        }
+    };
 
     private class CompletionHandler implements GKLeaderboard.Block_loadLeaderboardsWithCompletionHandler {
         private boolean silent = false;
@@ -216,12 +237,20 @@ public class Main extends IOSApplication.Delegate implements ActionResolver {
         iosApplication.getUIWindow().addSubview(uiProgressView);
     }
 
-    public void displayError(){
+    public void displayError(boolean internetAvailable){
         UIAlertView alert = UIAlertView.alloc().init();
         alert.setTitle("Sorry :(");
-        alert.setMessage("An error occurred.");
+        if(!internetAvailable){
+            alert.setMessage("Internet connection is off. Your score will be submitted the next time you play with internet available");
+        }else {
+            alert.setMessage("An error occurred.");
+        }
         alert.addButtonWithTitle("Ok");
         alert.show();
+    }
+
+    public void isInternetAvailable(){
+        Gdx.net.sendHttpRequest(httpRequest, httpResponseListener);
     }
 
     private void initAdMobReward(){
@@ -550,7 +579,8 @@ public class Main extends IOSApplication.Delegate implements ActionResolver {
         }
 
         if(product == null){
-            displayError();
+            //displayError();
+            isInternetAvailable();
             iosApplication.log(LOG_TAG,"product == null");
         }else{
 
@@ -624,7 +654,8 @@ public class Main extends IOSApplication.Delegate implements ActionResolver {
         iosApplication.log(LOG_TAG,"displayRestore");
 
         if(productsStore == null){
-            displayError();
+            //displayError();
+            isInternetAvailable();
             iosApplication.log(LOG_TAG,"displayRestore == null");
         }else{
             UIAlertView alert = UIAlertView.alloc().init();
@@ -682,7 +713,8 @@ public class Main extends IOSApplication.Delegate implements ActionResolver {
                         public void call_reportScoresWithCompletionHandler(NSError nsError) {
                             if (nsError != null) {
                                 Gdx.app.debug(LOG_TAG,"submitted score not successfully");
-                                displayError();
+                                //displayError();
+                                isInternetAvailable();
                             } else {
                                 Gdx.app.debug(LOG_TAG,"submitted score successfully");
                             }
