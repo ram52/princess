@@ -49,7 +49,7 @@ public class Credits extends GameState {
     private static String CREDIT;
     private Vector2 credits_size = new Vector2(0,0);
     private ShapeRenderer shapeRenderer;
-    private int numbOfLinesInCredits = 5;
+    private int numbOfLinesInCredits = 7;
 
     public Credits(GameStateManager gsm) {
 

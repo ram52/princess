@@ -247,6 +247,7 @@ public class AndroidLauncher extends AndroidApplication implements
                     //TODO Give free coins
                     Save.load();
                     Save.gd.setMoney(Save.gd.getMoney() + MyGdxGame.TWENTY_COINS_STORE_PACK);
+                    if (MyGdxGame.isSoundEnable() != 0) MyGdxGame.res.getSound("point").play();
                     Save.save();
                 }
             });

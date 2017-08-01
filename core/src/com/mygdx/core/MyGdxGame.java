@@ -159,7 +159,7 @@ public class MyGdxGame implements ApplicationListener {
     private static int CONTINUE_MAX = 9999999;
     private static int CONTINUE_PRICE = 100;
     private static int CONTINUE_STORE_PACK = 500;
-    public static int TWENTY_COINS_STORE_PACK = 20;
+    public static int TWENTY_COINS_STORE_PACK = 40;
     public static int HUNDRED_COINS_STORE_PACK = 100;
     public static int THOUSAND_COINS_STORE_PACK = 1000;
     private static boolean secretDiscovered = false;

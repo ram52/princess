@@ -46,7 +46,6 @@ io.fabric/
 /data.sav
 /android/assets/crashlytics-build.properties
 /android/res/values/com_crashlytics_export_strings.xml
-*.js
-.idea/libraries/
+/*.js
+/idea/libraries/
 
-projectFilesBackup/

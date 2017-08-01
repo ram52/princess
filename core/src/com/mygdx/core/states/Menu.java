@@ -72,7 +72,7 @@ public class Menu extends GameState {
 
         super(gsm);
 
-
+        game.actionResolver.hideBannerAd();
 
         if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) {
             if(MyGdxGame.res.getMusic("newScreen").isPlaying()){
@@ -99,13 +99,13 @@ public class Menu extends GameState {
         updateSelector();
 
         Save.load();
-        if (!Save.gd.getAdsRemoverPurchased()) {
-            String network = game.actionResolver.getNetworkClass();
-            if(network == null) network = "ABSENT";
-            Gdx.app.debug(LOG_TAG,"NETWORK: "+network);
-            if(network.equals("4G")|network.equals("3G")|network.equals("WIFI"))
-                game.actionResolver.showOrLoadBanner();
-        }
+//        if (!Save.gd.getAdsRemoverPurchased()) {
+//            String network = game.actionResolver.getNetworkClass();
+//            if(network == null) network = "ABSENT";
+//            Gdx.app.debug(LOG_TAG,"NETWORK: "+network);
+//            if(network.equals("4G")|network.equals("3G")|network.equals("WIFI"))
+//                game.actionResolver.showOrLoadBanner();
+//        }
 
         click_on_play = false;
         click_on_leaderboard = false;
@@ -1091,6 +1091,14 @@ public class Menu extends GameState {
                 MyGdxGame.res.getMusic("newScreen").pause();
                 MyGdxGame.res.getMusic("newScreen").stop();
             }
+        }
+
+        if (!Save.gd.getAdsRemoverPurchased()) {
+            String network = game.actionResolver.getNetworkClass();
+            if(network == null) network = "ABSENT";
+            Gdx.app.debug(LOG_TAG,"NETWORK: "+network);
+            if(network.equals("4G")|network.equals("3G")|network.equals("WIFI"))
+                game.actionResolver.showOrLoadBanner();
         }
     }
 
