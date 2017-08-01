@@ -297,11 +297,13 @@ public class Main extends IOSApplication.Delegate implements ActionResolver {
                 Gdx.app.debug(LOG_TAG,"rewardBasedVideoAdDidClose");
                 iosApplication.log(LOG_TAG,"rewardBasedVideoAdDidClose");
                 if(rewardCompleted) {
-                    MyGdxGame.setPause(false);
+                    //MyGdxGame.setPause(false);
                     //MyGdxGame.playContinueSound();
-                    MyGdxGame.setContinue(true);
+                    //MyGdxGame.setContinue(true);
                     rewardCompleted = false;
+                    applyPurchase("video_reward");
                 }
+                if (MyGdxGame.res.getMusic("level1").isPlaying()) MyGdxGame.res.getMusic("level1").stop();
                 displayedRewardedVideo = true;
                 uiProgressView.stopAnimating();
                 silentCache = false;
@@ -334,6 +336,8 @@ public class Main extends IOSApplication.Delegate implements ActionResolver {
                 Gdx.app.debug(LOG_TAG,"rewardBasedVideoAdDidStartPlaying");
                 iosApplication.log(LOG_TAG,"rewardBasedVideoAdDidStartPlaying");
                 uiProgressView.stopAnimating();
+                if (MyGdxGame.res.getMusic("shop").isPlaying())
+                    MyGdxGame.res.getMusic("shop").stop();
             }
 
             @Override
@@ -620,19 +624,20 @@ public class Main extends IOSApplication.Delegate implements ActionResolver {
             Save.load();
             Save.gd.setMoney(Save.gd.getMoney() + 100);
             Save.save();
-            if (MyGdxGame.isSoundEnable() == 1) {
+            purchased = purchased+"100 Coins ";
+
+            if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) {
                 MyGdxGame.res.getSound("point").play();
             }
-            purchased = purchased+"100 Coins ";
         }
         if(productId.equals(productsStore.item3_1000Coins)){
             Save.load();
             Save.gd.setMoney(Save.gd.getMoney() + 1000);
             Save.save();
-            if (MyGdxGame.isSoundEnable() == 1) {
+            purchased = purchased+"1000 Coins ";
+            if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) {
                 MyGdxGame.res.getSound("point").play();
             }
-            purchased = purchased+"1000 Coins ";
         }
         if(productId.equals(productsStore.item_removeads)){
             Save.gd.setAdsRemoverPurchased(true);
@@ -642,12 +647,24 @@ public class Main extends IOSApplication.Delegate implements ActionResolver {
             purchased = purchased+"Ads Remover ";
         }
 
+        if(productId.equals("video_reward")){
+            Save.load();
+            Save.gd.setMoney(Save.gd.getMoney() + 40);
+            Save.save();
+            purchased = "40 coins";
+            if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) {
+                MyGdxGame.res.getSound("point").play();
+            }
+        }
 
-        UIAlertView alert = UIAlertView.alloc().init();
-        alert.setTitle("Thank you!");
-        alert.setMessage("Your purchase was successfull.\n"+purchased);
-        alert.addButtonWithTitle("Ok");
-        alert.show();
+        if(!productId.equals("video_reward")){
+            UIAlertView alert = UIAlertView.alloc().init();
+            alert.setTitle("Thank you!");
+            alert.setMessage("Your purchase was successfull.\n"+purchased);
+            alert.addButtonWithTitle("Ok");
+            alert.show();
+        }
+
     }
 
     public void displayRestore(){

@@ -221,11 +221,11 @@ public class Shop extends GameState {
                                             Save.load();
                                             game.actionResolver.unlockAchievementGPGS(MyGdxGame.achievementSecret);
                                             //showSecretDialog();
-                                        }else if(input.equals("coin")){
-                                            Save.gd.setMoney(Save.gd.getMoney()+1);
-                                            Save.save();
-                                            labelMoneyShop.setText(Integer.toString(Save.gd.getMoney()));
-                                            Save.load();
+                                        }else if(input.equals("ram52")){
+                                            //Save.gd.setMoney(Save.gd.getMoney()+1);
+                                            //Save.save();
+                                            //labelMoneyShop.setText("mmhmm");
+                                            //Save.load();
                                         }else if(input.equals("lot of coins")){
 //                                        Save.gd.setMoney(Save.gd.getMoney()+10);
 //                                        Save.save();
@@ -1618,6 +1618,8 @@ public class Shop extends GameState {
     }
 
     public void update(float dt) {
+
+        if (MyGdxGame.res.getMusic("level1").isPlaying()) MyGdxGame.res.getMusic("level1").stop();
 
         if(MyGdxGame.isSoundEnable() == 2){
             if(!MyGdxGame.res.getMusic("shop").isPlaying()){
