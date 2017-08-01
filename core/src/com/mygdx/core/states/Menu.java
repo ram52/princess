@@ -160,7 +160,7 @@ public class Menu extends GameState {
         MyGdxGame.background_wood1.setVector(-3, 0);
 
 
-        if(animPlayerIdle == null){
+
             Sprite tex = null;
             if(Save.gd.isExcaliburEquiped()){
                 tex = new Sprite(MyGdxGame.atlas.findRegion("walkEx"));
@@ -176,6 +176,7 @@ public class Menu extends GameState {
             animPlayerIdleFliped = new Animation(sprites2Fliped, 1 / 5f);
 
 
+        if(animPrincessIdle == null){
             animPrincessIdle = new Animation(new Sprite(MyGdxGame.atlas.findRegion("princesscry")).split(64, 64)[0], 1 / 5f);
 
             animTitle = new Animation(new Sprite(MyGdxGame.atlas.findRegion("princess!")).split(111, 44)[0], 1 / 5f);
