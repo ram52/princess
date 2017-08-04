@@ -133,7 +133,7 @@ public class MyGdxGame implements ApplicationListener {
     public static String fontfsexPath = "data/font/FSEX300-32.fnt";
     public static String mapPath = "data/map/map1.tmx";
     public static String desktopIconPath = "data/sprite/icon/ic_launcher.png";
-    public static String AndroidPlayStoreGameUrl = "https://play.google.com/store/apps/details?id=com.axldotm.runningbird";
+    public static String AndroidPlayStoreGameUrl = "https://ram52.com";
     public static String AndroidFacebookGameUrl = "https://www.facebook.com/Axl.RunningBird/";
     public static String AndroidTwitterGameUrl = "https://twitter.com/axldotm";
     public static String developerWebSite = "https://axldotm.com";
