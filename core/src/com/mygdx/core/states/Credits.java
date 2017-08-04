@@ -397,6 +397,9 @@ public class Credits extends GameState {
     public void dispose() {
         font.setScale(1);
         if (MyGdxGame.res.getMusic("shop").isPlaying()) MyGdxGame.res.getMusic("shop").stop();
+        stage0.dispose();
+        stage1.dispose();
+        stage2.dispose();
     }
 
 }

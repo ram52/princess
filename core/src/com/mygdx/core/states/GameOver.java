@@ -603,6 +603,8 @@ public class GameOver extends GameState {
     }
 
     public void dispose() {
+        stage0.dispose();
+        stage1.dispose();
         //sb.dispose();
         if (MyGdxGame.res.getMusic("game_over").isPlaying()) {
             MyGdxGame.res.getMusic("game_over").pause();

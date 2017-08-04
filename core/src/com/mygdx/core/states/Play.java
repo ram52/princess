@@ -4291,6 +4291,10 @@ public class Play extends GameState {
     public void dispose() {
         spriteBatch.dispose();
         spriteBatchLightning.dispose();
+        stage1.dispose();
+        stageUiContinue.dispose();
+        stage0.dispose();
+        stageUiControl.dispose();
         //if (MyGdxGame.res.getSound("alarm").isPlaying()) MyGdxGame.res.getSound("alarm").pause();
         if(MyGdxGame.isSoundEnable() == 2) {
             if(MyGdxGame.res.getMusic("shop").isPlaying()){

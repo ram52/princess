@@ -1077,6 +1077,12 @@ public class Menu extends GameState {
     }
 
     public void dispose() {
+        stage1.dispose();
+        stage0.dispose();
+        stage2.dispose();
+        stage3.dispose();
+        stageUiOption.dispose();
+
         sb2.dispose();
         sb3.dispose();
 

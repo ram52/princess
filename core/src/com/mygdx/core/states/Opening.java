@@ -182,6 +182,8 @@ public class Opening extends GameState {
     }
 
     public void dispose() {
+        stage1.dispose();
+        stage0.dispose();
     }
 
 }
