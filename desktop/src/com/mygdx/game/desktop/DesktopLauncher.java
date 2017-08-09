@@ -13,7 +13,7 @@ public class DesktopLauncher  {
 		config.height=MyGdxGame.V_HEIGHT;
 		config.resizable = true;
 		config.addIcon(MyGdxGame.desktopIconPath,FileType.Internal);
-		new LwjglApplication(new MyGdxGame(new ActionResolverDesktop(),new RequestHandlerDesktop()), config);
+		new LwjglApplication(new MyGdxGame(), config);
 	}
 	
 

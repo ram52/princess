@@ -1,6 +1,7 @@
 package com.mygdx.core.states;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -72,7 +74,6 @@ public class Menu extends GameState {
 
         super(gsm);
 
-        game.actionResolver.hideBannerAd();
 
         if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) {
             if(MyGdxGame.res.getMusic("newScreen").isPlaying()){
@@ -260,19 +261,19 @@ public class Menu extends GameState {
         stageUiOption.addActor(buttonCloseUiOption);
 
         style = new ButtonStyle();
-        style.up = skin.getDrawable("buttonPlayUp");
-        style.down = skin.getDrawable("buttonPlayDown");
+        style.up = skin.getDrawable("buttonUiContinueNoUp");
+        style.down = skin.getDrawable("buttonUiContinueNoDown");
         buttonPlay = new Button(style);
-        buttonPlay.setWidth(Gdx.graphics.getWidth() / 2.2f);
-        buttonPlay.setHeight(Gdx.graphics.getHeight() / 5f);
-        //buttonExit.setPosition(-buttonExit.getWidth()/2.6f, (Gdx.graphics.getHeight() - buttonExit.getHeight()) / 1.6f);
+        buttonPlay.setWidth(buttonPlay.getWidth()*1.3f);
+        buttonPlay.setHeight(buttonPlay.getHeight()*1.3f);
+        buttonPlay.setPosition((Gdx.graphics.getWidth() - buttonPlay.getWidth())/ 2f, (Gdx.graphics.getHeight() - buttonPlay.getHeight()) / 1.505f);
 
-        buttonPlay.setPosition(-400, Gdx.graphics.getHeight() / 2f);
+        //buttonPlay.setPosition(-400, Gdx.graphics.getHeight() / 2f);
         stage1.addActor(buttonPlay);
 
         style = new ButtonStyle();
-        style.up = skin.getDrawable("buttonLeaderBoardUp");
-        style.down = skin.getDrawable("buttonLeaderBoardDown");
+        style.up = skin.getDrawable("buttonSecret");
+        style.down = skin.getDrawable("buttonSecret");
         buttonLeaderBoard = new Button(style);
         buttonLeaderBoard.setWidth(Gdx.graphics.getWidth() / 2.2f);
         buttonLeaderBoard.setHeight(Gdx.graphics.getHeight() / 5f);
@@ -300,8 +301,8 @@ public class Menu extends GameState {
 
 
         style = new ButtonStyle();
-        style.up = skin.getDrawable("buttonSound2Full");
-        style.down = skin.getDrawable("buttonSound2Full");
+        style.up = skin.getDrawable("buttonSecret");
+        style.down = skin.getDrawable("buttonSecret");
         buttonSound = new Button(style);
         buttonSound.setWidth(Gdx.graphics.getWidth() / 5f);
         buttonSound.setHeight(Gdx.graphics.getHeight() / 7.8f);
@@ -309,20 +310,20 @@ public class Menu extends GameState {
 
         if(MyGdxGame.isSoundEnable() == 0){
             style = new ButtonStyle();
-            style.up = skin.getDrawable("buttonSound2Mute");
-            style.down = skin.getDrawable("buttonSound2Mute");
+            style.up = skin.getDrawable("buttonSecret");
+            style.down = skin.getDrawable("buttonSecret");
             buttonSound.setStyle(style);
         }
         if(MyGdxGame.isSoundEnable() == 1){
             style = new ButtonStyle();
-            style.up = skin.getDrawable("buttonSound2Fx");
-            style.down = skin.getDrawable("buttonSound2Fx");
+            style.up = skin.getDrawable("buttonSecret");
+            style.down = skin.getDrawable("buttonSecret");
             buttonSound.setStyle(style);
         }
         if(MyGdxGame.isSoundEnable() == 2){
             style = new ButtonStyle();
-            style.up = skin.getDrawable("buttonSound2Full");
-            style.down = skin.getDrawable("buttonSound2Full");
+            style.up = skin.getDrawable("buttonSecret");
+            style.down = skin.getDrawable("buttonSecret");
             buttonSound.setStyle(style);
         }
         stage1.addActor(buttonSound);
@@ -376,8 +377,8 @@ public class Menu extends GameState {
         stage1.addActor(buttonPGreen);
 
         style = new ButtonStyle();
-        style.up = skin.getDrawable("buttonGearUp");
-        style.down = skin.getDrawable("buttonGearDown");
+        style.up = skin.getDrawable("buttonSecret");
+        style.down = skin.getDrawable("buttonSecret");
         buttonGear = new Button(style);
         buttonGear.setWidth(Gdx.graphics.getWidth() / 5f);
         buttonGear.setHeight(Gdx.graphics.getHeight() / 7.8f);
@@ -407,7 +408,7 @@ public class Menu extends GameState {
                     float y, int pointer, int button) {
 
                 Gdx.app.debug(LOG_TAG,"bt gear pressed!");
-                click_on_shop = true;
+//                click_on_shop = true;
 //                stageUiOption.addAction(Actions.sequence(Actions.alpha(0.5f), Actions.fadeIn(0.1f)));
 //                showOptionUi = true;
 //                showMainUi = false;
@@ -426,37 +427,37 @@ public class Menu extends GameState {
                     float y, int pointer, int button) {
                 if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("select").play();
                 Gdx.app.debug(LOG_TAG,"bt sound pressed!");
-                if(MyGdxGame.isSoundEnable() == 2){
-                    MyGdxGame.setSoundEnable(0);
-                }else{
-                    MyGdxGame.setSoundEnable(MyGdxGame.isSoundEnable()+1);
-                }
-
-
-                if (MyGdxGame.isSoundEnable() == 0) {
-                    if (MyGdxGame.res.getMusic("title").isPlaying()) MyGdxGame.res.getMusic("title").pause();
-                    ButtonStyle style = new ButtonStyle();
-                    style.up = skin.getDrawable("buttonSound2Mute");
-                    style.down = skin.getDrawable("buttonSound2Mute");
-                    buttonSound.setStyle(style);
-                }
-
-                if (MyGdxGame.isSoundEnable() == 1) {
-                    if (MyGdxGame.res.getMusic("title").isPlaying()) MyGdxGame.res.getMusic("title").pause();
-                    MyGdxGame.res.getSound("select").play();
-                    ButtonStyle style = new ButtonStyle();
-                    style.up = skin.getDrawable("buttonSound2Fx");
-                    style.down = skin.getDrawable("buttonSound2Fx");
-                    buttonSound.setStyle(style);
-                }
-
-                if (MyGdxGame.isSoundEnable() == 2) {
-                    if (!MyGdxGame.res.getMusic("title").isPlaying()) MyGdxGame.res.getMusic("title").play();
-                    ButtonStyle style = new ButtonStyle();
-                    style.up = skin.getDrawable("buttonSound2Full");
-                    style.down = skin.getDrawable("buttonSound2Full");
-                    buttonSound.setStyle(style);
-                }
+//                if(MyGdxGame.isSoundEnable() == 2){
+//                    MyGdxGame.setSoundEnable(0);
+//                }else{
+//                    MyGdxGame.setSoundEnable(MyGdxGame.isSoundEnable()+1);
+//                }
+//
+//
+//                if (MyGdxGame.isSoundEnable() == 0) {
+//                    if (MyGdxGame.res.getMusic("title").isPlaying()) MyGdxGame.res.getMusic("title").pause();
+//                    ButtonStyle style = new ButtonStyle();
+//                    style.up = skin.getDrawable("buttonSound2Mute");
+//                    style.down = skin.getDrawable("buttonSound2Mute");
+//                    buttonSound.setStyle(style);
+//                }
+//
+//                if (MyGdxGame.isSoundEnable() == 1) {
+//                    if (MyGdxGame.res.getMusic("title").isPlaying()) MyGdxGame.res.getMusic("title").pause();
+//                    MyGdxGame.res.getSound("select").play();
+//                    ButtonStyle style = new ButtonStyle();
+//                    style.up = skin.getDrawable("buttonSound2Fx");
+//                    style.down = skin.getDrawable("buttonSound2Fx");
+//                    buttonSound.setStyle(style);
+//                }
+//
+//                if (MyGdxGame.isSoundEnable() == 2) {
+//                    if (!MyGdxGame.res.getMusic("title").isPlaying()) MyGdxGame.res.getMusic("title").play();
+//                    ButtonStyle style = new ButtonStyle();
+//                    style.up = skin.getDrawable("buttonSound2Full");
+//                    style.down = skin.getDrawable("buttonSound2Full");
+//                    buttonSound.setStyle(style);
+//                }
 
                 return true;
             }
@@ -663,7 +664,6 @@ public class Menu extends GameState {
                     /*Save.gd.setMoney(Save.gd.getMoney() + MyGdxGame.getContinueStorePack());
                     Save.save();
                     Save.load();*/
-                    MyGdxGame.actionResolver.purchaseExtraCoins();
                     labelMoney.setText(Integer.toString(Save.gd.getMoney()));
                 }else{
                     if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("error").play();
@@ -687,10 +687,6 @@ public class Menu extends GameState {
             public void touchUp(
                     com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
                     float y, int pointer, int button) {
-                if (MyGdxGame.actionResolver.getSignedInGPGS())
-                    MyGdxGame.actionResolver.getAchievementsGPGS();
-                else
-                    MyGdxGame.actionResolver.loginGPGS();
             };
         });
 
@@ -742,6 +738,19 @@ public class Menu extends GameState {
         hideUiOption();
         showMainUi();
 
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+            InputEvent event1 = new InputEvent();
+            event1.setType(InputEvent.Type.touchDown);
+            buttonPlay.fire(event1);
+
+            InputEvent event2 = new InputEvent();
+            event2.setType(InputEvent.Type.touchUp);
+            buttonPlay.fire(event2);
+            click_on_play = true;
+            cpt = 0;
+        }
+
+
         if (click_on_play) {
             if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) {
                 //MyGdxGame.res.getMusic("newScreen").play();
@@ -752,10 +761,6 @@ public class Menu extends GameState {
         }
         if (click_on_leaderboard) {
             click_on_leaderboard = false;
-            if (MyGdxGame.actionResolver.getSignedInGPGS())
-                MyGdxGame.actionResolver.getLeaderboardGPGS();
-            else
-                MyGdxGame.actionResolver.loginGPGS();
         }
         if (click_on_tuto) {
             click_on_tuto = false;
@@ -792,13 +797,9 @@ public class Menu extends GameState {
             if(isfadeOutStarted > 30){
                 Save.load();
 
-                if(!Save.gd.isFirstPlay()){
-                    gsm.setState(GameStateManager.PLAY);
-                }else{
-                    gsm.setState(GameStateManager.TUTO);
-                    Save.gd.setFirstPlay(false);
-                    Save.save();
-                }
+
+                gsm.setState(GameStateManager.PLAY);
+
 
                 isfadeOutStarted = 0;
             }
@@ -953,7 +954,7 @@ public class Menu extends GameState {
             sb3.begin();
             //BUTTON PLAY
             stage1.getActors().items[0].setVisible(true);
-            stage1.getActors().items[0].setPosition(-stage1.getActors().items[0].getWidth() + Gdx.graphics.getWidth()/20 +cpt_translate_animation * speed, stage1.getActors().items[0].getY());
+            //stage1.getActors().items[0].setPosition(-stage1.getActors().items[0].getWidth() + Gdx.graphics.getWidth()/20 +cpt_translate_animation * speed, stage1.getActors().items[0].getY());
             stage1.getActors().items[0].draw(sb3, 1f);
 
             //BUTTON LEADERBOARD
@@ -1100,11 +1101,6 @@ public class Menu extends GameState {
         }
 
         if (!Save.gd.getAdsRemoverPurchased()) {
-            String network = game.actionResolver.getNetworkClass();
-            if(network == null) network = "ABSENT";
-            Gdx.app.debug(LOG_TAG,"NETWORK: "+network);
-            if(network.equals("4G")|network.equals("3G")|network.equals("WIFI"))
-                game.actionResolver.showOrLoadBanner();
         }
     }
 

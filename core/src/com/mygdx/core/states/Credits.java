@@ -75,14 +75,6 @@ public class Credits extends GameState {
         }
 
         Save.load();
-        if (!Save.gd.getAdsRemoverPurchased()) {
-            String network = game.actionResolver.getNetworkClass();
-            if(network == null) network = "ABSENT";
-            System.out.print("NETWORK: "+network);
-            if(network.equals("4G")|network.equals("3G")|network.equals("WIFI"))
-                game.actionResolver.showOrLoadInterstital();
-            Gdx.app.debug(LOG_TAG,network);
-        }
 
         Sprite tex = null;
         if(Save.gd.isExcaliburEquiped()){

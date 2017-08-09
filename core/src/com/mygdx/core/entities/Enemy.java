@@ -11,7 +11,7 @@ public class Enemy extends B2DSprite
 {
     private static String LOG_TAG = Enemy.class.getSimpleName();
 
-	private double health = 20;
+	private double health = 30;
 	private Sprite tex;
     private boolean normalRight = false;
     private boolean normalLeft = false;
@@ -218,7 +218,7 @@ public class Enemy extends B2DSprite
         this.speed = speed;
         this.nextLevel = nextLevel;
 
-        if(nextLevel) health = health*2;
+        if(nextLevel) health = health*3;
 
 
 

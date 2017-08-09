@@ -86,7 +86,6 @@ public class Shop extends GameState {
         skin = new Skin();
         skin.addRegions(MyGdxGame.atlas);
         Save.load();
-        game.actionResolver.hideBannerAd();
 
         Sprite tex = new Sprite(MyGdxGame.atlas.findRegion("enemy"));
         TextureRegion[] sprites = tex.split(64, 64)[0];
@@ -168,7 +167,6 @@ public class Shop extends GameState {
                                         Save.gd.setFireBallEquiped(false);
                                         Save.save();
                                         Save.load();
-                                        game.actionResolver.unlockAchievementGPGS(MyGdxGame.achievementSecret);
                                         //showSecretDialog();
                                     }else if(input.equals("coin")){
                                         Save.gd.setMoney(Save.gd.getMoney()+1);
@@ -417,7 +415,6 @@ public class Shop extends GameState {
                             Gdx.app.debug(LOG_TAG,"result Equip ads free?"+obj);
                             
                             if(obj.toString().equals("true")){
-                                MyGdxGame.actionResolver.purchaseAdsRemover();
 //                                if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
 //                                    MyGdxGame.res.getSound("equiped").play();
 //                                }
@@ -464,7 +461,6 @@ public class Shop extends GameState {
 //                                Save.gd.setMoney(Save.gd.getMoney()+money);
 //                                Save.save();
 //                                labelMoney.setText(Integer.toString(Save.gd.getMoney()));
-                                MyGdxGame.actionResolver.purchaseHundredCoins();
                             }
                             Save.save();
                             Save.load();
@@ -508,7 +504,6 @@ public class Shop extends GameState {
 //                            Save.gd.setMoney(Save.gd.getMoney()+money);
 //                            Save.save();
 //                            labelMoney.setText(Integer.toString(Save.gd.getMoney()));
-                            MyGdxGame.actionResolver.purchaseThousandCoins();
                         }
                         Save.save();
                         Save.load();
@@ -545,13 +540,6 @@ public class Shop extends GameState {
                         Gdx.app.debug(LOG_TAG,"result"+obj);
 
                         if(obj.toString().equals("true")){
-                            String network = MyGdxGame.actionResolver.getNetworkClass();
-                            if(network == null) network = "ABSENT";
-                            Gdx.app.debug(LOG_TAG,"NETWORK: " + network);
-                            if(network.equals("4G")|network.equals("3G")|network.equals("WIFI")) {
-                                MyGdxGame.actionResolver.showRewardedVideoChartBoost();
-                                //game.actionResolver.showRewardedVideoChartBoost();
-                            }
 //                            if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
 //                                MyGdxGame.res.getSound("point").play();
 //                            }
@@ -682,7 +670,7 @@ public class Shop extends GameState {
                     float y, int pointer, int button) {
                 Gdx.app.debug(LOG_TAG,"buttonFireBall2 clicked!");
                 Save.load();
-                final int cost = 800;
+                final int cost = 8000;
                 if(!Save.gd.isFireBall2Purchased()){
                     ShopDialog dialog = new ShopDialog(Shop.this,
                             "\n\n" +
@@ -783,7 +771,7 @@ public class Shop extends GameState {
                     float y, int pointer, int button) {
                 Gdx.app.debug(LOG_TAG,"buttonExcalibur clicked!");
                 Save.load();
-                final int cost = 1000;
+                final int cost = 9000;
                 if(!Save.gd.isExcaliburPurchased()){
                 ShopDialog dialog = new ShopDialog(Shop.this,
                         "\n\n" +
@@ -871,7 +859,7 @@ public class Shop extends GameState {
                     float y, int pointer, int button) {
                 Gdx.app.debug(LOG_TAG,"buttonKamehameha clicked!");
                 Save.load();
-                final int cost = 900;
+                final int cost = 10000;
                 if(!Save.gd.isKamehamehaPurchased()){
                     ShopDialog dialog = new ShopDialog(Shop.this,
                             "\n\n" +
@@ -967,7 +955,7 @@ public class Shop extends GameState {
                     float y, int pointer, int button) {
                 Gdx.app.debug(LOG_TAG,"buttonBoot clicked!");
                 Save.load();
-                final int cost = 300;
+                final int cost = 3000;
                 if(!Save.gd.isBootPurchased()){
                     ShopDialog dialog = new ShopDialog(Shop.this,
                             "\n\n" +
@@ -1053,7 +1041,7 @@ public class Shop extends GameState {
                     float y, int pointer, int button) {
                 Gdx.app.debug(LOG_TAG,"buttonBrick2 clicked!");
                 Save.load();
-                final int cost = 800;
+                final int cost = 5000;
                 if(!Save.gd.isBrick2Purchased()){
                     ShopDialog dialog = new ShopDialog(Shop.this,
                             "\n\n" +
@@ -1140,7 +1128,7 @@ public class Shop extends GameState {
                     float y, int pointer, int button) {
                 Gdx.app.debug(LOG_TAG,"buttonLightning clicked!");
                 Save.load();
-                final int cost = 2000;
+                final int cost = 12000;
                 if(!Save.gd.isLightningPurchased()){
                     ShopDialog dialog = new ShopDialog(Shop.this,
                             "\n\n" +
@@ -1233,7 +1221,7 @@ public class Shop extends GameState {
                     float y, int pointer, int button) {
                 Gdx.app.debug(LOG_TAG,"buttonMegaJump clicked!");
                 Save.load();
-                final int cost = 250;
+                final int cost = 2500;
                 if(!Save.gd.isMegaJumpPurchased()){
                     ShopDialog dialog = new ShopDialog(Shop.this,
                             "\n\n" +
@@ -1430,9 +1418,6 @@ public class Shop extends GameState {
         animationEnemy.update(dt);
         animationEnemyMock.update(dt);
         animationCoin.update(dt);
-        if (Save.gd.getAdsRemoverPurchased()) {
-                game.actionResolver.hideBannerAd();
-        }
 
         updateItem(Save.gd.isFireBallEquiped(), "buttonFireBall", buttonFireBall);
         updateItem(Save.gd.isFireBall2Equiped(), "buttonFireBall2", buttonFireBall2);

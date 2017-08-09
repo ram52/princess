@@ -2,9 +2,8 @@ package com.mygdx.core.handlers;
 
 import com.badlogic.gdx.Gdx;
 
-import java.io.Serializable;
 
-public class GameData implements Serializable {
+public class GameData {
 	private static String LOG_TAG = GameData.class.getSimpleName();
 	
 	private static final long serialVersionUID = 1;
@@ -36,13 +35,13 @@ public class GameData implements Serializable {
     private String selector;
 	private long tentativeScore;
     private boolean soundPause = false;
-    private int money = 100;
+    private int money = 0;
     private boolean playerBlue = false;
 	private boolean playerRed = false;
 	private boolean playerYellow = false;
 	private boolean playerGreen = false;
 	private boolean isFirstPlay = true;
-	private int pickedGamePlay = 1;
+	private int pickedGamePlay = 2;
 
 
 	public GameData() {
@@ -55,7 +54,6 @@ public class GameData implements Serializable {
         adsRemoverPurchased = false;
         sound = 2;
         night = false;
-        money = 10;
 		playerBlue = false;
 		playerRed = false;
 		playerYellow = false;
@@ -350,7 +348,7 @@ public class GameData implements Serializable {
 	}
 
 	public boolean isFirstPlay() {
-		return isFirstPlay;
+		return false;
 	}
 
 	public void setFirstPlay(boolean firstPlay) {

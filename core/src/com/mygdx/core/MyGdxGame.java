@@ -40,7 +40,6 @@ public class MyGdxGame implements ApplicationListener {
     private Image intro;
     private FPSLogger fps;
     public static Rectangle viewport;
-    public static ActionResolver actionResolver;
     public static final String TITLE = "PRINCESS";
     public static final int V_WIDTH = 640;
     public static final int V_HEIGHT = 960;
@@ -58,7 +57,6 @@ public class MyGdxGame implements ApplicationListener {
     public static Content res;
     private AssetManager assets;
     public static TextureAtlas atlas;
-    RequestHandler requestHandler;
     public static float offsetx;
     public static float offsety;
     public static TiledMap tileMap;
@@ -70,7 +68,7 @@ public class MyGdxGame implements ApplicationListener {
     public static BitmapFont font, font2;
     public static String debugString = "";
     public static float GROUND = 2.5621998f; //todo use box2d
-    public static int MONEY_BY_ENEMY = 2;
+    public static int MONEY_BY_ENEMY = 1;
     public static boolean DEBUG = false;
     public static boolean TEST = false;
     public static Vector2 lastPlayerPosition = new Vector2(0,0);
@@ -169,7 +167,7 @@ public class MyGdxGame implements ApplicationListener {
     private static boolean init = false;
     public static int continueCount = 0;
 
-    public static int pickedGameplay = -1;
+    public static int pickedGameplay = 2;
 
 
     public static boolean isContinue() {
@@ -192,12 +190,8 @@ public class MyGdxGame implements ApplicationListener {
         public void no();
     }
 
-    public MyGdxGame(ActionResolver actionResolver, RequestHandler requestHandler) {
-        this.actionResolver = actionResolver;
-        this.requestHandler = requestHandler;
+    public MyGdxGame() {
     }
-
-
 
     public void create() {
         Gdx.app.setLogLevel(Application.LOG_DEBUG);
@@ -272,14 +266,11 @@ public class MyGdxGame implements ApplicationListener {
         hudCam.setToOrtho(false, V_WIDTH, V_HEIGHT);
         size(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Gdx.app.debug(LOG_TAG,"-->"+ "SCREEN SIZE: " + Gdx.graphics.getWidth() + "X" + Gdx.graphics.getHeight());
+        Save.init();
         Save.load();
 
         Save.gd.setFireBallPurchased(true);
-        if(Save.gd.isFireBall2Equiped()| Save.gd.isKamehamehaEquiped() | Save.gd.isLightningEquiped()){
-            Save.gd.setFireBallEquiped(false);
-        }else{
-            Save.gd.setFireBallEquiped(true);
-        }
+        Save.gd.setFireBallEquiped(true);
         Save.save();
 
         soundEnable = Save.gd.isSoundEnable();
@@ -505,7 +496,7 @@ public class MyGdxGame implements ApplicationListener {
         tex = new Sprite(MyGdxGame.atlas.findRegion("backgroundWood1"));
         background_wood1 = new Background(new TextureRegion(tex), cam, 1f);
 
-        tex = new Sprite(MyGdxGame.atlas.findRegion("backgroundTitle"));
+        tex = new Sprite(MyGdxGame.atlas.findRegion("backgroundTitlehtml"));
         background_title = new Background(new TextureRegion(tex), cam, 1f);
         background_title.setVector(0, 0);
 
@@ -559,17 +550,7 @@ public class MyGdxGame implements ApplicationListener {
     }
 
     public void showConfirmDialog() {
-        requestHandler.confirm(new ConfirmInterface() {
-            @Override
-            public void yes() {
-                dispose();
-                Gdx.app.exit();
-            }
 
-            @Override
-            public void no() {
-            }
-        });
     }
 
     public ShapeRenderer getShapeRenderer() {
@@ -652,7 +633,6 @@ public class MyGdxGame implements ApplicationListener {
         sb.dispose();
         shapeRenderer.dispose();
         stage0.dispose();
-        actionResolver = null;
         shapeRenderer = null;
         gsm = null;
         ;
