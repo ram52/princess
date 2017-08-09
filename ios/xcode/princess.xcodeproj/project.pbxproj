@@ -40,7 +40,6 @@
 		B07D6C851EFF507700C4BA2F /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B07D6C841EFF507700C4BA2F /* OpenGLES.framework */; };
 		B07D6C871EFF508500C4BA2F /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B07D6C861EFF508500C4BA2F /* QuartzCore.framework */; };
 		B07D6C891EFF509400C4BA2F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B07D6C881EFF509400C4BA2F /* UIKit.framework */; };
-		B07D6C8B1EFF50C600C4BA2F /* MOE.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B07D6C8A1EFF50C600C4BA2F /* MOE.framework */; };
 		B0BAE80E1F00790200D095E0 /* loading_no_copyright.png in Resources */ = {isa = PBXBuildFile; fileRef = B0BAE80D1F00790200D095E0 /* loading_no_copyright.png */; };
 		B0D79C511EFF52ED00133789 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0D79C501EFF52ED00133789 /* StoreKit.framework */; };
 		B0D79C531EFF52F800133789 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0D79C521EFF52F800133789 /* GameKit.framework */; };
@@ -84,7 +83,6 @@
 		B07D6C841EFF507700C4BA2F /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		B07D6C861EFF508500C4BA2F /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		B07D6C881EFF509400C4BA2F /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		B07D6C8A1EFF50C600C4BA2F /* MOE.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MOE.framework; path = ../../../../../../../Applications/Intel/multi_os_engine/sdk/iphoneos/MOE.framework; sourceTree = "<group>"; };
 		B0BAE80D1F00790200D095E0 /* loading_no_copyright.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loading_no_copyright.png; sourceTree = "<group>"; };
 		B0D79C501EFF52ED00133789 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		B0D79C521EFF52F800133789 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
@@ -127,7 +125,6 @@
 				B0203A4E1F27F5C400299FAC /* GoogleMobileAds.framework in Frameworks */,
 				B0D79C571EFF611800133789 /* libz.tbd in Frameworks */,
 				B0D79C551EFF610A00133789 /* libc++.tbd in Frameworks */,
-				B07D6C8B1EFF50C600C4BA2F /* MOE.framework in Frameworks */,
 				B07D6C891EFF509400C4BA2F /* UIKit.framework in Frameworks */,
 				B07D6C871EFF508500C4BA2F /* QuartzCore.framework in Frameworks */,
 				B0D79C531EFF52F800133789 /* GameKit.framework in Frameworks */,
@@ -186,7 +183,6 @@
 				B0D79C541EFF610A00133789 /* libc++.tbd */,
 				B0D79C521EFF52F800133789 /* GameKit.framework */,
 				B0D79C501EFF52ED00133789 /* StoreKit.framework */,
-				B07D6C8A1EFF50C600C4BA2F /* MOE.framework */,
 				B07D6C881EFF509400C4BA2F /* UIKit.framework */,
 				B07D6C861EFF508500C4BA2F /* QuartzCore.framework */,
 				B07D6C841EFF507700C4BA2F /* OpenGLES.framework */,
@@ -518,6 +514,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				MOE_VERSION = 1.3.6;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -558,6 +555,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				MOE_VERSION = 1.3.6;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -606,6 +604,7 @@
 					"-force_load",
 					"\"$(SRCROOT)/native/ios/libgdx-box2d.a\"",
 					"-ObjC",
+					"$(inherited)",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.ram52.princess;
 				PRODUCT_NAME = Princess;
@@ -657,6 +656,7 @@
 					"-force_load",
 					"\"$(SRCROOT)/native/ios/libgdx-box2d.a\"",
 					"-ObjC",
+					"$(inherited)",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.ram52.princess;
 				PRODUCT_NAME = Princess;
