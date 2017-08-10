@@ -373,7 +373,7 @@ public class Play extends GameState {
 
         executor = Executors.newScheduledThreadPool(1);
 
-        if(runnable == null)
+        //if(runnable == null)
             runnable = new Runnable() {
                 public void run() {
 

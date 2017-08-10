@@ -419,7 +419,7 @@ public class MyGdxGame implements ApplicationListener {
     public static Stage stage1GameOver;
     public static Label labelScoreGameOver, labelBestScoreGameOver;
     public static Button.ButtonStyle buttonStylePlayGameOver, buttonStyleLeaderboardGameOver, buttonStyleHeartGameOver, buttonStyleStarGameOver, buttonStyleEnergieGameOver, buttonStyleAdsGameOver;
-    public static Button buttonExitGameOver, buttonReplayGameOver, buttonShop, buttonStar, buttonEnergie, buttonAdsGameOver;
+    public static Button buttonExitGameOver, buttonReplayGameOver, buttonShop, buttonStar, buttonEnergie, buttonAdsFacebook;
     public static Skin skinPlayGameOver, skinLeaderboardGameOver, skinHeart, skinStar, skinEnergie, skinAds;
     public static Image backgroundGameOver, trophy_empty, trophy_bronze, trophy_silver, trophy_gold, high_score;
     public static AlphaAction fadeGameOver;
