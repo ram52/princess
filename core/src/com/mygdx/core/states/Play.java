@@ -1422,7 +1422,7 @@ public class Play extends GameState {
                 if(megaKameha){
                     enemy.setHealth(enemy.getHealth()-99f);
                 }else{
-                    enemy.setHealth(enemy.getHealth()-0.6f);
+                    enemy.setHealth(enemy.getHealth()-0.8f);
                 }
 
             }else{

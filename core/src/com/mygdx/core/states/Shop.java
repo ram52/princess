@@ -813,7 +813,7 @@ public class Shop extends GameState {
                     float y, int pointer, int button) {
                 Gdx.app.debug(LOG_TAG,"buttonFireBall2 clicked!");
                 Save.load();
-                final int cost = 800;
+                final int cost = 8000;
                 if(!Save.gd.isFireBall2Purchased()){
                     if(dialogFireBall2NotPurchased == null){
                         dialogFireBall2NotPurchased = new ShopDialog(Shop.this,
@@ -939,7 +939,7 @@ public class Shop extends GameState {
                     float y, int pointer, int button) {
                 Gdx.app.debug(LOG_TAG,"buttonExcalibur clicked!");
                 Save.load();
-                final int cost = 1000;
+                final int cost = 9000;
                 if(!Save.gd.isExcaliburPurchased()){
                     if(dialogExcaliburNotPurchased == null){
                         dialogExcaliburNotPurchased = new ShopDialog(Shop.this,
@@ -1036,7 +1036,7 @@ public class Shop extends GameState {
                     float y, int pointer, int button) {
                 Gdx.app.debug(LOG_TAG,"buttonKamehameha clicked!");
                 Save.load();
-                final int cost = 900;
+                final int cost = 10000;
                 if(!Save.gd.isKamehamehaPurchased()){
                     if(dialogKamehamehaNotPurchased == null){
                         dialogKamehamehaNotPurchased = new ShopDialog(Shop.this,
@@ -1139,7 +1139,7 @@ public class Shop extends GameState {
                     float y, int pointer, int button) {
                 Gdx.app.debug(LOG_TAG,"buttonBoot clicked!");
                 Save.load();
-                final int cost = 300;
+                final int cost = 3000;
                 if(!Save.gd.isBootPurchased()){
                     if(dialogBootNotPurchased == null){
                         dialogBootNotPurchased = new ShopDialog(Shop.this,
@@ -1232,7 +1232,7 @@ public class Shop extends GameState {
                     float y, int pointer, int button) {
                 Gdx.app.debug(LOG_TAG,"buttonBrick2 clicked!");
                 Save.load();
-                final int cost = 800;
+                final int cost = 5000;
                 if(!Save.gd.isBrick2Purchased()){
                     if(dialogBrickNotPurchased == null){
                         dialogBrickNotPurchased = new ShopDialog(Shop.this,
@@ -1326,7 +1326,7 @@ public class Shop extends GameState {
                     float y, int pointer, int button) {
                 Gdx.app.debug(LOG_TAG,"buttonLightning clicked!");
                 Save.load();
-                final int cost = 2000;
+                final int cost = 12000;
                 if(!Save.gd.isLightningPurchased()){
                     if(dialogLightningNotPurchased == null){
                         dialogLightningNotPurchased = new ShopDialog(Shop.this,
@@ -1427,7 +1427,7 @@ public class Shop extends GameState {
                     float y, int pointer, int button) {
                 Gdx.app.debug(LOG_TAG,"buttonMegaJump clicked!");
                 Save.load();
-                final int cost = 250;
+                final int cost = 2500;
                 if(!Save.gd.isMegaJumpPurchased()){
                     if(dialogMegaJumpNotPurchased == null){
                         dialogMegaJumpNotPurchased = new ShopDialog(Shop.this,

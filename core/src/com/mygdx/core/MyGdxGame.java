@@ -99,7 +99,7 @@ public class MyGdxGame implements ApplicationListener {
     public static BitmapFont font, font2, font2Credit;
     public static String debugString = "";
     public static float GROUND = 2.5621998f; //todo use box2d
-    public static int MONEY_BY_ENEMY = 2;
+    public static int MONEY_BY_ENEMY = 1;
     public static boolean DEBUG = false;
     public static boolean TEST = false;
     public static Vector2 lastPlayerPosition = new Vector2(0,0);
