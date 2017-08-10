@@ -44,6 +44,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.async.AsyncExecutor;
 import com.mygdx.core.MyGdxGame;
 import com.mygdx.core.entities.B2DSprite;
 import com.mygdx.core.entities.Brick;
@@ -64,9 +65,9 @@ import com.mygdx.core.handlers.ScreenShake;
 import com.mygdx.core.handlers.SimpleDirectionGestureDetector;
 
 import java.util.Random;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+//import java.util.concurrent.Executors;
+//import java.util.concurrent.ScheduledExecutorService;
+//import java.util.concurrent.TimeUnit;
 
 import static com.mygdx.core.MyGdxGame.DEBUG;
 import static com.mygdx.core.MyGdxGame.TEST;
@@ -111,7 +112,7 @@ public class Play extends GameState {
     private Brick brick;
     private Lightning lightning;
     private Array<FireBall> fireBalls;
-    private ScheduledExecutorService executor;
+    private AsyncExecutor executor;
     private int player_selector = 0;
     private int cpt_alarm = 0;
     private Stage stage1, stageUiContinue;
@@ -767,7 +768,7 @@ public class Play extends GameState {
 
         fireBalls = new Array<FireBall>();
 
-        executor = Executors.newScheduledThreadPool(1);
+        executor = new AsyncExecutor(1);
 
         runnable = new Runnable() {
             public void run() {
@@ -786,30 +787,61 @@ public class Play extends GameState {
 
                         if(player.getNumCoins() >= 5 && !step0){
                             step0 = true;
-                            maxEnemiesOnScreen++;
-                            executor = Executors.newScheduledThreadPool(1);
-                            executor.scheduleAtFixedRate(runnable, 0, 2500, TimeUnit.MILLISECONDS);
+//                            maxEnemiesOnScreen++;
+//                            //executor = Executors.newScheduledThreadPool(1);
+//                            executor.scheduleAtFixedRate(runnable, 0, 2500, TimeUnit.MILLISECONDS);
+//                            executor.submit()
+
+                            Timer.schedule(new Timer.Task(){
+                                               @Override
+                                               public void run() {
+                                                   maxEnemiesOnScreen++;
+                                                   runnable.run();
+                                               }
+                                           }, 0,2.5f);
                         }
 
                         if(player.getNumCoins() >= 10 && !step1){
                             step1 = true;
                             maxEnemiesOnScreen++;
-                            executor = Executors.newScheduledThreadPool(1);
-                            executor.scheduleAtFixedRate(runnable, 0, 2000, TimeUnit.MILLISECONDS);
+                            //executor = Executors.newScheduledThreadPool(1);
+                            //executor.scheduleAtFixedRate(runnable, 0, 2000, TimeUnit.MILLISECONDS);
+
+                            Timer.schedule(new Timer.Task(){
+                                @Override
+                                public void run() {
+                                    maxEnemiesOnScreen++;
+                                    runnable.run();
+                                }
+                            }, 0,2.0f);
                         }
 
                         if(player.getNumCoins() >= 20 && !step2){
                             step2 = true;
                             maxEnemiesOnScreen++;
-                            executor = Executors.newScheduledThreadPool(1);
-                            executor.scheduleAtFixedRate(runnable, 0, 1000, TimeUnit.MILLISECONDS);
+//                            executor = Executors.newScheduledThreadPool(1);
+//                            executor.scheduleAtFixedRate(runnable, 0, 1000, TimeUnit.MILLISECONDS);
+                            Timer.schedule(new Timer.Task(){
+                                @Override
+                                public void run() {
+                                    maxEnemiesOnScreen++;
+                                    runnable.run();
+                                }
+                            }, 0,1.0f);
                         }
 
                         if(player.getNumCoins() >= 50 && !step3){
                             step3 = true;
                             maxEnemiesOnScreen++;
-                            executor = Executors.newScheduledThreadPool(1);
-                            executor.scheduleAtFixedRate(runnable, 0, 900, TimeUnit.MILLISECONDS);
+                            //executor = Executors.newScheduledThreadPool(1);
+                            //executor.scheduleAtFixedRate(runnable, 0, 900, TimeUnit.MILLISECONDS);
+                            Timer.schedule(new Timer.Task(){
+                                @Override
+                                public void run() {
+                                    maxEnemiesOnScreen++;
+                                    runnable.run();
+                                }
+                            }, 0,0.9f);
                         }
 
 
@@ -821,7 +853,13 @@ public class Play extends GameState {
 
 
         if(!Play.this.isTutorial){
-            executor.scheduleAtFixedRate(runnable, 0, 3000, TimeUnit.MILLISECONDS);
+            //executor.scheduleAtFixedRate(runnable, 0, 3000, TimeUnit.MILLISECONDS);
+            Timer.schedule(new Timer.Task(){
+                @Override
+                public void run() {
+                    runnable.run();
+                }
+            }, 0,3f);
         }
 
 
@@ -2141,20 +2179,32 @@ public class Play extends GameState {
                 if(brick.getLife() <= 0 && brick != null){
                     //brick destroyed in anim function
                     if(!brick.getBroken() && brick != null){
-                        new java.util.Timer().schedule(
-                                new java.util.TimerTask() {
-                                    @Override
-                                    public void run() {
-                                        if(brick != null){
-                                            brick.getBody().setType(BodyType.DynamicBody);//can't destroy static body for some reason.
-                                            bodyToDestroy.add(brick);
-                                            //brick.destroy();
-                                            brick = null;
-                                        }
-                                    }
-                                },
-                                500
-                        );
+//                        new java.util.Timer().schedule(
+//                                new java.util.TimerTask() {
+//                                    @Override
+//                                    public void run() {
+//                                        if(brick != null){
+//                                            brick.getBody().setType(BodyType.DynamicBody);//can't destroy static body for some reason.
+//                                            bodyToDestroy.add(brick);
+//                                            //brick.destroy();
+//                                            brick = null;
+//                                        }
+//                                    }
+//                                },
+//                                500
+//                        );
+
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                if(brick != null){
+                                    brick.getBody().setType(BodyType.DynamicBody);//can't destroy static body for some reason.
+                                    bodyToDestroy.add(brick);
+                                    //brick.destroy();
+                                    brick = null;
+                                }
+                            }
+                        }, 0.5f);
 
                         brick.brokeAnimation();
                         if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) {
@@ -2693,12 +2743,12 @@ public class Play extends GameState {
 //            tutoGamePlay2();
 //        }
 
-        try
-        {
-            MyGdxGame.lastScoreInTutorial = Integer.valueOf(labelScore.getText().toString());
-        }catch (NumberFormatException e){
-            Gdx.app.error(LOG_TAG,"error while parsing score",e);
-        }
+//        try
+//        {
+//            MyGdxGame.lastScoreInTutorial = Integer.valueOf(labelScore.getText().toString());
+//        }catch (NumberFormatException e){
+//            Gdx.app.error(LOG_TAG,"error while parsing score",e);
+//        }
 
 
     }

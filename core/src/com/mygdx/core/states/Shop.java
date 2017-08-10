@@ -21,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.badlogic.gdx.utils.Timer;
 import com.mygdx.core.MyGdxGame;
 import com.mygdx.core.handlers.Animation;
 import com.mygdx.core.handlers.AnimeActor;
@@ -31,8 +32,6 @@ import com.mygdx.core.handlers.SimpleDirectionGestureDetector;
 
 import java.io.IOException;
 import java.net.URL;
-import java.text.NumberFormat;
-import java.util.Scanner;
 /**
  * Copyright Axel MONTOUT
  * started in 2016
@@ -402,8 +401,8 @@ public class Shop extends GameState {
                 Gdx.app.debug(LOG_TAG,"buttonAds clicked!");
                 Save.load();
                 if(!Save.gd.getAdsRemoverPurchased()){
-                    NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
-                    String cur = currencyFormatter.format(1).replaceAll("[0-9.,]","");;
+//                    NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
+//                    String cur = currencyFormatter.format(1).replaceAll("[0-9.,]","");;
                     ShopDialog dialog = new ShopDialog(Shop.this,
                             "\n\n" +
                                     "ADS REMOVER\n" +
@@ -413,7 +412,7 @@ public class Shop extends GameState {
                                     "Remove ads?", "buttonAdsUp"){
                         public void result(Object obj) {
                             Gdx.app.debug(LOG_TAG,"result Equip ads free?"+obj);
-                            
+
                             if(obj.toString().equals("true")){
 //                                if ((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)) {
 //                                    MyGdxGame.res.getSound("equiped").play();
@@ -442,8 +441,8 @@ public class Shop extends GameState {
                     float y, int pointer, int button) {
                 Gdx.app.debug(LOG_TAG,"buttonCoin1 clicked!");
                 Save.load();
-                    NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
-                    String cur = currencyFormatter.format(1).replaceAll("[0-9.,]","");
+//                    NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
+//                    String cur = currencyFormatter.format(1).replaceAll("[0-9.,]","");
                     final int money = 100;
                     ShopDialog dialog = new ShopDialog(Shop.this,
                             "\n\n" +
@@ -484,8 +483,8 @@ public class Shop extends GameState {
                 Gdx.app.debug(LOG_TAG,"buttonCoin2 clicked!");
                 Gdx.app.debug(LOG_TAG,"buttonCoin1 clicked!");
                 Save.load();
-                NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
-                String cur = currencyFormatter.format(1).replaceAll("[0-9.,]","");
+//                NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
+//                String cur = currencyFormatter.format(1).replaceAll("[0-9.,]","");
                 final int money = 1000;
                 ShopDialog dialog = new ShopDialog(Shop.this,
                         "\n\n" +
@@ -526,8 +525,8 @@ public class Shop extends GameState {
                     float y, int pointer, int button) {
                 Gdx.app.debug(LOG_TAG,"buttonCoin3 clicked!");
                 Save.load();
-                NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
-                String cur = currencyFormatter.format(1).replaceAll("[0-9.,]","");;
+//                NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
+//                String cur = currencyFormatter.format(1).replaceAll("[0-9.,]","");;
                 int value = 40;
                 ShopDialog dialog = new ShopDialog(Shop.this,
                         "\n\n" +
@@ -600,14 +599,21 @@ public class Shop extends GameState {
                                     if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("error").play();
                                     labelMoney.setColor(Color.RED);
 
-                                    new java.util.Timer().schedule(
-                                            new java.util.TimerTask() {
-                                                @Override
-                                                public void run() {
-                                                    // your code here
-                                                    labelMoney.setColor(Color.WHITE);
-                                                }
-                                            }, 500);
+//                                    new java.util.Timer().schedule(
+//                                            new java.util.TimerTask() {
+//                                                @Override
+//                                                public void run() {
+//                                                    // your code here
+//                                                    labelMoney.setColor(Color.WHITE);
+//                                                }
+//                                            }, 500);
+
+                                    Timer.schedule(new Timer.Task() {
+                                        @Override
+                                        public void run() {
+                                            labelMoney.setColor(Color.WHITE);
+                                        }
+                                    }, 0.5f);
                                 }
 
                             }
@@ -703,14 +709,21 @@ public class Shop extends GameState {
                                     if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("error").play();
                                     labelMoney.setColor(Color.RED);
 
-                                    new java.util.Timer().schedule(
-                                            new java.util.TimerTask() {
-                                                @Override
-                                                public void run() {
-                                                    // your code here
-                                                    labelMoney.setColor(Color.WHITE);
-                                                }
-                                            }, 500);
+//                                    new java.util.Timer().schedule(
+//                                            new java.util.TimerTask() {
+//                                                @Override
+//                                                public void run() {
+//                                                    // your code here
+//                                                    labelMoney.setColor(Color.WHITE);
+//                                                }
+//                                            }, 500);
+
+                                    Timer.schedule(new Timer.Task() {
+                                        @Override
+                                        public void run() {
+                                            labelMoney.setColor(Color.WHITE);
+                                        }
+                                    }, 0.5f);
                                 }
 
                             }
@@ -801,14 +814,20 @@ public class Shop extends GameState {
                                 if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("error").play();
                                 labelMoney.setColor(Color.RED);
 
-                                new java.util.Timer().schedule(
-                                        new java.util.TimerTask() {
-                                            @Override
-                                            public void run() {
-                                                // your code here
-                                                labelMoney.setColor(Color.WHITE);
-                                            }
-                                        }, 500);
+//                                new java.util.Timer().schedule(
+//                                        new java.util.TimerTask() {
+//                                            @Override
+//                                            public void run() {
+//                                                // your code here
+//                                                labelMoney.setColor(Color.WHITE);
+//                                            }
+//                                        }, 500);
+                                Timer.schedule(new Timer.Task() {
+                                    @Override
+                                    public void run() {
+                                        labelMoney.setColor(Color.WHITE);
+                                    }
+                                }, 0.5f);
                             }
 
                         }
@@ -892,14 +911,20 @@ public class Shop extends GameState {
                                     if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("error").play();
                                     labelMoney.setColor(Color.RED);
 
-                                    new java.util.Timer().schedule(
-                                            new java.util.TimerTask() {
-                                                @Override
-                                                public void run() {
-                                                    // your code here
-                                                    labelMoney.setColor(Color.WHITE);
-                                                }
-                                            }, 500);
+//                                    new java.util.Timer().schedule(
+//                                            new java.util.TimerTask() {
+//                                                @Override
+//                                                public void run() {
+//                                                    // your code here
+//                                                    labelMoney.setColor(Color.WHITE);
+//                                                }
+//                                            }, 500);
+                                    Timer.schedule(new Timer.Task() {
+                                        @Override
+                                        public void run() {
+                                            labelMoney.setColor(Color.WHITE);
+                                        }
+                                    }, 0.5f);
                                 }
 
                             }
@@ -985,14 +1010,20 @@ public class Shop extends GameState {
                                     if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("error").play();
                                     labelMoney.setColor(Color.RED);
 
-                                    new java.util.Timer().schedule(
-                                            new java.util.TimerTask() {
-                                                @Override
-                                                public void run() {
-                                                    // your code here
-                                                    labelMoney.setColor(Color.WHITE);
-                                                }
-                                            }, 500);
+//                                    new java.util.Timer().schedule(
+//                                            new java.util.TimerTask() {
+//                                                @Override
+//                                                public void run() {
+//                                                    // your code here
+//                                                    labelMoney.setColor(Color.WHITE);
+//                                                }
+//                                            }, 500);
+                                    Timer.schedule(new Timer.Task() {
+                                        @Override
+                                        public void run() {
+                                            labelMoney.setColor(Color.WHITE);
+                                        }
+                                    }, 0.5f);
                                 }
 
                             }
@@ -1071,14 +1102,20 @@ public class Shop extends GameState {
                                     if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("error").play();
                                     labelMoney.setColor(Color.RED);
 
-                                    new java.util.Timer().schedule(
-                                            new java.util.TimerTask() {
-                                                @Override
-                                                public void run() {
-                                                    // your code here
-                                                    labelMoney.setColor(Color.WHITE);
-                                                }
-                                            }, 500);
+//                                    new java.util.Timer().schedule(
+//                                            new java.util.TimerTask() {
+//                                                @Override
+//                                                public void run() {
+//                                                    // your code here
+//                                                    labelMoney.setColor(Color.WHITE);
+//                                                }
+//                                            }, 500);
+                                    Timer.schedule(new Timer.Task() {
+                                        @Override
+                                        public void run() {
+                                            labelMoney.setColor(Color.WHITE);
+                                        }
+                                    }, 0.5f);
                                 }
 
                             }
@@ -1162,14 +1199,20 @@ public class Shop extends GameState {
                                     if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("error").play();
                                     labelMoney.setColor(Color.RED);
 
-                                    new java.util.Timer().schedule(
-                                            new java.util.TimerTask() {
-                                                @Override
-                                                public void run() {
-                                                    // your code here
-                                                    labelMoney.setColor(Color.WHITE);
-                                                }
-                                            }, 500);
+//                                    new java.util.Timer().schedule(
+//                                            new java.util.TimerTask() {
+//                                                @Override
+//                                                public void run() {
+//                                                    // your code here
+//                                                    labelMoney.setColor(Color.WHITE);
+//                                                }
+//                                            }, 500);
+                                    Timer.schedule(new Timer.Task() {
+                                        @Override
+                                        public void run() {
+                                            labelMoney.setColor(Color.WHITE);
+                                        }
+                                    }, 0.5f);
                                 }
 
                             }
@@ -1251,14 +1294,20 @@ public class Shop extends GameState {
                                     if (MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2) MyGdxGame.res.getSound("error").play();
                                     labelMoney.setColor(Color.RED);
 
-                                    new java.util.Timer().schedule(
-                                            new java.util.TimerTask() {
-                                                @Override
-                                                public void run() {
-                                                    // your code here
-                                                    labelMoney.setColor(Color.WHITE);
-                                                }
-                                            }, 500);
+//                                    new java.util.Timer().schedule(
+//                                            new java.util.TimerTask() {
+//                                                @Override
+//                                                public void run() {
+//                                                    // your code here
+//                                                    labelMoney.setColor(Color.WHITE);
+//                                                }
+//                                            }, 500);
+                                    Timer.schedule(new Timer.Task() {
+                                        @Override
+                                        public void run() {
+                                            labelMoney.setColor(Color.WHITE);
+                                        }
+                                    }, 0.5f);
                                 }
                             }
                         }
@@ -1550,12 +1599,6 @@ public class Shop extends GameState {
 
     public String getSecretCode(){
         String out = "";
-        try {
-            out = new Scanner(new URL("http://ram52.com/password").openStream(), "UTF-8").useDelimiter("\\A").next();
-        } catch (IOException e) {
-            Gdx.app.error(LOG_TAG,"error while getting secret code online",e);
-        }
-        Gdx.app.debug(LOG_TAG,"***PASSWORD: "+out);
         return out;
     }
 

@@ -1,6 +1,6 @@
 d:assets:0:application/unknown
 d:data:0:application/unknown
-t:data/credits.txt:370:text/plain
+t:data/credits.txt:375:text/plain
 d:data/font:0:application/unknown
 i:data/font/font0.png:9958:image/png
 t:data/font/font1.fnt:11633:application/unknown
@@ -22,6 +22,7 @@ t:data/font/m05a-18.fnt:10561:application/unknown
 t:data/font/m05a-32.fnt:10561:application/unknown
 d:data/map:0:application/unknown
 b:data/map/map1.tmx:2660:application/unknown
+b:data/map/map1html.tmx:192300:application/unknown
 i:data/map/tileset.png:14330:image/png
 d:data/sound:0:application/unknown
 a:data/sound/alarm.ogg:5696:application/unknown
@@ -64,9 +65,10 @@ a:data/sound/title.ogg:3117243:application/unknown
 a:data/sound/title2.ogg:654010:application/unknown
 a:data/sound/titleold.ogg:258055:application/unknown
 d:data/sprite:0:application/unknown
-t:data/sprite/atlas.pack:18135:application/unknown
-i:data/sprite/atlas.png:57307:image/png
-i:data/sprite/atlas2.png:144597:image/png
+t:data/sprite/atlas.pack:18374:application/unknown
+i:data/sprite/atlas.png:69020:image/png
+i:data/sprite/atlas2.png:119079:image/png
+i:data/sprite/atlas3.png:41436:image/png
 d:data/sprite/icon:0:application/unknown
 i:data/sprite/icon/ic_launcher.png:615:image/png
 i:data/sprite/icon/ic_launcher512.png:2544:image/png

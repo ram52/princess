@@ -23,8 +23,10 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.utils.Timer;
 import com.mygdx.core.entities.ActionResolver;
 import com.mygdx.core.entities.B2DSprite;
 import com.mygdx.core.handlers.Background;
@@ -83,10 +85,9 @@ public class MyGdxGame implements ApplicationListener {
 
     private static boolean isBoosTerritory = false;
     public static boolean pause = false;
-    public static Background background_cloud, background_wood1,
-    //background_skyDay
+    public static Background background_cloud, background_wood1, background_skyDay,background_title,background_shop;
     //background_storyLine,
-    background_title, background_tuto, background_shop;
+    //, background_tuto;
     public static String spritesPackPath = "data/sprite/atlas.pack";
     public static String errorSoundPath = "data/sound/error.ogg";
     public static String kameBeamSoundPath = "data/sound/kame.ogg";
@@ -129,7 +130,7 @@ public class MyGdxGame implements ApplicationListener {
     public static String fontScorePath = "data/font/font2.fnt";
     public static String fontPointPath = "data/font/font3.fnt";
     public static String fontfsexPath = "data/font/FSEX300-32.fnt";
-    public static String mapPath = "data/map/map1.tmx";
+    public static String mapPath = "data/map/map1html.tmx";
     public static String desktopIconPath = "data/sprite/icon/ic_launcher.png";
     public static String AndroidPlayStoreGameUrl = "https://ram52.com";
     public static String AndroidFacebookGameUrl = "https://www.facebook.com/Axl.RunningBird/";
@@ -321,15 +322,22 @@ public class MyGdxGame implements ApplicationListener {
 
                 if(!init){
                     init = true;
-                    new java.util.Timer().schedule(
-                            new java.util.TimerTask() {
-                                @Override
-                                public void run() {
-                                    wait = true;
-                                }
-                            },
-                            1000
-                    );
+//                    new java.util.Timer().schedule(
+//                            new java.util.TimerTask() {
+//                                @Override
+//                                public void run() {
+//                                    wait = true;
+//                                }
+//                            },
+//                            1000
+//                    );
+
+                    Timer.schedule(new Timer.Task() {
+                        @Override
+                        public void run() {
+                            wait = true;
+                        }
+                    }, 1f);
                 }
             }
             //Everything is loaded ready to start the game
@@ -491,7 +499,7 @@ public class MyGdxGame implements ApplicationListener {
 
         tex = new Sprite(MyGdxGame.atlas.findRegion("backgroundSky"));
         tex.setScale(1, MyGdxGame.V_WIDTH);
-        //background_skyDay = new Background(new TextureRegion(tex), hudCam, 1f);
+        background_skyDay = new Background(new TextureRegion(tex), hudCam, 1f);
 
         tex = new Sprite(MyGdxGame.atlas.findRegion("backgroundWood1"));
         background_wood1 = new Background(new TextureRegion(tex), cam, 1f);

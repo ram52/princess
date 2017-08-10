@@ -30,9 +30,12 @@
     <orderEntry type="module" module-name="core" exported="" />
     <orderEntry type="library" exported="" name="robovm-rt-1.0.0-beta-04" level="project" />
     <orderEntry type="library" exported="" name="robovm-cocoatouch-1.0.0-beta-04" level="project" />
-    <orderEntry type="library" exported="" name="gdx-backend-robovm-1.5.4" level="project" />
-    <orderEntry type="library" exported="" name="gdx-1.5.4" level="project" />
+    <orderEntry type="library" exported="" name="gdx-backend-robovm-1.9.6" level="project" />
+    <orderEntry type="library" exported="" name="gdx-1.9.6" level="project" />
     <orderEntry type="library" exported="" name="robovm-objc-1.0.0-beta-04" level="project" />
+    <orderEntry type="library" exported="" name="robovm-cocoatouch-2.3.0" level="project" />
+    <orderEntry type="library" exported="" name="robovm-objc-2.3.0" level="project" />
+    <orderEntry type="library" exported="" name="robovm-rt-2.3.0" level="project" />
     <orderEntry type="library" exported="" name="ios.ios-1.0" level="project" />
     <orderEntry type="library" exported="" name="ios.ios-1.0" level="project" />
     <orderEntry type="library" exported="" name="ios.ios-1.0" level="project" />

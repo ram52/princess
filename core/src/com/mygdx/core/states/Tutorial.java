@@ -19,13 +19,13 @@ public class Tutorial extends GameState {
     float offset = 0;
     private Stage stage0;
     private Image intro;
-    Button buttonExit, buttonReplay, buttonHeart, buttonStar, buttonFacebook, buttonAds;
+    Button buttonExit;
     Skin skinPlay, skinLeaderboard, skinHeart, skinStar, skinEnergie, skinAds;
-    boolean click1, click2, timerIsOn;
+    boolean click2;
 
     public Tutorial(final GameStateManager gsm) {
         super(gsm);
-        intro = new Image(MyGdxGame.atlas.findRegion("backgroundSky"));
+        intro = new Image(MyGdxGame.atlas.findRegion("backgroundTuto"));
         intro.setFillParent(true);
         stage0 = new Stage();
         stage0.addActor(intro);
@@ -90,10 +90,14 @@ public class Tutorial extends GameState {
 
     public void render() {
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
-        //MyGdxGame.background_skyDay.render(sb);
-        MyGdxGame.background_wood1.render(sb);
+        MyGdxGame.background_skyDay.render(sb);
         MyGdxGame.background_title.render(sb);
+        MyGdxGame.background_title.render(sb);
+        MyGdxGame.background_wood1.render(sb);
+        stage0.act();
+        sb.begin();
+        stage0.draw();
+        sb.end();
     }
 
     public void dispose() {
@@ -125,10 +129,6 @@ public class Tutorial extends GameState {
 
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glViewport(0,0, (int)viewport.width+ (int)offsetX, Gdx.graphics.getHeight());
-        stage0.act();
-        sb.begin();
-        stage0.draw();
-        sb.end();
         Gdx.gl.glViewport((int) viewport.x, (int) viewport.y, (int) viewport.width - (int)offsetX, (int) viewport.height - (int)offsetY);
     }
 }

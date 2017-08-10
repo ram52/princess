@@ -51,9 +51,6 @@ public class GameOver extends GameState {
     private Stage stage0;
     private Image intro;
 
-    public static String padRight(String s, int n) {
-        return String.format("%1$-" + n + "s", s);
-    }
 
     public GameOver(final GameStateManager gsm) {
 
