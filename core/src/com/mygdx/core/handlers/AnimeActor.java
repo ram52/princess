@@ -22,7 +22,7 @@ public class AnimeActor extends Actor{
         super.act(delta);
         time += delta;
 
-        currentRegion = animation.getKeyFrame(time, true);
+        currentRegion = (TextureRegion) animation.getKeyFrame(time, true);
     }
 
     @Override

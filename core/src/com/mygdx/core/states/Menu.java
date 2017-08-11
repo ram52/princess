@@ -21,7 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.core.MyGdxGame;
 import com.mygdx.core.handlers.Animation;
@@ -84,7 +84,7 @@ public class Menu extends GameState {
         }
 
         lastPlayerPosition = new Vector2(0,0);
-        MyGdxGame.initFade();
+
         Timer.instance().start();
 
 
@@ -783,6 +783,8 @@ public class Menu extends GameState {
 
     public void update(float dt) {
 
+        MyGdxGame.fadeIn.update(dt);
+
         if(MyGdxGame.isSoundEnable() == 2){
             if(!MyGdxGame.res.getMusic("title").isPlaying() /*&& !MyGdxGame.res.getMusic("newScreen").isPlaying()*/){
                 MyGdxGame.res.getMusic("title").setVolume(1.0f);
@@ -884,6 +886,7 @@ public class Menu extends GameState {
     public void render() {
 
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
 
         //cpt_translate_animation_title++;
 
@@ -1074,6 +1077,7 @@ public class Menu extends GameState {
             MyGdxGame.fadeOut.render(sb2);
         }
 
+        MyGdxGame.fadeIn.render(sb);
 
     }
 

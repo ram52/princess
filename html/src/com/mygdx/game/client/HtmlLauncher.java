@@ -1,15 +1,9 @@
 package com.mygdx.game.client;
 
 import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
 import com.badlogic.gdx.backends.gwt.preloader.Preloader;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.utils.TimeUtils;
-import com.google.gwt.canvas.client.Canvas;
-import com.google.gwt.canvas.dom.client.Context2d;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.InlineHTML;
@@ -18,7 +12,10 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.mygdx.core.MyGdxGame;
 
+
 public class HtmlLauncher extends GwtApplication {
+
+        MyGdxGame game;
 
         @Override
         public GwtApplicationConfiguration getConfig () {
@@ -27,7 +24,13 @@ public class HtmlLauncher extends GwtApplication {
 
         @Override
         public ApplicationListener getApplicationListener () {
-                return new MyGdxGame();
+                return game;
+        }
+
+        @Override
+        public ApplicationListener createApplicationListener() {
+                game = new MyGdxGame();
+                return game;
         }
 
 

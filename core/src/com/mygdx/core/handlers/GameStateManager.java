@@ -163,6 +163,7 @@ public class GameStateManager {
 	
 	public void setState(int state)
 	{
+		MyGdxGame.initFade();
 		if(!gameStates.isEmpty()){
 		popState();
 		pushState(state);

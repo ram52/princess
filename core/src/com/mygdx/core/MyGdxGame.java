@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -26,6 +27,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.core.entities.ActionResolver;
 import com.mygdx.core.entities.B2DSprite;
@@ -130,7 +132,7 @@ public class MyGdxGame implements ApplicationListener {
     public static String fontScorePath = "data/font/font2.fnt";
     public static String fontPointPath = "data/font/font3.fnt";
     public static String fontfsexPath = "data/font/FSEX300-32.fnt";
-    public static String mapPath = "data/map/map1html.tmx";
+    public static String mapPath = "data/map/map1.tmx";
     public static String desktopIconPath = "data/sprite/icon/ic_launcher.png";
     public static String AndroidPlayStoreGameUrl = "https://ram52.com";
     public static String AndroidFacebookGameUrl = "https://www.facebook.com/Axl.RunningBird/";
@@ -170,6 +172,8 @@ public class MyGdxGame implements ApplicationListener {
 
     public static int pickedGameplay = 2;
 
+    public static GlyphLayout glyphLayout = new GlyphLayout();
+
 
     public static boolean isContinue() {
         return Continue;
@@ -195,7 +199,7 @@ public class MyGdxGame implements ApplicationListener {
     }
 
     public void create() {
-        Gdx.app.setLogLevel(Application.LOG_DEBUG);
+        Gdx.app.setLogLevel(Application.LOG_NONE);
         //loading  = GifDecoder.loadGIFAnimation(com.badlogic.gdx.graphics.g2d.Animation.PlayMode.LOOP, Gdx.files.internal("data/sprite/loading.gif").readBytes());
         //font = new BitmapFont();
         fps = new FPSLogger();
@@ -370,7 +374,7 @@ public class MyGdxGame implements ApplicationListener {
             if(DEBUG){
                 sb.begin();
                 font.setColor(Color.RED);
-                font.drawMultiLine(sb, debugString, MyGdxGame.V_WIDTH/15 , MyGdxGame.V_HEIGHT/1.1f, MyGdxGame.V_WIDTH, BitmapFont.HAlignment.LEFT);
+                //font.drawMultiLine(sb, debugString, MyGdxGame.V_WIDTH/15 , MyGdxGame.V_HEIGHT/1.1f, MyGdxGame.V_WIDTH, BitmapFont.HAlignment.LEFT);
                 sb.end();
             }
 
@@ -560,6 +564,8 @@ public class MyGdxGame implements ApplicationListener {
     public void showConfirmDialog() {
 
     }
+
+
 
     public ShapeRenderer getShapeRenderer() {
         return shapeRenderer;

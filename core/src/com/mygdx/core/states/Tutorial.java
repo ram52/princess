@@ -86,6 +86,7 @@ public class Tutorial extends GameState {
         handleInput();
         MyGdxGame.background_wood1.update(dt);
         MyGdxGame.background_cloud.update(dt);
+        MyGdxGame.fadeIn.update(dt);
     }
 
     public void render() {
@@ -98,6 +99,8 @@ public class Tutorial extends GameState {
         sb.begin();
         stage0.draw();
         sb.end();
+
+        MyGdxGame.fadeIn.render(sb);
     }
 
     public void dispose() {

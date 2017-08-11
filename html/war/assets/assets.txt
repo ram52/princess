@@ -21,7 +21,7 @@ t:data/font/m05a-12.fnt:10559:application/unknown
 t:data/font/m05a-18.fnt:10561:application/unknown
 t:data/font/m05a-32.fnt:10561:application/unknown
 d:data/map:0:application/unknown
-b:data/map/map1.tmx:2660:application/unknown
+b:data/map/map1.tmx:768948:application/unknown
 b:data/map/map1html.tmx:192300:application/unknown
 i:data/map/tileset.png:14330:image/png
 d:data/sound:0:application/unknown
@@ -65,7 +65,7 @@ a:data/sound/title.ogg:3117243:application/unknown
 a:data/sound/title2.ogg:654010:application/unknown
 a:data/sound/titleold.ogg:258055:application/unknown
 d:data/sprite:0:application/unknown
-t:data/sprite/atlas.pack:18374:application/unknown
+t:data/sprite/atlas.pack:19600:application/unknown
 i:data/sprite/atlas.png:69020:image/png
 i:data/sprite/atlas2.png:119079:image/png
 i:data/sprite/atlas3.png:41436:image/png
@@ -85,10 +85,10 @@ t:uiskin.atlas:3122:application/unknown
 t:uiskin.json:3223:application/unknown
 i:uiskin.png:36972:image/png
 t:com/badlogic/gdx/graphics/g3d/particles/particles.fragment.glsl:770:application/unknown
-t:com/badlogic/gdx/graphics/g3d/particles/particles.vertex.glsl:2730:application/unknown
-t:com/badlogic/gdx/graphics/g3d/shaders/default.fragment.glsl:5163:application/unknown
-t:com/badlogic/gdx/graphics/g3d/shaders/default.vertex.glsl:8948:application/unknown
-t:com/badlogic/gdx/graphics/g3d/shaders/depth.fragment.glsl:870:application/unknown
+t:com/badlogic/gdx/graphics/g3d/particles/particles.vertex.glsl:2886:application/unknown
+t:com/badlogic/gdx/graphics/g3d/shaders/default.fragment.glsl:5162:application/unknown
+t:com/badlogic/gdx/graphics/g3d/shaders/default.vertex.glsl:8824:application/unknown
+t:com/badlogic/gdx/graphics/g3d/shaders/depth.fragment.glsl:869:application/unknown
 t:com/badlogic/gdx/graphics/g3d/shaders/depth.vertex.glsl:2923:application/unknown
 t:com/badlogic/gdx/utils/arial-15.fnt:21743:application/unknown
 i:com/badlogic/gdx/utils/arial-15.png:21814:image/png
