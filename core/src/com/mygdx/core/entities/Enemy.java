@@ -218,7 +218,7 @@ public class Enemy extends B2DSprite
         this.speed = speed;
         this.nextLevel = nextLevel;
 
-        if(nextLevel) health = health*2;
+        if(nextLevel) health = health*4;
 
 
 

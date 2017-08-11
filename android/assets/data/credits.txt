@@ -1,6 +1,6 @@
 PRINCESS!
 ram52studio@gmail.com
-v1.2
+v1.2.0
 
 Programming:
 Axel

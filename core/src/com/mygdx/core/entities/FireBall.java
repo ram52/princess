@@ -24,7 +24,7 @@ public class FireBall extends B2DSprite{
         if(Save.gd.isFireBall2Equiped()){
             tex = new Sprite(MyGdxGame.atlas.findRegion("fireball2"));
             sprites = tex.split( 179, 128)[0];
-            health = 3;
+            health = 2;
         }else{
             tex = new Sprite(MyGdxGame.atlas.findRegion("fireball"));
             sprites = tex.split( 64, 64)[0];

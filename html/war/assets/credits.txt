@@ -1,5 +1,5 @@
 PRINCESS!
-v1.2
+v1.2.0
 
 Programming:
 Axel

@@ -70,6 +70,7 @@ import java.util.concurrent.TimeUnit;
 
 import static com.mygdx.core.MyGdxGame.DEBUG;
 import static com.mygdx.core.MyGdxGame.TEST;
+import static com.mygdx.core.MyGdxGame.delay;
 import static com.mygdx.core.MyGdxGame.font;
 import static com.mygdx.core.MyGdxGame.font2;
 import static com.mygdx.core.MyGdxGame.lastBrickPosition;
@@ -111,7 +112,7 @@ public class Play extends GameState {
     private Brick brick;
     private Lightning lightning;
     private Array<FireBall> fireBalls;
-    private ScheduledExecutorService executor;
+    //private ScheduledExecutorService executor;
     private int player_selector = 0;
     private int cpt_alarm = 0;
     private Stage stage1, stageUiContinue;
@@ -158,7 +159,7 @@ public class Play extends GameState {
     private boolean megaKameha = false;
     private boolean lightningReachLimit = false;
     private int maxEnemiesOnScreen = 10;
-    private Runnable runnable;
+    //private Runnable runnable;
     private Boolean stopEnemies = false;
     private Boolean isStepping = false;
     private Boolean step0 = false;
@@ -608,26 +609,26 @@ public class Play extends GameState {
 
         buttonJump.addListener(new ClickListener() {
             public boolean isOver (Actor actor, float x, float y) {
-                Gdx.app.debug(LOG_TAG, "isOver");
+                //Gdx.app.debug(LOG_TAG, "isOver");
                 return true;
             }
 
             public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                Gdx.app.debug(LOG_TAG, "enter");
+                //Gdx.app.debug(LOG_TAG, "enter");
             }
 
             public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
-                Gdx.app.debug(LOG_TAG, "exit");
+                //Gdx.app.debug(LOG_TAG, "exit");
             }
 
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.app.debug(LOG_TAG, "touchDown");
+                //Gdx.app.debug(LOG_TAG, "touchDown");
                 jump = true;
                 return true;
             }
 
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.app.debug(LOG_TAG, "touchUp");
+                //Gdx.app.debug(LOG_TAG, "touchUp");
                 jump = false;
             }
 
@@ -659,58 +660,58 @@ public class Play extends GameState {
 
         buttonLeft.addListener(new ClickListener() {
             public boolean isOver (Actor actor, float x, float y) {
-                Gdx.app.debug(LOG_TAG, "buttonLeft isOver");
+                //Gdx.app.debug(LOG_TAG, "buttonLeft isOver");
                 return true;
             }
 
             public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                Gdx.app.debug(LOG_TAG, "buttonLeft enter");
+                //Gdx.app.debug(LOG_TAG, "buttonLeft enter");
                 left = true;
             }
 
             public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
-                Gdx.app.debug(LOG_TAG, "buttonLeft exit");
+                //Gdx.app.debug(LOG_TAG, "buttonLeft exit");
                 left = false;
 
             }
 
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.app.debug(LOG_TAG, "buttonLeft touchDown");
+                //Gdx.app.debug(LOG_TAG, "buttonLeft touchDown");
                 left = true;
                 return true;
             }
 
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.app.debug(LOG_TAG, "buttonLeft ouchUp");
+                //Gdx.app.debug(LOG_TAG, "buttonLeft ouchUp");
             }
 
         });
 
         buttonRight.addListener(new ClickListener() {
             public boolean isOver (Actor actor, float x, float y) {
-                Gdx.app.debug(LOG_TAG, "buttonRight isOver");
+                //Gdx.app.debug(LOG_TAG, "buttonRight isOver");
                 return true;
             }
 
             public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                Gdx.app.debug(LOG_TAG, "buttonRight enter");
+                //Gdx.app.debug(LOG_TAG, "buttonRight enter");
                 right = true;
             }
 
             public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
-                Gdx.app.debug(LOG_TAG, "buttonRight exit");
+                //Gdx.app.debug(LOG_TAG, "buttonRight exit");
                 right = false;
 
             }
 
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.app.debug(LOG_TAG, "buttonRight touchDown");
+                //Gdx.app.debug(LOG_TAG, "buttonRight touchDown");
                 right = true;
                 return true;
             }
 
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.app.debug(LOG_TAG, "buttonRight touchUp");
+                //Gdx.app.debug(LOG_TAG, "buttonRight touchUp");
             }
 
         });
@@ -780,73 +781,22 @@ public class Play extends GameState {
 
         fireBalls = new Array<FireBall>();
 
-        executor = Executors.newScheduledThreadPool(1);
 
-        runnable = new Runnable() {
-            public void run() {
 
-                if(!MyGdxGame.pause){
-                    if(!stopEnemies){
+//        if(!Play.this.isTutorial){
+//            executor.scheduleAtFixedRate(runnable, 0, 3000, TimeUnit.MILLISECONDS);
+//        }
 
-                        addNewEnemy = true;
-                        //Gdx.app.debug(LOG_TAG,"addNewEnemy! "+"stopEnemies:"+stopEnemies+" MyGdxGame.pause:"+MyGdxGame.pause);
-
-                        toggle = !toggle;
-
-                        isMalicious = getRandomBoolean();
-
-                        //d = (d < 500)? 500:3000-player.getNumCoins()*100;
-
-                        if(player.getNumCoins() >= 5 && !step0){
-                            step0 = true;
-                            maxEnemiesOnScreen++;
-                            executor = Executors.newScheduledThreadPool(1);
-                            executor.scheduleAtFixedRate(runnable, 0, 2500, TimeUnit.MILLISECONDS);
-                        }
-
-                        if(player.getNumCoins() >= 10 && !step1){
-                            step1 = true;
-                            maxEnemiesOnScreen++;
-                            executor = Executors.newScheduledThreadPool(1);
-                            executor.scheduleAtFixedRate(runnable, 0, 2000, TimeUnit.MILLISECONDS);
-                        }
-
-                        if(player.getNumCoins() >= 20 && !step2){
-                            step2 = true;
-                            maxEnemiesOnScreen++;
-                            executor = Executors.newScheduledThreadPool(1);
-                            executor.scheduleAtFixedRate(runnable, 0, 1000, TimeUnit.MILLISECONDS);
-                        }
-
-                        if(player.getNumCoins() >= 50 && !step3){
-                            step3 = true;
-                            maxEnemiesOnScreen++;
-                            executor = Executors.newScheduledThreadPool(1);
-                            executor.scheduleAtFixedRate(runnable, 0, 900, TimeUnit.MILLISECONDS);
-                        }
-
-//                        if(player.getNumCoins() >= 100 && !step4){
-//                            step4 = true;
-//                            maxEnemiesOnScreen++;
-//                            executor = Executors.newScheduledThreadPool(1);
-//                            executor.scheduleAtFixedRate(runnable, 0, 800, TimeUnit.MILLISECONDS);
-//                        }
-//
-//                        if(player.getNumCoins() >= 200 && !step5){
-//                            step5 = true;
-//                            maxEnemiesOnScreen+=10;
-//                            executor = Executors.newScheduledThreadPool(1);
-//                            executor.scheduleAtFixedRate(runnable, 0, 600, TimeUnit.MILLISECONDS);
-//                        }
-
-                    }
-                }
-            }
-        };
-
+        Timer.instance().clear();
 
         if(!Play.this.isTutorial){
-            executor.scheduleAtFixedRate(runnable, 0, 3000, TimeUnit.MILLISECONDS);
+            delay = 3f;
+            step0 = false;
+            step1 = false;
+            step2 = false;
+            step3 = false;
+            step4 = false;
+            callTimerTask();
         }
 
 
@@ -1335,11 +1285,11 @@ public class Play extends GameState {
             @Override
             public boolean keyUp(InputEvent event, int keycode) {
                 if (keycode == Input.Keys.LEFT) {
-                    Gdx.app.debug(LOG_TAG,"keyUp LEFT");
+                    //Gdx.app.debug(LOG_TAG,"keyUp LEFT");
                     left = false;
                 }
                 if (keycode == Input.Keys.RIGHT) {
-                    Gdx.app.debug(LOG_TAG,"keyUp RIGHT");
+                    //Gdx.app.debug(LOG_TAG,"keyUp RIGHT");
                     right  = false;
                 }
 
@@ -1363,11 +1313,11 @@ public class Play extends GameState {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
                 if (keycode == Input.Keys.LEFT) {
-                    Gdx.app.debug(LOG_TAG,"keyUp LEFT");
+                    //Gdx.app.debug(LOG_TAG,"keyUp LEFT");
                     left = true;
                 }
                 if (keycode == Input.Keys.RIGHT) {
-                    Gdx.app.debug(LOG_TAG,"keyUp RIGHT");
+                    //Gdx.app.debug(LOG_TAG,"keyUp RIGHT");
                     right = true;
                 }
                 if (keycode == Input.Keys.ENTER | keycode == Input.Keys.SPACE) {
@@ -1401,6 +1351,60 @@ public class Play extends GameState {
             }
         }, 1.5f);
 
+    }
+
+
+    private void callTimerTask(){
+        //Timer.instance().clear();
+        Timer.schedule(new Timer.Task(){
+            @Override
+            public void run(){
+                Gdx.app.debug(LOG_TAG,"delay="+delay);
+                Gdx.app.debug(LOG_TAG,"coins="+player.getNumCoins());
+                Gdx.app.debug(LOG_TAG,"0 "+step0+" "+step1+" "+step2+" "+step3+" "+step4+" "+step5);
+
+                if(!MyGdxGame.pause){
+                    if(!stopEnemies){
+                        addNewEnemy = true;
+
+                        toggle = !toggle;
+
+                        isMalicious = getRandomBoolean();
+
+                        if(player.getNumCoins() >= 5 && !step0){
+                            step0 = true;
+                            delay = 2.5f;
+                            callTimerTask();
+                        }
+
+                        if(player.getNumCoins() >= 10 && !step1){
+                            step1 = true;
+                            delay = 2f;
+                            callTimerTask();
+                        }
+
+                        if(player.getNumCoins() >= 20 && !step2){
+                            step2 = true;
+                            delay = 1.0f;
+                            callTimerTask();
+                        }
+
+
+                        if(player.getNumCoins() >= 50 && !step3){
+                            step3 = true;
+                            delay = 0.5f;
+                            callTimerTask();
+                        }
+
+                    }
+                }
+
+
+
+
+            }
+
+        },0,delay);
     }
 
     private boolean isGamePadTouched(){
@@ -1596,7 +1600,7 @@ public class Play extends GameState {
             buttonLeft.fire(event2);
             left = true;
             right = false;
-            Gdx.app.debug(LOG_TAG,"keyUp LEFT");
+            //Gdx.app.debug(LOG_TAG,"keyUp LEFT");
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) ) {
@@ -1609,7 +1613,7 @@ public class Play extends GameState {
             buttonRight.fire(event2);
             right = true;
             left = false;
-            Gdx.app.debug(LOG_TAG,"keyUp RIGHT");
+            //Gdx.app.debug(LOG_TAG,"keyUp RIGHT");
         }
 
         //LIGHTNING

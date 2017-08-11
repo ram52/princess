@@ -70,13 +70,14 @@ public class MyGdxGame implements ApplicationListener {
     public static BitmapFont font, font2;
     public static String debugString = "";
     public static float GROUND = 2.5621998f; //todo use box2d
-    public static int MONEY_BY_ENEMY = 2;
+    public static int MONEY_BY_ENEMY = 1;
     public static boolean DEBUG = false;
     public static boolean TEST = false;
     public static Vector2 lastPlayerPosition = new Vector2(0,0);
     public static Vector2 lastBrickPosition = new Vector2(0,0);
     public static Vector2 lastPrincessPosition = new Vector2(0,0);
     public static int lastScoreInTutorial = 0;
+    public static float delay = 0;
 
 
     public static void setIsBoosTerritory(boolean isBoosTerritory) {
