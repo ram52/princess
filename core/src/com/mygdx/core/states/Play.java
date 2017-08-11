@@ -695,12 +695,14 @@ public class Play extends GameState {
                         if(player.getNumCoins() >= 20 && !step2){
                             step2 = true;
                             delay = 1.0f;
+                            callTimerTask();
                         }
 
 
                         if(player.getNumCoins() >= 50 && !step3){
                             step3 = true;
                             delay = 0.5f;
+                            callTimerTask();
                         }
 
                     }
