@@ -321,7 +321,6 @@ public class MyGdxGame implements ApplicationListener {
     public static Brick brick;
     public static Lightning lightning;
     public static Array<FireBall> fireBalls;
-    public static ScheduledExecutorService executor;
     public static int player_selector = 0;
     public static int cpt_alarm = 0;
     public static Stage stage1Play;
@@ -364,8 +363,8 @@ public class MyGdxGame implements ApplicationListener {
     public static boolean kamehaReachLimit = false;
     public static boolean megaKameha = false;
     public static boolean lightningReachLimit = false;
-    public static int maxEnemiesOnScreen = 10;
-    public static Runnable runnable;
+    public static int maxEnemiesOnScreen = 20;
+    public static float delay = 0;
     public static Boolean stopEnemies = false;
     public static Boolean isStepping = false;
     public static Boolean step0 = false;
