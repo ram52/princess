@@ -237,7 +237,7 @@ public class Play extends GameState {
         Save.load();
 
 
-        Image intro = new Image(MyGdxGame.atlas.findRegion("backgroundSky"));
+        Image intro = new Image(MyGdxGame.atlas.findRegion("backgroundSkyHTML"));
         intro.setFillParent(true);
         stage0 = new Stage();
         stage0.addActor(intro);

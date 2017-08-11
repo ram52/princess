@@ -64,7 +64,7 @@ public class Credits extends GameState {
 
         if(shapeRendererCredit == null){
             shapeRendererCredit = new ShapeRenderer();
-            introCredit = new Image(MyGdxGame.atlas.findRegion("backgroundSky"));
+            introCredit = new Image(MyGdxGame.atlas.findRegion("backgroundSkyHTML"));
             introCredit.setFillParent(true);
             stage0Credit = new Stage();
             stage0Credit.addActor(introCredit);

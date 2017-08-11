@@ -17,28 +17,28 @@ backgroundSky
   orig: 640, 960
   offset: 0, 0
   index: -1
-backgroundTitle
+backgroundSkyHTML
   rotate: false
   xy: 643, 1085
   size: 640, 960
   orig: 640, 960
   offset: 0, 0
   index: -1
-backgroundTitlehtml
+backgroundTitle
   rotate: false
   xy: 643, 123
   size: 640, 960
   orig: 640, 960
   offset: 0, 0
   index: -1
-backgroundTuto
+backgroundTitlehtml
   rotate: false
   xy: 1285, 1085
   size: 640, 960
   orig: 640, 960
   offset: 0, 0
   index: -1
-backgroundWood1
+backgroundTuto
   rotate: false
   xy: 1285, 123
   size: 640, 960
@@ -302,557 +302,382 @@ atlas2.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+backgroundWood1
+  rotate: false
+  xy: 1, 1087
+  size: 640, 960
+  orig: 640, 960
+  offset: 0, 0
+  index: -1
 gamePlaySelection
   rotate: false
-  xy: 1, 1081
+  xy: 1, 125
   size: 640, 960
   orig: 640, 960
   offset: 0, 0
   index: -1
 opening1
   rotate: false
-  xy: 1, 119
+  xy: 643, 1087
   size: 640, 960
   orig: 640, 960
   offset: 0, 0
   index: -1
 handrotated45
   rotate: false
-  xy: 643, 1788
+  xy: 643, 832
   size: 800, 253
   orig: 800, 253
   offset: 0, 0
   index: -1
 handrotated90
   rotate: false
-  xy: 643, 1533
+  xy: 643, 577
   size: 800, 253
   orig: 800, 253
   offset: 0, 0
   index: -1
 enemyClimbDie2
   rotate: false
-  xy: 643, 1467
+  xy: 643, 511
   size: 832, 64
   orig: 832, 64
   offset: 0, 0
   index: -1
 uiContinueBackground
   rotate: false
-  xy: 1, 29
+  xy: 1, 35
   size: 640, 88
   orig: 640, 88
   offset: 0, 0
   index: -1
 tip
   rotate: false
-  xy: 1445, 1559
+  xy: 1285, 1565
   size: 238, 482
   orig: 238, 482
   offset: 0, 0
   index: -1
 brick2_breacking
   rotate: false
-  xy: 643, 1401
+  xy: 643, 445
   size: 640, 64
   orig: 640, 64
   offset: 0, 0
   index: -1
 brick_breacking
   rotate: false
-  xy: 643, 1335
+  xy: 643, 379
   size: 640, 64
   orig: 640, 64
   offset: 0, 0
   index: -1
 fireball2
   rotate: false
-  xy: 643, 1205
+  xy: 643, 249
   size: 537, 128
   orig: 537, 128
   offset: 0, 0
   index: -1
 hand_press_with_circles
   rotate: false
-  xy: 643, 1003
+  xy: 1525, 1847
   size: 425, 200
   orig: 425, 200
   offset: 0, 0
   index: -1
-buttonUiOptionAchievementDown
-  rotate: false
-  xy: 1685, 1942
-  size: 362, 99
-  orig: 362, 99
-  offset: 0, 0
-  index: -1
-buttonUiOptionAchievementUp
-  rotate: false
-  xy: 1685, 1841
-  size: 362, 99
-  orig: 362, 99
-  offset: 0, 0
-  index: -1
-hand_press
-  rotate: false
-  xy: 643, 893
-  size: 425, 108
-  orig: 425, 108
-  offset: 0, 0
-  index: -1
-enemyEscapeFadeIn
-  rotate: false
-  xy: 643, 827
-  size: 512, 64
-  orig: 512, 64
-  offset: 0, 0
-  index: -1
 enemyEscapeFadeOut
   rotate: false
-  xy: 643, 761
+  xy: 643, 183
   size: 576, 64
   orig: 576, 64
   offset: 0, 0
   index: -1
-enemyEscapeFadeOut2
+enemyEscapeFadeIn
   rotate: false
-  xy: 643, 695
+  xy: 643, 117
   size: 512, 64
   orig: 512, 64
   offset: 0, 0
   index: -1
+enemyEscapeFadeOut2
+  rotate: false
+  xy: 643, 51
+  size: 512, 64
+  orig: 512, 64
+  offset: 0, 0
+  index: -1
+hand_press
+  rotate: false
+  xy: 1525, 1737
+  size: 425, 108
+  orig: 425, 108
+  offset: 0, 0
+  index: -1
 enemyGroundDie2
   rotate: false
-  xy: 643, 629
+  xy: 1525, 1671
   size: 512, 64
   orig: 512, 64
   offset: 0, 0
   index: -1
 enemyEscapeFadeIn2
   rotate: false
-  xy: 643, 567
+  xy: 1525, 1609
   size: 512, 60
   orig: 512, 60
   offset: 0, 0
   index: -1
 buttonExitDown
   rotate: false
-  xy: 1685, 1643
+  xy: 1285, 1367
   size: 281, 196
   orig: 281, 196
   offset: 0, 0
   index: -1
 buttonExitUp
   rotate: false
-  xy: 643, 369
+  xy: 1285, 1169
   size: 281, 196
   orig: 281, 196
   offset: 0, 0
   index: -1
 buttonLeaderBoardDown
   rotate: false
-  xy: 643, 171
+  xy: 1568, 1411
   size: 281, 196
   orig: 281, 196
   offset: 0, 0
   index: -1
 buttonLeaderBoardUp
   rotate: false
-  xy: 926, 369
+  xy: 1568, 1213
   size: 281, 196
   orig: 281, 196
   offset: 0, 0
   index: -1
+slash
+  rotate: false
+  xy: 1285, 1103
+  size: 288, 64
+  orig: 288, 64
+  offset: 0, 0
+  index: -1
 buttonPlayDown
   rotate: false
-  xy: 926, 171
+  xy: 1575, 1015
   size: 281, 196
   orig: 281, 196
   offset: 0, 0
   index: -1
 buttonPlayUp
   rotate: false
-  xy: 1685, 1445
+  xy: 1445, 817
   size: 281, 196
   orig: 281, 196
   offset: 0, 0
   index: -1
-sad
-  rotate: false
-  xy: 643, 1
-  size: 220, 168
-  orig: 220, 168
-  offset: 0, 0
-  index: -1
-sadEx
-  rotate: false
-  xy: 865, 1
-  size: 220, 168
-  orig: 220, 168
-  offset: 0, 0
-  index: -1
 buttonReplayDown
   rotate: false
-  xy: 1285, 1269
+  xy: 1445, 619
   size: 281, 196
   orig: 281, 196
   offset: 0, 0
   index: -1
 buttonReplayUp
   rotate: false
-  xy: 1568, 1247
+  xy: 1728, 817
   size: 281, 196
   orig: 281, 196
   offset: 0, 0
   index: -1
-buttonSound1Full
+sad
   rotate: false
-  xy: 1087, 1
-  size: 150, 168
-  orig: 150, 168
+  xy: 1728, 647
+  size: 220, 168
+  orig: 220, 168
   offset: 0, 0
   index: -1
-happy
+sadEx
   rotate: false
-  xy: 1851, 1274
-  size: 132, 169
-  orig: 132, 169
+  xy: 1285, 341
+  size: 220, 168
+  orig: 220, 168
   offset: 0, 0
   index: -1
-happyEx
+buttonAdsDown
   rotate: false
-  xy: 1070, 1034
-  size: 132, 169
-  orig: 132, 169
+  xy: 1851, 1448
+  size: 159, 159
+  orig: 159, 159
   offset: 0, 0
   index: -1
-lightning
+buttonAdsUp
   rotate: false
-  xy: 1070, 904
-  size: 152, 128
-  orig: 152, 128
+  xy: 1851, 1287
+  size: 159, 159
+  orig: 159, 159
   offset: 0, 0
   index: -1
-buttonGp1Down
+buttonUiOptionAchievementDown
   rotate: false
-  xy: 1477, 1479
-  size: 201, 78
-  orig: 201, 78
+  xy: 1477, 518
+  size: 362, 99
+  orig: 362, 99
   offset: 0, 0
   index: -1
-slash
+buttonUiOptionAchievementUp
   rotate: false
-  xy: 1239, 1203
-  size: 288, 64
-  orig: 288, 64
+  xy: 1507, 417
+  size: 362, 99
+  orig: 362, 99
   offset: 0, 0
   index: -1
 slashEx
   rotate: false
-  xy: 1204, 1137
+  xy: 1507, 351
   size: 288, 64
   orig: 288, 64
   offset: 0, 0
   index: -1
 coinsprite
   rotate: false
-  xy: 1204, 1071
+  xy: 1507, 285
   size: 256, 64
   orig: 256, 64
   offset: 0, 0
   index: -1
-buttonAdsDown
+buttonSound1Full
   rotate: false
-  xy: 1224, 910
-  size: 159, 159
-  orig: 159, 159
+  xy: 1858, 1117
+  size: 150, 168
+  orig: 150, 168
+  offset: 0, 0
+  index: -1
+enemyMock
+  rotate: false
+  xy: 1445, 1037
+  size: 128, 64
+  orig: 128, 64
   offset: 0, 0
   index: -1
 fireball
   rotate: false
-  xy: 1529, 1181
+  xy: 1182, 275
   size: 256, 64
   orig: 256, 64
   offset: 0, 0
   index: -1
 stand
   rotate: false
-  xy: 1494, 1115
+  xy: 1221, 209
   size: 256, 64
   orig: 256, 64
   offset: 0, 0
   index: -1
 standEx
   rotate: false
-  xy: 1462, 1049
+  xy: 1479, 219
   size: 256, 64
   orig: 256, 64
   offset: 0, 0
   index: -1
-buttonSound1Fx
+buttonGp1Down
   rotate: false
-  xy: 1157, 591
-  size: 150, 168
-  orig: 150, 168
-  offset: 0, 0
-  index: -1
-buttonSound1Mute
-  rotate: false
-  xy: 1209, 421
-  size: 150, 168
-  orig: 150, 168
-  offset: 0, 0
-  index: -1
-buttonAdsUp
-  rotate: false
-  xy: 1209, 260
-  size: 159, 159
-  orig: 159, 159
-  offset: 0, 0
-  index: -1
-buttonGp2Down
-  rotate: false
-  xy: 1209, 179
-  size: 200, 79
-  orig: 200, 79
-  offset: 0, 0
-  index: -1
-buttonBootDown
-  rotate: false
-  xy: 1239, 18
-  size: 159, 159
-  orig: 159, 159
-  offset: 0, 0
-  index: -1
-buttonBootUp
-  rotate: false
-  xy: 1385, 888
-  size: 159, 159
-  orig: 159, 159
-  offset: 0, 0
-  index: -1
-buttonBrick2Down
-  rotate: false
-  xy: 1546, 888
-  size: 159, 159
-  orig: 159, 159
-  offset: 0, 0
-  index: -1
-buttonGp1Up
-  rotate: false
-  xy: 1411, 808
+  xy: 1221, 129
   size: 201, 78
   orig: 201, 78
   offset: 0, 0
   index: -1
+buttonActionDisabledDown
+  rotate: false
+  xy: 1157, 1
+  size: 145, 126
+  orig: 145, 126
+  offset: 0, 0
+  index: -1
+buttonActionDisabledUp
+  rotate: false
+  xy: 1304, 1
+  size: 145, 126
+  orig: 145, 126
+  offset: 0, 0
+  index: -1
+hyaa
+  rotate: false
+  xy: 1858, 1055
+  size: 168, 60
+  orig: 168, 60
+  offset: 0, 0
+  index: -1
+buttonGp1Up
+  rotate: false
+  xy: 1479, 139
+  size: 201, 78
+  orig: 201, 78
+  offset: 0, 0
+  index: -1
+lightning
+  rotate: false
+  xy: 1451, 9
+  size: 152, 128
+  orig: 152, 128
+  offset: 0, 0
+  index: -1
+buttonActionDown
+  rotate: false
+  xy: 1841, 519
+  size: 145, 126
+  orig: 145, 126
+  offset: 0, 0
+  index: -1
+buttonActionUp
+  rotate: false
+  xy: 1871, 391
+  size: 145, 126
+  orig: 145, 126
+  offset: 0, 0
+  index: -1
+buttonSecret
+  rotate: false
+  xy: 1605, 9
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+buttonGp2Down
+  rotate: false
+  xy: 1797, 310
+  size: 200, 79
+  orig: 200, 79
+  offset: 0, 0
+  index: -1
 buttonGp2Up
   rotate: false
-  xy: 1411, 727
+  xy: 1765, 229
   size: 200, 79
   orig: 200, 79
   offset: 0, 0
   index: -1
 buttonRestoreDown
   rotate: false
-  xy: 1411, 646
+  xy: 1737, 148
   size: 200, 79
   orig: 200, 79
-  offset: 0, 0
-  index: -1
-buttonBrick2Up
-  rotate: false
-  xy: 1361, 485
-  size: 159, 159
-  orig: 159, 159
-  offset: 0, 0
-  index: -1
-buttonBrickDown
-  rotate: false
-  xy: 1522, 485
-  size: 159, 159
-  orig: 159, 159
-  offset: 0, 0
-  index: -1
-buttonBrickUp
-  rotate: false
-  xy: 1370, 324
-  size: 159, 159
-  orig: 159, 159
-  offset: 0, 0
-  index: -1
-buttonCoins1Down
-  rotate: false
-  xy: 1531, 324
-  size: 159, 159
-  orig: 159, 159
-  offset: 0, 0
-  index: -1
-buttonCoins1Up
-  rotate: false
-  xy: 1411, 163
-  size: 159, 159
-  orig: 159, 159
-  offset: 0, 0
-  index: -1
-buttonCoins2Down
-  rotate: false
-  xy: 1400, 2
-  size: 159, 159
-  orig: 159, 159
-  offset: 0, 0
-  index: -1
-buttonCoins2Up
-  rotate: false
-  xy: 1572, 163
-  size: 159, 159
-  orig: 159, 159
-  offset: 0, 0
-  index: -1
-buttonCoins3Down
-  rotate: false
-  xy: 1561, 2
-  size: 159, 159
-  orig: 159, 159
-  offset: 0, 0
-  index: -1
-protectme
-  rotate: false
-  xy: 1157, 827
-  size: 123, 75
-  orig: 123, 75
-  offset: 0, 0
-  index: -1
-enemyMock
-  rotate: false
-  xy: 1221, 761
-  size: 128, 64
-  orig: 128, 64
-  offset: 0, 0
-  index: -1
-buttonCoins3Up
-  rotate: false
-  xy: 1707, 888
-  size: 159, 159
-  orig: 159, 159
   offset: 0, 0
   index: -1
 buttonRestoreUp
   rotate: false
-  xy: 1614, 807
+  xy: 1735, 67
   size: 200, 79
   orig: 200, 79
   offset: 0, 0
   index: -1
-buttonExcaliburDown
-  rotate: false
-  xy: 1613, 646
-  size: 159, 159
-  orig: 159, 159
-  offset: 0, 0
-  index: -1
-buttonExcaliburUp
-  rotate: false
-  xy: 1683, 485
-  size: 159, 159
-  orig: 159, 159
-  offset: 0, 0
-  index: -1
-buttonFireBall2Down
-  rotate: false
-  xy: 1692, 324
-  size: 159, 159
-  orig: 159, 159
-  offset: 0, 0
-  index: -1
-buttonFireBall2Up
-  rotate: false
-  xy: 1733, 163
-  size: 159, 159
-  orig: 159, 159
-  offset: 0, 0
-  index: -1
-buttonFireBallDown
-  rotate: false
-  xy: 1722, 2
-  size: 159, 159
-  orig: 159, 159
-  offset: 0, 0
-  index: -1
-buttonFireBallUp
-  rotate: false
-  xy: 1774, 646
-  size: 159, 159
-  orig: 159, 159
-  offset: 0, 0
-  index: -1
-buttonKamehamehaDown
-  rotate: false
-  xy: 1844, 485
-  size: 159, 159
-  orig: 159, 159
-  offset: 0, 0
-  index: -1
-buttonKamehamehaUp
-  rotate: false
-  xy: 1853, 324
-  size: 159, 159
-  orig: 159, 159
-  offset: 0, 0
-  index: -1
-buttonSecret
-  rotate: false
-  xy: 1894, 194
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: -1
 brick2_hurt
   rotate: false
-  xy: 1720, 1049
+  xy: 1735, 1
   size: 192, 64
   orig: 192, 64
-  offset: 0, 0
-  index: -1
-brick_hurt
-  rotate: false
-  xy: 1752, 1115
-  size: 192, 64
-  orig: 192, 64
-  offset: 0, 0
-  index: -1
-enemy
-  rotate: false
-  xy: 1787, 1181
-  size: 192, 64
-  orig: 192, 64
-  offset: 0, 0
-  index: -1
-buttonLightningDown
-  rotate: false
-  xy: 1868, 888
-  size: 159, 159
-  orig: 159, 159
-  offset: 0, 0
-  index: -1
-enemy2
-  rotate: false
-  xy: 1816, 822
-  size: 192, 64
-  orig: 192, 64
-  offset: 0, 0
-  index: -1
-enemyMock2
-  rotate: false
-  xy: 1914, 1049
-  size: 128, 64
-  orig: 128, 64
-  offset: 0, 0
-  index: -1
-buttonLightningUp
-  rotate: false
-  xy: 1883, 2
-  size: 159, 159
-  orig: 159, 159
   offset: 0, 0
   index: -1
 
@@ -860,367 +685,549 @@ atlas3.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-buttonMegaJumpDown
+buttonBootDown
   rotate: false
   xy: 1, 864
   size: 159, 159
   orig: 159, 159
   offset: 0, 0
   index: -1
-buttonMegaJumpUp
+buttonBootUp
   rotate: false
   xy: 1, 703
   size: 159, 159
   orig: 159, 159
   offset: 0, 0
   index: -1
-buttonNoDown
+buttonBrick2Down
   rotate: false
   xy: 162, 864
   size: 159, 159
   orig: 159, 159
   offset: 0, 0
   index: -1
-buttonNoUp
+buttonBrick2Up
   rotate: false
   xy: 1, 542
   size: 159, 159
   orig: 159, 159
   offset: 0, 0
   index: -1
-buttonYesDown
+buttonBrickDown
   rotate: false
   xy: 162, 703
   size: 159, 159
   orig: 159, 159
   offset: 0, 0
   index: -1
-buttonYesUp
+buttonBrickUp
   rotate: false
   xy: 323, 864
   size: 159, 159
   orig: 159, 159
   offset: 0, 0
   index: -1
-gameplay1Down
+buttonCoins1Down
   rotate: false
   xy: 1, 381
   size: 159, 159
   orig: 159, 159
   offset: 0, 0
   index: -1
-gameplay1Up
+buttonCoins1Up
   rotate: false
   xy: 162, 542
   size: 159, 159
   orig: 159, 159
   offset: 0, 0
   index: -1
-gameplay2Down
+buttonCoins2Down
   rotate: false
   xy: 323, 703
   size: 159, 159
   orig: 159, 159
   offset: 0, 0
   index: -1
-gameplay2Up
+buttonCoins2Up
   rotate: false
   xy: 484, 864
   size: 159, 159
   orig: 159, 159
   offset: 0, 0
   index: -1
+buttonCoins3Down
+  rotate: false
+  xy: 1, 220
+  size: 159, 159
+  orig: 159, 159
+  offset: 0, 0
+  index: -1
+buttonCoins3Up
+  rotate: false
+  xy: 162, 381
+  size: 159, 159
+  orig: 159, 159
+  offset: 0, 0
+  index: -1
+buttonExcaliburDown
+  rotate: false
+  xy: 323, 542
+  size: 159, 159
+  orig: 159, 159
+  offset: 0, 0
+  index: -1
+buttonExcaliburUp
+  rotate: false
+  xy: 484, 703
+  size: 159, 159
+  orig: 159, 159
+  offset: 0, 0
+  index: -1
+buttonFireBall2Down
+  rotate: false
+  xy: 645, 864
+  size: 159, 159
+  orig: 159, 159
+  offset: 0, 0
+  index: -1
+buttonFireBall2Up
+  rotate: false
+  xy: 1, 59
+  size: 159, 159
+  orig: 159, 159
+  offset: 0, 0
+  index: -1
+buttonFireBallDown
+  rotate: false
+  xy: 162, 220
+  size: 159, 159
+  orig: 159, 159
+  offset: 0, 0
+  index: -1
+buttonFireBallUp
+  rotate: false
+  xy: 323, 381
+  size: 159, 159
+  orig: 159, 159
+  offset: 0, 0
+  index: -1
+buttonKamehamehaDown
+  rotate: false
+  xy: 484, 542
+  size: 159, 159
+  orig: 159, 159
+  offset: 0, 0
+  index: -1
+buttonKamehamehaUp
+  rotate: false
+  xy: 645, 703
+  size: 159, 159
+  orig: 159, 159
+  offset: 0, 0
+  index: -1
+buttonLightningDown
+  rotate: false
+  xy: 806, 864
+  size: 159, 159
+  orig: 159, 159
+  offset: 0, 0
+  index: -1
+buttonLightningUp
+  rotate: false
+  xy: 162, 59
+  size: 159, 159
+  orig: 159, 159
+  offset: 0, 0
+  index: -1
+buttonMegaJumpDown
+  rotate: false
+  xy: 323, 220
+  size: 159, 159
+  orig: 159, 159
+  offset: 0, 0
+  index: -1
+buttonMegaJumpUp
+  rotate: false
+  xy: 484, 381
+  size: 159, 159
+  orig: 159, 159
+  offset: 0, 0
+  index: -1
+buttonNoDown
+  rotate: false
+  xy: 645, 542
+  size: 159, 159
+  orig: 159, 159
+  offset: 0, 0
+  index: -1
+buttonNoUp
+  rotate: false
+  xy: 806, 703
+  size: 159, 159
+  orig: 159, 159
+  offset: 0, 0
+  index: -1
+buttonSound1Fx
+  rotate: false
+  xy: 967, 855
+  size: 150, 168
+  orig: 150, 168
+  offset: 0, 0
+  index: -1
+buttonSound1Mute
+  rotate: false
+  xy: 1119, 855
+  size: 150, 168
+  orig: 150, 168
+  offset: 0, 0
+  index: -1
+buttonYesDown
+  rotate: false
+  xy: 323, 59
+  size: 159, 159
+  orig: 159, 159
+  offset: 0, 0
+  index: -1
+buttonYesUp
+  rotate: false
+  xy: 484, 220
+  size: 159, 159
+  orig: 159, 159
+  offset: 0, 0
+  index: -1
+gameplay1Down
+  rotate: false
+  xy: 645, 381
+  size: 159, 159
+  orig: 159, 159
+  offset: 0, 0
+  index: -1
+gameplay1Up
+  rotate: false
+  xy: 806, 542
+  size: 159, 159
+  orig: 159, 159
+  offset: 0, 0
+  index: -1
+gameplay2Down
+  rotate: false
+  xy: 967, 694
+  size: 159, 159
+  orig: 159, 159
+  offset: 0, 0
+  index: -1
+gameplay2Up
+  rotate: false
+  xy: 1271, 864
+  size: 159, 159
+  orig: 159, 159
+  offset: 0, 0
+  index: -1
 buttonHeartDown
   rotate: false
-  xy: 1, 223
+  xy: 484, 62
   size: 159, 156
   orig: 159, 156
   offset: 0, 0
   index: -1
 buttonHeartUp
   rotate: false
-  xy: 162, 384
+  xy: 645, 223
   size: 159, 156
   orig: 159, 156
   offset: 0, 0
   index: -1
 buttonStarDown
   rotate: false
-  xy: 323, 545
+  xy: 806, 384
   size: 159, 156
   orig: 159, 156
   offset: 0, 0
   index: -1
 buttonStarUp
   rotate: false
-  xy: 484, 706
+  xy: 967, 536
   size: 159, 156
   orig: 159, 156
   offset: 0, 0
   index: -1
 buttonExit2Down
   rotate: false
-  xy: 645, 869
+  xy: 1432, 869
   size: 159, 154
   orig: 159, 154
   offset: 0, 0
   index: -1
 buttonExit2Up
   rotate: false
-  xy: 1, 67
+  xy: 645, 67
   size: 159, 154
   orig: 159, 154
   offset: 0, 0
   index: -1
-enemyclimb
+brick_hurt
   rotate: false
-  xy: 1, 1
+  xy: 645, 1
   size: 192, 64
   orig: 192, 64
   offset: 0, 0
   index: -1
 buttonGearDown
   rotate: false
-  xy: 323, 389
+  xy: 1593, 869
   size: 159, 154
   orig: 159, 154
   offset: 0, 0
   index: -1
 buttonGearFlipDown
   rotate: false
-  xy: 484, 550
+  xy: 806, 228
   size: 159, 154
   orig: 159, 154
   offset: 0, 0
   index: -1
 buttonGearFlipUp
   rotate: false
-  xy: 645, 713
+  xy: 967, 380
   size: 159, 154
   orig: 159, 154
   offset: 0, 0
   index: -1
 buttonGearUp
   rotate: false
-  xy: 806, 869
+  xy: 1754, 869
   size: 159, 154
   orig: 159, 154
   offset: 0, 0
   index: -1
+happy
+  rotate: false
+  xy: 1915, 854
+  size: 132, 169
+  orig: 132, 169
+  offset: 0, 0
+  index: -1
 buttonPromoteDown
   rotate: false
-  xy: 162, 228
+  xy: 806, 72
   size: 159, 154
   orig: 159, 154
   offset: 0, 0
   index: -1
 buttonPromoteUp
   rotate: false
-  xy: 323, 233
-  size: 159, 154
-  orig: 159, 154
-  offset: 0, 0
-  index: -1
-buttonSound2Full
-  rotate: false
-  xy: 484, 394
-  size: 159, 154
-  orig: 159, 154
-  offset: 0, 0
-  index: -1
-buttonSound2Fx
-  rotate: false
-  xy: 645, 557
-  size: 159, 154
-  orig: 159, 154
-  offset: 0, 0
-  index: -1
-buttonSound2Mute
-  rotate: false
-  xy: 806, 713
+  xy: 967, 224
   size: 159, 154
   orig: 159, 154
   offset: 0, 0
   index: -1
 buttonPause
   rotate: false
-  xy: 967, 870
+  xy: 967, 69
   size: 159, 153
   orig: 159, 153
   offset: 0, 0
   index: -1
-buttonActionDisabledDown
+happyEx
   rotate: false
-  xy: 162, 100
-  size: 145, 126
-  orig: 145, 126
+  xy: 1128, 684
+  size: 132, 169
+  orig: 132, 169
   offset: 0, 0
   index: -1
-buttonActionDisabledUp
+buttonSound2Full
   rotate: false
-  xy: 484, 266
-  size: 145, 126
-  orig: 145, 126
+  xy: 1128, 528
+  size: 159, 154
+  orig: 159, 154
   offset: 0, 0
   index: -1
-buttonActionDown
+buttonSound2Fx
   rotate: false
-  xy: 645, 429
-  size: 145, 126
-  orig: 145, 126
+  xy: 1128, 372
+  size: 159, 154
+  orig: 159, 154
   offset: 0, 0
   index: -1
-buttonActionUp
+buttonSound2Mute
   rotate: false
-  xy: 806, 585
-  size: 145, 126
-  orig: 145, 126
+  xy: 1128, 216
+  size: 159, 154
+  orig: 159, 154
   offset: 0, 0
   index: -1
 buttonUiBossLeftDown
   rotate: false
-  xy: 967, 742
+  xy: 1128, 88
   size: 145, 126
   orig: 145, 126
+  offset: 0, 0
+  index: -1
+enemy
+  rotate: false
+  xy: 1432, 803
+  size: 192, 64
+  orig: 192, 64
+  offset: 0, 0
+  index: -1
+enemy2
+  rotate: false
+  xy: 1626, 803
+  size: 192, 64
+  orig: 192, 64
+  offset: 0, 0
+  index: -1
+enemyclimb
+  rotate: false
+  xy: 1128, 22
+  size: 192, 64
+  orig: 192, 64
   offset: 0, 0
   index: -1
 buttonUiBossLeftUp
   rotate: false
-  xy: 1128, 897
+  xy: 1275, 88
   size: 145, 126
   orig: 145, 126
-  offset: 0, 0
-  index: -1
-buttonUiBossRightDown
-  rotate: false
-  xy: 1275, 897
-  size: 145, 126
-  orig: 145, 126
-  offset: 0, 0
-  index: -1
-buttonUiBossRightUp
-  rotate: false
-  xy: 1422, 897
-  size: 145, 126
-  orig: 145, 126
-  offset: 0, 0
-  index: -1
-buttonUiContinueNoDown
-  rotate: false
-  xy: 1569, 913
-  size: 149, 110
-  orig: 149, 110
-  offset: 0, 0
-  index: -1
-buttonUiContinueNoUp
-  rotate: false
-  xy: 1720, 913
-  size: 149, 110
-  orig: 149, 110
-  offset: 0, 0
-  index: -1
-hiii
-  rotate: false
-  xy: 1871, 912
-  size: 137, 111
-  orig: 137, 111
-  offset: 0, 0
-  index: -1
-killEnemy
-  rotate: false
-  xy: 1871, 912
-  size: 137, 111
-  orig: 137, 111
   offset: 0, 0
   index: -1
 enemyclimb2
   rotate: false
-  xy: 1128, 831
+  xy: 1422, 737
   size: 192, 64
   orig: 192, 64
   offset: 0, 0
   index: -1
 enemyClimbHurt
   rotate: false
-  xy: 1322, 831
+  xy: 1616, 737
   size: 192, 64
   orig: 192, 64
   offset: 0, 0
   index: -1
+buttonUiContinueNoDown
+  rotate: false
+  xy: 1271, 752
+  size: 149, 110
+  orig: 149, 110
+  offset: 0, 0
+  index: -1
 enemyClimbHurt2
   rotate: false
-  xy: 1114, 765
+  xy: 1422, 671
   size: 192, 64
   orig: 192, 64
   offset: 0, 0
   index: -1
 enemyGroundHurt
   rotate: false
-  xy: 1308, 765
+  xy: 1616, 671
   size: 192, 64
   orig: 192, 64
   offset: 0, 0
   index: -1
 enemyGroundHurt2
   rotate: false
-  xy: 1114, 699
+  xy: 1422, 605
   size: 192, 64
   orig: 192, 64
   offset: 0, 0
   index: -1
 jump
   rotate: false
-  xy: 1308, 699
+  xy: 1616, 605
   size: 192, 64
   orig: 192, 64
   offset: 0, 0
   index: -1
 jumpEx
   rotate: false
-  xy: 1569, 847
+  xy: 1422, 539
   size: 192, 64
   orig: 192, 64
   offset: 0, 0
   index: -1
-hyaa
-  rotate: false
-  xy: 645, 367
-  size: 168, 60
-  orig: 168, 60
-  offset: 0, 0
-  index: -1
 princess
   rotate: false
-  xy: 631, 301
+  xy: 1616, 539
   size: 192, 64
   orig: 192, 64
   offset: 0, 0
   index: -1
 princesscry
   rotate: false
-  xy: 631, 235
+  xy: 1422, 473
   size: 192, 64
   orig: 192, 64
   offset: 0, 0
   index: -1
 princessdie
   rotate: false
-  xy: 806, 519
+  xy: 1616, 473
   size: 192, 64
   orig: 192, 64
   offset: 0, 0
   index: -1
 walk
   rotate: false
-  xy: 792, 453
+  xy: 1422, 407
   size: 192, 64
   orig: 192, 64
   offset: 0, 0
   index: -1
 walkEx
   rotate: false
-  xy: 815, 387
+  xy: 1616, 407
   size: 192, 64
   orig: 192, 64
+  offset: 0, 0
+  index: -1
+enemyMock2
+  rotate: false
+  xy: 1262, 686
+  size: 128, 64
+  orig: 128, 64
+  offset: 0, 0
+  index: -1
+protectme
+  rotate: false
+  xy: 1289, 609
+  size: 123, 75
+  orig: 123, 75
+  offset: 0, 0
+  index: -1
+buttonUiContinueNoUp
+  rotate: false
+  xy: 1422, 295
+  size: 149, 110
+  orig: 149, 110
+  offset: 0, 0
+  index: -1
+buttonUiBossRightDown
+  rotate: false
+  xy: 1573, 279
+  size: 145, 126
+  orig: 145, 126
+  offset: 0, 0
+  index: -1
+buttonUiBossRightUp
+  rotate: false
+  xy: 1720, 279
+  size: 145, 126
+  orig: 145, 126
+  offset: 0, 0
+  index: -1
+hiii
+  rotate: false
+  xy: 1422, 182
+  size: 137, 111
+  orig: 137, 111
+  offset: 0, 0
+  index: -1
+killEnemy
+  rotate: false
+  xy: 1422, 182
+  size: 137, 111
+  orig: 137, 111
   offset: 0, 0
   index: -1

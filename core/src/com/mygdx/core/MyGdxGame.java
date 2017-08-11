@@ -501,7 +501,7 @@ public class MyGdxGame implements ApplicationListener {
         tex = new Sprite(MyGdxGame.atlas.findRegion("buttonSecret"));
         background_cloud = new Background(new TextureRegion(tex), cam, 1f);
 
-        tex = new Sprite(MyGdxGame.atlas.findRegion("backgroundSky"));
+        tex = new Sprite(MyGdxGame.atlas.findRegion("backgroundSkyHTML"));
         tex.setScale(1, MyGdxGame.V_WIDTH);
         background_skyDay = new Background(new TextureRegion(tex), hudCam, 1f);
 

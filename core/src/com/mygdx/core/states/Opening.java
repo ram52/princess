@@ -34,7 +34,7 @@ public class Opening extends GameState {
     public Opening(final GameStateManager gsm) {
 
         super(gsm);
-        intro = new Image(MyGdxGame.atlas.findRegion("backgroundSky"));
+        intro = new Image(MyGdxGame.atlas.findRegion("backgroundSkyHTML"));
         intro.setFillParent(true);
         stage0 = new Stage();
         stage0.addActor(intro);
