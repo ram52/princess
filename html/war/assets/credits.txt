@@ -1,5 +1,6 @@
 PRINCESS!
-v1.2.0
+contact@ram52.com
+v1.2.1
 
 Programming:
 Axel
@@ -8,6 +9,10 @@ Art:
 lansari rachid
 rachidlansari@gmail.com
 Axel
+Clint Bellanger (Shock Spell)
+https://creativecommons.org/
+licenses/by/3.0/
+Bongwater-bandit (projectiles)
 
 Music:
 Yuu Hayashi
@@ -18,3 +23,6 @@ Satie
 Sfx:
 Juhani Junkala
 juhani.junkala@musician.org
+
+Special Thanks
+Reibu Jocelyn
