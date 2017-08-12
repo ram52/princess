@@ -252,8 +252,8 @@ public class Menu extends GameState {
         stageUiOption.addActor(buttonAchievement);
 
         style = new ButtonStyle();
-        style.up = skin.getDrawable("buttonPlayUp");
-        style.down = skin.getDrawable("buttonPlayUp");
+        style.up = skin.getDrawable("buttonPlayHTMLUp");
+        style.down = skin.getDrawable("buttonPlayHTMLDown");
         buttonCloseUiOption = new Button(style);
         buttonCloseUiOption.setWidth(Gdx.graphics.getWidth() / 6f);
         buttonCloseUiOption.setHeight(Gdx.graphics.getWidth() / 6f);
@@ -261,14 +261,14 @@ public class Menu extends GameState {
         stageUiOption.addActor(buttonCloseUiOption);
 
         style = new ButtonStyle();
-        style.up = skin.getDrawable("buttonUiContinueNoUp");
-        style.down = skin.getDrawable("buttonUiContinueNoDown");
+        style.up = skin.getDrawable("buttonPlayUp");
+        style.down = skin.getDrawable("buttonPlayDown");
         buttonPlay = new Button(style);
-        buttonPlay.setWidth(buttonPlay.getWidth()*1.3f);
-        buttonPlay.setHeight(buttonPlay.getHeight()*1.3f);
-        buttonPlay.setPosition((Gdx.graphics.getWidth() - buttonPlay.getWidth())/ 2f, (Gdx.graphics.getHeight() - buttonPlay.getHeight()) / 1.505f);
+        buttonPlay.setWidth(Gdx.graphics.getWidth() / 2.2f);
+        buttonPlay.setHeight(Gdx.graphics.getHeight() / 4.8f);
+        //buttonExit.setPosition(-buttonExit.getWidth()/2.6f, (Gdx.graphics.getHeight() - buttonExit.getHeight()) / 1.6f);
 
-        //buttonPlay.setPosition(-400, Gdx.graphics.getHeight() / 2f);
+        buttonPlay.setPosition(-130, Gdx.graphics.getHeight() / 2f);
         stage1.addActor(buttonPlay);
 
         style = new ButtonStyle();

@@ -113,7 +113,7 @@ public class Play extends GameState {
     private Brick brick;
     private Lightning lightning;
     private Array<FireBall> fireBalls;
-    private AsyncExecutor executor;
+    //private AsyncExecutor executor;
     private int player_selector = 0;
     private int cpt_alarm = 0;
     private Stage stage1, stageUiContinue;
@@ -160,7 +160,7 @@ public class Play extends GameState {
     private boolean megaKameha = false;
     private boolean lightningReachLimit = false;
     private int maxEnemiesOnScreen = 10;
-    private Runnable runnable;
+    //private Runnable runnable;
     private Boolean stopEnemies = false;
     private Boolean isStepping = false;
     private Boolean step0 = false;
@@ -182,6 +182,7 @@ public class Play extends GameState {
     private double cpt_scream_fade = 0;
     private Stage stage0;
     private ScreenShake screenShake;
+    public float delay = 0f;
     private float baseX = 0f;
     private float baseY = 0f;
     private boolean isTutorial = false;
@@ -769,98 +770,15 @@ public class Play extends GameState {
 
         fireBalls = new Array<FireBall>();
 
-        executor = new AsyncExecutor(1);
-
-        runnable = new Runnable() {
-            public void run() {
-
-                if(!MyGdxGame.pause){
-                    if(!stopEnemies){
-
-                        addNewEnemy = true;
-                        //Gdx.app.debug(LOG_TAG,"addNewEnemy! "+"stopEnemies:"+stopEnemies+" MyGdxGame.pause:"+MyGdxGame.pause);
-
-                        toggle = !toggle;
-
-                        isMalicious = getRandomBoolean();
-
-                        //d = (d < 500)? 500:3000-player.getNumCoins()*100;
-
-                        if(player.getNumCoins() >= 5 && !step0){
-                            step0 = true;
-//                            maxEnemiesOnScreen++;
-//                            //executor = Executors.newScheduledThreadPool(1);
-//                            executor.scheduleAtFixedRate(runnable, 0, 2500, TimeUnit.MILLISECONDS);
-//                            executor.submit()
-
-                            Timer.schedule(new Timer.Task(){
-                                               @Override
-                                               public void run() {
-                                                   maxEnemiesOnScreen++;
-                                                   runnable.run();
-                                               }
-                                           }, 0,2.5f);
-                        }
-
-                        if(player.getNumCoins() >= 10 && !step1){
-                            step1 = true;
-                            maxEnemiesOnScreen++;
-                            //executor = Executors.newScheduledThreadPool(1);
-                            //executor.scheduleAtFixedRate(runnable, 0, 2000, TimeUnit.MILLISECONDS);
-
-                            Timer.schedule(new Timer.Task(){
-                                @Override
-                                public void run() {
-                                    maxEnemiesOnScreen++;
-                                    runnable.run();
-                                }
-                            }, 0,2.0f);
-                        }
-
-                        if(player.getNumCoins() >= 20 && !step2){
-                            step2 = true;
-                            maxEnemiesOnScreen++;
-//                            executor = Executors.newScheduledThreadPool(1);
-//                            executor.scheduleAtFixedRate(runnable, 0, 1000, TimeUnit.MILLISECONDS);
-                            Timer.schedule(new Timer.Task(){
-                                @Override
-                                public void run() {
-                                    maxEnemiesOnScreen++;
-                                    runnable.run();
-                                }
-                            }, 0,1.0f);
-                        }
-
-                        if(player.getNumCoins() >= 50 && !step3){
-                            step3 = true;
-                            maxEnemiesOnScreen++;
-                            //executor = Executors.newScheduledThreadPool(1);
-                            //executor.scheduleAtFixedRate(runnable, 0, 900, TimeUnit.MILLISECONDS);
-                            Timer.schedule(new Timer.Task(){
-                                @Override
-                                public void run() {
-                                    maxEnemiesOnScreen++;
-                                    runnable.run();
-                                }
-                            }, 0,0.9f);
-                        }
-
-
-
-                    }
-                }
-            }
-        };
-
 
         if(!Play.this.isTutorial){
-            //executor.scheduleAtFixedRate(runnable, 0, 3000, TimeUnit.MILLISECONDS);
-            Timer.schedule(new Timer.Task(){
-                @Override
-                public void run() {
-                    runnable.run();
-                }
-            }, 0,3f);
+            delay = 3f;
+            step0 = false;
+            step1 = false;
+            step2 = false;
+            step3 = false;
+            step4 = false;
+            callTimerTask();
         }
 
 
@@ -1409,6 +1327,55 @@ public class Play extends GameState {
             }
         }, 1.5f);
 
+    }
+
+    private void callTimerTask(){
+        //Timer.instance().clear();
+        Timer.schedule(new Timer.Task(){
+            @Override
+            public void run(){
+                Gdx.app.debug(LOG_TAG,"delay="+delay);
+                Gdx.app.debug(LOG_TAG,"coins="+player.getNumCoins());
+                Gdx.app.debug(LOG_TAG,"0 "+step0+" "+step1+" "+step2+" "+step3+" "+step4+" "+step5);
+
+                if(!MyGdxGame.pause){
+                    if(!stopEnemies){
+                        addNewEnemy = true;
+
+                        toggle = !toggle;
+
+                        isMalicious = getRandomBoolean();
+
+                        if(player.getNumCoins() >= 5 && !step0){
+                            step0 = true;
+                            delay = 2.5f;
+                            callTimerTask();
+                        }
+
+                        if(player.getNumCoins() >= 10 && !step1){
+                            step1 = true;
+                            delay = 2f;
+                            callTimerTask();
+                        }
+
+                        if(player.getNumCoins() >= 20 && !step2){
+                            step2 = true;
+                            delay = 1.0f;
+                            callTimerTask();
+                        }
+
+
+                        if(player.getNumCoins() >= 50 && !step3){
+                            step3 = true;
+                            delay = 0.5f;
+                            callTimerTask();
+                        }
+
+                    }
+                }
+            }
+
+        },0,delay);
     }
 
     private boolean isGamePadTouched(){
@@ -2768,7 +2735,7 @@ public class Play extends GameState {
         }
 
 
-        if(player.getNumCoins() >= 52){
+        if(player.getNumCoins() >= 50){
             Save.gd.setFireBall2Equiped(true);
             Save.gd.setFireBallEquiped(false);
         }
