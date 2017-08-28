@@ -22,6 +22,7 @@ public class GameData implements Serializable {
 	private boolean lightningPurchased;
 	private boolean megaJumpPurchased;
 	private boolean fireBall2Purchased;
+	private boolean gunPurchased;
 	private boolean lightningEquiped;
 	private boolean megaJumpEquiped;
 	private boolean fireBall2Equiped;
@@ -31,6 +32,7 @@ public class GameData implements Serializable {
 	private boolean bootEquiped;
 	private boolean brick2Equiped;
 	private boolean kamehamehaEquiped;
+	private boolean gunEquiped;
 	private int sound;
 	private boolean night;
     private String selector;
@@ -77,6 +79,10 @@ public class GameData implements Serializable {
 		megaJumpEquiped = false;
 		fireBall2Equiped = false;
 		isFirstPlay = true;
+
+		//todo handle when power up will be created
+		gunEquiped = true;
+		gunPurchased = true;
 	}
 	
 	// sets up an empty high scores table
@@ -497,8 +503,21 @@ public class GameData implements Serializable {
 		this.data15 = data15;
 	}
 
+	public boolean isGunPurchased() {
+		return gunPurchased;
+	}
 
+	public void setGunPurchased(boolean gunPurchased) {
+		this.gunPurchased = gunPurchased;
+	}
 
+	public boolean isGunEquiped() {
+		return gunEquiped;
+	}
+
+	public void setGunEquiped(boolean gunEquiped) {
+		this.gunEquiped = gunEquiped;
+	}
 }
 
 

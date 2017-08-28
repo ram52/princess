@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -39,8 +40,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.Timer;
@@ -201,6 +204,44 @@ public class Play extends GameState {
     private SpriteBatch sbKyaa;
     private int cpt_tuto = 0;
     private float powerUpBar_MaxHeight = 0.0f;
+    private Touchpad touchpad;
+    private Touchpad.TouchpadStyle touchpadStyle;
+    private Skin touchpadSkin;
+    private Drawable touchBackground;
+    private Drawable touchKnob;
+    private Sprite blockSprite;
+    private float blockSpeed;
+
+    private void setupTouchPad(Button button){
+        //Create a touchpad skin
+        touchpadSkin = new Skin();
+        //Set background image
+        touchpadSkin.add("touchBackground", new TextureRegion(new Sprite(MyGdxGame.atlas.findRegion("touchBackground"))));
+        //Set knob image
+        touchpadSkin.add("touchKnob", new TextureRegion(new Sprite(MyGdxGame.atlas.findRegion("touchKnob"))));
+        //Create TouchPad Style
+        touchpadStyle = new Touchpad.TouchpadStyle();
+        //Create Drawable's from TouchPad skin
+        touchBackground = touchpadSkin.getDrawable("touchBackground");
+        touchKnob = touchpadSkin.getDrawable("touchKnob");
+        //Apply the Drawables to the TouchPad Style
+        touchpadStyle.background = touchBackground;
+        touchpadStyle.knob = touchKnob;
+        //Create new TouchPad with the created style
+        touchpad = new Touchpad(10, touchpadStyle);
+        touchpad.setPosition(button.getX(),button.getY());
+        touchpad.setWidth(button.getWidth());
+        touchpad.setHeight(button.getHeight());
+        //setBounds(x,y,width,height)
+        //touchpad.setBounds(15, 15, 200, 200);
+
+        //Create block sprite
+        //blockTexture = new Texture(Gdx.files.internal("block.png"));
+        blockSprite = new Sprite(MyGdxGame.atlas.findRegion("block"));
+        //Set position to centre of the screen
+        blockSprite.setPosition(Gdx.graphics.getWidth()/2-blockSprite.getWidth()/2, Gdx.graphics.getHeight()/2-blockSprite.getHeight()/2);
+        blockSpeed = 5;
+    }
 
     private boolean getRandomBoolean() {
         Random random = new Random();
@@ -362,6 +403,8 @@ public class Play extends GameState {
         skin = new Skin();
         skin.addRegions(MyGdxGame.atlas);
 
+
+
         MyGdxGame.background_cloud.setVector(+10, 0);
         //MyGdxGame.background_skyDay.setVector(0, 0);
         MyGdxGame.background_wood1.setVector(+10, 0);
@@ -480,7 +523,17 @@ public class Play extends GameState {
         buttonRed.setPosition(buttonFire.getX(), buttonFire.getY()+space);
         //stageUiControl.addActor(buttonRed);
 
-        stageUiControl.addActor(buttonFire);
+        setupTouchPad(buttonFire);
+
+        if(true){
+
+            stageUiControl.addActor(touchpad);
+        }else{
+            stageUiControl.addActor(buttonFire);
+        }
+
+
+
 
         Button.ButtonStyle jumpButtonStyle = new Button.ButtonStyle();
         jumpButtonStyle.up = skin.getDrawable("buttonActionUp");
@@ -1329,6 +1382,8 @@ public class Play extends GameState {
                 return false;
             }
         });
+
+
 
         InputMultiplexer im = new InputMultiplexer();
         im.addProcessor(gd);
@@ -3433,6 +3488,14 @@ public class Play extends GameState {
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         //MyGdxGame.background_skyDay.render(sb);
 
+        //Move blockSprite with TouchPad
+        //blockSprite.setX(blockSprite.getX() + touchpad.getKnobPercentX()*blockSpeed);
+        //blockSprite.setY(blockSprite.getY() + touchpad.getKnobPercentY()*blockSpeed);
+
+        //Draw
+        //sb.begin();
+        //blockSprite.draw(sb);
+        //sb.end();
 
 
         for (FireBall fireBall: fireBalls) {
