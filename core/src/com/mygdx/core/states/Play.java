@@ -186,6 +186,7 @@ public class Play extends GameState {
     private ScreenShake screenShake;
     private float baseX = 0f;
     private float baseY = 0f;
+    private float space = 0;
     private boolean isTutorial = false;
     private boolean hideScream = false;
     private Hand pointer;
@@ -212,13 +213,16 @@ public class Play extends GameState {
     private Sprite blockSprite;
     private float blockSpeed;
 
-    private void setupTouchPad(Button button){
+    private void setupTouchPad(float x, float y){
+        //resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         //Create a touchpad skin
         touchpadSkin = new Skin();
         //Set background image
         touchpadSkin.add("touchBackground", new TextureRegion(new Sprite(MyGdxGame.atlas.findRegion("touchBackground"))));
         //Set knob image
-        touchpadSkin.add("touchKnob", new TextureRegion(new Sprite(MyGdxGame.atlas.findRegion("touchKnob"))));
+        Sprite sprite = new Sprite(MyGdxGame.atlas.findRegion("touchKnob"));
+        TextureRegion texRegion = new TextureRegion(sprite);
+        touchpadSkin.add("touchKnob", texRegion);
         //Create TouchPad Style
         touchpadStyle = new Touchpad.TouchpadStyle();
         //Create Drawable's from TouchPad skin
@@ -226,14 +230,18 @@ public class Play extends GameState {
         touchKnob = touchpadSkin.getDrawable("touchKnob");
         //Apply the Drawables to the TouchPad Style
         touchpadStyle.background = touchBackground;
+        touchKnob.setMinHeight(buttonFire.getHeight());
+        touchKnob.setMinWidth(buttonFire.getWidth());
         touchpadStyle.knob = touchKnob;
         //Create new TouchPad with the created style
         touchpad = new Touchpad(10, touchpadStyle);
-        touchpad.setPosition(button.getX(),button.getY());
-        touchpad.setWidth(button.getWidth());
-        touchpad.setHeight(button.getHeight());
+        touchpad.setSize(buttonFire.getWidth(), buttonFire.getHeight());
+
+        touchpad.setPosition(x,y,Align.center);
+
+
         //setBounds(x,y,width,height)
-        //touchpad.setBounds(15, 15, 200, 200);
+        //touchpad.setBounds(x-buttonFire.getWidth()/2, y-buttonFire.getHeight()/2, buttonFire.getWidth(), buttonFire.getHeight());
 
         //Create block sprite
         //blockTexture = new Texture(Gdx.files.internal("block.png"));
@@ -523,10 +531,10 @@ public class Play extends GameState {
         buttonRed.setPosition(buttonFire.getX(), buttonFire.getY()+space);
         //stageUiControl.addActor(buttonRed);
 
-        setupTouchPad(buttonFire);
+
 
         if(true){
-
+            setupTouchPad(buttonFire.getX()+buttonFire.getWidth()/2, buttonLeft.getY()+ buttonLeft.getHeight()/2);
             stageUiControl.addActor(touchpad);
         }else{
             stageUiControl.addActor(buttonFire);
@@ -601,6 +609,59 @@ public class Play extends GameState {
 
         });
 
+        touchpad.addListener(new ClickListener() {
+            public boolean isOver (Actor actor, float x, float y) {
+                Gdx.app.debug(LOG_TAG, "isOver");
+                return true;
+            }
+
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                Gdx.app.debug(LOG_TAG, "enter");
+            }
+
+            public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
+                Gdx.app.debug(LOG_TAG, "exit");
+            }
+
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                Gdx.app.debug(LOG_TAG, "touchDown");
+                buttonFire.setChecked(true);
+                if(Save.gd.isFireBallEquiped()|Save.gd.isFireBall2Equiped()){
+                    Gdx.app.debug(LOG_TAG,"clicked fire!");
+                    fire = true;
+                }else if(Save.gd.isKamehamehaEquiped() && !blockKamehameha){
+                    fire = true;
+                    if((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)&& reloadKamehameha == 0 && beamWidth == 0){
+                        if((pickedGameplay == 1 && tuto_step5) | (pickedGameplay == 2 && tuto_step3) | !isTutorial){
+                            MyGdxGame.res.getSound("kame").play();
+                        }
+
+                    }
+                }else if(Save.gd.isLightningEquiped() && !blockLightning){
+                    fire = true;
+                    if((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)&& reloadLightning == 0 && beamWidth == 0 ){
+                        if((pickedGameplay == 1 && tuto_step5) | (pickedGameplay == 2 && tuto_step3) | !isTutorial){
+                            MyGdxGame.res.getSound("lightning").play();
+                        }
+                    }
+                } else{
+                    fire = false;
+                }
+                if(player.getFireBallCount() <= 0){
+                    if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)
+                    {
+                        MyGdxGame.res.getSound("no_ammo").play();
+                    }
+                }
+                return true;
+            }
+
+            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                Gdx.app.debug(LOG_TAG, "touchUp");
+                buttonFire.setChecked(false);
+            }
+
+        });
 //        buttonFire.addListener(new InputListener() {
 //            public boolean touchDown(
 //                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
@@ -1473,7 +1534,7 @@ public class Play extends GameState {
 
     private void updateButtonPosition(){
         float size = (Gdx.graphics.getWidth() / 4.2f);
-        float space = (Gdx.graphics.getWidth() - (size*4))/5;
+        space = (Gdx.graphics.getWidth() - (size*4))/5;
 
         if(offsetY > 0){
             buttonLeft.setPosition(space, space*15f);
@@ -3485,17 +3546,23 @@ public class Play extends GameState {
     }
 
     public void render() {
+
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        if(MyGdxGame.pickedGameplay == 2){
+            touchpad.setPosition(buttonRight.getRight()+space, buttonLeft.getY());
+        }else{
+            touchpad.setPosition((Gdx.graphics.getWidth()-buttonFire.getWidth())/2, buttonLeft.getY());
+        }
+
+
         //MyGdxGame.background_skyDay.render(sb);
 
         //Move blockSprite with TouchPad
-        //blockSprite.setX(blockSprite.getX() + touchpad.getKnobPercentX()*blockSpeed);
-        //blockSprite.setY(blockSprite.getY() + touchpad.getKnobPercentY()*blockSpeed);
+        blockSprite.setX(blockSprite.getX() + touchpad.getKnobPercentX()*blockSpeed);
+        blockSprite.setY(blockSprite.getY() + touchpad.getKnobPercentY()*blockSpeed);
 
-        //Draw
-        //sb.begin();
-        //blockSprite.draw(sb);
-        //sb.end();
+
+
 
 
         for (FireBall fireBall: fireBalls) {
@@ -3858,6 +3925,11 @@ public class Play extends GameState {
 //
 //        sb.end();
 
+        //Draw
+        sb.begin();
+        blockSprite.draw(sb);
+        sb.end();
+
 
         sb.setProjectionMatrix(hudCam.combined);
 
@@ -4076,9 +4148,20 @@ public class Play extends GameState {
         body.createFixture(fdef).setUserData("fireBall");
         shape.dispose();
 
+
         body.setLinearVelocity(velocity,0);
 
-        return new FireBall(body);
+        FireBall fireBall = new FireBall(body);
+
+        blockSprite.setPosition(Gdx.graphics.getWidth()/2-blockSprite.getWidth()/2, Gdx.graphics.getHeight()/2-blockSprite.getHeight()/2);
+
+        fireBall.getBody().setLinearVelocity(fireBall.shootToward(blockSprite.getX() + touchpad.getKnobPercentX()*blockSpeed,blockSprite.getY() + touchpad.getKnobPercentY()*blockSpeed,velocity));
+
+
+        //blockSprite.setX(blockSprite.getX() + touchpad.getKnobPercentX()*blockSpeed);
+        //blockSprite.setY(blockSprite.getY() + touchpad.getKnobPercentY()*blockSpeed);
+
+        return fireBall;
     }
 
     private Lightning createLightning(float x, float y, float velocity) {
@@ -4331,6 +4414,7 @@ public class Play extends GameState {
 
 
 
+
         float offsetY = crop.y;
         float offsetX = crop.x;
 
@@ -4350,8 +4434,11 @@ public class Play extends GameState {
 
         Gdx.gl.glViewport((int) viewport.x, (int) viewport.y, (int) viewport.width - (int)offsetX, (int) viewport.height - (int)offsetY);
 
-        stage1.getViewport().update((int) (width - offsetX), (int) (height - offsetY), true);
-        stageUiControl.getViewport().update((int) (width - offsetX), (int) (height - offsetY), true);
+        if(stage1 != null)
+            stage1.getViewport().update((int) (width - offsetX), (int) (height - offsetY), true);
+
+        if(stageUiControl != null)
+            stageUiControl.getViewport().update((int) (width - offsetX), (int) (height - offsetY), true);
 
     }
 

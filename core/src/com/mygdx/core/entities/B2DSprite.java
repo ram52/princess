@@ -147,6 +147,17 @@ public class B2DSprite {
 			getBody().destroyFixture(fixture);
 		}
 	}
+
+	public Vector2 shootToward(float targetX, float targetY, float speedMax) {
+            /*
+             * Get the normalized direction vector from our position to the target. Then scale that value to our desired speed. In
+             * this particular example, we are using the distance of the target from the current position to determine how fast we
+             * will shoot the ball, and limiting to a maximum speed. We will apply velocity in the update method.
+             */
+		Vector2 velocity = new Vector2();
+		velocity.set(targetX - body.getPosition().x, targetY - body.getPosition().y).nor().scl(Math.min(body.getPosition().dst(targetX, targetY), speedMax));
+		return velocity;
+	}
 }
 
 
