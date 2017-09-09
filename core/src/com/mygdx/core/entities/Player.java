@@ -25,7 +25,7 @@ public class Player extends B2DSprite
     private boolean stillRight = true;
     private boolean stillLeft = false;
     private boolean playerDead = false;
-    private int fireBallCount = 10;
+    private int fireBallCount = 10000;
     private boolean right = false;
     private boolean left = false;
     private boolean isSlashingRight = false;

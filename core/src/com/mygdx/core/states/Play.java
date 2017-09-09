@@ -46,6 +46,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Logger;
+import com.badlogic.gdx.utils.Pools;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.core.MyGdxGame;
 import com.mygdx.core.entities.B2DSprite;
@@ -248,7 +249,7 @@ public class Play extends GameState {
         blockSprite = new Sprite(MyGdxGame.atlas.findRegion("block"));
         //Set position to centre of the screen
         blockSprite.setPosition(Gdx.graphics.getWidth()/2-blockSprite.getWidth()/2, Gdx.graphics.getHeight()/2-blockSprite.getHeight()/2);
-        blockSpeed = 5;
+        blockSpeed = 500;
     }
 
     private boolean getRandomBoolean() {
@@ -609,59 +610,59 @@ public class Play extends GameState {
 
         });
 
-        touchpad.addListener(new ClickListener() {
-            public boolean isOver (Actor actor, float x, float y) {
-                Gdx.app.debug(LOG_TAG, "isOver");
-                return true;
-            }
-
-            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                Gdx.app.debug(LOG_TAG, "enter");
-            }
-
-            public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
-                Gdx.app.debug(LOG_TAG, "exit");
-            }
-
-            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.app.debug(LOG_TAG, "touchDown");
-                buttonFire.setChecked(true);
-                if(Save.gd.isFireBallEquiped()|Save.gd.isFireBall2Equiped()){
-                    Gdx.app.debug(LOG_TAG,"clicked fire!");
-                    fire = true;
-                }else if(Save.gd.isKamehamehaEquiped() && !blockKamehameha){
-                    fire = true;
-                    if((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)&& reloadKamehameha == 0 && beamWidth == 0){
-                        if((pickedGameplay == 1 && tuto_step5) | (pickedGameplay == 2 && tuto_step3) | !isTutorial){
-                            MyGdxGame.res.getSound("kame").play();
-                        }
-
-                    }
-                }else if(Save.gd.isLightningEquiped() && !blockLightning){
-                    fire = true;
-                    if((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)&& reloadLightning == 0 && beamWidth == 0 ){
-                        if((pickedGameplay == 1 && tuto_step5) | (pickedGameplay == 2 && tuto_step3) | !isTutorial){
-                            MyGdxGame.res.getSound("lightning").play();
-                        }
-                    }
-                } else{
-                    fire = false;
-                }
-                if(player.getFireBallCount() <= 0){
-                    if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)
-                    {
-                        MyGdxGame.res.getSound("no_ammo").play();
-                    }
-                }
-                return true;
-            }
-
-            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.app.debug(LOG_TAG, "touchUp");
-                buttonFire.setChecked(false);
-            }
-
-        });
+//        touchpad.addListener(new ClickListener() {
+//            public boolean isOver (Actor actor, float x, float y) {
+//                Gdx.app.debug(LOG_TAG, "isOver");
+//                return true;
+//            }
+//
+//            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
+//                Gdx.app.debug(LOG_TAG, "enter");
+//            }
+//
+//            public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
+//                Gdx.app.debug(LOG_TAG, "exit");
+//            }
+//
+//            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+//                Gdx.app.debug(LOG_TAG, "touchDown");
+//                buttonFire.setChecked(true);
+//                if(Save.gd.isFireBallEquiped()|Save.gd.isFireBall2Equiped()){
+//                    Gdx.app.debug(LOG_TAG,"clicked fire!");
+//                    fire = true;
+//                }else if(Save.gd.isKamehamehaEquiped() && !blockKamehameha){
+//                    fire = true;
+//                    if((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)&& reloadKamehameha == 0 && beamWidth == 0){
+//                        if((pickedGameplay == 1 && tuto_step5) | (pickedGameplay == 2 && tuto_step3) | !isTutorial){
+//                            MyGdxGame.res.getSound("kame").play();
+//                        }
+//
+//                    }
+//                }else if(Save.gd.isLightningEquiped() && !blockLightning){
+//                    fire = true;
+//                    if((MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)&& reloadLightning == 0 && beamWidth == 0 ){
+//                        if((pickedGameplay == 1 && tuto_step5) | (pickedGameplay == 2 && tuto_step3) | !isTutorial){
+//                            MyGdxGame.res.getSound("lightning").play();
+//                        }
+//                    }
+//                } else{
+//                    fire = false;
+//                }
+//                if(player.getFireBallCount() <= 0){
+//                    if(MyGdxGame.isSoundEnable() == 1 | MyGdxGame.isSoundEnable() == 2)
+//                    {
+//                        MyGdxGame.res.getSound("no_ammo").play();
+//                    }
+//                }
+//                return true;
+//            }
+//
+//            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+//                Gdx.app.debug(LOG_TAG, "touchUp");
+//                buttonFire.setChecked(false);
+//            }
+//
+//        });
 //        buttonFire.addListener(new InputListener() {
 //            public boolean touchDown(
 //                    com.badlogic.gdx.scenes.scene2d.InputEvent event, float x,
@@ -1552,8 +1553,31 @@ public class Play extends GameState {
 
     }
 
+    public void triggerButtonClicked(Button button) {
+        InputEvent inputEvent = Pools.obtain(InputEvent.class);
+        inputEvent.setRelatedActor(button);
+
+        try {
+            inputEvent.setType(InputEvent.Type.touchDown);
+            button.fire(inputEvent);
+
+            inputEvent.setType(InputEvent.Type.touchUp);
+            button.fire(inputEvent);
+        } catch (NullPointerException e){
+
+        }
+        finally
+        {
+            Pools.free(inputEvent);
+        }
+    }
+
     public void handleInput() {
         updateButtonPosition();
+
+        if((Math.abs(touchpad.getKnobPercentX()) > 0.8f | Math.abs(touchpad.getKnobPercentY()) > 0.8f)){
+            triggerButtonClicked(buttonFire);
+        }
 
 //        if(Gdx.input.justTouched() && Gdx.input.getY() > MyGdxGame.BRICK_SUMON_ZONE && pickedGameplay == 1){
 //            Gdx.app.debug(LOG_TAG,"fire!");
@@ -1742,7 +1766,7 @@ public class Play extends GameState {
 
         }
         //FIRE BALL 1
-        if(Save.gd.isFireBallEquiped() && fire && player.getFireBallCount()>0){
+        if(Save.gd.isFireBallEquiped() && fire && player.getFireBallCount()>0 && (Math.abs(touchpad.getKnobPercentX()) > 0.6f | Math.abs(touchpad.getKnobPercentY()) > 0.6f)){
             fire = false;
             //if(!isTutorial){
             if(!TEST)
@@ -1757,10 +1781,13 @@ public class Play extends GameState {
                 FireBall fireball = createFireBall(player.getPosition().x + gap, player.getPosition().y,2);
                 if(!fireball.getRight())
                     fireball.normalAnimation_rev();
-                fireBalls.add(fireball);
+
+                if(fireBalls.size < 100)
+                    fireBalls.add(fireball);
             }
             else {
-                fireBalls.add(createFireBall(player.getPosition().x - gap, player.getPosition().y,-2));
+                if(fireBalls.size < 100)
+                    fireBalls.add(createFireBall(player.getPosition().x - gap, player.getPosition().y,-2));
             }
         }
         //FIRE BALL2
@@ -1780,10 +1807,13 @@ public class Play extends GameState {
                 FireBall fireball = createFireBall(player.getPosition().x + gap, player.getPosition().y,2.5f);
                 if(!fireball.getRight())
                     fireball.normalAnimation_rev();
-                fireBalls.add(fireball);
+
+                if(fireBalls.size < 100)
+                    fireBalls.add(fireball);
             }
             else {
-                fireBalls.add(createFireBall(player.getPosition().x - gap, player.getPosition().y,-2.5f));
+                if(fireBalls.size < 100)
+                    fireBalls.add(createFireBall(player.getPosition().x - gap, player.getPosition().y,-2.5f));
             }
 
         }
@@ -3518,28 +3548,28 @@ public class Play extends GameState {
 
         //SUBMIT SCORE ONLY ONCE!
         if(submit && !isTutorial) {
-            submit = false;
-            MyGdxGame.setContinue(false);
-            Save.load();
-            boolean newHighScore = false;
-            long highScores[] = Save.gd.getHighScores();
-            for (long highScore : highScores) {
-                newHighScore = (player.getNumCoins() > highScore);
-            }
-            if (newHighScore) {
-                Save.gd.setTenativeScore(player.getNumCoins());
-                Save.gd.setNewHighScore(true);
-                Save.gd.addHighScore(Save.gd.getTentativeScore(), "player");
-                Save.save();
-            } else {
-                Save.gd.setNewHighScore(false);
-                Save.gd.setTenativeScore(player.getNumCoins());
-                Save.save();
-            }
-
-            if (MyGdxGame.actionResolver.getSignedInGPGS()) {
-                MyGdxGame.actionResolver.submitScoreGPGS(player.getNumCoins());
-            }
+//            submit = false;
+//            MyGdxGame.setContinue(false);
+//            Save.load();
+//            boolean newHighScore = false;
+//            long highScores[] = Save.gd.getHighScores();
+//            for (long highScore : highScores) {
+//                newHighScore = (player.getNumCoins() > highScore);
+//            }
+//            if (newHighScore) {
+//                Save.gd.setTenativeScore(player.getNumCoins());
+//                Save.gd.setNewHighScore(true);
+//                Save.gd.addHighScore(Save.gd.getTentativeScore(), "player");
+//                Save.save();
+//            } else {
+//                Save.gd.setNewHighScore(false);
+//                Save.gd.setTenativeScore(player.getNumCoins());
+//                Save.save();
+//            }
+//
+//            if (MyGdxGame.actionResolver.getSignedInGPGS()) {
+//                MyGdxGame.actionResolver.submitScoreGPGS(player.getNumCoins());
+//            }
 
         }
 
@@ -3558,12 +3588,11 @@ public class Play extends GameState {
         //MyGdxGame.background_skyDay.render(sb);
 
         //Move blockSprite with TouchPad
-        blockSprite.setX(blockSprite.getX() + touchpad.getKnobPercentX()*blockSpeed);
-        blockSprite.setY(blockSprite.getY() + touchpad.getKnobPercentY()*blockSpeed);
+//        blockSprite.setX(blockSprite.getX() + touchpad.getKnobPercentX()*5);
+//        blockSprite.setY(blockSprite.getY() + touchpad.getKnobPercentY()*5);
 
-
-
-
+        blockSprite.setX(player.getPosition().x*PPM - player.getWidth()/2 + -touchpad.getKnobPercentX()*25);
+        blockSprite.setY(player.getPosition().y*PPM - player.getHeight()/2+ -touchpad.getKnobPercentY()*25);
 
         for (FireBall fireBall: fireBalls) {
             if(fireBall.getDead()) continue;
@@ -3926,9 +3955,9 @@ public class Play extends GameState {
 //        sb.end();
 
         //Draw
-        sb.begin();
-        blockSprite.draw(sb);
-        sb.end();
+//        sb.begin();
+//        blockSprite.draw(sb);
+//        sb.end();
 
 
         sb.setProjectionMatrix(hudCam.combined);
@@ -4149,13 +4178,16 @@ public class Play extends GameState {
         shape.dispose();
 
 
+
         body.setLinearVelocity(velocity,0);
 
         FireBall fireBall = new FireBall(body);
 
-        blockSprite.setPosition(Gdx.graphics.getWidth()/2-blockSprite.getWidth()/2, Gdx.graphics.getHeight()/2-blockSprite.getHeight()/2);
+        velocity = Math.abs(velocity);
 
-        fireBall.getBody().setLinearVelocity(fireBall.shootToward(blockSprite.getX() + touchpad.getKnobPercentX()*blockSpeed,blockSprite.getY() + touchpad.getKnobPercentY()*blockSpeed,velocity));
+        //blockSprite.setPosition(Gdx.graphics.getWidth()/2-blockSprite.getWidth()/2, Gdx.graphics.getHeight()/2-blockSprite.getHeight()/2);
+
+        fireBall.getBody().setLinearVelocity(-touchpad.getKnobPercentX()*velocity,-touchpad.getKnobPercentY()*velocity);
 
 
         //blockSprite.setX(blockSprite.getX() + touchpad.getKnobPercentX()*blockSpeed);

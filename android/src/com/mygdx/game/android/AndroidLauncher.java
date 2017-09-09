@@ -416,7 +416,9 @@ public class AndroidLauncher extends AndroidApplication implements
                 if(!dialog.isShowing()) {
                     //dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
                     showDialog();
-                    MyGdxGame.gsm.game().pause();
+                    if(MyGdxGame.gsm != null && MyGdxGame.gsm.game() != null){
+                        MyGdxGame.gsm.game().pause();
+                    }
                 }
             }
         });
@@ -573,7 +575,9 @@ public class AndroidLauncher extends AndroidApplication implements
     public void onBackPressed() {
         if(!dialog.isShowing()) {
             showDialog();
-            MyGdxGame.gsm.game().pause();
+            if(MyGdxGame.gsm != null && MyGdxGame.gsm.game() != null){
+                MyGdxGame.gsm.game().pause();
+            }
         }
         // If an interstitial is on screen, close it.
         if (Chartboost.onBackPressed())

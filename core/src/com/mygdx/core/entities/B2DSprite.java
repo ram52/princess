@@ -10,6 +10,8 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.mygdx.core.handlers.Animation;
 import com.mygdx.core.handlers.B2DVars;
 
+import static com.mygdx.core.handlers.B2DVars.PPM;
+
 
 public class B2DSprite {
 
@@ -92,8 +94,8 @@ public class B2DSprite {
 		sb.begin();
 		sb.draw(
 				animation.getFrame(),
-				(body == null)? 0:body.getPosition().x * B2DVars.PPM - width / 2,
-				(body == null)? 0:body.getPosition().y * B2DVars.PPM - height / 2,
+				(body == null)? 0:body.getPosition().x * PPM - width / 2,
+				(body == null)? 0:body.getPosition().y * PPM - height / 2,
 				width,
 				height
 		);
@@ -148,16 +150,6 @@ public class B2DSprite {
 		}
 	}
 
-	public Vector2 shootToward(float targetX, float targetY, float speedMax) {
-            /*
-             * Get the normalized direction vector from our position to the target. Then scale that value to our desired speed. In
-             * this particular example, we are using the distance of the target from the current position to determine how fast we
-             * will shoot the ball, and limiting to a maximum speed. We will apply velocity in the update method.
-             */
-		Vector2 velocity = new Vector2();
-		velocity.set(targetX - body.getPosition().x, targetY - body.getPosition().y).nor().scl(Math.min(body.getPosition().dst(targetX, targetY), speedMax));
-		return velocity;
-	}
 }
 
 
