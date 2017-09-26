@@ -2864,7 +2864,8 @@ public class Play extends GameState {
 
         if(brick != null){
 
-            if(brick.getPosition().y*PPM <= 264.8){
+
+            if(brick.getPosition().y <= GROUND+offsety){
                 brick.setFalling(false);
             }
 
