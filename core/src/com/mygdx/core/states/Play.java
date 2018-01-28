@@ -1147,10 +1147,8 @@ public class Play extends GameState {
                         }
                     }
                 }
+                Gdx.app.log(LOG_TAG,"summon brick");
             }
-
-
-
 
 //        if(!buttonRight.isOver() && buttonRight.isChecked()){
 //            rightMenu = false;
@@ -1856,7 +1854,7 @@ public class Play extends GameState {
         }
         //make brick fall from the sky when summoned
         if(brick != null && brick.isFalling()){
-
+            Gdx.app.log(LOG_TAG,"make brick fall from the sky when summoned");
             if(brick.getX() == 0){
                 brick.setX(lastClickPos);
             }
@@ -1865,6 +1863,7 @@ public class Play extends GameState {
             }
 
         }else{
+            Gdx.app.log(LOG_TAG,"brick is on the ground");
             stopEnemyIfTouchBrick(enemy);
             if(brick.getLife() <= 0){
                 //brick destroyed in anim function
@@ -2864,9 +2863,22 @@ public class Play extends GameState {
 
         if(brick != null){
 
+            Gdx.app.debug(LOG_TAG,"brick not null");
 
-            if(brick.getPosition().y <= GROUND+offsety){
+
+            if(brick.isFalling() && brick.getPosition().y <= GROUND){
+                Gdx.app.log(LOG_TAG,brick.getPosition().y+" "+player.getPosition().y);
+
+                brick.getBody().setType(BodyType.DynamicBody);
+                brick.setY(GROUND);
+                //brick.getBody().getPosition().set(brick.getPosition().x, player.getPosition().y);
+                //brick.getBody().setTransform(brick.getPosition().x, player.getPosition().y, brick.getBody().getAngle());
+                //brick.getBody().setType(BodyType.DynamicBody);
+
+                brick.update(STEP);
+
                 brick.setFalling(false);
+                Gdx.app.debug(LOG_TAG,"setFalling");
             }
 
             if(brick.isFalling() | brick.getDead()){
@@ -2887,12 +2899,12 @@ public class Play extends GameState {
                 if (brick.getPosition().x * PPM <= brick.getWidth()/2) {
                     brick.getBody().setType(BodyType.DynamicBody);
                     brick.getBody().setLinearVelocity(0,0);
-                    brick.getBody().setTransform(brick.getWidth()/2/PPM, brick.getPosition().y, brick.getBody().getAngle());
+                    brick.getBody().setTransform(brick.getWidth()/2/PPM, player.getPosition().y, brick.getBody().getAngle());
                 }else if(brick.getPosition().x*PPM + brick.getWidth()/2 >= Gdx.graphics.getWidth()){
                     //brick.getBody().setGravityScale(0);
                     brick.getBody().setType(BodyType.DynamicBody);
                     brick.getBody().setLinearVelocity(0,0);
-                    brick.getBody().setTransform(MyGdxGame.V_WIDTH/PPM - brick.getWidth()/2/PPM, brick.getPosition().y, brick.getBody().getAngle());
+                    brick.getBody().setTransform(MyGdxGame.V_WIDTH/PPM - brick.getWidth()/2/PPM, player.getPosition().y, brick.getBody().getAngle());
                 }
             }
 
@@ -2913,7 +2925,9 @@ public class Play extends GameState {
             }
 
             if(brick != null && !brick.isFalling()){
+                brick.setY(player.getPosition().y);
                 brick.getBody().setLinearVelocity(0,0);
+                brick.setY(player.getPosition().y);
             }
         }
 
@@ -3271,6 +3285,10 @@ public class Play extends GameState {
             player.render(sb);
         }
 
+        if(GROUND == 2.5621998f && cl.isPlayerOnGround()) {
+            GROUND = player.getPosition().y;
+        }
+
         for (FireBall fireBall: fireBalls) {
             fireBall.render(sb);
         }
@@ -3290,6 +3308,14 @@ public class Play extends GameState {
 
         if(brick != null){
             brick.render(sb);
+            Gdx.app.debug(LOG_TAG,brick.isFalling()+" "+brick.getPosition().y+" "+GROUND);
+            if(!brick.isFalling() && brick.getPosition().y != GROUND) {
+                //brick.getBody().setType(BodyType.DynamicBody);
+                brick.setY(GROUND);
+                brick.getBody().setTransform(brick.getPosition().x,GROUND,brick.getBody().getAngle());
+                //brick.getBody().setType(BodyType.StaticBody);
+
+            }
         }
 
         //equipment bar
